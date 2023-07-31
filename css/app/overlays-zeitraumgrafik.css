@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Zeitraumgrafik ------------------------------- */
+/* ZEITRAUMGRAFIK ------------------------------- */
+
 #zeitraumgrafik > div {
   margin-top: 40px;
   max-width: 740px;

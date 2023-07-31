@@ -1,9 +1,12 @@
 @charset "utf-8";
 
-/* Bedeutungenbaum ------------------------------ */
+/* IMPORTS -------------------------------------- */
+
 @import url(../bedeutungenbaum.css);
 
-/* Alle Overlay-Fenster ------------------------- */
+
+/* ALLE OVERLAY-FENSTER ------------------------- */
+
 .overlay {
   position: fixed;
   top: 0;

@@ -10,6 +10,7 @@ let drucken = {
       drucken.init(this.id);
     });
   },
+
   // Drucken über Tastaturkürzel initialisieren, starten oder ggf. unterbinden
   tastatur () {
     const oben = overlay.oben();
@@ -26,6 +27,7 @@ let drucken = {
       drucken.init("liste-");
     }
   },
+
   // Listener für die Buttons im Druckfenster
   //   span = Element
   //     (Element, hinter dem sich eine der Funktionen im Druckfenster befindet)
@@ -38,6 +40,7 @@ let drucken = {
       }
     });
   },
+
   // Druckanzeige initialisieren (nur für Karteikarte und Belegliste)
   //   id = String
   //     (ID des Links, über den gedruckt wurde)
@@ -80,6 +83,7 @@ let drucken = {
       });
     }
   },
+
   // Datenfelder der Karten, die gedruckt werden sollen
   kartenFelder: [
     {
@@ -138,8 +142,10 @@ let drucken = {
       width: 2,
     },
   ],
+
   // die IDs der Karten, die gedruckt werden sollen
   kartenIds: [],
+
   // IDs der Karten sammeln, die gedruckt werden sollen
   getIds (id) {
     drucken.kartenIds = [];
@@ -152,6 +158,7 @@ let drucken = {
       });
     }
   },
+
   // Druckfenster mit dem Karteninhalt füllen
   fillKarten () {
     // Content leeren
@@ -234,6 +241,7 @@ let drucken = {
       }
     });
   },
+
   // Druckfenster mit dem Bedeutungsbaum füllen
   //   gn = String
   //     (die ID des Gerüsts, das gedruckt werden soll)
@@ -316,6 +324,7 @@ let drucken = {
     h3.appendChild(i);
     cont.insertBefore(h3, cont.firstChild);
   },
+
   // Druck starten
   start () {
     // Liste auf "preload" setzen, sonst springt sie im Hintergrund wild rum
@@ -324,6 +333,7 @@ let drucken = {
     // Druckfunktion triggern
     print();
   },
+
   // Text aus der Vorschau kopieren
   kopieren () {
     // Bedeutungsbaum?

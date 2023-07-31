@@ -3,6 +3,7 @@
 let karteisucheExport = {
   // Fenster initialisieren
   init: true,
+
   // Fenster öffnen
   async oeffnen () {
     // keine Treffer in der Liste
@@ -45,8 +46,10 @@ let karteisucheExport = {
     // Export-Button fokussieren
     document.querySelector("#karteisuche-export-exportieren").focus();
   },
+
   // Exportieren: ausgewählte Optionen
   exportierenOpt: {},
+
   // Exportieren
   //   auto = Boolean
   //     (automatischer Export)
@@ -285,6 +288,7 @@ let karteisucheExport = {
       });
     }
   },
+
   // Exportieren: Lemma- und Artikelliste erstellen
   exportierenListe () {
     const opt = karteisucheExport.exportierenOpt;
@@ -414,6 +418,7 @@ let karteisucheExport = {
     // Liste zurückgeben
     return liste;
   },
+
   // Exportieren: Datensätze zusammentragen
   //   liste = Object
   //     (Liste mit Lemmata- und Artikeldaten)
@@ -579,6 +584,7 @@ let karteisucheExport = {
       return arr[2] + ". " + arr[1] + ". " + arr[0];
     }
   },
+
   // Exportieren: Exportdatum erstellen
   exportierenDatum () {
     const opt = karteisucheExport.exportierenOpt;
@@ -617,6 +623,7 @@ let karteisucheExport = {
       return ` – ${datum}`;
     }
   },
+
   // Exportieren: Tabellenkopf erstellen
   //   spaltenCenter = Array
   //     (Index-Liste mit zentrierten Spalten)
@@ -724,6 +731,7 @@ let karteisucheExport = {
       return kopf;
     }
   },
+
   // Exportieren: Karteiliste automatisch speichern
   //   vars = Object
   //     (Pfade: vars.quelle, vars.ziel; Vorlagen-Index: vars.vorlage)
@@ -838,6 +846,7 @@ let karteisucheExport = {
       karteisuche.filterWiederherstellen();
     }
   },
+
   // Vorlagen
   vorlagen: [
     {
@@ -913,6 +922,7 @@ let karteisucheExport = {
       ],
     },
   ],
+
   // Vorlagen auflisten
   vorlagenListe () {
     let opt = optionen.data["karteisuche-export-vorlagen"],
@@ -942,6 +952,7 @@ let karteisucheExport = {
     }
     tooltip.init(vorlagen);
   },
+
   // Vorlage laden
   //   idx = Number
   //     (Index der zu ladenden Vorlage)
@@ -965,6 +976,7 @@ let karteisucheExport = {
       }
     }
   },
+
   // Vorlagen-Tools (Listener)
   //   a = Element
   //     (Tool-Link)
@@ -974,6 +986,7 @@ let karteisucheExport = {
       karteisucheExport.vorlagenTools(this);
     });
   },
+
   // Vorlagen-Tools
   //   a = Element
   //     (Tool-Link)
@@ -992,6 +1005,7 @@ let karteisucheExport = {
       karteisucheExport.vorlageLaden(idx);
     }
   },
+
   // Vorlagen-Tools: Hinzufügen
   async vorlagenToolsAdd () {
     let name = "";
@@ -1056,6 +1070,7 @@ let karteisucheExport = {
     optionen.speichern();
     karteisucheExport.vorlagenListe();
   },
+
   // Vorlagen-Tools: Zurücksetzen
   //   fragen = Boolean
   //     (Sicherheitsfrage muss bei der Initialisierung unterdrückt werden)
@@ -1077,6 +1092,7 @@ let karteisucheExport = {
     karteisucheExport.vorlagenFillOpt();
     karteisucheExport.vorlagenListe();
   },
+
   // Vorlagen-Tools: Optionen mit Standardvorlagen füllen
   vorlagenFillOpt () {
     optionen.data["karteisuche-export-vorlagen"] = [];
@@ -1090,6 +1106,7 @@ let karteisucheExport = {
     }
     optionen.speichern();
   },
+
   // Datei speichern
   // (Funktion wird auch für das Speichern der Literaturdatenbank genutzt)
   //   content = String

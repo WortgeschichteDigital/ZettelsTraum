@@ -12,9 +12,11 @@ let filter = {
       filterliste.classList.remove("keine-filter");
     }
   },
+
   // speichert die ID des Filterblocks, in dem die BenutzerIn
   // vor dem Neuaufbau der Belegliste aktiv gewesen ist
   zuletztAktiv: "",
+
   // die ID des zuletzt aktiven Filterblocks ermitteln
   //   ele = Element
   //     (das Element, das geändert wurde
@@ -25,8 +27,10 @@ let filter = {
     ele = ele.previousSibling;
     filter.zuletztAktiv = ele.id;
   },
+
   // Zwischenspeicher für die dynamischen Filtertypen
   typen: {},
+
   // Liste der Filter aufbauen
   //   belege = Array
   //     (die IDs der Belege, bereits chronologisch sortiert)
@@ -403,6 +407,7 @@ let filter = {
       schachtelFinden(f);
     }
   },
+
   // Statistik der Bedeutungen um untergeordnete Karten ergänzen
   //   belege = Array
   //     (die IDs der bereits gefilterten Belege)
@@ -432,9 +437,11 @@ let filter = {
       }
     }
   },
+
   // Zwischenspeicher für die Zeiträume der aktuellen Belegliste
   zeitraumStart: "",
   zeitraumEnde: "",
+
   // Zeitraumfilter aufbauen
   //   start = String
   //     (Jahr des 1. Belegs)
@@ -501,6 +508,7 @@ let filter = {
     // Liste nach oben scrollen
     cont.scrollTop = 0;
   },
+
   // Step ermitteln, in dem die Zeitraumfilter dargestellt werden
   aufbauenZeitraumStep () {
     let inputs = document.getElementsByName("filter-zeitraum");
@@ -510,9 +518,11 @@ let filter = {
       }
     }
   },
+
   // Zwischenspeicher für das Jahr des Belegs, mit dem gerechnet werden kann
   // (vgl. filter.aufbauen())
   jahrBelege: {},
+
   // füllt den Zwischenspeicher filter.jahrBelege
   //   belege = Array
   //     (IDs der aktuellen Belege)
@@ -523,9 +533,11 @@ let filter = {
       filter.jahrBelege[id] = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
     }
   },
+
   // hier werden die Treffer der angezeigten Zeiträume zwischengespeichert
   // (der Cache dient dazu, die Zeitraum-Grafik zu generieren)
   zeitraumTrefferCache: {},
+
   // Anzahl der Treffer in einem gegebenen Zeitraum ermitteln
   //   y = Number
   //     (das Jahr, mit dem der Zeitraum startet)
@@ -545,6 +557,7 @@ let filter = {
     filter.zeitraumTrefferCache[y] = treffer;
     return treffer;
   },
+
   // die Schnitte im Filter-Zeitraum werden gewechselt
   //   input = Element
   //     (Radio-Button, der für die gewünschten Zeitschnitte steht)
@@ -558,6 +571,7 @@ let filter = {
       liste.status(true);
     });
   },
+
   // extrahiert die einzelnen Schichten, die in einer Wortbildungs-, Synonym-
   // oder Textsortenangabe stecken
   // (wird auch für Korpora benutzt, weil es so leichter ist)
@@ -582,6 +596,7 @@ let filter = {
     }
     return extrakt;
   },
+
   // Array mit Schichten sortieren, die aus Wortbildungs-, Synonym-,
   // Korpus- und Textsortenangaben extrahiert wurden
   baumSort (a, b) {
@@ -601,6 +616,7 @@ let filter = {
     }
     return 1;
   },
+
   // Kopf und Container einer Filtergruppe erzeugen
   //   name = String
   //     (Name des Filterkopfes)
@@ -650,6 +666,7 @@ let filter = {
     // Fragment zurückgeben
     return frag;
   },
+
   // Zeile mit Filterlogik aufbauen
   aufbauenFilterlogik () {
     let p = document.createElement("p");
@@ -675,6 +692,7 @@ let filter = {
     }
     return p;
   },
+
   // die Logik im Verschiedenes-Filter wird geändert
   //   input = Element
   //     (Radio-Button, der für die gewünschten Zeitschnitte steht)
@@ -686,6 +704,7 @@ let filter = {
       liste.status(true);
     });
   },
+
   // Absatz mit einem Checkbox-Filter erzeugen
   //   f = String
   //     (Name des Filters)
@@ -751,6 +770,7 @@ let filter = {
     // Fragment zurückgeben
     return [frag, baum_tiefe];
   },
+
   // Absatz mit Sternen aufbauen für eine detaillierte Markierungssuche
   aufbauenSterne () {
     let p = document.createElement("p");
@@ -766,6 +786,7 @@ let filter = {
     }
     return p;
   },
+
   // stellt die gespeicherte Markierung im Bewertungsfilter wieder her
   markierenSterne () {
     let filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
@@ -784,6 +805,7 @@ let filter = {
       }
     }
   },
+
   // Erstellt ein Backup der aktuellen Filter-Einstellungen, um sie nach
   // dem Neuaufbau der Liste wieder anzuwenden.
   backup () {
@@ -801,6 +823,7 @@ let filter = {
     }
     return bak;
   },
+
   // Stellt ein zuvor gemachtes Backup der Einstellungen in der Filterliste wieder her.
   //   bak = Object
   //     (Das Objekt mit den gespeicherten Einstellungen; vgl. filter.backup().)
@@ -822,8 +845,10 @@ let filter = {
       filter_bewertung.dataset.bewertung = bak["filter-verschiedenes-bewertung"];
     }
   },
+
   // speichert den Klappstatus und die Scrollposition der Filterblöcke
   backupKlapp: {},
+
   // Backup des Klappstatus und der Scrollposition der Filterblöcke erstellen
   backupKlappMake () {
     filter.backupKlapp = {};
@@ -852,6 +877,7 @@ let filter = {
       filter.backupKlapp[id] = pos;
     });
   },
+
   // Backup des Klappstatust und der Scrollposition der Filterblöcke wiederherstellen
   backupKlappReset () {
     document.querySelectorAll(".filter-kopf").forEach(function(i) {
@@ -879,6 +905,7 @@ let filter = {
       }
     });
   },
+
   // Scroll-Status als Fallback speichern
   // (nötig, weil scrollTop nur ermittelt werden kann, wenn der Block sichtbar ist;
   // speichere ich die Karteikarte, ist der Block nicht sichtbar und die Scrollposition immer 0)
@@ -893,6 +920,7 @@ let filter = {
       ziel.dataset.scroll = this.scrollTop;
     });
   },
+
   // beim Ändern eines Filters die Optionen anpassen (Listener)
   //   checkbox = Element
   //     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
@@ -901,6 +929,7 @@ let filter = {
       filter.filterOptionen(this, true);
     });
   },
+
   // beim Ändern eines Filters die Optionen anpassen (Listener)
   //   checkbox = Element
   //     (Input-Element, das geändert wurde [wohl immer eine Checkbox])
@@ -915,6 +944,7 @@ let filter = {
       liste.status(true);
     }
   },
+
   // erweiterte Filter umschalten
   toggleErweiterte () {
     document.getElementById("filter-erweiterte").addEventListener("click", function(evt) {
@@ -930,10 +960,12 @@ let filter = {
       liste.status(true);
     });
   },
+
   // speichert den aktiven Timeout für das Anwenden der Filter
   // (wichtig für den Volltextfilter, der nicht sofort, sondern
   // nur mit Verzögerung angewandt werden soll)
   anwendenTimeout: null,
+
   // Löst beim Ändern eines Filters den Neuaufbau der Liste aus
   //   input = Element
   //     (Check- oder Textbox in der Filterliste, die geändert wurde)
@@ -981,8 +1013,10 @@ let filter = {
     }
     liste.status(true);
   },
+
   // Zwischenspeicher für die zur Zeit aktiven Filter
   aktiveFilter: {},
+
   // ermittelt, welche Filter gerade aktiv sind
   //   inaktive = Boolean
   //     (Funktion zum Schließen der inaktiven Filter aufrufen)
@@ -1030,6 +1064,7 @@ let filter = {
     // filter_zeitraum wird unter Umständen weiterverwendet
     return filter_zeitraum;
   },
+
   // markiert die Filterblöcke, in denen Filter aktiv sind
   aktiveFilterMarkieren () {
     document.querySelectorAll(".filter-kopf").forEach(function(i) {
@@ -1041,6 +1076,7 @@ let filter = {
       }
     });
   },
+
   // inaktive Filter nach dem Neuaufbau der Filterliste schließen;
   // der Filter, in dem man zuletzt aktiv war, bleibt allerdings immer offen
   //   immer = Boolean
@@ -1071,9 +1107,11 @@ let filter = {
       });
     }
   },
+
   // Cache mit regulären Ausdrücken für Wortbildungen, Synonyme, Korpora und Textsorten
   // (wirkt sich wohl positiv auf die Performance aus)
   regCacheBaum: {},
+
   // Zwischenspeicher für die Daten der Volltextsuche
   volltextSuche: {
     suche: false, // Volltext-Suche ist aktiv
@@ -1081,6 +1119,7 @@ let filter = {
     ds: [], // speichert die Datensätze, die durchsucht werden sollen
     reg: [], // speichert die regulären Ausdrücke, mit denen gesucht werden soll
   },
+
   // Variablen für die Volltextsuche vorbereiten
   volltextSuchePrep () {
     // Filter-Text ermitteln
@@ -1132,8 +1171,10 @@ let filter = {
       filter.volltextSuche.reg.push(new RegExp(reg, insensitiv));
     });
   },
+
   // Array mit den aktiven Verschiedenes-Filtern bei exklusiver Filterlogik
   exklusivAktiv: [],
+
   // aktive Verschiedenes-Filter bei exklusiver Filterlogik finden
   getExklusivAktiv () {
     filter.exklusivAktiv = [];
@@ -1146,6 +1187,7 @@ let filter = {
       filter.exklusivAktiv.push(id);
     });
   },
+
   // Karteikarten filtern
   //   karten = Array
   //     (enthält die IDs der Karten, die gefiltert werden sollen)
@@ -1363,6 +1405,7 @@ let filter = {
     }
     return karten_gefiltert;
   },
+
   // Bedeutungenfilter um untergeordnete Bedeutungen ergänzen
   //   arr = Array
   //     (Filter, die angeklickt wurden)
@@ -1394,6 +1437,7 @@ let filter = {
     // Array mit untergeordneten Filtern zurückgeben
     return arrErg;
   },
+
   // Volltextfilter
   //   id = String
   //     (die ID der Karteikarte)
@@ -1430,6 +1474,7 @@ let filter = {
     }
     return false;
   },
+
   // ermitteln, welche Jahre durch den Filter gelassen werden
   kartenFilternZeitraum () {
     let inputs = document.querySelectorAll("#filter-zeitraum-dynamisch input"),
@@ -1446,6 +1491,7 @@ let filter = {
     });
     return erg;
   },
+
   // Aktion für die Steuerungslinks im Kopf der Filterleiste verteilen
   //   a = Element
   //     (Link, der die Aktion triggert)
@@ -1462,6 +1508,7 @@ let filter = {
       }
     });
   },
+
   // alle Filter zurücksetzen
   ctrlReset (liste_aufbauen) {
     // Filter zurücksetzen
@@ -1487,6 +1534,7 @@ let filter = {
     // inaktive Filter schließen
     filter.inaktiveSchliessen(true);
   },
+
   // einen einzelnen Filterblock zurücksetzen
   ctrlResetBlock (img) {
     img.addEventListener("click", function(evt) {
@@ -1515,6 +1563,7 @@ let filter = {
       liste.status(true);
     });
   },
+
   // Zeitraumgrafik generieren und anzeigen
   ctrlGrafik () {
     // Macht es überhaupt Sinn, die Karte anzuzeigen?
@@ -1596,12 +1645,14 @@ let filter = {
       ele: document.getElementById("zeitraumgrafik-cont-over"),
     });
   },
+
   // Reduktionsmodus der Filter umschalten
   ctrlReduzierenToggle () {
     optionen.data.filter.reduzieren = !optionen.data.filter.reduzieren;
     optionen.speichern();
     filter.ctrlReduzierenAnzeige();
   },
+
   // Reduktionsmodus der Filter visualisieren
   ctrlReduzierenAnzeige () {
     let link = document.getElementById("filter-ctrl-reduzieren");
@@ -1614,6 +1665,7 @@ let filter = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Datensätze im Volltextfilter en bloc umschalten
   //   a = Element
   //     (Link, über den das Umschalten gesteuert wird)
@@ -1636,6 +1688,7 @@ let filter = {
       liste.status(true);
     });
   },
+
   // klappt die Filterblöcke auf oder zu (Event-Listener)
   //   a = Element
   //     (Filterkopf)
@@ -1662,8 +1715,10 @@ let filter = {
       }
     });
   },
+
   // speichert die Filterblöcke, in denen gerade eine Animation läuft
   anzeigeUmschaltenAktiv: new Set(),
+
   // Animation zum Auf- oder Zuklappen der Filter
   //   block = Element
   //     (Filterkopf)
@@ -1709,6 +1764,7 @@ let filter = {
       }, 300);
     }, 0);
   },
+
   // die Suche wird aufgerufen
   suche () {
     // ggf. das Suchformular in der Literaturdatenbank fokussieren
@@ -1743,6 +1799,7 @@ let filter = {
       input.select();
     });
   },
+
   // initialisiert den Kartendatum-Filter
   kartendatumInit () {
     // Checkboxes aus
@@ -1771,6 +1828,7 @@ let filter = {
     filter.kartendatumEintragen(document.getElementById("filter-kartendatum-von"), von);
     filter.kartendatumEintragen(document.getElementById("filter-kartendatum-bis"), bis);
   },
+
   // trägt das Kartendatum ein
   //   feld = Element
   //     (das Feld, in das eingetragen werden soll)
@@ -1788,6 +1846,7 @@ let filter = {
     minute = minute.toString().padStart(2, "0");
     feld.value = `${jahr}-${monat}-${tag}T${stunde}:${minute}`;
   },
+
   // Änderungen in den Checkboxes des Kartendatum-Filters abfangen
   //   input = Element
   //     (eine Checkbox)
@@ -1803,6 +1862,7 @@ let filter = {
     });
     filter.anwenden(input);
   },
+
   // ermittelt, ob der Kartendatum-Filter aktiv ist
   kartendatumAktiv () {
     let erstellt = document.getElementById("filter-kartendatum-erstellt"),
@@ -1812,6 +1872,7 @@ let filter = {
     }
     return false;
   },
+
   // Änderungen in den Datumsfelder abfangen
   //   input = Element
   //     (ein Datumsfeld)
@@ -1821,6 +1882,7 @@ let filter = {
     });
     filter.anwenden(input);
   },
+
   // Zeit des Datumsfeldes auf den Augenblick des Klicks setzen
   //   a = Element
   //     (der Icon-Link zum Setzen des Datums)
@@ -1834,6 +1896,7 @@ let filter = {
       liste.status(true);
     });
   },
+
   // die Datumsfelder im Kartendatum-Filter auf Validität überprüfen
   kartendatumCheck () {
     let feldVon = document.getElementById("filter-kartendatum-von"),

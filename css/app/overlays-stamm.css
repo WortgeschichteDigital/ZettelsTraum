@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Formvarianten -------------------------------- */
+/* FORMVARIANTEN -------------------------------- */
+
 #stamm > div {
   margin-top: 40px;
   max-width: 650px;
@@ -11,7 +12,9 @@
   mask-image: url(../../img/formvarianten.svg);
 }
 
-/* Fensterkopf ---------------------------------- */
+
+/* FENSTERKOPF ---------------------------------- */
+
 #stamm-kopf {
   position: relative;
   margin-bottom: 10px;
@@ -56,7 +59,9 @@
   background-color: var(--farbe);
 }
 
-/* Popup ---------------------------------------- */
+
+/* POPUP ---------------------------------------- */
+
 #stamm-popup {
   position: absolute;
   top: 32px;
@@ -149,7 +154,9 @@
   margin-right: 15px;
 }
 
-/* Sperre --------------------------------------- */
+
+/* SPERRE --------------------------------------- */
+
 #stamm-sperre {
   position: absolute;
   top: 0;
@@ -165,7 +172,9 @@
   backdrop-filter: blur(2px);
 }
 
-/* Formenliste ---------------------------------- */
+
+/* FORMENLISTE ---------------------------------- */
+
 #stamm-cont {
   position: relative;
   padding: 10px;

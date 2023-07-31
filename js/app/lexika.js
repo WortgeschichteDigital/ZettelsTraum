@@ -14,6 +14,7 @@ let lexika = {
     "Schulz/Basler": "Deutsches Fremdwörterbuch",
     "Trübner": "Trübners Deutsches Wörterbuch",
   },
+
   // Lexika-Fenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -36,6 +37,7 @@ let lexika = {
     // Fokus auf die erste Checkbox
     document.querySelector("#lexika-liste input").focus();
   },
+
   // Liste der Lexika erstellen
   auflisten () {
     // Liste leeren
@@ -83,6 +85,7 @@ let lexika = {
     }
     tooltip.init(cont);
   },
+
   // Lexikon als überprüft kennzeichnen
   //   input = Element
   //     (Checkbox, die für ein Lexikon steht)
@@ -97,6 +100,7 @@ let lexika = {
       kartei.karteiGeaendert(true);
     });
   },
+
   // Lexikon ergänzen
   ergaenzen () {
     let le = document.getElementById("lexika-text"),
@@ -134,12 +138,14 @@ let lexika = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Klick auf Button
   aktionButton (button) {
     button.addEventListener("click", function() {
       lexika.ergaenzen();
     });
   },
+
   // Tastatureingaben im Textfeld
   aktionText (input) {
     input.addEventListener("keydown", function(evt) {

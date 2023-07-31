@@ -6,6 +6,7 @@ let meta = {
   // der Konversion des Formats natürlich immer die höchste; hier wird
   // gespeichert, welche Version die Kartei tatsächlich hat)
   ve: 0,
+
   // Metadaten-Fenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)

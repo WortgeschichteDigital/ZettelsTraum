@@ -3,6 +3,7 @@
 let suchleiste = {
   // speichert, ob die Suchleiste gerade sichtbar ist oder nicht
   aktiv: false,
+
   // Leiste einblenden
   einblenden () {
     // Leiste ggf. erzeugen
@@ -30,6 +31,7 @@ let suchleiste = {
       }
     }, 1);
   },
+
   // Listener für das Ausblenden via Link
   //   a = Element
   //     (der Schließen-Link in der Suchleiste)
@@ -39,6 +41,7 @@ let suchleiste = {
       suchleiste.ausblenden();
     });
   },
+
   // Leiste ausblenden
   ausblenden () {
     suchleiste.aktiv = false;
@@ -52,6 +55,7 @@ let suchleiste = {
       padding.classList.remove("padding-suchleiste");
     }
   },
+
   // HTML der Suchleiste aufbauen
   make () {
     let div = document.createElement("div");
@@ -112,6 +116,7 @@ let suchleiste = {
     // Tooltips initialisieren
     tooltip.init(div);
   },
+
   // Listener für das Suchfeld
   //   input = Element
   //     (der Text-Input der Suchleiste)
@@ -126,8 +131,10 @@ let suchleiste = {
       this.select();
     });
   },
+
   // Zwischenspeicher für den Text der letzten erfolgreichen Suche
   suchenZuletzt: "",
+
   // Suche starten
   //   neuaufbau = true || undefined
   //     (die Suchergebnisse sollen nur neu aufgebaut werden, sonst nichts)
@@ -241,6 +248,7 @@ let suchleiste = {
       return m;
     }
   },
+
   // alte Suche zurücksetzen
   suchenReset () {
     // zuletzt gesuchten Text zurücksetzen
@@ -258,6 +266,7 @@ let suchleiste = {
       return p1;
     }
   },
+
   // nach dem Ändern des HTML Events wieder einhängen
   //   ele = Element
   //     (HTML-Element, in dem HTML geändert wurde;
@@ -335,8 +344,10 @@ let suchleiste = {
       });
     });
   },
+
   // Zwischenspeicher für den Timeout
   suchenKeineTrefferTimeout: null,
+
   // visualisieren, dass es keine Treffer gab
   suchenKeineTreffer () {
     let input = document.getElementById("suchleiste-text");
@@ -346,6 +357,7 @@ let suchleiste = {
       input.classList.remove("keine-treffer");
     }, 1000);
   },
+
   // Verhalten beim Drücken von F3 steuern
   //   evt = Object
   //     (das Event-Objekt)
@@ -362,6 +374,7 @@ let suchleiste = {
     leiste.firstChild.select();
     suchleiste.navi(!evt.shiftKey);
   },
+
   // Listener für die Navigationslinks
   //   a = Element
   //     (der Navigationslink)
@@ -375,6 +388,7 @@ let suchleiste = {
       suchleiste.navi(next);
     });
   },
+
   // Navigation durch die Suchergebnisse
   //   next = Boolean
   //     (zum nächsten Treffer springen)
@@ -495,6 +509,7 @@ let suchleiste = {
       });
     }
   },
+
   // seitenweises Scrollen
   // (ist die Suchleiste offen, muss ich das übernehmen;
   // wird nur aufgerufen, bei PageUp, PageDown, Space;

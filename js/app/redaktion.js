@@ -56,6 +56,7 @@ let redaktion = {
       textNaechstes: "",
     },
   },
+
   // Schlüssel der Feldtypen ermitteln, die in jedem Eintrag vorhanden sind
   feldtypen: {
     datum: "da",
@@ -63,6 +64,7 @@ let redaktion = {
     notiz: "no",
     person: "pr",
   },
+
   // Redaktionsfenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -88,6 +90,7 @@ let redaktion = {
       ele: document.getElementById("redaktion-cont-over"),
     });
   },
+
   // nächstes Redaktionsereignis im Kopf des Ereignisfenster anzeigen
   next () {
     // Element leeren
@@ -106,6 +109,7 @@ let redaktion = {
       strong.appendChild(document.createTextNode("!"));
     }
   },
+
   // erstellt die Tabelle im Redaktionsfenster
   tabelle () {
     // Content leeren
@@ -161,6 +165,7 @@ let redaktion = {
     // Zeile für neuen Eintrag
     redaktion.tabelleNeu(table);
   },
+
   // Zeile für einen neuen Eintrag erzeugen
   //   table = Element
   //     (die Tabelle)
@@ -199,6 +204,7 @@ let redaktion = {
       redaktion.eintragErgaenzen();
     });
   },
+
   // ISO 8601-Datum umwandeln
   //   datum = String
   //     (Datum-String mit dem Format YYYY-MM-DD)
@@ -206,6 +212,7 @@ let redaktion = {
     let datum_sp = datum.split("-");
     return `${datum_sp[2].replace(/^0/, "")}. ${datum_sp[1].replace(/^0/, "")}. ${datum_sp[0]}`;
   },
+
   // erzeugt eine Tabellenzelle
   //   parent = Element
   //     (Tabellenzeile [oder Fragment], an die die Zelle angehängt werden soll)
@@ -236,6 +243,7 @@ let redaktion = {
       td.textContent = wert;
     }
   },
+
   // erzeugt ein Datum-Feld
   //   td = Element
   //     (die Tabellenzellen, in die das Input-Feld eingehängt werden soll)
@@ -248,6 +256,7 @@ let redaktion = {
     input.type = "date";
     input.value = val;
   },
+
   // erzeugt ein Text-Input-Feld mit Dropdown-Menü
   //   td = Element
   //     (die Tabellenzellen, in die das Input-Feld eingehängt werden soll)
@@ -292,6 +301,7 @@ let redaktion = {
       tooltip.init(td);
     }
   },
+
   // Fokus auf ein Input-Feld setzen
   // (ja, das muss leider über eine eigene Funktion geschehen)
   //   id = String
@@ -299,6 +309,7 @@ let redaktion = {
   inputFocus (id) {
     document.getElementById(id).focus();
   },
+
   // Event-Listener für ein Input-Feld
   //   id = String
   //     (ID des Inputfelds, das auf Enter hören soll)
@@ -341,6 +352,7 @@ let redaktion = {
       redaktion.zelleErsetzen(feldtyp, val, this);
     });
   },
+
   // Event-Listener für Input-Felder, die evtl. zurückgesetzt werden sollen
   //   id = String
   //     (ID des Inputfelds, das auf Enter hören soll)
@@ -357,6 +369,7 @@ let redaktion = {
       redaktion.zelleErsetzen(feldtyp, data.rd.er[slot][redaktion.feldtypen[feldtyp]], this);
     });
   },
+
   // Tabellenzelle mit einem Input-Element durch eine Textzelle ersetzen
   //   feldtyp = String
   //     (der Feldtyp)
@@ -378,6 +391,7 @@ let redaktion = {
     redaktion.wertAendern(frag.lastChild, feldtyp);
     input.parentNode.parentNode.replaceChild(frag, input.parentNode);
   },
+
   // auf Wunsch einen Wert ändern
   //   td = Element
   //     (Tabellenzelle, in der der Wert geändert werden soll)
@@ -404,6 +418,7 @@ let redaktion = {
       redaktion.inputReset(id);
     });
   },
+
   // die Liste der Einträge soll ergänzt werden
   eintragErgaenzen () {
     let inputs = document.querySelectorAll("#redaktion-cont-over tr:last-child input");
@@ -449,6 +464,7 @@ let redaktion = {
     // Erinnerungen-Icon auffrischen
     erinnerungen.check();
   },
+
   // Eintrag um eine Position nach oben schieben
   //   a = Element
   //     (Verschiebe-Link, auf den geklickt wurde)
@@ -472,6 +488,7 @@ let redaktion = {
       }
     });
   },
+
   // Eintrag löschen
   //   a = Element
   //     (Lösch-Link, auf den geklickt wurde)
@@ -496,6 +513,7 @@ let redaktion = {
       });
     });
   },
+
   // Meldung auswerfen, falls mit den Eingaben etwas nicht stimmt
   //   text = String
   //     (der Dialogtext)
@@ -510,6 +528,7 @@ let redaktion = {
       },
     });
   },
+
   // nächstes Redaktionsereignis ermitteln und in Worte fassen
   naechstesEreignis () {
     // keine Kartei geöffnet

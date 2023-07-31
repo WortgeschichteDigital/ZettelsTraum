@@ -3,8 +3,10 @@
 let kopieren = {
   // speichert, ob der Kopiermodus an ist
   an: false,
+
   // speichert die IDs der Karten, die zum Kopieren ausgewählt wurden
   belege: [],
+
   // Kopier-Prozess initialisieren
   init () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -23,6 +25,7 @@ let kopieren = {
     // Funktion anstellen
     kopieren.uiOn();
   },
+
   // User-Interface einblenden
   uiOn () {
     kopieren.an = true;
@@ -38,6 +41,7 @@ let kopieren = {
     // Icons im Listenkopf einblenden
     document.querySelectorAll(".liste-kopf .icon-kopieren").forEach(a => a.classList.remove("aus"));
   },
+
   // User-Interface ausblenden
   //   fragen = Booleadn
   //     (vor dem Beenden der Funktion sollte nachgefragt werden)
@@ -75,6 +79,7 @@ let kopieren = {
       overlay.schliessen(document.getElementById("kopieren-liste"));
     }
   },
+
   // trägt den Text in UI-Feld ein
   uiText () {
     let text = kopieren.belege.length.toString();
@@ -83,6 +88,7 @@ let kopieren = {
     }
     document.getElementById("kopieren").textContent = text;
   },
+
   // Klickfunktion für die Anker in der Belegliste
   //   a = Element
   //     (das Kopier-Icon im Belegkopf)
@@ -93,6 +99,7 @@ let kopieren = {
       kopieren.add(this.parentNode.dataset.id);
     });
   },
+
   // Klickfunktion für den Anker im Kopf der Belegliste
   //   a = Element
   //     (das Kopier-Icon im Listenkopf)
@@ -108,11 +115,13 @@ let kopieren = {
       });
     });
   },
+
   // Beleg aus der offenen Karte zur Liste hinzufügen
   // (besser wenn in Funktion, weil das Ganze von mehreren Orten aufgerufen wird)
   addKarte () {
     kopieren.add(beleg.id_karte.toString());
   },
+
   // Beleg zur Kopierliste hinzufügen
   //   id = String
   //     (ID der Karteikarte/des Belegs)
@@ -128,6 +137,7 @@ let kopieren = {
     kopieren.uiText();
     helfer.animation("liste");
   },
+
   // Fenster mit Belegliste öffnen
   liste () {
     overlay.oeffnen(document.getElementById("kopieren-liste"));
@@ -137,6 +147,7 @@ let kopieren = {
       ele: document.getElementById("kopieren-liste-cont"),
     });
   },
+
   // Belegliste aufbauen
   listeAufbauen () {
     // Liste leeren
@@ -170,6 +181,7 @@ let kopieren = {
       anhaenge.belegOeffnen(a);
     }
   },
+
   // Beleg aus der Liste entfernen
   //   a = Element
   //     (das Entfernen-Icon vor dem Beleg in der Liste)
@@ -181,6 +193,7 @@ let kopieren = {
       kopieren.listeAufbauen();
     });
   },
+
   // alle Belege aus der Liste entfernen
   listeLeeren () {
     // keine Belege in der Liste
@@ -200,6 +213,7 @@ let kopieren = {
       },
     });
   },
+
   // Overlay-Fenster zum Einfügen der Belege öffnen
   einfuegen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -226,6 +240,7 @@ let kopieren = {
       ele: document.getElementById("kopieren-einfuegen-over"),
     });
   },
+
   // Listener für das Abhaken der Datenfelder
   //   input = Element
   //     (eine Checkbox in der Datenfelder-Liste)
@@ -244,6 +259,7 @@ let kopieren = {
       optionen.speichern();
     });
   },
+
   // Basisdaten der Karteien, aus denen Belege eingefügt werden können, anfordern
   //   animation = Boolean
   //     (der Reload-Button soll animiert werden)
@@ -253,16 +269,20 @@ let kopieren = {
       document.getElementById("kopieren-einfuegen-reload").classList.add("rotieren-bitte");
     }
   },
+
   // Zwischenspeicher für die Basisdaten der einfügbaren Belege
   //   "ID" (ID des Fensters, von dem die Daten stammen)
   //     belege (Number; Anzahl der Belege, die kopiert werden können)
   //     gerueste (Array; eindimensional mit Strings gefüllt; die Strings = IDs der Bedeutungsgerüste)
   //     wort (String; das Karteiwort)
   basisdaten: {},
+
   // Zwischenspeicher für die Daten der geladenen Belegedatei
   belegedatei: [],
+
   // Zwischenspeicher für die in der Zwischenablage gefundenen Daten
   zwischenablage: [],
+
   // Daten eintragen, die angeboten werden
   //   daten = Object
   //     (Objekt mit Informationen zu den Daten, die kopiert werden können)
@@ -371,6 +391,7 @@ let kopieren = {
     // Importformular für Bedeutungen aufbauen
     kopieren.einfuegenBasisdatenBedeutungen(id_aktiv);
   },
+
   // die Zwischenablage überprüfen, ob in ihr ein Beleg steckt
   einfuegenParseClipboard () {
     kopieren.zwischenablage = [];
@@ -394,6 +415,7 @@ let kopieren = {
     // Die Daten sind offenbar okay!
     kopieren.zwischenablage.push(daten);
   },
+
   // wählt den Datensatz aus, für den der angeklickte Absatz steht
   //   ele = Element
   //     (der Absatz, hinter dem sich der Datensatz verbirgt)
@@ -413,6 +435,7 @@ let kopieren = {
       kopieren.einfuegenBasisdatenBedeutungen(id_aktiv);
     });
   },
+
   // Importformular für die Bedeutungen
   //   id_aktiv = String
   //     (ID des aktiven Datensatzes, kann leer sein)
@@ -474,6 +497,7 @@ let kopieren = {
     }
     tooltip.init(cont);
   },
+
   // Einfügen aus der gewünschten Datenquelle wird angestoßen
   einfuegenAusfuehren () {
     // ermitteln, aus welcher Quelle eingefügt werden soll
@@ -501,6 +525,7 @@ let kopieren = {
     // Quelle = Fenster
     modules.ipc.send("kopieren-daten", parseInt(quelle, 10), winInfo.winId);
   },
+
   // die übergebenen Daten werden eingelesen
   // (wird auch für zum Duplizieren von Belegen genutzt)
   //   daten = Array
@@ -623,6 +648,7 @@ let kopieren = {
       });
     }
   },
+
   // Basisdaten über die Belegmenge und das Fenster an den Main-Prozess senden
   basisdatenSenden () {
     let daten = {
@@ -633,6 +659,7 @@ let kopieren = {
     };
     modules.ipc.send("kopieren-basisdaten-lieferung", daten);
   },
+
   // alle Belegdaten an den Main-Prozess senden
   datenSenden () {
     let daten = [];
@@ -641,6 +668,7 @@ let kopieren = {
     }
     modules.ipc.send("kopieren-daten-lieferung", daten);
   },
+
   // fertigt eine Kopie des übergebenen Belegs an
   //   quelle = Object
   //     (Datenquelle des Belegs)
@@ -679,6 +707,7 @@ let kopieren = {
     }
     return kopie;
   },
+
   // Kopierliste in Datei exportieren
   async exportieren () {
     // keine Belege in der Kopierliste
@@ -744,6 +773,7 @@ let kopieren = {
       throw ergebnis;
     }
   },
+
   // Kopierliste aus Datei importieren
   async importieren () {
     let opt = {

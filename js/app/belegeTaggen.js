@@ -3,6 +3,7 @@
 let belegeTaggen = {
   // in der Belegliste sichtbare Belege
   karten: [],
+
   // Tagging-Fenster für Belege einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -46,6 +47,7 @@ let belegeTaggen = {
     // Formular zurücksetzen
     document.querySelectorAll("#belege-taggen-cont table input").forEach(i => i.checked = i.defaultChecked);
   },
+
   // Taggen ausführen
   taggen () {
     const keyMap = {

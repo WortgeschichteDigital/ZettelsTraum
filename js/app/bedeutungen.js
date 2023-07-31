@@ -4,10 +4,13 @@ let bedeutungen = {
   // speichert den Timeout für das Ausschalten der Farbe
   // bei den Ereignissen unmovable, moved und saved
   timeout: null,
+
   // Kopie des Bedeutungsgerüsts, ausgelesen aus data.bd
   data: {},
+
   // Zeiger auf das gerade aktive Bedeutungsgerüst: bedeutungen.data.gr["ID"]
   akt: {},
+
   // Generator zur Erzeugung der nächsten ID
   makeId: null,
   *idGenerator (id) {
@@ -15,6 +18,7 @@ let bedeutungen = {
       yield id++;
     }
   },
+
   // ermittelt, welche ID als Nächstes vergeben werden sollte
   idInit () {
     let lastId = 0;
@@ -25,6 +29,7 @@ let bedeutungen = {
     });
     bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
   },
+
   // baut ein initiales, alphabetisch sortiertes Bedeutungsgerüst auf
   // (falls in der Kartei noch keiner vorhanden ist; irgendwann ist diese Funktion wohl tot)
   konstit () {
@@ -75,6 +80,7 @@ let bedeutungen = {
     // Einträge im Gerüst durchzählen
     bedeutungen.konstitZaehlung(data.bd.gr["1"].bd, 2);
   },
+
   // Gerüst ggf. um die übergebene Bedeutung ergänzen
   //   bd = String
   //     (Bedeutung ausgeschrieben, Hierarchien durch ": " getrennt)
@@ -93,6 +99,7 @@ let bedeutungen = {
       i++;
     } while (hie[i]);
   },
+
   // gibt ein neues Bedeutungs-Objekt zurück
   //   bd = Array
   //     (die Bedeutung mit allen Hierarchieebenen)
@@ -105,6 +112,7 @@ let bedeutungen = {
       za: "",
     };
   },
+
   // Bedeutungen durchzählen
   //   arr = Array
   //     (Array mit den Bedeutungen, die durchgezählt werden sollen)
@@ -116,6 +124,7 @@ let bedeutungen = {
       i.za = bedeutungen.zaehlung(i.bd, sl);
     });
   },
+
   // Zählzeichen
   zaehlzeichen: [
     ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "IX", "XX"],
@@ -126,8 +135,10 @@ let bedeutungen = {
     Array(20).fill("•"),
     Array(20).fill("◦"),
   ],
+
   // speichert, wo man gerade mit der Zählung der einzelnen Hierarchien ist
   zaehlungen: [],
+
   // gibt das richtige Zählzeichen zurück
   //   bd = Array
   //     (Array mit allen Bedeutungen)
@@ -151,6 +162,7 @@ let bedeutungen = {
     }
     return zeichen;
   },
+
   // gibt alle Ebenen der Zählung der übergebenen Bedeutung zurück
   //   idx = Number
   //     (Index der Bedeutung im Bedeutungsgerüst)
@@ -166,6 +178,7 @@ let bedeutungen = {
     } while (ebene > 1);
     return zaehlungen.reverse();
   },
+
   // gibt Bedeutungen mit Zählung als String zurück
   //   gr = String
   //     (ID der Gerüst-Nummer)
@@ -251,6 +264,7 @@ let bedeutungen = {
       arr.push(`${zaehlung}${bedeutung}`);
     }
   },
+
   // überprüft, ob die übergebene Bedeutung schon vorhanden ist
   //   bd = String
   //     (die Bedeutung, Hierarchien getrennt durch ": ")
@@ -273,6 +287,7 @@ let bedeutungen = {
     }
     return false;
   },
+
   // Bedeutungsgerüst wechseln
   //   id = String
   //     (die ID des Bedeutungsgerüsts in bedeutungen.data.gr[id])
@@ -285,6 +300,7 @@ let bedeutungen = {
     bedeutungen.bedeutungenGeaendert(true);
     bedeutungen.idInit();
   },
+
   // Bedeutungsgerüst kopieren
   geruestKopieren () {
     const geruest = document.getElementById("bedeutungen-gerueste-kopieren").value.replace(/^Gerüst /, "");
@@ -310,6 +326,7 @@ let bedeutungen = {
     // ermitteln, welche ID als nächste vergeben werden sollte
     bedeutungen.idInit();
   },
+
   // Bedeutungsgerüst öffnen
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -350,6 +367,7 @@ let bedeutungen = {
       bedeutungen.idInit();
     });
   },
+
   // fertigt eine tiefe Kopie der Bedeutungsgerüstdaten an
   //   q = Object
   //     (Quell-Objekt)
@@ -383,6 +401,7 @@ let bedeutungen = {
       }
     }
   },
+
   // das Bedeutungsgerüst aufbauen
   aufbauen () {
     bedeutungen.moveAktiv = false;
@@ -479,6 +498,7 @@ let bedeutungen = {
     // Tooltips initialisieren
     tooltip.init(cont);
   },
+
   // Überschrift des Bedeutungsgerüst ggf. anpassen
   aufbauenH2 () {
     // Überschrift ermitteln
@@ -491,6 +511,7 @@ let bedeutungen = {
     let h2 = document.querySelector("#bedeutungen-cont h2");
     h2.replaceChild(document.createTextNode(text), h2.firstChild);
   },
+
   // Details der Überschrift ermitteln
   // (diese Funktion wird auch in anderen Kontexten genutzt, darum ausgelagert)
   //   data = Object
@@ -511,6 +532,7 @@ let bedeutungen = {
     }
     return details;
   },
+
   // Tags einer Bedeutung erzeugen und einhängen
   // (wird auch vom Tagger genutzt)
   //   ta = Array
@@ -555,6 +577,7 @@ let bedeutungen = {
       bedeutungen.bedeutungenGeaendert(true);
     }
   },
+
   // Zeile zum Kopieren eines Bedeutungsgerüsts einfügen
   //   table = Element
   //     (die Tabelle mit dem Bedeutungsgerüst)
@@ -596,6 +619,7 @@ let bedeutungen = {
     dropdown.feld(document.getElementById("bedeutungen-gerueste-kopieren"));
     button.addEventListener("click", () => bedeutungen.geruestKopieren());
   },
+
   // Zeile zum Ergänzen des Bedeutungsgerüsts einfügen
   //   table = Element
   //     (die Tabelle mit dem Bedeutungsgerüst)
@@ -617,12 +641,14 @@ let bedeutungen = {
     bedeutungen.ergaenzen(span);
     tr.childNodes[3].replaceChild(span, tr.childNodes[3].firstChild);
   },
+
   // Werte für das Formular, mit dem die oberste Hierarchie der Zählzeichen festgelegt wird
   hierarchieEbenen: [
     "I, II, III, …",
     "A, B, C, …",
     "1, 2, 3, …",
   ],
+
   // Reaktion auf Änderungen der Hierarchie
   hierarchie () {
     const hie = document.getElementById("bedeutungen-hierarchie").value,
@@ -639,6 +665,7 @@ let bedeutungen = {
       i.textContent = bedeutungen.akt.bd[n].za;
     });
   },
+
   // die vorherige oder nächste Bedeutung aufrufen
   // (wird nur aufgerufen, wenn Ctrl + ↑ || Ctrl + ↓)
   //   evt = Object
@@ -676,6 +703,7 @@ let bedeutungen = {
       return false;
     }
   },
+
   // Navigation durch die Felder einer Bedeutung mit Tabs
   //   evt = Event-Objekt
   //     (Keyboard-Event)
@@ -724,8 +752,10 @@ let bedeutungen = {
       }
     }
   },
+
   // speichert den Timeout für das Aktivieren des Drags
   moveListenerDrag: null,
+
   // Listener für die Windrose
   //   a = Element
   //     (der Link mit der Windrose)
@@ -764,8 +794,10 @@ let bedeutungen = {
       }, 250);
     });
   },
+
   // eine der Bedeutungen ist aktiviert und kann nun mit allen Subbedeutungen bewegt werden
   moveAktiv: false,
+
   // Bedeutung (mit allen Unterbedeutungen) aktivieren
   //   idx = Number
   //     (Index der aktiven Zeile)
@@ -808,6 +840,7 @@ let bedeutungen = {
       bedeutungen.feedback("bedeutungen-moved");
     }
   },
+
   // Bewegung wieder ausschalten
   moveAus () {
     let tr = document.querySelector(".bedeutungen-aktiv");
@@ -832,6 +865,7 @@ let bedeutungen = {
     // vormals aktive Zeile zurückgeben
     return tr;
   },
+
   // speichert die Daten zwischen, welche Bewegungen möglich sind und
   // wie sie ausgeführt werden sollten
   moveData: {
@@ -853,6 +887,7 @@ let bedeutungen = {
       steps: 0,
     },
   },
+
   // ermitteln, in welche Richtung der aktive Block bewegt werden kann
   moveGetData () {
     // Daten zurücksetzen
@@ -941,6 +976,7 @@ let bedeutungen = {
       d.d.movable = true;
     }
   },
+
   // Bedeutung im Bedeutungsgerüst bewegen
   //   evt = Object
   //     (Event-Object des keydown)
@@ -1003,6 +1039,7 @@ let bedeutungen = {
     // Änderungsmarkierung setzen
     bedeutungen.bedeutungenGeaendert(true);
   },
+
   // Elemente sammeln, die bewegt werden sollen
   moveGetItems () {
     let items = [];
@@ -1012,6 +1049,7 @@ let bedeutungen = {
     });
     return items;
   },
+
   // nach der Bewegung das Gerüst ggf. an die richtige Stelle scrollen
   moveScroll () {
     let tr = document.querySelector(".bedeutungen-aktiv");
@@ -1040,6 +1078,7 @@ let bedeutungen = {
       });
     }
   },
+
   // Animation, die anzeigt, dass der Versuch, einen Bedeutungszweig zu bewegen, illegal war
   //   typ = String
   //     (die Klasse der Animation)
@@ -1052,6 +1091,7 @@ let bedeutungen = {
       tab.classList.remove(typ);
     }, 500);
   },
+
   // erstellt eine unabhängige Kopie eines Datensatzes
   //   idx = Number
   //     (Index des Eintrags, von dem eine Kopie erstellt werden soll)
@@ -1069,6 +1109,7 @@ let bedeutungen = {
     // Kopie zurückgeben
     return kopie;
   },
+
   // Listener für das Löschen-Icon
   //   a = Element
   //     (der Link mit dem Abfalleimer)
@@ -1095,6 +1136,7 @@ let bedeutungen = {
       }
     });
   },
+
   // Tastatur-Handler für Entf
   loeschenTastatur () {
     // ggf. abbrechen
@@ -1103,6 +1145,7 @@ let bedeutungen = {
     }
     bedeutungen.loeschenPrep();
   },
+
   // benötigte Werte ermitteln, bevor das Löschen angestoßen wird
   loeschenPrep () {
     // Verschmelzungsmarkierung ggf. entfernen
@@ -1117,6 +1160,7 @@ let bedeutungen = {
       bedeutungen.loeschen(idx);
     }, 1);
   },
+
   // Löschen auf Nachfrage durchführen
   //   idx = Number
   //     (Index der Bedeutung)
@@ -1151,6 +1195,7 @@ let bedeutungen = {
       },
     });
   },
+
   // markierte Einträge werden gelöscht
   // (wird auch für das Verschmelzen genutzt, darum ausgelagert)
   //   items = Array
@@ -1163,6 +1208,7 @@ let bedeutungen = {
     bedeutungen.aufbauen();
     bedeutungen.bedeutungenGeaendert(true);
   },
+
   // Listener für das Verschmelzen-Icon
   //   a = Element
   //     (der Link mit dem Merge-Icon)
@@ -1196,6 +1242,7 @@ let bedeutungen = {
       });
     });
   },
+
   // Verschmelzen durchführen
   //   idxZiel = Number
   //     (Index-Nummer der Bedeutung, in die hinein der markierte Bedeutungszweig geschoben wird)
@@ -1249,6 +1296,7 @@ let bedeutungen = {
       },
     });
   },
+
   // Listener zum Öffnen des Taggers
   //   td = Element
   //     (die Tabellenzelle, über die der Tagger geöffnet werden soll)
@@ -1264,6 +1312,7 @@ let bedeutungen = {
       tagger.oeffnen(idx);
     });
   },
+
   // Link zum Öffnen des Taggers erstellen
   //   zelle = Element
   //     (die Tabellenzelle für die Tags);
@@ -1298,6 +1347,7 @@ let bedeutungen = {
       bedeutungen.editEintragen(this.parentNode);
     });
   },
+
   // Listener für den Container, in dem ein Edit-Feld erstellt werden soll
   //   ele = Element
   //     (Element, in dem das Edit-Feld erstellt werden soll)
@@ -1310,6 +1360,7 @@ let bedeutungen = {
       bedeutungen.editErstellen(this);
     });
   },
+
   // Edit-Feld erstellen
   //   ele = Element
   //     (Element, in dem das Edit-Feld erstellt werden soll)
@@ -1358,6 +1409,7 @@ let bedeutungen = {
       sel.collapse(knoten, knoten.textContent.length);
     }
   },
+
   // Toolbox einblenden und positionieren oder ausblenden
   //   an = Boolean
   //     (Toolbox an- oder ausstellen)
@@ -1431,6 +1483,7 @@ let bedeutungen = {
     // Tooltip initialisieren
     tooltip.init(div);
   },
+
   // Funktion der Text-Tools auf das Content-Feld anwenden
   //   a = Element
   //     (der Tools-Link, auf den geklickt wurde)
@@ -1449,6 +1502,7 @@ let bedeutungen = {
       }
     });
   },
+
   // Listener für ein Edit-Feld
   //   edit = Element
   //     (das Edit-Feld)
@@ -1566,6 +1620,7 @@ let bedeutungen = {
       }
     });
   },
+
   // Testet, ob die eingegebene Bedeutung akzeptiert werden kann
   //   wert = String
   //     (die Bedeutung; kann HTML-Tags enthalten)
@@ -1616,6 +1671,7 @@ let bedeutungen = {
     // keine Fehler gefunden
     return "";
   },
+
   // altes Eingabefeld ggf. entfernen
   editFeldWeg () {
     let edit = document.getElementById("bedeutungen-edit");
@@ -1624,6 +1680,7 @@ let bedeutungen = {
     }
     bedeutungen.editTools(false);
   },
+
   // gespeicherten Wert des edierten Feldes in die übergebene Zelle eintragen
   //   ele = Element
   //     (Element, in dem das Edit-Feld steht)
@@ -1661,6 +1718,7 @@ let bedeutungen = {
     ele.innerHTML = wert;
     bedeutungen.editZeile(ele, false);
   },
+
   // Index des betreffenden Elemenets suchen
   //   ele = Element
   //     (das Edit-Feld, zu dem der Index gesucht werden soll)
@@ -1670,6 +1728,7 @@ let bedeutungen = {
     }
     return parseInt(ele.dataset.idx, 10);
   },
+
   // Zeile markieren/demarkieren, in der ein Edit-Feld geöffnet/geschlossen wurde
   //   ele = Element
   //     (Element, das zum Edieren fokussiert wird)
@@ -1697,6 +1756,7 @@ let bedeutungen = {
       tr.classList.remove("bedeutungen-edit");
     }
   },
+
   // korrigiert den Inhalt eines Edit-Feldes formal
   //   cont = String
   //     (der Text des Edit-Feldes; kann HTML-Tags enthalten)
@@ -1706,6 +1766,7 @@ let bedeutungen = {
     cont = helfer.textTrim(cont, true);
     return cont;
   },
+
   // überprüfen, ob der Inhalt des Feldes geändert wurde
   //   ele = Element
   //     (das Edit-Feld, auf dessen Veränderungen geachtet werden soll)
@@ -1734,8 +1795,10 @@ let bedeutungen = {
       ele.classList.remove("bedeutungen-changed");
     }
   },
+
   // speichert den Verweis auf den Timeout zum Ausblenden
   ergaenzenToolsTimeout: null,
+
   // Bedeutung ergänzen
   //   span = Element
   //     (das Edit-Feld, über das eine Bedeutung ergänzt werden kann)
@@ -1797,6 +1860,7 @@ let bedeutungen = {
       }
     });
   },
+
   // Änderungen speichern
   speichern () {
     // keine Änderungen
@@ -1825,9 +1889,11 @@ let bedeutungen = {
       }
     }
   },
+
   // speichert eine Änderungsliste mit Ersetzungen/Streichungen, die beim Speichern
   // in den Karteikarten angewendet werden sollen
   aendern: [],
+
   // Änderungsliste füllen
   aendernFuellen ({
       del = false,
@@ -1841,6 +1907,7 @@ let bedeutungen = {
     }) {
     bedeutungen.aendern.push({del, merge, add, wi, gr, grN, id, idN});
   },
+
   // Änderungsliste abarbeiten
   aendernAnwenden () {
     let a = bedeutungen.aendern;
@@ -1887,6 +1954,7 @@ let bedeutungen = {
     // Änderungsliste zurücksetzen
     bedeutungen.aendern = [];
   },
+
   // ist die Bedeutung, mit der verschmolzen wird, in einer Karte schon vorhanden?
   // (wird auch in filter.js und kopieren.js benutzt, um zu gucken,
   // ob eine Karte eine Bedeutung bereits enthält)
@@ -1904,6 +1972,7 @@ let bedeutungen = {
     }
     return [false, -1];
   },
+
   // Bedeutungen schließen und zur Belegliste wechseln
   schliessen () {
     speichern.checkInit(() => {
@@ -1912,8 +1981,10 @@ let bedeutungen = {
       liste.wechseln();
     });
   },
+
   // Bedeutungen wurden geändert und noch nicht gespeichert
   geaendert: false,
+
   // Anzeigen, dass die Bedeutungen geändert wurden
   //   geaendert = Boolean
   bedeutungenGeaendert (geaendert) {
@@ -1926,6 +1997,7 @@ let bedeutungen = {
       asterisk.classList.add("aus");
     }
   },
+
   // Bedeutungsgerüst an das Redaktionssystem schicken (Listener)
   //   icon = Element
   //     (das XML-Icon)
@@ -1935,6 +2007,7 @@ let bedeutungen = {
       bedeutungen.xmlDatensatz();
     });
   },
+
   // Bedeutungsgerüst transformieren und an das Redaktionssystem schicken
   xmlDatensatz () {
     // Lesarten auslesen
@@ -2072,6 +2145,7 @@ let bedeutungen = {
       return pr.join("; ");
     }
   },
+
   // überprüft, ob das Bedeutungsgerüst beim Umbenennen einer Bedeutung korrumpiert wurde
   // (der Fehler war von 0.10.0 [2019-07-02] an da und wurde mit 0.13.2 [2019-07-30] behoben)
   korruptionCheck () {
@@ -2113,6 +2187,7 @@ let bedeutungen = {
       },
     });
   },
+
   // repariert ein korruptes Bedeutungsgerüst
   korruptionRepair () {
     for (let id in data.bd.gr) {

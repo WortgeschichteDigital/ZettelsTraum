@@ -10,6 +10,7 @@ let bearbeiterin = {
     name.value = "";
     name.focus();
   },
+
   // Eingabe überprüfen und registrieren
   check () {
     // Name wurde erfolgreich eingetragen

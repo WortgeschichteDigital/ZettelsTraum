@@ -31,16 +31,19 @@ let initWin = {
     // Before-Unload
     modules.ipc.on("before-unload", () => helferWin.beforeUnload());
   },
+
   // Infos zu App und Fenster erfragen
   async infos () {
     let info = await modules.ipc.invoke("infos-senden");
     window.appInfo = info.appInfo;
     window.winInfo = info.winInfo;
   },
+
   // Programmname in Elemente eintragen
   appName () {
     document.querySelectorAll(".app-name").forEach(i => i.textContent = appInfo.name);
   },
+
   // XML-Quelltexte aufhübschen
   xmlPrettyPrint () {
     let pretty = document.querySelectorAll(".xml-pretty-print");
@@ -48,6 +51,7 @@ let initWin = {
       i.innerHTML = helferXml.prettyPrint({xmlStr: i.textContent});
     }
   },
+
   // Events initialisieren
   events () {
     // Tastatureingaben abfangen
@@ -93,6 +97,7 @@ let initWin = {
       });
     }
   },
+
   // Events initialisieren: Suchzeile
   eventsSuche () {
     hilfe.sucheListener(document.getElementById("suchfeld"));
@@ -121,6 +126,7 @@ let initWin = {
       });
     });
   },
+
   // Events initialisieren: Rechtsklickmenü
   eventsPopup () {
     window.addEventListener("contextmenu", evt => {
@@ -128,6 +134,7 @@ let initWin = {
       popup.oeffnen(evt);
     });
   },
+
   // Events initialisieren: Kopf-Icons (Changelog, Dokumentation, Handbuch)
   eventsHilfeKopf () {
     document.querySelectorAll("#kopf-icons a").forEach(a => {
@@ -141,6 +148,7 @@ let initWin = {
       });
     });
   },
+
   // Events initialisieren: Elemente im XML-Fenster
   eventsXml () {
     // Kopf-Icons

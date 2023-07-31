@@ -4,9 +4,11 @@ let dialog = {
   // Speicherort für Funktionen, die nach dem Schließen
   // des Dialogs ausgeführt werden.
   callback: null,
+
   // Speicherort für die Nutzerantwort, die aus einem Bestätigungsdialog resultiert.
   // Mögliche Werte: true (Okay od. Ja) || false (Abbrechen od. Nein) || null (Schließen durch Link)
   antwort: null,
+
   // Dialog-Fenster öffnen
   //   typ = String
   //     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")
@@ -51,6 +53,7 @@ let dialog = {
       ele: document.getElementById("dialog-text"),
     });
   },
+
   // Text in Dialog-Fenster eintragen
   //   text = String
   //     (Text, der eingetragen werden soll)
@@ -89,6 +92,7 @@ let dialog = {
       cont.appendChild(p);
     }
   },
+
   // Text des Prompt-Inputs auslesen und zurückgeben
   getPromptText () {
     let text = document.getElementById("dialog-prompt-text").value;

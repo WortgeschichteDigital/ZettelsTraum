@@ -417,6 +417,7 @@ module.exports = {
       window: BrowserWindow.fromWebContents(contents),
     });
   },
+
   // Menüpunkt erzeugen
   //   contents = Object
   //     (webContents des Fensters, in dem das Menü erscheint)
@@ -463,6 +464,7 @@ module.exports = {
     }
     return new MenuItem(opt);
   },
+
   // Separator erzeugen
   makeSep () {
     return new MenuItem({

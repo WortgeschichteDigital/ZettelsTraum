@@ -17,6 +17,7 @@ let helferXml = {
     }
     return fundort;
   },
+
   // Datenstruktur des XML-Redaktionsfensters zurückgeben
   redXmlData () {
     return {
@@ -35,6 +36,7 @@ let helferXml = {
       wi: {}, // Wortinformationen
     };
   },
+
   // Datum extrahieren
   //   text = String
   //     (Text, aus dem heraus das Datum extrahiert werden soll)
@@ -114,6 +116,7 @@ let helferXml = {
     }
     return "";
   },
+
   // Datum ermitteln und als solches und in einem Sortierformat zurückgeben
   //   xmlStr = String
   //     (String mit XML-Tags)
@@ -121,6 +124,7 @@ let helferXml = {
     const datum = xmlStr.match(/<Datum>(.+?)<\/Datum>/)[1];
     return helfer.datumGet({datum});
   },
+
   // geschützte Zeichen maskieren
   //   text = String
   //     (String, der maskiert werden soll)
@@ -146,6 +150,7 @@ let helferXml = {
     }
     return text;
   },
+
   // ID normieren
   //   id = String
   //     (die ID)
@@ -161,6 +166,7 @@ let helferXml = {
     }
     return val;
   },
+
   // XML-Dokument mit Einzügen versehen
   // (s. https://stackoverflow.com/a/376503)
   //   xml = Document
@@ -179,6 +185,7 @@ let helferXml = {
     processor.importStylesheet(xslt);
     return processor.transformToDocument(xml);
   },
+
   // XML-Snippet einfärben
   //   xmlStr = String
   //     (das XML-Snippet, das eingefärbt werden soll)
@@ -249,6 +256,7 @@ let helferXml = {
     // Ergebnis zurückgeben
     return xmlStr;
   },
+
   // Abkürzungen Fließtext
   abbr: {
     "Abb\\.": "Abbildung",
@@ -357,6 +365,7 @@ let helferXml = {
     "z\\.\\sB\\.": "zum Beispiel",
     "Z\\.\\sB\\.": "Zum Beispiel",
   },
+
   // Abkürzungen im Literaturverzeichnis
   abbrLit: {
     "a\\.\\sd\\.\\sS\\.": "an der Saale",
@@ -418,6 +427,7 @@ let helferXml = {
     "Wbb\\.": "Wörterbücher",
     "Zs\\.": "Zeitschrift",
   },
+
   // Abkürzungen-Tagger
   //   text = String
   //     (Text, der getaggt werden soll)

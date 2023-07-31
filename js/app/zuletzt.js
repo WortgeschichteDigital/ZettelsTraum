@@ -41,6 +41,7 @@ let zuletzt = {
       liste.appendChild(li);
     }
   },
+
   // entfernt eine Kartei
   //   datei = String
   //     (Datei, die aus optionen.data.zuletzt entfernt werden soll)
@@ -50,6 +51,7 @@ let zuletzt = {
     optionen.speichern();
     zuletzt.aufbauen();
   },
+
   // öffnet eine Kartei
   //   a = Element
   //     (Link zur Datei, die geöffent werden soll)
@@ -62,6 +64,7 @@ let zuletzt = {
       kartei.oeffnenEinlesen(this.dataset.datei);
     });
   },
+
   // Liste der zuletzt verwendeten Karteien ergänzen
   aendern () {
     // Datei ggf. entfernen (falls an einer anderen Stelle schon vorhanden)
@@ -79,6 +82,7 @@ let zuletzt = {
     // Optionen speichern
     optionen.speichern();
   },
+
   // Liste der zuletzt verwendeten Karteien updaten (angestoßen durch Main-Prozess)
   //   karteien = Array
   //     (Liste der zuletzt verwendeten Karteien)
@@ -88,8 +92,10 @@ let zuletzt = {
       zuletzt.aufbauen();
     }
   },
+
   // speichert Karteien, die verschwunden sind
   verschwunden: [],
+
   // markiert Karteien auf der Startseite als verschwunden
   //   verschwunden = Array
   //     (Liste der Karteien, die nicht mehr gefunden wurden)
@@ -104,6 +110,7 @@ let zuletzt = {
       }
     });
   },
+
   // erzeugt ein Image, das eine Kartei als verschwunden markiert
   verschwundenImg () {
     let img = document.createElement("img");
@@ -112,6 +119,7 @@ let zuletzt = {
     img.height = "24";
     return img;
   },
+
   // eine verschwundene Kartei wurde wiedergefunden
   //   datei = String
   //     (Kartei, die gerade geöffnet oder gespeichert wurde)

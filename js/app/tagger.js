@@ -5,12 +5,14 @@ let tagger = {
   // (das ist zugleich ein Zeichen, dass das Fenster nicht aus dem
   // Bedeutungsgerüst heraus geöffnet wurde)
   limit: [],
+
   // Map für die Zuordnung von Tag-Datei-Typen und Schlüsseln
   limitMap: {
     sachgebiete: "sg",
     stichwortplanung: "sp",
     themenfelder: "tf",
   },
+
   // Tagger-Fenster öffnen
   //   idx = String
   //     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen;
@@ -29,6 +31,7 @@ let tagger = {
       ele: document.getElementById("tagger-typen"),
     });
   },
+
   // Bedeutung eintragen, die hier getaggt wird
   //   idx = String
   //     (Index-Nummer im aktuellen Bedeutungsgerüst, zu der die Tags hinzugefügt werden sollen)
@@ -48,6 +51,7 @@ let tagger = {
     span.innerHTML = bedeutungen.akt.bd[i].bd[bedeutungen.akt.bd[i].bd.length - 1];
     cont.appendChild(span);
   },
+
   // Tag-Kategorien aufbauen
   aufbauen () {
     tagger.filled = false;
@@ -100,6 +104,7 @@ let tagger = {
       tagger.fill();
     }
   },
+
   // Tag-Typen sortieren
   //   a = String
   //   b = String
@@ -118,6 +123,7 @@ let tagger = {
     }
     return 1;
   },
+
   // Namen einer Tag-Kategorie ermitteln
   //   typ = String
   //     (der Zeiger auf die Kategorie)
@@ -128,8 +134,10 @@ let tagger = {
     }
     return name;
   },
+
   // die Tag-Felder wurden noch nicht gefüllt => keine Änderungsmarkierung setzen
   filled: false,
+
   // Tags eintragen
   fill () {
     const dataIdx = document.getElementById("tagger").dataset.idx,
@@ -166,6 +174,7 @@ let tagger = {
       tagger.filled = true;
     }, 5);
   },
+
   // hört, ob sich in einem Edit-Feld etwas tut
   listener (span) {
     // Enter abfangen
@@ -189,6 +198,7 @@ let tagger = {
       characterData: true,
     });
   },
+
   // Tagger speichern
   speichern () {
     // Es wurde gar nichts geändert!
@@ -317,6 +327,7 @@ let tagger = {
       }
     }
   },
+
   // Tagger schließen
   schliessen () {
     speichern.checkInit(() => {
@@ -329,6 +340,7 @@ let tagger = {
       beleg: false,
     });
   },
+
   // Tabellenzelle mit den Tags fokussieren (nach dem Schließen)
   fokusTagzelle () {
     const dataIdx = document.getElementById("tagger").dataset.idx;
@@ -344,8 +356,10 @@ let tagger = {
     bedeutungen.editZeile(zelle, true);
     bedeutungen.linkTagger(zelle);
   },
+
   // Tags wurden geändert und noch nicht gespeichert
   geaendert: false,
+
   // Anzeigen, dass die Tags geändert wurden
   //   geaendert = Boolean
   taggerGeaendert (geaendert) {

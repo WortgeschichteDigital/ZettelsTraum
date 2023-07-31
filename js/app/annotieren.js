@@ -17,6 +17,7 @@ let annotieren = {
     annotieren.mod(mark);
     annotieren.ausfuehren();
   },
+
   // Meldung, dass das Annotieren nicht möglich ist
   unmoeglich () {
     dialog.oeffnen({
@@ -24,6 +25,7 @@ let annotieren = {
       text: `Das Annotieren ist nur möglich, wenn Trennstriche und Seitenumbrüche sichtbar sind.\nSie müssen zunächst die Funktion <img src="img/trennzeichen.svg" width="24" height="24" alt=""> aktivieren.`,
     });
   },
+
   // Annotierung initialisieren
   //   p = Element
   //     (Absatz, in dem sich markierte Wörter befinden können)
@@ -34,6 +36,7 @@ let annotieren = {
       });
     });
   },
+
   // speichert wichtige Elemente und Werte, mit denen später gearbeitet wird
   data: {
     cl: "", // class der Markierung (wort || user)
@@ -44,6 +47,7 @@ let annotieren = {
     ende: null, // letzter <mark> (kann identisch sein mit start)
     endeN: -1, // Nummer des letzten <mark> im Absatz (kann identisch sein mit startN)
   },
+
   // alle <mark> suchen, die gerade annotiert werden
   //   w = Element
   //     (<mark class="wort || user">, auf den geklickt wurde)
@@ -92,6 +96,7 @@ let annotieren = {
     }
     annotieren.data.data = data;
   },
+
   // Popup für die Annotierung aufbauen
   //   w = Element
   //     (<mark class="wort || user">, auf den geklickt wurde)
@@ -188,6 +193,7 @@ let annotieren = {
     tooltip.init(knoten);
     annotieren.modEvents();
   },
+
   // Events an das Annotieren-Feld hängen
   modEvents () {
     let aw = document.getElementById("annotierung-wort");
@@ -195,11 +201,11 @@ let annotieren = {
     aw.querySelector("img").addEventListener("click", () => annotieren.modSchliessen()); // Schließen-Icon
     aw.querySelectorAll(".farbe").forEach(i => annotieren.modFarbe(i)); // Farbkästchen
     aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", function() {
-      
       annotieren.ausfuehren();
     }); // Checkbox
     annotieren.modText(aw.querySelector(".text")); // Textfeld
   },
+
   // Annotierungs-Popup schließen
   modSchliessen () {
     let aw = document.getElementById("annotierung-wort");
@@ -209,6 +215,7 @@ let annotieren = {
     }
     return false;
   },
+
   // Farbe der Annotierung ändern
   //   f = Element
   //     (das <span> für die Farbe)
@@ -219,6 +226,7 @@ let annotieren = {
       annotieren.ausfuehren();
     });
   },
+
   // Text der Annotierung ändern
   //   t = Element
   //     (das Textfeld)
@@ -254,6 +262,7 @@ let annotieren = {
       });
     });
   },
+
   // Werte aus dem Annotationsfeld übernehmen
   //   input = Element
   //     (das Input-Feld)
@@ -276,6 +285,7 @@ let annotieren = {
     feld.classList.remove("aktiv");
     annotieren.ausfuehren();
   },
+
   // Annotierung umsetzen
   ausfuehren () {
     let aw = document.getElementById("annotierung-wort");

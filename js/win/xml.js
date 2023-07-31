@@ -19,6 +19,7 @@ let xml = {
   //   xl = Object
   //     (die aktuellen Redaktionsdaten: data.rd.xl)
   data: {},
+
   // Typen-Mapping für die Wortinformationen
   wiMap: {
     export: {
@@ -34,6 +35,7 @@ let xml = {
       Wortfeldartikel: "Wortfeldartikel",
     },
   },
+
   // Dropdown: Auswahlmöglichkeiten für Dropdown-Felder
   dropdown: {
     artikelTypen: ["Vollartikel", "Wortfeldartikel"],
@@ -64,6 +66,7 @@ let xml = {
     ],
     nachweisTypen: ["Literatur", "Link"],
   },
+
   // Dropdown: Referenzen zusammentragen
   dropdownReferenzen () {
     let arr = [],
@@ -82,6 +85,7 @@ let xml = {
     }
     return arr;
   },
+
   // Dropdown: Siglen sammeln
   dropdownSiglen () {
     let si = [];
@@ -90,6 +94,7 @@ let xml = {
     }
     return si;
   },
+
   // Dropdown: Daten zu den vorhandenen Gerüsten sammeln
   dropdownGerueste () {
     let arr = [];
@@ -100,6 +105,7 @@ let xml = {
     arr.sort(helfer.sortAlpha);
     return arr;
   },
+
   // Dropdown: Lesarten sammeln
   dropdownLesarten () {
     let data = {
@@ -155,6 +161,7 @@ let xml = {
     }
     return data;
   },
+
   // Counter, der fortlaufende Ziffern auswirft
   // (für Formularfelder, die eine ID brauchen)
   counter: null,
@@ -163,6 +170,7 @@ let xml = {
       yield n++;
     }
   },
+
   // Anzeige mit den gelieferten Daten aufbereiten
   async init () {
     // Counter initialisieren
@@ -249,6 +257,7 @@ let xml = {
     // Init: Wortinformationen
     xml.wiMake();
   },
+
   // Daten zurücksetzen
   async reset () {
     // Sollen die Daten wirklich zurückgesetzt werden?
@@ -274,6 +283,7 @@ let xml = {
     await xml.resetFormular();
     xml.init();
   },
+
   // Formulardaten zurücksetzen
   resetFormular () {
     return new Promise(async resolve => {
@@ -311,6 +321,7 @@ let xml = {
       resolve(true);
     });
   },
+
   // Metadaten: ID
   mdIdMake () {
     // ID erstellen
@@ -329,6 +340,7 @@ let xml = {
     xml.data.xl.md.id = id.value;
     xml.speichern();
   },
+
   // Metadaten/Revision: neue Revision erstellen
   mdRevisionAdd () {
     let au = document.getElementById("md-re-au"),
@@ -399,6 +411,7 @@ let xml = {
     no.value = "";
     au.focus();
   },
+
   // Metadaten/Revision: Revisionsblock aufbauen
   //   slot = Number
   //     (Slot, in dem der Datensatz steht)
@@ -425,6 +438,7 @@ let xml = {
     }
     xml.layoutTabellig(layout);
   },
+
   // Metadaten: Change-Listener für Artikel-ID, Artikeltyp und Themenfeld
   //   input = Element
   //     (das Textfeld)
@@ -457,6 +471,7 @@ let xml = {
       xml.speichern();
     });
   },
+
   // Lemma: neues Lemma erstellen
   lemmaAdd () {
     let le = document.getElementById("le-le"),
@@ -538,6 +553,7 @@ let xml = {
     re.value = "";
     le.focus();
   },
+
   // Lemma: Lemmablock aufbauen
   //   slot = Number
   //     (Slot, in dem der Datensatz steht)
@@ -557,6 +573,7 @@ let xml = {
     }
     xml.layoutTabellig(layout);
   },
+
   // Empfangen von Datensätzen: Verteilerfunktion
   //   xmlDatensatz = Object
   //     (der Datensatz; enthält die übergebenen Daten:
@@ -656,6 +673,7 @@ let xml = {
     }
     xml.speichern();
   },
+
   // Empfangen von Datensätzen: Standard-Arrays
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -713,6 +731,7 @@ let xml = {
       ele: [2, 3],
     });
   },
+
   // Empfangen von Datensätzen: Arrays sortieren
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -750,6 +769,7 @@ let xml = {
       xml.data.xl.lt.sort((a, b) => sortStr.indexOf(a.si) - sortStr.indexOf(b.si));
     }
   },
+
   // Beleg aus Zwischenablage einfügen
   belegEinfuegen () {
     let cb = modules.clipboard.readText(),
@@ -788,6 +808,7 @@ let xml = {
     // Belege zählen
     xml.belegeZaehlen();
   },
+
   // Wortinformationen: alle Wörter aufbauen
   wiMake () {
     // alle Köpfe entfernen
@@ -816,6 +837,7 @@ let xml = {
       restore: 300,
     });
   },
+
   // Wortinformationen: Verweistypgrenze markieren
   wiVerweistypGrenze () {
     let koepfe = document.querySelectorAll("#wi > .kopf");
@@ -834,12 +856,15 @@ let xml = {
       }
     }
   },
+
   // Bedeutungsgerüst: speichert den Slot des aktuellen Bedeutungsgerüsts
   bgAkt: -1,
+
   // Bedeutungsgerüst: speichert die ID des aktuellen Bedeutungsgerüsts oder
   // die ID der aktuellen Wortinformationen, falls kein Bedeutungsgerüst vorhanden
   // (wird nur für die Wortinformationen genutzt)
   bgAktGn: "",
+
   // Label eines Bedeutungsgerüsts eingeben/ändern/löschen
   async bgLabelChange () {
     // Ist das Formular noch im Bearbeiten-Modus?
@@ -895,6 +920,7 @@ let xml = {
     // Datensatz speichern
     xml.speichern();
   },
+
   // Bedeutungsgerüst: Nachweisformular umstellen
   bgNachweisToggle () {
     let typ = document.getElementById("nw-ty").value,
@@ -916,6 +942,7 @@ let xml = {
       formLink.classList.add("aus");
     }
   },
+
   // Bedeutungsgerüst: neuen Nachweis erstellen
   async bgNachweisAdd () {
     // Ist das Formular noch im Bearbeiten-Modus?
@@ -1051,6 +1078,7 @@ let xml = {
     ty.focus();
     ty.dispatchEvent(new Event("input"));
   },
+
   // Bedeutungsgerüst: Nachweise im Bedeutungsgerüst auffrischen
   bgNachweiseRefresh () {
     let xl = xml.data.xl.bg[xml.bgAkt].xl;
@@ -1081,6 +1109,7 @@ let xml = {
       });
     }
   },
+
   // Bedeutungsgerüst: neue Textreferenz erstellen
   async bgTextreferenzAdd () {
     // Ist das Formular noch im Bearbeiten-Modus?
@@ -1170,6 +1199,7 @@ let xml = {
     ti.value = "";
     li.focus();
   },
+
   // Bedeutungsgerüst: Textreferenzen im Bedeutungsgerüst auffrischen
   bgTextreferenzenRefresh () {
     let parser = new DOMParser(),
@@ -1228,6 +1258,7 @@ let xml = {
       });
     }
   },
+
   // Bedeutungsgerüst: alle Nachweise/Textreferenzen (neu) aufbauen
   //   key = String
   //     (Schlüssel des Datensatzes, der neu aufgebaut werden soll)
@@ -1256,12 +1287,14 @@ let xml = {
       restore: 300,
     });
   },
+
   // Bedeutungsgerüst: Nachweistyp-Formular zurücksetzen
   bgNwTyReset () {
     let nwTy = document.getElementById("nw-ty");
     nwTy.value = "";
     nwTy.dispatchEvent(new Event("input"));
   },
+
   // Bedeutungsgerüst: Formulardaten nach manuellem Bearbeiten auffrischen
   async bgRefreshData () {
     // kein Bedeutungsgerüst mehr => alle Strukturen und Daten entfernen
@@ -1330,6 +1363,7 @@ let xml = {
     xml.bgNwTfMake({key: "nw"});
     xml.bgNwTfMake({key: "tf"});
   },
+
   // Bedeutungsgerüst: XML aufbauen
   async bgMakeXML () {
     let bg = document.getElementById("bg");
@@ -1356,6 +1390,7 @@ let xml = {
     await new Promise(warten => setTimeout(() => warten(true), 25));
     div.dispatchEvent(new Event("click"));
   },
+
   // Bedeutungsgerüst: Bearbeiten-Modus beenden
   bgCloseXML () {
     return new Promise(async resolve => {
@@ -1382,6 +1417,7 @@ let xml = {
       resolve(true);
     });
   },
+
   // Bedeutungsgerüst: zurücksetzen bzw. initialisieren
   bgReset () {
     if (xml.data.xl.bg.length) {
@@ -1405,6 +1441,7 @@ let xml = {
     xml.bgNwTfMake({key: "tf"});
     xml.bgSelSet();
   },
+
   // Bedeutungsgerüst: anderes Gerüst auswählen
   //   caller = String
   //     (ID des Input-Feldes, das geändert wurde)
@@ -1425,6 +1462,7 @@ let xml = {
       xml.bgNwTfMake({key: "tf"});
     }
   },
+
   // Bedeutungsgerüst: ID und Name des aktuellen Gerüsts in die Auswahlfelder
   bgSelSet () {
     let selWi = document.getElementById("wi-sel-gr"),
@@ -1438,6 +1476,7 @@ let xml = {
     selWi.value = val;
     selBg.value = val;
   },
+
   // Element erzeugen: Standard-Kopf
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -1647,6 +1686,7 @@ let xml = {
     // Kopf zurückgeben
     return div;
   },
+
   // Element: Events an Kopfelemente hängen
   //   kopf = Element
   //     (der .kopf, der die Events erhalten soll)
@@ -1718,6 +1758,7 @@ let xml = {
       }
     });
   },
+
   // Elemente umschalten: Blöcke auf oder zuklappen
   //   auf = Boolean
   //     (die Blöcke sollen geöffnet werden)
@@ -1737,6 +1778,7 @@ let xml = {
       }
     }
   },
+
   // Element-Vorschau umschalten: Standard-Arrays
   //   div = Element
   //     (Kopf, zu dem die Vorschau eingeblendet werden soll)
@@ -1781,6 +1823,7 @@ let xml = {
       });
     });
   },
+
   // Element-Vorschau ausblenden
   //   pre = Element
   //     (Vorschau, die ausgeblendet werden soll)
@@ -1796,6 +1839,7 @@ let xml = {
       }, 0);
     });
   },
+
   // Element entfernen: Standard-Arrays
   //   a = Element
   //     (der Lösch-Link)
@@ -1911,6 +1955,7 @@ let xml = {
       xml.speichern();
     });
   },
+
   // Meldung anzeigen, dass in einer Datenstruktur noch keine Daten zu finden sind
   //   ele = Element
   //     (Container dessen Datenstruktur betroffen ist)
@@ -1920,6 +1965,7 @@ let xml = {
     p.classList.add("leer");
     p.textContent = "keine Daten";
   },
+
   // Abschnitt: neuen Datensatz anlegen
   //   element = Element
   //     (das Element, von dem ausgehend entschieden wird,
@@ -1958,6 +2004,7 @@ let xml = {
       });
     }
   },
+
   // Abschnitt: neuen Datensatz anlegen (Shortcut)
   abschnittAddShortcut () {
     let cont = document.activeElement.closest(".text-cont"),
@@ -1972,6 +2019,7 @@ let xml = {
     }
     xml.abschnittAdd({element});
   },
+
   // Abschnitt: Kopf und Container erzeugen
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -2057,6 +2105,7 @@ let xml = {
     // Tooltips initialisieren
     tooltip.init(cont);
   },
+
   // Abschnitt: ID automatisch anpassen (nach Speichern einer Überschrift)
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -2090,6 +2139,7 @@ let xml = {
       cont: abschnitt,
     });
   },
+
   // Textblock: neuen Datensatz für einen Textblock anlegen
   //   input = Element
   //     (das Textfeld mit dem Textblocktyp)
@@ -2153,6 +2203,7 @@ let xml = {
     // Illustrationsdaten erzeugt werden könnten)
     xml.speichern();
   },
+
   // Textblock: Kopf und Container erzeugen
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -2409,6 +2460,7 @@ let xml = {
     }
     xml.layoutTabellig(layout);
   },
+
   // Textblock: Textfeld automatisch speichern, sollte das Bearbeiten-Feld noch offen sein
   //   cont = Element
   //     (.textblock-cont)
@@ -2418,6 +2470,7 @@ let xml = {
       speichernButton.dispatchEvent(new MouseEvent("click"));
     }
   },
+
   // Textblock: XML-String zusammenbauen
   //   xmlStr = String || null
   //     (null, wenn der String aus dem Datensatz ausgelesen werden soll)
@@ -2467,6 +2520,7 @@ let xml = {
     // Ergebnis auswerfen
     return xmlStr;
   },
+
   // Textblock: XML einer Illustration erzeugen, Eingabe im Formular evaluieren
   //   form = Element
   //     (Container des Illustrationsformulars)
@@ -2551,6 +2605,7 @@ let xml = {
       return text.replace(/&(?!amp;)/g, "&amp;");
     }
   },
+
   // Textblock: IDs der Abbildungen auffrischen
   textblockAbbSetId ({key = "", slot = -1, slotBlock = -1}) {
     let nr = 0;
@@ -2577,6 +2632,7 @@ let xml = {
       }
     }
   },
+
   // Abschnitt/Textblock: Events an Element im Container anhängen
   //   cont = Element
   //     (.abschnitt-cont | .textblock-cont)
@@ -2640,6 +2696,7 @@ let xml = {
       });
     }
   },
+
   // Abschnitt/Textblock: Anzeige der Blöcke in Abstract und Text umschalten
   //   div = Element
   //     (Kopf, dessen Formularteil ein- oder ausgeblendet werden soll)
@@ -2677,6 +2734,7 @@ let xml = {
       }
     });
   },
+
   // Abschnitt/Textblock, Change-Listener: generischer Listener für Textformulare
   //   ele = Element
   //     (das Input-Element, auf dessen Änderung gehört wird)
@@ -2769,6 +2827,7 @@ let xml = {
       }
     });
   },
+
   // Abschnitt/Textblock: <pre> auffrischen
   //   cont = Element
   //     (Container mit dem <pre>)
@@ -2792,6 +2851,7 @@ let xml = {
       pre.classList.add("not-editable");
     }
   },
+
   // Abschnitt/Textblock: Löschen
   //   a = Element
   //     (der Lösch-Link)
@@ -2876,6 +2936,7 @@ let xml = {
       xml.speichern();
     });
   },
+
   // XML-Vorschau erzeugen
   //   xmlStr = String
   //     (XML-Snippet, das angezeigt werden soll)
@@ -2962,8 +3023,10 @@ let xml = {
       setTimeout(() => cont.style.removeProperty("height"), 300);
     }, 0);
   },
+
   // XML-Vorschau: nach Erzeugen des Bearbeitenfeldes an die Nullposition
   editSelect0: true,
+
   // XML-Vorschau: generische Funktion zum Erzeugen eines Bearbeitenfeldes
   //   cont = Element
   //     (.pre-cont)
@@ -3013,6 +3076,7 @@ let xml = {
       xml.editSpeichern({button});
     }
   },
+
   // XML-Vorschau: Events für Textarea
   editTaEvents ({ta}) {
     ta.addEventListener("input", function() {
@@ -3046,6 +3110,7 @@ let xml = {
       }, 25);
     });
   },
+
   // XML-Vorschau: Doppelklick zum Bearbeiten einer Vorschau
   //   pre = Element
   //     (der Vorschaucontainer .pre-cont)
@@ -3098,6 +3163,7 @@ let xml = {
       }
     });
   },
+
   // XML-Vorschau: Bearbeiten-Button erzeugen
   //   p = Element
   //     (Absatz für den Bearbeiten-Button)
@@ -3113,6 +3179,7 @@ let xml = {
       });
     });
   },
+
   // XML-Vorschau: Speichern-/Abbrechen-Button erzeugen
   //   button = Element
   //     (Speichern- oder Abbrechen-Button)
@@ -3279,6 +3346,7 @@ let xml = {
       }
     });
   },
+
   // XML-Vorschau: Speichern/Abbrechen, generischer Abschluss
   // (<pre> und Buttons zurücksetzen; muss auch bei Abbruch
   // ohne Speichern geschehen werden)
@@ -3299,6 +3367,7 @@ let xml = {
     xml.editBearbeiten({p: cont.lastChild});
     xml.editPreDbl({pre});
   },
+
   // XML-Vorschau: Frage, ob Änderungen gespeichert werden sollen
   //   pre = Element
   //     (.pre-cont)
@@ -3329,6 +3398,7 @@ let xml = {
       resolve(true);
     });
   },
+
   // XML-Vorschau: Text in der Vorschau automatisch taggen
   //   str = String
   //     (String, der getaggt werden soll)
@@ -3542,6 +3612,7 @@ let xml = {
       return `<Hervorhebung Stil="#sup">${ziffernNorm}</Hervorhebung>`;
     }
   },
+
   // zählt die Belege durch und trägt die Anzahl ein
   belegeZaehlen () {
     let anzahl = document.getElementById("belege-anzahl"),
@@ -3552,6 +3623,7 @@ let xml = {
       anzahl.textContent = " ";
     }
   },
+
   // Kopf-Element bewegen
   //   dir = String
   //     (Bewegungsrichtung, "up" | "down")
@@ -3732,6 +3804,7 @@ let xml = {
       xml.textblockAbbSetId({});
     }
   },
+
   // Abschnitt ein- oder ausrücken
   //   dir = String
   //     (Bewegungsrichtung, "left" | "right")
@@ -3767,6 +3840,7 @@ let xml = {
     // Daten speichern
     xml.speichern();
   },
+
   // illegale Einrückungen korrigieren
   //   key = String
   //     (ID des Containers, dessen Köpfe überprüft werden sollen)
@@ -3795,6 +3869,7 @@ let xml = {
       kopf.nextSibling.classList.replace(`level-${level}`, `level-${level - 1}`);
     }
   },
+
   // Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
   //   key = String
   //     (Schlüssel des Datensatzes, der betroffen ist)
@@ -3830,6 +3905,7 @@ let xml = {
       document.querySelectorAll(`#${key} > .kopf`).forEach((i, n) => i.dataset.slot = n);
     }
   },
+
   // überprüft ein XML-Snippet darauf, ob es wohlgeformt ist
   //   warn = Element
   //     (das Warn-Icon, das angepasst werden muss)
@@ -3851,6 +3927,7 @@ let xml = {
       warn.title = "keine Fehler";
     }
   },
+
   // übprüft, ob in einem Abschnitt noch Fehler sind
   //   cont = Element || null
   //     (ggf. der .abschnitt-cont)
@@ -3872,6 +3949,7 @@ let xml = {
     }
     tooltip.init(warn.parentNode);
   },
+
   // Breite von Elementen anpassen, sodass Kopfzeilen wie eine Tabelle wirken
   //   id = String
   //     (ID des Containers, in dem die Elemente sind)
@@ -3913,6 +3991,7 @@ let xml = {
       }
     }
   },
+
   // extrahiert die Lemmata aus dem Karteiwort
   lemmata () {
     let arr = [],
@@ -3926,15 +4005,18 @@ let xml = {
     arr.sort(helfer.sortAlpha);
     return arr;
   },
+
   // Änderungen in der Kartei speichern
   speichern () {
     modules.ipc.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
   },
+
   // Speichern der Kartei triggern
   speichernKartei () {
     modules.ipc.sendTo(xml.data.contentsId, "kartei-speichern");
     helfer.animation("gespeichert");
   },
+
   // Exportieren: XML-Datei zusammenbauen
   exportieren () {
     if (!xml.exportierenEval()) {
@@ -4093,6 +4175,7 @@ let xml = {
       return str.replace(/\n/g, `\n${t}`);
     }
   },
+
   // Exportieren: übperprüfen, ob alle notwendigen Elemente vorhanden sind
   exportierenEval () {
     let fehlstellen = [],
@@ -4189,6 +4272,7 @@ let xml = {
     }
     return true;
   },
+
   // Exportieren: XML-Dateidaten speichern
   //   xmlStr = String
   //     (die XML-Dateiedaten)
@@ -4268,6 +4352,7 @@ let xml = {
     xml.data.letzter_pfad = pfad;
     modules.ipc.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
   },
+
   // Importieren: XML-Datei öffnen und überprüfen
   async importieren () {
     let opt = {
@@ -4347,6 +4432,7 @@ let xml = {
         throw err;
       });
   },
+
   // Importieren: XML-Datei einlesen
   //   xmlDoc = Document
   //     (die XML-Datei, die eingelesen werden soll)

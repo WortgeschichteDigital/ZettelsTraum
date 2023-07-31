@@ -3,8 +3,10 @@
 let overlay = {
   // bisher höchster z-index
   zIndex: 99,
+
   // Verweis auf einen laufenden Timeout
   timeout: null,
+
   // Fenster öffnen
   //   fenster = Element
   //     (Overlay-Fenster, das geöffnet werden soll)
@@ -31,6 +33,7 @@ let overlay = {
     // Rückgabewert
     return schon_offen;
   },
+
   // Schließen-Event eines Links initialisieren
   //   link = Element
   //     (Link, auf den geklickt wurde)
@@ -40,6 +43,7 @@ let overlay = {
       overlay.schliessen(this);
     });
   },
+
   // schließt ein Overlay-Fenster
   //   schliesser = Element
   //     (Link oder Button, über den das Schließen angestoßen wurde)
@@ -91,6 +95,7 @@ let overlay = {
       document.getElementById("beleg-bd").focus();
     }
   },
+
   // alle offenen Overlays schließen
   async alleSchliessen () {
     let offen = [];
@@ -104,6 +109,7 @@ let overlay = {
       await new Promise(resolve => setTimeout(() => resolve(true), 200));
     }
   },
+
   // blendet ein Overlay-Fenster aus
   ausblenden (fenster) {
     fenster.classList.remove("einblenden");
@@ -111,6 +117,7 @@ let overlay = {
     // overlay.css festgelegt ist.
     overlay.timeout = setTimeout(() => fenster.classList.add("aus"), 200);
   },
+
   // oberstes Overlay-Fenster ermitteln
   oben () {
     let oben = {

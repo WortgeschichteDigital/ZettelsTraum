@@ -8,17 +8,22 @@ let liste = {
     document.getElementById("liste").classList.add("preload");
     helfer.sektionWechseln("liste");
   },
+
   // Zwischenspeicher für die ID eines neu erstellten Belegs
   // (wichtig, damit der Beleg aufgeklappt wird, wenn die Liste neu aufgebaut wird;
   // vgl. liste.status())
   statusNeu: "",
+
   // Zwischenspeicher für die ID eines geänderten Belegs
   // (damit der Beleg markiert wird)
   statusGeaendert: "",
+
   // Zwischenspeicher für die aufgeklappten Belege
   statusOffen: {},
+
   // Zwischenspeicher für sichtbare Absätze in Belegen
   statusSichtbarP: {},
+
   // speichert den Status der aktuellen Belegliste, d.h. ob die Karten auf oder zugeklappt sind
   //   filter_init = Boolean
   //     (speichert, ob die Filterliste initialisiert werden sollen)
@@ -95,8 +100,10 @@ let liste = {
       setTimeout(() => kopf.classList.remove("hinweis-beleg"), 1000);
     }
   },
+
   // Zwischenspeicher für den ermittelten Scroll-Status
   statusScroll: {},
+
   // Scroll-Status ermitteln
   statusScrollBak () {
     liste.statusScroll = {
@@ -120,6 +127,7 @@ let liste = {
       }
     }
   },
+
   // Scroll-Status wiederherstellen
   statusScrollReset () {
     if (!liste.statusScroll.id) {
@@ -135,6 +143,7 @@ let liste = {
       });
     }
   },
+
   // baut die Belegliste auf
   //   filter_init = Boolean
   //     (true = Filter müssen erneut initialisiert werden)
@@ -271,6 +280,7 @@ let liste = {
       suchleiste.suchen(true);
     }
   },
+
   // basale Vorbereitungen für die Belegliste
   //   filter_init = Boolean
   //     (true = Filter müssen neu initialisiert werden)
@@ -315,6 +325,7 @@ let liste = {
     // Belege zurückgeben
     return belege;
   },
+
   // In der Kartei sind keine Belege (mehr) und das sollte auch gezeigt werden.
   aufbauenKeineBelege () {
     let cont = document.getElementById("liste-belege-cont"),
@@ -323,6 +334,7 @@ let liste = {
     div.textContent = "keine Belege";
     cont.appendChild(div);
   },
+
   // Anzahl der Belge drucken
   //   gesamt = Number
   //     (Anzahl aller Belege)
@@ -354,6 +366,7 @@ let liste = {
     }
     cont.textContent = anzahl;
   },
+
   // Detailblock aufbauen
   //   id = Number
   //     (ID der Karteikarte)
@@ -466,6 +479,7 @@ let liste = {
     // Tooltip initialisieren
     tooltip.init(div);
   },
+
   // ermittelt, ob die Detail-Anzeige wirklich aufgebaut werden soll (für den Fall einer Suche)
   //   id = String
   //     (die ID der Karteikarte, um die es geht)
@@ -482,6 +496,7 @@ let liste = {
     }
     return false;
   },
+
   // Zeitschnitt ermitteln
   //   datum = String
   //     (das im Datum-Feld des Belegformulars eingetragene Datum)
@@ -525,6 +540,7 @@ let liste = {
     // Output auswerfen
     return output;
   },
+
   // erstellt ein <div>, der den Zeitschnitt anzeigt
   //   jahrzehnt = Number
   //     (das Jahrzehnt des Zeitschnitts, der erstellt werden soll)
@@ -545,6 +561,7 @@ let liste = {
     // <div> auswerfen
     return div;
   },
+
   // Anzeige, dass für einen Zeitabschnitt keine Belege vorhanden sind, ggf. ausblenden
   zeitschnitteKeineBelege () {
     // 1. Schritt: Meldungen, nur nach Zeitschnitten einblenden, die angezeigt werden.
@@ -568,6 +585,7 @@ let liste = {
       }
     }
   },
+
   // Anzeige der Zeitschnitte anpassen
   //   scroll_bak = Boolean
   //     (beim Neuaufbau der Liste darf die Position nicht gemerkt werden)
@@ -589,9 +607,11 @@ let liste = {
       liste.statusScrollReset();
     }
   },
+
   // Cache, um die Daten nicht andauernd neu extrahieren zu müssen
   // (unbedingt vor dem Sortieren leeren, sonst werden Änderungen nicht berücksichtigt!)
   belegeSortierenCache: {},
+
   // Belege chronologisch sortieren
   //   a, b = String
   //     (IDs der zu sortierenden Belege)
@@ -691,6 +711,7 @@ let liste = {
     }
     return parseInt(b, 10) - parseInt(a, 10);
   },
+
   // erstellt die Anzeige des Belegs
   //   id = String
   //     (ID des Belegs)
@@ -789,6 +810,7 @@ let liste = {
     // <div> zurückgeben
     return div;
   },
+
   // Absätze aufbereiten
   //   p = String
   //     (Text mit Absätzen)
@@ -801,6 +823,7 @@ let liste = {
     p = p.replace(/\n\s*\n/g, "\n");
     return p;
   },
+
   // gekürzte Absätze darstellen
   //   p = Element
   //     (der Absatz, der gekürzt dargestellt wird
@@ -817,6 +840,7 @@ let liste = {
     // gekürzten Absatz auf Klick erweitern
     liste.belegAbsatzEinblenden(p);
   },
+
   // hebt die Kürzung eines Absatzes auf Klick auf
   //   p = Element
   //     (der gekürzte Absatz)
@@ -906,6 +930,7 @@ let liste = {
       }
     });
   },
+
   // generiert den Vorschautext des übergebenen Belegs inkl. Autorname (wenn vorhanden)
   //   beleg_akt = Object
   //     (Verweis auf den aktuellen Beleg)
@@ -979,6 +1004,7 @@ let liste = {
     // Fragment zurückgeben
     return frag;
   },
+
   // Textsorte/Notiz hinter Jahr bzw. Autorname in Vorschaukopf des Belegs einhängen
   //   ele = Element
   //     (hier wird die Textsorte angehängt)
@@ -1043,6 +1069,7 @@ let liste = {
     // Nachsatz
     ele.appendChild(document.createTextNode(`)${nach}`));
   },
+
   // Trennungszeichen entfernen
   // (Funktion wird auch für andere Kontexte benutzt, z. B. in filter.js und beleg.js)
   //   text = String
@@ -1061,6 +1088,7 @@ let liste = {
     }
     return text.replace(/\[¬\]|\[:.+?:\]\s*/g, "");
   },
+
   // hebt ggf. die unterschiedlich eingeklammerten Textteile hervor,
   // die im Belegtext zu finden sind
   //   text = String
@@ -1093,6 +1121,7 @@ let liste = {
     // Ergebnis zurückgeben
     return text;
   },
+
   // hebt ggf. das Wort der Kartei im übergebenen Text hervor
   //   schnitt = String
   //     (Text, in dem der Beleg hervorgehoben werden soll)
@@ -1182,6 +1211,7 @@ let liste = {
       return m;
     }
   },
+
   // überprüft, ob das Karteiwort in dem übergebenen Text steht
   //   text = String
   //     (Text, der auf die Existenz des Karteiworts überprüft werden soll)
@@ -1261,6 +1291,7 @@ let liste = {
     }
     return false; // manche Karteiwörter wurden nicht gefunden
   },
+
   // Suchtreffer hervorheben
   //   text = String
   //     (der Text, in dem die Ersetzung vorgenommen werden soll)
@@ -1322,10 +1353,13 @@ let liste = {
       return m;
     }
   },
+
   // Timeout für das Aus- bzw. Einblenden der Detailansicht
   belegUmschaltenTimeout: null,
+
   // speichert die Zielhöhe des Detail-Containers für das Einblenden
   belegUmschaltenZielhoehe: -1,
+
   // Details zu einem einzelnen Beleg durch Klick auf den Belegkopf ein- oder ausblenden
   //   div = Element
   //     (der Belegkopf, auf den geklickt werden kann)
@@ -1374,6 +1408,7 @@ let liste = {
       }
     });
   },
+
   // generische Funktion für das Erstellen eines Beleg-Details
   //   config = Object
   //     Enthält folgende Eigenschaften:
@@ -1437,6 +1472,7 @@ let liste = {
       helfer.externeLinks(link);
     }
   },
+
   // Text aller Bedeutungen in ein Array schreiben
   //   bd = Array
   //     (Bedeutungen, wie sie in den Karteikarten stehen; d.h. Array mit Objects in den Slots)
@@ -1453,6 +1489,7 @@ let liste = {
     }
     return arr;
   },
+
   // Leiste mit Meta-Informationen zu der Karte erstellen
   //   beleg = Object
   //     (Datenobjekt mit allen Werte der Karte, die dargestellt werden soll)
@@ -1547,6 +1584,7 @@ let liste = {
     // Tooltip initialisieren
     tooltip.init(div);
   },
+
   // Text-Links erkennen und in echte HTML-Links umwandeln
   //   text = String
   //     (Plain-Text, in dem die Links umgewandelt werden sollen)
@@ -1565,6 +1603,7 @@ let liste = {
     });
     return text;
   },
+
   // Klick-Event zum Öffnen des Karteikarten-Formulars
   //   a = Element
   //     (Icon-Link, über den das Formular geöffnet werden kann)
@@ -1575,6 +1614,7 @@ let liste = {
       beleg.oeffnen(parseInt(this.parentNode.dataset.id, 10));
     });
   },
+
   // Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
   //   span = Element
   //     (<span>, in dem das Detail steht)
@@ -1589,6 +1629,7 @@ let liste = {
       });
     });
   },
+
   // Text der Überschrift für die Detailanzeige erstellen
   // (die Funktion brauch ich auch in anhaenge.js, drucken.js und popup.js, darum ausgelagert)
   //   beleg_id = String || Object
@@ -1616,6 +1657,7 @@ let liste = {
     }
     return text;
   },
+
   // Funktionen im Header aufrufen
   //   link = Element
   //     (Link im Header, auf den geklickt wird)
@@ -1644,6 +1686,7 @@ let liste = {
       }
     });
   },
+
   // Header-Icons: Filter ein- bzw. ausblenden
   headerFilter () {
     // Option ändern
@@ -1652,6 +1695,7 @@ let liste = {
     // Anzeige anpassen
     liste.headerFilterAnzeige(true);
   },
+
   // Header-Icons: Filter ein- bzw. ausblenden
   // (Anzeige der Filterleiste und des Links im Header anpassen)
   //   scroll_bak = Boolean
@@ -1682,8 +1726,10 @@ let liste = {
       setTimeout(() => liste.statusScrollReset(), 500);
     }
   },
+
   // Header-Icons: speichert die ausgewählte Sortierrichtung
   headerSortierenAuswahl: null,
+
   // Header-Icons: chronologisches Sortieren der Belege
   async headerSortieren () {
     // Sortierfunktion auswählen
@@ -1734,6 +1780,7 @@ let liste = {
     // Liste neu aufbauen
     liste.status(false);
   },
+
   // Header-Icons: chronologisches Sortieren der Belege (Anzeige im Header anpassen)
   headerSortierenAnzeige () {
     let link = document.getElementById("liste-link-sortieren");
@@ -1756,6 +1803,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: Sortieren-Popup schließen
   headerSortierenSchliessen () {
     const ls = document.querySelector("#liste-sort");
@@ -1765,6 +1813,7 @@ let liste = {
     }
     return false;
   },
+
   // Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen
   //   funktion = String
   //     (der letzte Teil der ID des Elements, also "liste-link-" + "funktion" = ID)
@@ -1781,6 +1830,7 @@ let liste = {
     // Anzeige der Zeitschnitte in der Liste anpassen
     liste.zeitschnitteAnpassen(true);
   },
+
   // Header-Icons: Anzahl der Zeitschnitte festlegen, die angezeigt werden sollen (Anzeige im Header anpassen)
   headerZeitschnitteAnzeige () {
     let aktiv = "";
@@ -1797,6 +1847,7 @@ let liste = {
       }
     }
   },
+
   // Header-Icons: Anzeige der Details des Belegs umstellen
   headerBeleg () {
     // Variable umstellen
@@ -1833,6 +1884,7 @@ let liste = {
       suchleiste.suchen(true);
     }
   },
+
   // Header-Icons: Anzeige der Details des Belegs umstellen (Anzeige im Header anpassen)
   headerBelegAnzeige () {
     let link = document.getElementById("liste-link-beleg");
@@ -1845,6 +1897,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: Kürzung des Belegs aus-/einschalten
   headerBelegKuerzen () {
     // Kürzung umstellen
@@ -1855,6 +1908,7 @@ let liste = {
     // Liste neu aufbauen
     liste.status(false, false);
   },
+
   // Header-Icons: Kürzung des Belegs aus-/einschalten (Anzeige im Header anpassen)
   headerBelegKuerzenAnzeige () {
     let link = document.getElementById("liste-link-kuerzen");
@@ -1867,6 +1921,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: Silbentrennung im Beleg aus-/einschalten
   headerTrennung () {
     // Hervorhebung umstellen
@@ -1877,6 +1932,7 @@ let liste = {
     // Liste neu aufbauen
     liste.status(false);
   },
+
   // Header-Icons: Silbentrennung im Beleg aus-/einschalten (Anzeige im Header anpassen)
   headerTrennungAnzeige () {
     let link = document.getElementById("liste-link-trennung");
@@ -1889,6 +1945,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten
   headerWortHervorheben () {
     // Hervorhebung umstellen
@@ -1899,6 +1956,7 @@ let liste = {
     // Liste neu aufbauen
     liste.status(false);
   },
+
   // Header-Icons: Hervorhebung des Worts im Beleg und der Vorschau aus-/einschalten (Anzeige im Header anpassen)
   headerWortHervorhebenAnzeige () {
     let link = document.getElementById("liste-link-hervorheben");
@@ -1911,6 +1969,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: Steuerung der Detailanzeige ändern
   //   funktion = String
   //     (verweist auf den Link, der geklickt wurde)
@@ -1940,6 +1999,7 @@ let liste = {
       suchleiste.suchen(true);
     }
   },
+
   // Header-Icons: frischt die Anzeige der Details nach dem Ändern
   // einer Anzeigeoption im Header der Belegliste auf
   headerDetailsAuffrischen () {
@@ -1958,6 +2018,7 @@ let liste = {
     // Scroll-Status wiederherstellen
     liste.statusScrollReset();
   },
+
   // Header-Icons: Links zur Steuerung der Detailanzeige visuell anpassen
   //   funktion = String
   //     (verweist auf den Link, der geklickt wurde)
@@ -1984,6 +2045,7 @@ let liste = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Header-Icons: das letzte angezeigte Icon soll rechts keine border, dafür runde Kanten haben
   headerDetailsLetztesIcon () {
     // alte Markierung entfernen
@@ -2002,6 +2064,7 @@ let liste = {
       }
     }
   },
+
   // Beleg als gebucht markieren
   //   icon = Element
   //     (Buchungs-Icon neben dem Belegtext)
@@ -2024,6 +2087,7 @@ let liste = {
       kartei.karteiGeaendert(true);
     });
   },
+
   // Datenfeld durch Klick auf ein Icon kopieren
   //   icon = Element
   //     (Kopier-Icon, auf das geklickt wurde)
@@ -2040,6 +2104,7 @@ let liste = {
       });
     });
   },
+
   // alle in der Belegliste angezeigten Belege in die Zwischenablage
   kopierenAlleBelege () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -2082,6 +2147,7 @@ let liste = {
     // Feedback
     helfer.animation("zwischenablage");
   },
+
   // alle in der Belegliste sichtbaren Belege löschen
   async loeschenAlleBelege () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -2130,6 +2196,7 @@ let liste = {
       kopieren.uiText();
     }
   },
+
   // stellt fest, ob die Belegliste sichtbar ist
   //   funktion = String
   //     (Name der Funktion, die nur ausgeführt werden darf,
@@ -2145,6 +2212,7 @@ let liste = {
     }
     return true;
   },
+
   // Tastaturkürzel Strg + C abfangen und das Kopieren von markiertem Text ggf. selbst regeln
   //   evt = Object
   //     (das Event-Objekt, das beim Kopieren erzeugt wird)
@@ -2196,6 +2264,7 @@ let liste = {
       }
     }
   },
+
   // Listener für die Input-Element im Kopierfenster
   //   input = Element
   //     (Radio-Button oder Button)
@@ -2211,6 +2280,7 @@ let liste = {
       input.addEventListener("click", () => liste.textKopierenExec());
     }
   },
+
   // Kopieren von markiertem Text ausführen
   textKopierenExec () {
     let fenster = document.getElementById("ctrlC"),

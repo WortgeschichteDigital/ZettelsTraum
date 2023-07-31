@@ -3,6 +3,7 @@
 let dropdown = {
   // speichert Daten der aktuellen Dropdown-Liste
   data: [],
+
   // sammelt die bereits registrierten Daten aus einem Formular-Datensatz
   //   ds = String
   //     (der Datensatz, aus dem die Daten zusammengetragen werden sollen)
@@ -24,6 +25,7 @@ let dropdown = {
     }
     dropdown.data.sort(helfer.sortAlpha);
   },
+
   // sammelt die Bedeutungen für das Dropdown-Menü im Formular
   dataBedeutungen () {
     let bd = data.bd.gr[data.bd.gn].bd;
@@ -37,6 +39,7 @@ let dropdown = {
       }));
     }
   },
+
   // ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
   dataKorpora () {
     let korpora = [...beleg.korpora],
@@ -53,6 +56,7 @@ let dropdown = {
     korpora_ergaenzt.sort(helfer.sortAlpha);
     dropdown.data = korpora_ergaenzt.concat(korpora);
   },
+
   // Tagliste erstellen
   //   feld_id = String
   //     (ID des Dropdownfeldes, für das die Tagliste erstellt werden soll)
@@ -72,6 +76,7 @@ let dropdown = {
     arr.sort(helfer.sortAlpha);
     return arr;
   },
+
   // Liste der Bedeutungsgerüste erstellen
   //   gr = Object
   //     (Zweig mit den Gerüsten)
@@ -87,6 +92,7 @@ let dropdown = {
     });
     return arr;
   },
+
   // Gerüste-Auswahl im Einfügen-Fenster der Kopierfunktion
   dataKopierenGerueste () {
     let arr = [];
@@ -96,9 +102,11 @@ let dropdown = {
     arr.push("kein Import");
     return arr;
   },
+
   // Timeouts für Events im Textfeld
   timeoutBlur: null,
   timeoutFill: null,
+
   // Events im Textfeld
   //   inp = Element
   //     (Textinput-Feld, das ein Dropdown-Element haben könnte)
@@ -172,6 +180,7 @@ let dropdown = {
       });
     }
   },
+
   // Dropdown-Link erzeugen
   //   cl = String
   //     (class des Dropdown-Links)
@@ -201,6 +210,7 @@ let dropdown = {
     svg.appendChild(path);
     return a;
   },
+
   // Klick-Event auf dem Link
   //   a = Element
   //     (Link, der geklickt wurde, um die Dropdown-Liste aufzubauen)
@@ -211,8 +221,10 @@ let dropdown = {
       this.previousSibling.focus();
     });
   },
+
   // ID des aufrufenden Inputfelds
   caller: "",
+
   // Dropdown-Liste initialisieren
   //   feld_id = String
   //     (ID des Textfeldes, zu dem das Dropdown gehört)
@@ -368,6 +380,7 @@ let dropdown = {
     // Dropdown positionieren
     dropdown.position();
   },
+
   // Dropdown korrekt positionieren
   position () {
     let drop = document.getElementById("dropdown"),
@@ -381,6 +394,7 @@ let dropdown = {
       drop.style.top = `${feld.offsetHeight + 4}px`;
     }
   },
+
   // liest den Wert aus einem Dropdown-Feld aus
   //   feld = Element
   //     (das Dropdown-Feld)
@@ -391,9 +405,11 @@ let dropdown = {
       return feld.value;
     }
   },
+
   // Wenn >= 0 heißt das, dass die Dropdownliste gefiltert wurde. Sie ist also
   // aufgrund einer Tastatureingabe erstellt worden
   cursor: -1,
+
   // Dropdown-Liste füllen
   //   filtern = Boolean
   //     (Vorschläge sollen gefiltert werden)
@@ -480,6 +496,7 @@ let dropdown = {
     // Dropdown positionieren
     dropdown.position();
   },
+
   // Tastatur-Navigation in der Dropdown-Liste
   //   evt = Object
   //     (Event-Object des keydown)
@@ -521,6 +538,7 @@ let dropdown = {
       drop.scrollTop = pos_von_oben - span_hoehe;
     }
   },
+
   // Klick in Dropdown-Liste abfangen
   //   ein = Element
   //     (<span>, auf den geklickt wurde)
@@ -530,6 +548,7 @@ let dropdown = {
       dropdown.auswahl(feld, this.textContent);
     });
   },
+
   // ausgewählten Text in das Input-Feld eintragen
   // Obacht! Die Funktion wird auch von beleg.bedeutungEintragen() genutzt.
   //   feld = Element
@@ -697,6 +716,7 @@ let dropdown = {
       });
     }
   },
+
   // Dropdown-Liste schließen
   schliessen () {
     let drop = document.getElementById("dropdown");

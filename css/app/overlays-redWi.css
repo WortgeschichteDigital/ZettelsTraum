@@ -1,12 +1,15 @@
 @charset "utf-8";
 
-/* Redaktion: Wortinformationen ----------------- */
+/* REDAKTION: WORTINFORMATIONEN ----------------- */
+
 #red-wi > div {
   margin-top: 40px;
   max-width: 650px;
 }
 
-/* Formular ------------------------------------- */
+
+/* FORMULAR ------------------------------------- */
+
 #red-wi-form {
   padding: 10px;
 }
@@ -97,7 +100,9 @@
   top: 6px;
 }
 
-/* Content -------------------------------------- */
+
+/* CONTENT -------------------------------------- */
+
 #red-wi-cont {
   margin-top: 5px;
   padding: 0 10px 10px 10px;
@@ -164,7 +169,9 @@
   color: var(--textHell);
 }
 
-/* Kopieren ------------------------------------- */
+
+/* KOPIEREN ------------------------------------- */
+
 #red-wi-copy {
   padding: 0 10px 10px 10px;
 }

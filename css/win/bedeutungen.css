@@ -1,18 +1,15 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../bedeutungenbaum.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* STRUKTUR-ELEMENTE ---------------------------- */
 
-/* Bedeutungenbaum ------------------------------ */
-@import url(../bedeutungenbaum.css);
-
-/* Struktur-Elemente ---------------------------- */
 body {
   margin: 0;
   overflow-x: hidden;
@@ -57,7 +54,9 @@ main {
   padding: 0 10px 20px 10px;
 }
 
-/* Basis-Elemente ------------------------------- */
+
+/* BASIS-ELEMENTE ------------------------------- */
+
 h2 {
   position: relative;
   margin: 80px 0 15px 0;
@@ -131,7 +130,9 @@ input:read-only::selection {
   margin-top: 2px; /* kleiner Fix, damit das Menü auch hier ein bisschen abgesetzt ist */
 }
 
-/* Bedeutungenbaum ------------------------------- */
+
+/* BEDEUTUNGENBAUM ------------------------------- */
+
 table {
   border-collapse: collapse;
   border-spacing: 0;

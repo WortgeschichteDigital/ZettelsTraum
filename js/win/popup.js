@@ -3,10 +3,13 @@
 let popup = {
   // speichert die ermittelte Textauswahl
   textauswahl: "",
+
   // speichert das Element, auf das sich das Event bezieht
   element: null,
+
   // speichert die ID des angeklickten Kopfs (nur Abschnitts- und Textköpfe)
   kopfID: "",
+
   // Popup öffnen
   //   evt = Event-Object
   //     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
@@ -34,6 +37,7 @@ let popup = {
     // Menü vom Main-Prozess erzeugen lassen
     modules.ipc.invoke("popup", items);
   },
+
   // ermittelt das für den Rechtsklick passende Klickziel
   //   pfad = Array
   //     (speichert den Event-Pfad, also die Elementeliste,
@@ -78,6 +82,7 @@ let popup = {
       }
     }
   },
+
   // Text der Auswahl ermitteln und entscheiden, ob sie berücksichtigt wird
   //   pfad = Array
   //     (speichert den Event-Pfad, also die Elementeliste, über die das

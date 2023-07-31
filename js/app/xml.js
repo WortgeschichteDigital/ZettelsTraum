@@ -33,6 +33,7 @@ let xml = {
     "(Die )?Welt",
     "Die ZEIT",
   ],
+
   // markierten Belegschnitt aufbereiten
   schnitt () {
     let data = popup.referenz.data,
@@ -321,6 +322,7 @@ let xml = {
     // String zurückgeben
     return xmlStr;
   },
+
   // veschachtelte Hervorhebungen-Tags zusammenführen
   //   text = String
   //     (Text, in dem die Hervorhebungen zusammengeführt werden sollen)
@@ -351,6 +353,7 @@ let xml = {
     }
     return text;
   },
+
   // markierten Belegschnitt in die Zwischenablage kopieren
   schnittInZwischenablage () {
     const xmlStr = xml.schnitt();
@@ -361,6 +364,7 @@ let xml = {
     // Animation
     helfer.animation("zwischenablage");
   },
+
   // markierten Belegschnitt an das XML-Fenster schicken
   schnittInXmlFenster () {
     // Karteikarte noch nicht gespeichert?
@@ -412,6 +416,7 @@ let xml = {
     };
     redXml.datensatz({xmlDatensatz});
   },
+
   // alle in der Belegliste sichtbaren Belege ans XML-Fenster schicken
   async belegeInXmlFenster () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -488,6 +493,7 @@ let xml = {
       await new Promise(resolve => setTimeout(() => resolve(true), 100));
     }
   },
+
   // Referenztag des Belegs in die Zwischenablage kopieren
   referenz () {
     const id = xml.belegId({});
@@ -496,6 +502,7 @@ let xml = {
     });
     helfer.animation("zwischenablage");
   },
+
   // Beleg-ID ermitteln
   //   data = Object || undefined
   //     (das Datenobjekt der betreffenden Karteikarte)
@@ -522,6 +529,7 @@ let xml = {
     // ID zurückgeben
     return `${autor}-${jahr}-${id}`;
   },
+
   // Typ der Hervorhebung ermitteln
   //   n = Element
   //     (ein Knoten, der Textauszeichnungen enthältO)

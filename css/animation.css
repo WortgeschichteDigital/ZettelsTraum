@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Overlay-Animation ---------------------------- */
+/* OVERLAY-ANIMATION ---------------------------- */
+
 #animation {
   position: fixed;
   top: calc(100vh / 2 - 50px);
@@ -32,7 +33,9 @@
   text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }
 
-/* Rotations-Animation -------------------------- */
+
+/* ROTATIONS-ANIMATION -------------------------- */
+
 @keyframes rotieren {
   25% {
     transform: rotate(90deg);

@@ -9,6 +9,7 @@ let bedeutungenGerueste = {
       yield id++;
     }
   },
+
   // Konfigurationsfenster öffnen
   //   evt = Event-Objekt
   //     (Klick-Event zum Öffnen des Fensters)
@@ -30,6 +31,7 @@ let bedeutungenGerueste = {
       ele: document.getElementById("gerueste-cont-over"),
     });
   },
+
   // Tabelle mit den Bedeutungsgerüsten aufbauen
   aufbauen () {
     let cont = document.getElementById("gerueste-cont-over");
@@ -100,6 +102,7 @@ let bedeutungenGerueste = {
       bedeutungenGerueste.add();
     });
   },
+
   // Gerüst hinzufügen
   add () {
     const name = document.querySelector("#gerueste-cont tr:last-child input").value,
@@ -113,6 +116,7 @@ let bedeutungenGerueste = {
     bedeutungen.bedeutungenGeaendert(true);
     bedeutungen.geruestWechseln(id);
   },
+
   // Gerüst löschen
   //   a = Element
   //     (Lösch-Link des Gerüsts)
@@ -164,6 +168,7 @@ let bedeutungenGerueste = {
       });
     });
   },
+
   // Name eines Gerüstes eingeben/ändern
   //   td = Element
   //     (die Tabellenzelle, in der der Name geändert werden soll)
@@ -182,6 +187,7 @@ let bedeutungenGerueste = {
       bedeutungenGerueste.writeNameListener(input);
     });
   },
+
   // Name aus dem Input-Feld übernehmen (Listener)
   //   input = Element
   //     (das aktive Input-Element)
@@ -204,6 +210,7 @@ let bedeutungenGerueste = {
       }, 5); // das gibt sonst Probleme, wenn das Enter-Event bereits abgefeuert wurde
     });
   },
+
   // Name aus dem Input-Feld übernehmen (Listener)
   //   input = Element
   //     (das aktive Input-Element)

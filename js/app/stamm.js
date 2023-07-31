@@ -3,6 +3,7 @@
 let stamm = {
   // speichert, ob im Formvarianten-Fenster Änderungen vorgenommen wurden
   geaendert: false,
+
   // Part-of-speech-Tags
   partOfSpeech: {
     ADJA: "attributives Adjektiv",
@@ -58,8 +59,10 @@ let stamm = {
     VVPP: "Partizip Perfekt, voll",
     XY: "Nichtwort",
   },
+
   // speichert, ob der Ladevorgang der Formvarianten noch läuft
   ladevorgang: false,
+
   // Formvarianten-Fenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -92,6 +95,7 @@ let stamm = {
       ele: document.getElementById("stamm-liste"),
     });
   },
+
   // Formvarianten-Fenster schließen
   schliessen () {
     if (stamm.geaendert &&
@@ -107,6 +111,7 @@ let stamm = {
     }
     overlay.ausblenden(document.getElementById("stamm"));
   },
+
   // Kopf und Liste aufbauen
   //   wortAkt = false || undefined
   aufbauen (wortAkt = true) {
@@ -121,10 +126,12 @@ let stamm = {
     // Fokus in das Textfeld
     document.getElementById("stamm-text").focus();
   },
+
   // speichert den Bestandteil des/eines mehrgliedrigen Karteiworts, dessen Liste gerade zu sehen ist;
   // in der Regel sollte das somit *das* Karteiwort sein
   // (beim Öffnen des Fensters steht hier der Name des ersten Objects in data.fv)
   wortAkt: "",
+
   // Kopf aufbauen
   kopf () {
     let cont = document.getElementById("stamm-kopf");
@@ -161,6 +168,7 @@ let stamm = {
     }
     tooltip.init(cont);
   },
+
   // Wort auswählen, dessen Formvarianten aufgelistet werden sollen
   //   span = Element
   //     (der Kopfblock mit den Icons und dem Wort)
@@ -181,6 +189,7 @@ let stamm = {
       stamm.auflisten();
     });
   },
+
   // Konfigurations-Popup (Listener)
   //   a = Element
   //     (der Icon-Link zum Öffnen des Konfigurations-Popups)
@@ -192,6 +201,7 @@ let stamm = {
       setTimeout(() => stamm.kopfKonfig(this), 25);
     });
   },
+
   // Konfigurations-Popup
   //   a = Element
   //     (der Icon-Link zum Öffnen des Konfigurations-Popups)
@@ -324,6 +334,7 @@ let stamm = {
     // Tooltips initialisieren
     tooltip.init(popup);
   },
+
   // Konfigurations-Popup entfernen, wenn es existiert
   kopfKonfigSchliessen () {
     let popup = document.getElementById("stamm-popup");
@@ -331,6 +342,7 @@ let stamm = {
       popup.parentNode.removeChild(popup);
     }
   },
+
   // Checkbox für das Konfigurations-Popup erzeugen
   //   wort = String
   //     (das Wort, um das es geht)
@@ -358,6 +370,7 @@ let stamm = {
     // Absatz zurückgeben
     return p;
   },
+
   // Änderung der Markierungsfarbe
   //   span = Element
   //     (das Quadrat, mit dem die Farbe ausgewählt wird)
@@ -380,6 +393,7 @@ let stamm = {
       kartei.karteiGeaendert(true);
     });
   },
+
   // Änderung der Checkboxes im Konfigurations-Popup übernehmen
   //   input = Element
   //     (die Checkbox im Konfigurations-Popup, die angeklickt wurde)
@@ -399,6 +413,7 @@ let stamm = {
       helfer.formVariRegExp();
     });
   },
+
   // Icons in dem übergebenen Kopfblock auffrischen
   //   span = Element
   //     (der Kopfblock, in dem die Icons erzeugt/aufgefrischt werden sollen)
@@ -428,6 +443,7 @@ let stamm = {
       span.insertBefore(stamm.kopfMakeIcon("text-markiert-gelb.svg"), text);
     }
   },
+
   // Icon erzeugen
   //   src = String
   //     (Dateiname des Icons)
@@ -439,6 +455,7 @@ let stamm = {
     img.height = "24";
     return img;
   },
+
   // Formvarianten zu dem Wort, dessen Konfigurations-Popup gerade offen ist, erneut importieren
   //   input = Element
   //     (der DTA-Import-Button im Konfigurations-Popup)
@@ -474,6 +491,7 @@ let stamm = {
       });
     });
   },
+
   // Wort, dessen Konfigurations-Popup gerade offen ist, mit allen Formvarianten löschen
   //   input = Element
   //     (der Lösch-Button)
@@ -516,6 +534,7 @@ let stamm = {
       });
     });
   },
+
   // Liste der Formvarianten des aktuellen Worts aufbauen
   auflisten () {
     let cont = document.getElementById("stamm-liste");
@@ -554,6 +573,7 @@ let stamm = {
       p.textContent = "keine Formvarianten";
     }
   },
+
   // Verteilerfunktion für den Ergänzungs-Button
   ergaenzen () {
     const variante = document.getElementById("stamm-ergaenzen-variante").checked,
@@ -577,6 +597,7 @@ let stamm = {
     }
     stamm.ergaenzenWort(va);
   },
+
   // Variante in der aktuellen Variantenliste ergänzen
   //   va = String
   //     (der bereits getrimmte Text im Textfeld)
@@ -628,6 +649,7 @@ let stamm = {
     // Abschluss
     stamm.ergaenzenAbschluss();
   },
+
   // Wort ergänzen, dabei die Formvarianten aus dem DTA ziehen
   //   va = String
   //     (der bereits getrimmte Text im Textfeld)
@@ -704,6 +726,7 @@ let stamm = {
       neuesWort.dispatchEvent(new Event("click"));
     }
   },
+
   // Abschluss des Ergänzen einer Variante oder eines Worts
   ergaenzenAbschluss () {
     // Änderungsmarkierung setzen
@@ -717,6 +740,7 @@ let stamm = {
     // regulären Ausdruck mit allen Formvarianten neu erstellen
     helfer.formVariRegExp();
   },
+
   // übergebene Liste der Formvarianten sortieren
   //   arr = Array
   //     (Array mit den Varianten, die sortiert werden sollen)
@@ -747,6 +771,7 @@ let stamm = {
       return 1;
     });
   },
+
   // Eintrag aus der Formvariantenliste entfernen
   //   a = Element
   //     (der Entfernen-Link vor der betreffenden Formvariante)
@@ -769,6 +794,7 @@ let stamm = {
       helfer.formVariRegExp();
     });
   },
+
   // Klick auf einen Button im Formvarianten-Fenster
   // (nicht im Konfigurations-Popup!)
   //   button = Element
@@ -804,6 +830,7 @@ let stamm = {
       }
     });
   },
+
   // Änderung der Radio-Buttons im Formvarianten-Fenster
   //   input = Element
   //     (der Radio-Button, der geändert wurde)
@@ -814,6 +841,7 @@ let stamm = {
       st.select();
     });
   },
+
   // Tastatureingaben im Textfeld des Formvarianten-Fensters abfangen
   //   input = Element
   //     (Textfeld zum Ergänzen einer Formvariante bzw. eines Worts)
@@ -826,6 +854,7 @@ let stamm = {
       }
     });
   },
+
   // Formvarianten aller Karteiwörter initialisieren oder noch einmal laden
   //   str = String
   //     (enthält das Wort oder die Wörter)
@@ -878,6 +907,7 @@ let stamm = {
     }
     stamm.ladevorgang = false;
   },
+
   // Karteiwörter vorbereiten
   // (Bereinigung um Satzzeichen, doppelte Wörter ausschließen)
   //   str = String
@@ -901,6 +931,7 @@ let stamm = {
     }
     return [...woerter];
   },
+
   // Request an das DTA schicken, um an die Formvarianten zu kommen
   //   wort = String
   //     (das Wort, zu dem die Formvarianten gezogen werden sollen;
@@ -941,6 +972,7 @@ let stamm = {
       ajax.send(null);
     });
   },
+
   // Fehler beim Laden der Formvarianten des DTA
   //   fehlertyp = String
   //     (der allgemeine Fehlertyp)
@@ -961,6 +993,7 @@ let stamm = {
       });
     }
   },
+
   // Arrays mit allen für die App relevanten Varianten in data.fv eintragen
   //   json = Object
   //     (die Daten, die vom DTA zurückgekommen sind)
@@ -1073,6 +1106,7 @@ let stamm = {
     // Abschluss
     stamm.dtaAbschluss(aktiv);
   },
+
   // Import der Formvarianten abschließen, wenn aktiv durch User angestoßen
   //   aktiv = Boolean
   //     (Aktion wurde durch den User aktiv angestoßen)
@@ -1084,6 +1118,7 @@ let stamm = {
     stamm.auflisten();
     document.getElementById("stamm-text").focus();
   },
+
   // Sperrbildschirm erzeugen
   //   cont = Element
   //     (Container, in den der Bildschirm eingehängt werden soll)

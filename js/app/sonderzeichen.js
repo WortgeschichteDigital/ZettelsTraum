@@ -3,6 +3,7 @@
 let sonderzeichen = {
   // speichert die ID des Elements zwischen, in das das Sonderzeichen eingefügt werden soll
   caller: "",
+
   // Fenster öffnen
   //   caller = String
   //     (ID des Textfeldes, in das die Sonderzeichen eingetragen werden sollen)
@@ -12,6 +13,7 @@ let sonderzeichen = {
     overlay.oeffnen(fenster);
     document.querySelector("#sonderzeichen-cont a").focus();
   },
+
   // Sonderzeichen eintragen
   //   ele = Element
   //     (Element, in dem das Sonderzeichen steht)

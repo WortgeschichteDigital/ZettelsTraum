@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Kopf ----------------------------------------- */
+/* KOPF ----------------------------------------- */
+
 #beleg.padding-suchleiste {
   padding-bottom: 29px;
 }
@@ -47,7 +48,9 @@
   height: 24px;
 }
 
-/* Tabelle des Formulars ------------------------ */
+
+/* TABELLE DES FORMULARS ------------------------ */
+
 #beleg table {
   margin: 0 auto 20px auto;
   table-layout: fixed;
@@ -154,7 +157,9 @@
   background-color: var(--linie);
 }
 
-/* Formular-Elemente ---------------------------- */
+
+/* FORMULAR-ELEMENTE ---------------------------- */
+
 #beleg input[type="text"] {
   width: calc(100% - 12px);
 }
@@ -272,7 +277,8 @@ textarea#beleg-bs {
 }
 
 
-/* Metadaten ------------------------------------ */
+/* METADATEN ------------------------------------ */
+
 #beleg pre {
   margin: 0;
   border: 1px solid var(--linie);
@@ -304,7 +310,8 @@ textarea#beleg-bs {
 }
 
 
-/* Text-Tools ----------------------------------- */
+/* TEXT-TOOLS ----------------------------------- */
+
 .text-tools {
   position: absolute;
   right: 6px;
@@ -497,7 +504,9 @@ textarea#beleg-bs {
   mask-image: url(../../img/minus.svg);
 }
 
-/* Leseansicht ---------------------------------- */
+
+/* LESEANSICHT ---------------------------------- */
+
 .beleg-lese {
   display: none;
 }

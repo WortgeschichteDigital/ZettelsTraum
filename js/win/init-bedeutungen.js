@@ -23,7 +23,7 @@ window.addEventListener("load", async () => {
     evt.preventDefault();
     bedeutungen.drucken();
   });
-  
+
   // DROPDOWN
   document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
   document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));

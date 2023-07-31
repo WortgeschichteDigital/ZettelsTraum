@@ -3,12 +3,14 @@
 let redWi = {
   // Selector für aktive Input-Felder
   inputs: "#red-wi-text:not(.aus) input, #red-wi-intern:not(.aus) input, #red-wi-extern:not(.aus) input",
+
   // Dropdown: Feldtypen
   dropdown: {
     vt: ["Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel"],
     lt: ["Textverweis", "Verweis intern", "Verweis extern"],
     se: ["Cluster", "Synonym", "Heteronym", "Paronym", "Hyponym", "Hyperonym", "Meronym", "Holonym", "Gegensatz", "Kohyponym"],
   },
+
   // Dropdown: Verweistextvorschläge sammeln
   dropdownVerweistexte () {
     const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
@@ -40,6 +42,7 @@ let redWi = {
     }
     return [...set].sort(helfer.sortAlpha);
   },
+
   // Wortinformationenfenster öffnen
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -67,6 +70,7 @@ let redWi = {
       ele: document.getElementById("red-wi-cont-over"),
     });
   },
+
   // Formular: Listener für die Textfelder
   //   input = Element
   //     (ein Textfeld im Formular)
@@ -106,6 +110,7 @@ let redWi = {
       });
     }
   },
+
   // Formular: Formular umstellen
   formToggle () {
     let lt = document.getElementById("red-wi-lt").value,
@@ -132,6 +137,7 @@ let redWi = {
     let inputs = document.querySelectorAll(redWi.inputs);
     inputs[0].focus();
   },
+
   // Formular: Fenster initialisieren
   formInit () {
     let gn = document.getElementById("red-wi-gn");
@@ -144,6 +150,7 @@ let redWi = {
     redWi.formReset();
     redWi.contMake();
   },
+
   // Formular: Felder zurücksetzen
   formReset () {
     let inputs = document.querySelectorAll(redWi.inputs);
@@ -155,6 +162,7 @@ let redWi = {
     }
     inputs[0].focus();
   },
+
   // Formular: Eingabe überprüfen und Datensatz erstellen
   async formEval () {
     // kurz warten, sonst verschwinden Meldungen sofort wieder
@@ -328,6 +336,7 @@ let redWi = {
       return typ;
     }
   },
+
   // Formular: Eingabe speichern
   //   ds = Object
   //     (Datensatz, der gespeichert werden soll)
@@ -352,6 +361,7 @@ let redWi = {
     setTimeout(() => wort.classList.add("update"), 0);
     setTimeout(() => wort.classList.remove("update"), 750);
   },
+
   // Content: Anzeige aufbauen
   contMake () {
     let cont = document.querySelector("#red-wi-cont div"),
@@ -424,6 +434,7 @@ let redWi = {
       redWi.contBearbeiten({p});
     }
   },
+
   // Content: Eintrag bearbeiten
   //   p = Element
   //    (Eintrag)
@@ -459,6 +470,7 @@ let redWi = {
       }
     });
   },
+
   // Content: Eintrag löschen
   //   a = Element
   //     (Lösch-Icon)
@@ -483,6 +495,7 @@ let redWi = {
       });
     });
   },
+
   // Verweis an das Redaktionssystem schicken
   //   a = Element
   //     (XML-Icon)
@@ -501,9 +514,11 @@ let redWi = {
       redXml.datensatz({xmlDatensatz});
     });
   },
+
   // Kopieren: speichert die aktuelle Gerüst-ID
   // (wenn das Kopieren-Formular angezeigt wird)
   kopierenGn: "",
+
   // Kopieren: ermittelt Gerüste, die Content haben
   kopierenDropdown () {
     let gerueste = [];
@@ -519,6 +534,7 @@ let redWi = {
     }
     return gerueste;
   },
+
   // Kopieren: für das Kopieren der Wortinformationen aus
   kopieren () {
     const gn = document.getElementById("red-wi-copy-gn").value.match(/[0-9]+/)[0];
@@ -539,6 +555,7 @@ let redWi = {
     // Anzeige neu aufbauen
     redWi.contMake();
   },
+
   // Wortinformationen an das Redaktionssystem schicken
   //   icon = Element
   //     (das XML-Icon)

@@ -1,23 +1,18 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
-@import url(../variablen.css);
+/* IMPORTS -------------------------------------- */
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
-
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
-
-/* Suchleiste ----------------------------------- */
 @import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../suchleiste.css);
+@import url(../tooltip.css);
+@import url(../variablen.css);
 @import url(../win/suchleiste-extra.css);
 
-/* Tooltip -------------------------------------- */
-@import url(../tooltip.css);
 
-/* Struktur-Elemente ---------------------------- */
+/* STRUKTUR-ELEMENTE ---------------------------- */
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -68,7 +63,9 @@ section.padding-suchleiste {
   padding-bottom: 51px;
 }
 
-/* Basis-Elemente ------------------------------- */
+
+/* BASIS-ELEMENTE ------------------------------- */
+
 a {
   outline: none;
   color: var(--textFarbe);
@@ -262,7 +259,9 @@ section ul.senza-stile p:first-child {
   text-indent: -30px;
 }
 
-/* Navigation ----------------------------------- */
+
+/* NAVIGATION ----------------------------------- */
+
 nav {
   position: sticky;
   top: 70px;
@@ -438,7 +437,9 @@ a.aktiv .nav-details-toggle {
   background-color: var(--farbe);
 }
 
-/* Tabellen ------------------------------------- */
+
+/* TABELLEN ------------------------------------- */
+
 table {
   margin: 0;
   border-collapse: collapse;
@@ -587,7 +588,9 @@ tr.ztj-alt td p {
   left: 5px;
 }
 
-/* Suche ---------------------------------------- */
+
+/* SUCHE ---------------------------------------- */
+
 mark.suche,
 mark.wort {
   border-radius: 3px;
@@ -636,7 +639,9 @@ mark.wort {
   font-style: italic;
 }
 
-/* Bild ----------------------------------------- */
+
+/* BILD ----------------------------------------- */
+
 #bild {
   position: fixed;
   top: 0;
@@ -692,7 +697,9 @@ mark.wort {
   right: 0;
 }
 
-/* Laden ---------------------------------------- */
+
+/* LADEN ---------------------------------------- */
+
 #laden {
   position: absolute;
   top: 0;
@@ -708,7 +715,9 @@ mark.wort {
   opacity: 0;
 }
 
-/* Globale Klassen ------------------------------ */
+
+/* GLOBALE KLASSEN ------------------------------ */
+
 .datei {
   font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }

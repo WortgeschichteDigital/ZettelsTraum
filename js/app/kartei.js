@@ -3,8 +3,10 @@
 let kartei = {
   // aktuelles Wort
   wort: "",
+
   // Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
   pfad: "",
+
   // neue Kartei erstellen
   async erstellen () {
     // Kartei-Pfad löschen
@@ -71,6 +73,7 @@ let kartei = {
     // neue Karte erstellen
     beleg.erstellen();
   },
+
   // bestehende Kartei öffnen (über den Öffnen-Dialog)
   async oeffnen () {
     let opt = {
@@ -113,6 +116,7 @@ let kartei = {
     // Datei einlesen
     kartei.oeffnenEinlesen(result.filePaths[0]);
   },
+
   // die übergebene Datei einlesen
   //   datei = String
   //     (Dateipfad; kommt von der Startseite, dem Main-Prozess,
@@ -234,6 +238,7 @@ let kartei = {
     // Bedeutungsgerüst auf Korruption überprüfen
     bedeutungen.korruptionCheck();
   },
+
   // Speichern: Verteilerfunktion
   // (Rückgabewerte:
   //     false: es wurde nicht gespeichert oder der User muss eine Entscheidung treffen;
@@ -263,6 +268,7 @@ let kartei = {
     kartei.speichernUnter();
     return false;
   },
+
   // Speichern: Kartei schreiben
   //   pfad = String
   //     (Zielpfad der Kartei)
@@ -324,6 +330,7 @@ let kartei = {
       resolve(true);
     });
   },
+
   // Speichern: Pfad ermitteln
   async speichernUnter () {
     const wort = kartei.wort.split(/[\\/]/)[0];
@@ -364,6 +371,7 @@ let kartei = {
     // Kartei speichern
     kartei.speichernSchreiben(result.filePath);
   },
+
   // Kartei schließen
   async schliessen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -387,6 +395,7 @@ let kartei = {
       kartei: true,
     });
   },
+
   // Kartei im aktuellen Fenster schließen, das Fenster selbst aber erhalten
   async schliessenDurchfuehren () {
     modules.ipc.send("kartei-geschlossen", winInfo.winId);
@@ -416,6 +425,7 @@ let kartei = {
     helfer.sektionWechseln("start");
     modules.ipc.send("menus-deaktivieren", true, winInfo.winId);
   },
+
   // Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
   wortErfragen () {
     // Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
@@ -450,6 +460,7 @@ let kartei = {
       },
     });
   },
+
   // Wort durch Benutzer ändern
   wortAendern () {
     // noch keine Kartei geöffnet
@@ -498,14 +509,17 @@ let kartei = {
     prompt_text.value = kartei.wort;
     prompt_text.select();
   },
+
   // Wort der aktuellen Kartei in den Kopf eintragen
   wortEintragen () {
     let cont = document.getElementById("wort");
     cont.classList.remove("keine-kartei");
     cont.textContent = kartei.wort;
   },
+
   // Kartei wurde geändert und nocht nicht gespeichert
   geaendert: false,
+
   // Anzeigen, dass die Kartei geändert wurde
   //   geaendert = Boolean
   //     (true = Kartei wurde geändert, false = Änderung wurde gespeichert oder verworfen)

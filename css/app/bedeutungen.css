@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Kopf ----------------------------------------- */
+/* KOPF ----------------------------------------- */
+
 #bedeutungen header {
   position: sticky;
   top: 70px;
@@ -93,7 +94,9 @@
   background-color: var(--farbe);
 }
 
-/* Tabelle -------------------------------------- */
+
+/* TABELLE -------------------------------------- */
+
 #bedeutungen-cont {
   padding-bottom: 20px;
 }
@@ -485,7 +488,9 @@ a[class*="icon-windrose"] {
   font-style: italic;
 }
 
-/* Tools ---------------------------------------- */
+
+/* TOOLS ---------------------------------------- */
+
 #bedeutungen-tools {
   position: absolute;
   top: -30px;
@@ -527,7 +532,9 @@ a[class*="icon-windrose"] {
   margin-left: 10px;
 }
 
-/* Besonderheiten ------------------------------- */
+
+/* BESONDERHEITEN ------------------------------- */
+
 .bedeutungen-dialog {
   margin-left: 25px;
   padding-left: 35px;

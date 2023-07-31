@@ -35,7 +35,7 @@ window.addEventListener("load", async () => {
 
   // TOOLTIPS INITIALISIEREN
   tooltip.init();
-  
+
   // DROPDOWN
   document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
   document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));

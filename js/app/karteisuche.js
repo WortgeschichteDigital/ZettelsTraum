@@ -33,6 +33,7 @@ let karteisuche = {
       karteisuche.filterWiederherstellen();
     }
   },
+
   // Liste der ausgewählten Pfade aufbauen
   pfadeAuflisten () {
     // Check-Status sichern
@@ -91,6 +92,7 @@ let karteisuche = {
     }
     tooltip.init(p);
   },
+
   // Pfad zur Pfadliste hinzufügen (Listener)
   //   p = Element
   //     (der Absatz zum Hinzufügen des Pfades)
@@ -100,6 +102,7 @@ let karteisuche = {
       karteisuche.pfadHinzufuegen();
     });
   },
+
   // Pfad zur Pfadliste hinzufügen
   async pfadHinzufuegen () {
     let opt = {
@@ -147,6 +150,7 @@ let karteisuche = {
       ele: document.getElementById("karteisuche-karteien"),
     });
   },
+
   // Pfad aus der Liste entfernen
   //   a = Element
   //     (das Lösch-Icon)
@@ -165,6 +169,7 @@ let karteisuche = {
       });
     });
   },
+
   // speichert die Suchttiefe, also die Angaben darüber, wie viele Ordner
   // in die Tiefe gegangen wird, um nach ZTJ-Dateien zu suchen;
   //   1 = nur im angegebenen Ordner suchen
@@ -172,8 +177,10 @@ let karteisuche = {
   //   3 = bis zu zwei Ordner tief gehen
   //   ...
   suchenTiefe: 0,
+
   // speichert das Input-Element, das vor dem Start der Suche den Fokus hatte
   suchenFokus: null,
+
   // Suche vorbereiten
   async suchenPrep () {
     // Fehler: kein Pfad hinzugefügt
@@ -252,6 +259,7 @@ let karteisuche = {
     // Suche starten
     await karteisuche.suchenPrepZtj(pfade);
   },
+
   // markiert einen Pfad, wenn er nicht gefunden wurde, und demarkiert ihn,
   // wenn er gefunden wurde
   //   pfad = String
@@ -281,6 +289,7 @@ let karteisuche = {
     x.height = "24";
     karteisuche.markierungFehler(x);
   },
+
   // Reaktion auf Klick auf dem Fehler-Icon
   //   img = Element
   //     (das Fehler-Icon)
@@ -292,6 +301,7 @@ let karteisuche = {
       });
     });
   },
+
   // ZTJ-Dateien zusammentragen
   //   pfade = Array
   //     (Pfade, in denen gesucht werden soll;
@@ -385,6 +395,7 @@ let karteisuche = {
       }, 500);
     });
   },
+
   // Suche starten
   async suchen () {
     // Filterwerte sammeln
@@ -597,6 +608,7 @@ let karteisuche = {
     }
     new Notification(appInfo.name, notifyOpts);
   },
+
   // Karteisuche abschließen (bei Erfolg oder vorzeitigem Abbruch)
   suchenAbschluss () {
     // Sperrbild weg und das zuletzt fokussierte Element wieder fokussieren
@@ -607,6 +619,7 @@ let karteisuche = {
     // Status der Karteisuche zurücksetzen
     modules.ipc.invoke("ztj-cache-status-set", false);
   },
+
   // ZTJ-Dateien, die gefunden wurden;
   // Array enthält Objekte:
   //   pfad (String; Pfad zur Kartei)
@@ -619,12 +632,14 @@ let karteisuche = {
   //   behandeltMit (Array; Lemmata, die mit dem aktuellen Wort behandelt werden)
   //   passt (Boolean; passt zu den Suchfiltern)
   ztj: [],
+
   // Cache für ZTJ-Dateien
   // (wird beim Öffnen des Fensters und Start einer Suche aus Main geholt;
   // Schlüssel ist der Pfad der ZTJ-Datei)
   //   ctime (String; Änderungsdatum der Kartei)
   //   data (Object; die kompletten Karteidaten)
   ztjCache: {},
+
   // findet alle Pfade in einem übergebenen Ordner
   //   ordner = String
   //     (Ordner, von dem aus die Suche beginnen soll)
@@ -645,6 +660,7 @@ let karteisuche = {
       }
     });
   },
+
   // überprüft einen übergebenen Pfad: Ordner oder ZTJ-Datei?
   //   pfad = String
   //     (Ordner, von dem aus die Suche beginnen soll)
@@ -681,6 +697,7 @@ let karteisuche = {
       }
     });
   },
+
   // ZTJ-Dateien auflisten
   ztjAuflisten () {
     let treffer = 0,
@@ -746,6 +763,7 @@ let karteisuche = {
     // Alphabet drucken
     karteisuche.alphabet(alphabet);
   },
+
   // Infos ergänzen (Redaktionsstatus und -ereignisse und Verweise)
   //   div = Element
   //     (der Container, in dem die Ereignisse angezeigt werden sollen)
@@ -807,6 +825,7 @@ let karteisuche = {
       div.appendChild(wrap);
     }
   },
+
   // Redaktionsstatus ermitteln
   //   idx = Number
   //     (auf karteisuche.ztj zeigender Index)
@@ -839,6 +858,7 @@ let karteisuche = {
       ereignis: ereignisse[hoechst],
     };
   },
+
   // Verweise ermitteln
   //   i = Number
   //     (Index, der auf die Daten in karteisuche.ztj zeigt)
@@ -878,6 +898,7 @@ let karteisuche = {
     }
     return span;
   },
+
   // ZTJ-Datei in neuem Fenster öffnen
   //   a = Element
   //     (Link, mit dem eine ZTJ-Datei geöffnet werden kann)
@@ -895,6 +916,7 @@ let karteisuche = {
       modules.ipc.send("kartei-laden", this.dataset.pfad, false);
     });
   },
+
   // Sortierwort aus dem übergebenen Wort/Ausdruck ableiten
   // (denn das Wort könnte mehrgliedrig sein, Beispiele:
   // politisch korrekt => Rückgabe: politisch;
@@ -926,6 +948,7 @@ let karteisuche = {
     }
     return sortform;
   },
+
   // Buchstabe des Alphabets aus dem übergebenen Karteiwort ableiten
   //   wort = String
   //     (das Wort, um das es geht)
@@ -948,6 +971,7 @@ let karteisuche = {
     }
     return erster;
   },
+
   // Alphabet drucken
   //   alpha = Set
   //     (Buchstaben des Alphabets, die auftauchen)
@@ -981,6 +1005,7 @@ let karteisuche = {
     // Klickevents anhängen
     cont.querySelectorAll("a").forEach(a => karteisuche.alphabetFilter(a));
   },
+
   // Trefferliste nach Buchstaben filtern
   //   a = Element
   //     (Link für einen oder alle Buchstaben)
@@ -1012,6 +1037,7 @@ let karteisuche = {
       document.getElementById("karteisuche-treffer").textContent = `(${treffer})`;
     });
   },
+
   // Generator zur Erzeugung der nächsten Filter-ID
   makeId: null,
   *idGenerator (id) {
@@ -1019,6 +1045,7 @@ let karteisuche = {
       yield id++;
     }
   },
+
   // zur Verfügung stehende Filter-Typen
   filterTypen: {
     "Karteiwort": [
@@ -1178,6 +1205,7 @@ let karteisuche = {
       },
     ],
   },
+
   // fügt einen neuen Filter hinzu
   //   manuell = Boolean || undefined
   //     (der Filter wurde manuell hinzugefügt)
@@ -1219,6 +1247,7 @@ let karteisuche = {
       ele: document.getElementById("karteisuche-karteien"),
     });
   },
+
   // baut die zu einem Filter gehörigen Formularelemente auf
   //   filterId = String
   //     (ID des Filters, der gerade geändert wurde)
@@ -1302,6 +1331,7 @@ let karteisuche = {
     }
     tooltip.init(p);
   },
+
   // Suche mit Enter starten
   filterFelderListener (input) {
     input.addEventListener("keydown", function(evt) {
@@ -1318,6 +1348,7 @@ let karteisuche = {
       }
     });
   },
+
   // ermittelt den zu einem ausgeschriebenen Tag-Typ gehörenden Schlüssel
   //   feld = Element
   //     (das Input-Feld, in dem der ausgeschriebene Tag-Typ steht)
@@ -1333,6 +1364,7 @@ let karteisuche = {
     }
     return typ.substring(0, 1).toLowerCase() + typ.substring(1);
   },
+
   // entfernt einen Filter
   //   a = Element
   //     (Anker zum Entfernen des Filters)
@@ -1346,13 +1378,16 @@ let karteisuche = {
       });
     });
   },
+
   // Zwischenspeicher für die Filterwerte
   filterWerte: [],
+
   // Map für Tags
   filterTagMap: {
     Themenfeld: "themenfelder",
     Sachgebiet: "sachgebiete",
   },
+
   // Filterwerte sammeln
   filterWerteSammeln () {
     karteisuche.filterWerte = [];
@@ -1504,6 +1539,7 @@ let karteisuche = {
       karteisuche.filterIgnorieren(filter, false);
     }
   },
+
   // markiert/demarkiert Filter, die ignoriert werden/wurden
   //   filter = Element
   //     (Input-Feld mit der Bezeichnung des Filtertyps)
@@ -1517,6 +1553,7 @@ let karteisuche = {
       p.classList.remove("karteisuche-ignoriert");
     }
   },
+
   // String-Datensätze, die der Volltextfilter berücksichtigt
   // (für die Bedeutungen wird es komplizierter)
   filterVolltext: {
@@ -1524,6 +1561,7 @@ let karteisuche = {
     redaktion: ["bh", "nl", "no"],
     karten: ["au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts"],
   },
+
   // überprüfen, ob eine Kartei zu den übergebenen Filtern passt
   //   datei = Object
   //     (die ZTJ-Datei, die gefiltert werden soll; also alle Karteidaten, in der üblichen Form)
@@ -1706,6 +1744,7 @@ let karteisuche = {
       return arr.some(v => reg.test(v));
     }
   },
+
   // aktuelle Filterkonfiguration in den Optionen speichern
   filterSpeichern () {
     optionen.data.karteisuche.filter = [];
@@ -1723,6 +1762,7 @@ let karteisuche = {
     }
     optionen.speichern();
   },
+
   // in den Optionen gespeicherte Filter wiederherstellen
   filterWiederherstellen () {
     for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
@@ -1749,6 +1789,7 @@ let karteisuche = {
       }
     }
   },
+
   // Ansicht der Filter umschalten
   filterUmschalten () {
     let filter = document.getElementById("karteisuche-filterblock"),
@@ -1788,6 +1829,7 @@ let karteisuche = {
       }, 300);
     }
   },
+
   // Animation, dass die Karteisuche läuft
   //   anschalten = Boolean
   //     (die Animation soll angeschaltet werden)
@@ -1805,11 +1847,13 @@ let karteisuche = {
     karteisuche.animationRefresh();
     sperrbild.classList.remove("aus");
   },
+
   // Status-Informationen für die Animation
   animationStatus: {
     punkte: 3,
     interval: null,
   },
+
   // Text in der Animation auffrischen
   animationRefresh() {
     let span = document.querySelector("#karteisuche-suche-laeuft span"),

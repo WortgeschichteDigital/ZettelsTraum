@@ -80,6 +80,7 @@ let lock = {
       }
     });
   },
+
   // Lock-Datei löschen
   //   lockfile = String
   //     (Pfad zur Lock-Datei)
@@ -97,6 +98,7 @@ let lock = {
         });
     });
   },
+
   // Lock-Datei einlesen
   //   lockfile = String
   //     (Pfad zur Lock-Datei)
@@ -114,6 +116,7 @@ let lock = {
         });
     });
   },
+
   // Sperrmeldung ausgeben
   //   info = Boolean || Array
   //     (Array enhält Informationen zu Person/Computer, die die Datei gerade benutzen)

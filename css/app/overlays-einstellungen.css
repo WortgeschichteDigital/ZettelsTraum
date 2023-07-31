@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Einstellungen -------------------------------- */
+/* EINSTELLUNGEN -------------------------------- */
+
 #einstellungen > div {
   margin-top: 40px;
   max-width: 900px;
@@ -171,7 +172,9 @@
   white-space: nowrap;
 }
 
-/* Quick-Access-Bar ----------------------------- */
+
+/* QUICK-ACCESS-BAR ----------------------------- */
+
 p#quick-config-presets {
   padding-left: 0;
   text-align: center;
@@ -247,7 +250,9 @@ p#quick-config-presets a {
   height: 5px;
 }
 
-/* Tag-Dateien ---------------------------------- */
+
+/* TAG-DATEIEN ---------------------------------- */
+
 #tags-cont {
   margin-bottom: 10px;
   padding-right: 10px;

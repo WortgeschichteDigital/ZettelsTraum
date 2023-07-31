@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Quick-Access-Bar ----------------------------- */
+/* QUICK-ACCESS-BAR ----------------------------- */
+
 #quick {
   position: fixed;
   top: -29px;
@@ -296,7 +297,8 @@
 }
 
 
-/* Kopf allgemein ------------------------------- */
+/* KOPF ALLGEMEIN ------------------------------- */
+
 body > header {
   position: fixed;
   top: 0;
@@ -325,7 +327,9 @@ body > header span {
   line-height: 60px;
 }
 
-/* Wort ----------------------------------------- */
+
+/* WORT ----------------------------------------- */
+
 #wort {
   vertical-align: top;
   overflow: hidden;
@@ -347,7 +351,9 @@ body > header span {
   visibility: visible;
 }
 
-/* Kopf-Icons ----------------------------------- */
+
+/* KOPF-ICONS ----------------------------------- */
+
 #kartei-anhaenge {
   padding: 2px 0;
   height: 24px;
@@ -366,7 +372,9 @@ body > header span {
   margin-right: 5px;
 }
 
-/* Kopf-Icons rechts ---------------------------- */
+
+/* KOPF-ICONS RECHTS ---------------------------- */
+
 #kopf-icons-rechts {
   position: absolute;
   top: 6px;

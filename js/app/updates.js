@@ -65,11 +65,13 @@ let updates = {
     // Release-Notes ins Update-Fenster eintragen
     updates.fensterFill();
   },
+
   // speichert Bild und Text des Update-Status, um sie ggf. zurücksetzen zu können
   animationStatus: {
     img: "",
     text: "",
   },
+
   // Such-Animation
   //   auto = Boolean
   //     (Suche wurde automatisch angestoßen)
@@ -101,6 +103,7 @@ let updates = {
       feld.classList.remove("rotieren-bitte");
     }
   },
+
   // Fehlermeldung ausgeben
   //   auto = Boolean
   //     (Suche wurde automatisch angestoßen)
@@ -122,6 +125,7 @@ let updates = {
       text: `Beim Laden der Release-Notes ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err}</p>`,
     });
   },
+
   // konvertiert eine Semver-Versionsnummer in eine Ziffer
   // (um sie leichter vergleichbar zu machen)
   //   version = String
@@ -132,6 +136,7 @@ let updates = {
     version = version.replace(/\./g, "");
     return parseInt(version, 10);
   },
+
   // Hinweis, dass Updates verfügbar sind, ein- bzw. ausblenden
   hinweis () {
     let icon = document.getElementById("updates");
@@ -144,6 +149,7 @@ let updates = {
     // online gibt es eine neuere Version
     icon.classList.remove("aus");
   },
+
   // Update-Fenster
   fenster () {
     // Fenster öffnen oder in den Vordergrund holen
@@ -154,6 +160,7 @@ let updates = {
     // Release-Notes eintragen
     updates.fensterFill();
   },
+
   // Update-Fenster mit Release-Notes füllen
   async fensterFill () {
     // Daten holen
@@ -217,6 +224,7 @@ let updates = {
       ele: document.getElementById("updatesWin-notes"),
     });
   },
+
   // Benachrichtigung einblenden, dass das Suchen nach Updates misslungen ist
   fensterFehler () {
     let td = document.querySelectorAll("#updatesWin-header td");
@@ -226,6 +234,7 @@ let updates = {
     td[0].firstChild.src = "img/fragezeichen.svg";
     td[0].appendChild(document.createTextNode("Laden der Release-Notes misslungen"));
   },
+
   // Aktion für die Buttons im Update-Fenster
   //   input = Element
   //     (Button im Update-Fenster)

@@ -1,22 +1,16 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
+@import url(../icon-links.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* STRUKTUR-ELEMENTE ---------------------------- */
 
-/* Icon-Links ----------------------------------- */
-@import url(../icon-links.css);
-
-/* Animation ------------------------------------ */
-@import url(../animation.css);
-
-
-/* Struktur-Elemente ---------------------------- */
 body {
   margin: 0;
   overflow-x: hidden;
@@ -76,7 +70,9 @@ main h2:first-child {
   margin-top: 0;
 }
 
-/* Kopf ----------------------------------------- */
+
+/* KOPF ----------------------------------------- */
+
 #kopf-nav {
   position: absolute;
   top: 17px;
@@ -124,7 +120,9 @@ main h2:first-child {
   color: var(--farbe);
 }
 
-/* Dialogfenster -------------------------------- */
+
+/* DIALOGFENSTER -------------------------------- */
+
 #dialog h2 {
   margin: 0;
   padding: 0 0 0 10px;
@@ -159,7 +157,9 @@ main h2:first-child {
   margin: 0 0 10px 0;
 }
 
-/* allgemeine Elemente und Styles --------------- */
+
+/* ALLGEMEINE ELEMENTE UND STYLES --------------- */
+
 p {
   margin: 10px 0;
 }
@@ -261,7 +261,9 @@ label {
   outline: none;
 }
 
-/* Spezifika der Abschnitte --------------------- */
+
+/* SPEZIFIKA DER ABSCHNITTE --------------------- */
+
 #md-re,
 #le > p {
   margin-bottom: 15px;
@@ -406,7 +408,9 @@ a.icon-plus-dick:first-child {
   margin: 0 5px;
 }
 
-/* Kopfleisten ---------------------------------- */
+
+/* KOPFLEISTEN ---------------------------------- */
+
 p.leer {
   margin: 0;
   color: var(--textSehrHell);
@@ -572,7 +576,9 @@ p.leer {
   margin-top: 15px;
 }
 
-/* Abschnitt-Container -------------------------- */
+
+/* ABSCHNITT-CONTAINER -------------------------- */
+
 .abschnitt-cont.level-1 {
   margin-left: 34px;
 }
@@ -665,7 +671,9 @@ p.leer {
   margin-left: 10px;
 }
 
-/* Illustrationsformular ------------------------ */
+
+/* ILLUSTRATIONSFORMULAR ------------------------ */
+
 .abb {
   margin-left: 39px;
   max-width: 750px;
@@ -697,7 +705,9 @@ p.leer {
   margin-left: 10px;
 }
 
-/* XML-Preview ---------------------------------- */
+
+/* XML-PREVIEW ---------------------------------- */
+
 .pre-cont {
   margin: 0 0 0 39px;
   overflow: hidden;

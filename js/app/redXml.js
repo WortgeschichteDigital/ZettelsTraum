@@ -3,9 +3,11 @@
 let redXml = {
   // speichert die contentsId des zugehörigen XML-Fensters
   contentsId: 0,
+
   // speichert, ob das Fenster gerade initialisiert wird
   // (abgeschlossen, wenn die Init-Daten gesendet wurden)
   winInit: false,
+
   // XML-Fenster öffnen
   oeffnen () {
     return new Promise(async resolve => {
@@ -29,6 +31,7 @@ let redXml = {
       resolve(true);
     });
   },
+
   // XML-Fenster öffnen (Promise)
   oeffnenPromise () {
     return new Promise(async resolve => {
@@ -45,6 +48,7 @@ let redXml = {
       resolve(true);
     });
   },
+
   // Bedeutungsgerüst-Fenster schließen
   schliessen () {
     return new Promise(async resolve => {
@@ -57,6 +61,7 @@ let redXml = {
       resolve(true);
     });
   },
+
   // Daten zusammentragen und an das XML-Fenster schicken
   daten () {
     if (!redXml.contentsId) {
@@ -96,6 +101,7 @@ let redXml = {
     // Init als abgeschlossen markieren
     xml.winInit = true;
   },
+
   // einen Datensatz an das XML-Fenster schicken
   //   xmlDatensatz = Object
   //     (der Datensatz, der an das Fenster gehen soll)
@@ -109,6 +115,7 @@ let redXml = {
     // Animation
     helfer.animation("xml");
   },
+
   // aus dem XML-Fenster empfangene Daten in die Kartei schreiben
   //   daten = Object
   //     (die XML-Datei-Daten)

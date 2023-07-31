@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Updates-Fenster ------------------------------ */
+/* UPDATES-FENSTER ------------------------------ */
+
 #updatesWin > div {
   max-width: 600px;
 }

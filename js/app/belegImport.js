@@ -3,6 +3,7 @@
 let belegImport = {
   // DTA-Import: Daten, die importiert wurden
   DTAData: {},
+
   // DTA-Import: Datenobjekt zurücksetzen
   DTAResetData () {
     belegImport.DTAData = {
@@ -31,6 +32,7 @@ let belegImport = {
       url: "",
     };
   },
+
   // DTA-Import: Daten aus dem DTA importieren
   DTA () {
     let dta = document.getElementById("beleg-dta");
@@ -119,6 +121,7 @@ let belegImport = {
       belegImport.clearClipboard(result, false);
     }
   },
+
   // DTA-Import: Titel-ID ermitteln
   //   url = String
   //     (DTA-URL)
@@ -134,6 +137,7 @@ let belegImport = {
     }
     return titel_id;
   },
+
   // DTA-Import: Faksimile-Nummer ermitteln
   //   url = String
   //     (DTA-URL)
@@ -155,6 +159,7 @@ let belegImport = {
     }
     return fak;
   },
+
   // DTA-Import: XMLHttpRequest stellen
   //   url = String
   //     (URL des Dokument, das aus dem DTA geladen werden soll)
@@ -194,6 +199,7 @@ let belegImport = {
     belegImport.DTAFill();
     return true;
   },
+
   // DTA-Import: Fehler beim Laden der Daten des DTA
   //   fehlertyp = String
   //     (die Beschreibung des Fehlers)
@@ -207,6 +213,7 @@ let belegImport = {
       },
     });
   },
+
   // DTA-Import: Meta-Daten des Titels importieren
   //   xmlDoc = Document
   //     (entweder das komplette Buch, aus dem eine Seite importiert
@@ -324,6 +331,7 @@ let belegImport = {
       return v;
     }
   },
+
   // DTA-Import: Seite und Text des Titels importieren
   //   xml = Document
   //     (das komplette Buch, aus dem eine Seite importiert werden soll)
@@ -573,6 +581,7 @@ let belegImport = {
       }
     }
   },
+
   // DTA-Import: Daten in das Formular eintragen
   DTAFill () {
     let dta = belegImport.DTAData,
@@ -617,6 +626,7 @@ let belegImport = {
     // Wort gefunden?
     belegImport.checkWort();
   },
+
   // DTA-Import: Quelle zusammensetzen
   //   mitURL = Boolean
   //     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
@@ -664,6 +674,7 @@ let belegImport = {
     td.url.push(dta.url);
     return belegImport.makeTitle({td, mitURL});
   },
+
   // DWDS-Import: Liste der Korpora des DWDS
   DWDSKorpora: {
     blogs: {
@@ -755,6 +766,7 @@ let belegImport = {
       ts: "Zeitung",
     },
   },
+
   // DWDS-Import: Daten parsen
   //   content = String || Object
   //     (die Daten; String, bei Datei-Daten; Object bei XML-Daten)
@@ -795,6 +807,7 @@ let belegImport = {
     }
     return true;
   },
+
   // DWDS-Import: einen leeren Datensatz erzeugen
   DWDSDatensatz () {
     let data = belegImport.DateiDatensatz();
@@ -802,6 +815,7 @@ let belegImport = {
     data.ds.kr = "DWDS";
     return data;
   },
+
   // DWDS-Import: XML-Daten einlesen
   //   clipboard = String
   //     (Clipboard-Content)
@@ -919,6 +933,7 @@ let belegImport = {
       return data;
     }
   },
+
   // DWDS-Import: JSON-Daten einlesen
   //   json = Object
   //     (die JSON-Daten der Belege)
@@ -1068,6 +1083,7 @@ let belegImport = {
       data.ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
     }
   },
+
   // DWDS-Import: Korrekturen
   //   typ = String
   //     (Datensatz)
@@ -1257,6 +1273,7 @@ let belegImport = {
       // 1. Zeile dito
     }
   },
+
   // DWDS-Import: überprüft, ob Daten in Zwischenablage DWDS-Snippet sind
   //   cb = String || undefined
   //     (Text-Inhalt des Clipboards)
@@ -1287,6 +1304,7 @@ let belegImport = {
       xml: xmlDoc,
     };
   },
+
   // DWDS-Import: überprüft, ob die geladen Datei ein DWDS-JSON-Export ist
   //   json = Object || Array
   //     (JSON-Daten)
@@ -1296,6 +1314,7 @@ let belegImport = {
     }
     return true;
   },
+
   // Datei-Import: speichert die Daten der geladenen Datei zwischen
   Datei: {
     pfad: "", // Pfad zur Datei
@@ -1303,6 +1322,7 @@ let belegImport = {
     meta: "", // Metadaten für alle Belege in belegImport.Datei.data
     data: [], // Daten der Datei; s. pushBeleg()
   },
+
   // Datei-Import: Zwischenspeicher und Importformular zurücksetzen
   DateiReset () {
     let datei = belegImport.Datei,
@@ -1320,6 +1340,7 @@ let belegImport = {
       beleg.formularImport(typ);
     }
   },
+
   // Datei-Import: einen leeren Datensatz erzeugen
   DateiDatensatz () {
     return {
@@ -1336,6 +1357,7 @@ let belegImport = {
       },
     };
   },
+
   // Datei-Import: öffnet eine Datei und liest sie ein
   async DateiOeffnen () {
     // Optionen
@@ -1424,6 +1446,7 @@ let belegImport = {
         throw err;
       });
   },
+
   // Datei-Import: Metadaten auffrischen
   //   pfad = String
   //     (Pfad zur geladenen Datei)
@@ -1439,6 +1462,7 @@ let belegImport = {
     belegImport.Datei.pfad = dataPfad;
     belegImport.Datei.typ = dataTyp;
   },
+
   // Datei-Import: Verteilerfunktion für das Importieren eingelesener Datensätze
   async DateiImport () {
     // Clipboard-Content schlägt Datei-Content
@@ -1533,6 +1557,7 @@ let belegImport = {
       belegImport.DateiImportFenster();
     }
   },
+
   // Datei-Import: Overlay-Fenster mit der Liste der eingelesenen Belege öffnen
   DateiImportFenster () {
     // Fenster öffnen
@@ -1651,11 +1676,13 @@ let belegImport = {
       });
     }
   },
+
   // Datei-Import: schließt das Importfenster und fokussiert den Import-Button
   DateiImportFensterSchliessen () {
     overlay.ausblenden(document.getElementById("import"));
     document.getElementById("beleg-datei-importieren").focus();
   },
+
   // Datei-Import: Import ausführen
   //   idx = Number
   //     (der Index in belegImport.Datei.data, der importiert werden soll)
@@ -1750,6 +1777,7 @@ let belegImport = {
       }
     }
   },
+
   // DTA-Import bevorzugen?
   //   idx = Number
   //     (der Index in belegImport.Datei.data, der importiert werden soll)
@@ -1796,6 +1824,7 @@ let belegImport = {
       }
     });
   },
+
   // DeReKo-Import: Datei parsen
   //   content = String
   //     (Inhalt der Datei)
@@ -1823,6 +1852,7 @@ let belegImport = {
     // Import-Fenster öffnen oder Daten direkt importieren
     belegImport.DateiImport();
   },
+
   // DeReKo-Import: Belege einlesen
   //   content = String
   //     (Inhalt der Datei)
@@ -1858,6 +1888,7 @@ let belegImport = {
     belegImport.DeReKoLesenBelege(belege);
     return true; // Einlesen erfolgreich
   },
+
   // DeReKo-Import: Metadaten parsen
   //   meta = String
   //     (Metadaten zum Export, die für alle Belege gelten)
@@ -1872,8 +1903,10 @@ let belegImport = {
       }
     }
   },
+
   // Form der ID eines DeReKo-Belegs
   DeReKoId: "[a-zA-Z0-9]+?\\/[a-zA-Z0-9]+?\\.[0-9]+?\\s",
+
   // DeReKo-Import: Belege parsen
   //   belege = String
   //     (die exportierte Belegreihe)
@@ -1946,6 +1979,7 @@ let belegImport = {
       beleg = [];
     }
   },
+
   // BibTeX-Import: Datei parsen
   //   content = String
   //     (Inhalt der Datei)
@@ -1968,6 +2002,7 @@ let belegImport = {
     }
     return true;
   },
+
   // BibTeX-Import: Content einer BibTeX-Datei fixen und normieren
   //   content = String
   //     (Inhalt der Datei)
@@ -1989,6 +2024,7 @@ let belegImport = {
     }
     return zeilen.join("\n");
   },
+
   // BibTeX-Import: Daten einlesen
   //   content = String
   //     (Inhalt der Datei)
@@ -2168,6 +2204,7 @@ let belegImport = {
       titel.push(data);
     }
   },
+
   // BibTeX-Import: Helferfunktion zum Auflösen von BibTeX-Symbolen
   // (die tauchen noch in den Dateien von GoogleBooks auf)
   //   text = String
@@ -2278,6 +2315,7 @@ let belegImport = {
     // Text zurückgeben
     return text;
   },
+
   // BibTeX-Import: prüft, ob ein BibTex-Datensatz im Clipboard liegt
   //   cb = String
   //     (Text-Inhalt des Clipboards)
@@ -2288,6 +2326,7 @@ let belegImport = {
     }
     return true;
   },
+
   // XML-Import: Datei parsen
   //   content = String
   //     (Inhalt der Datei)
@@ -2319,6 +2358,7 @@ let belegImport = {
     }
     return true;
   },
+
   // XML-Import: Daten einlesen
   //   content = String
   //     (Inhalt der Datei)
@@ -2355,6 +2395,7 @@ let belegImport = {
     }
     return false;
   },
+
   // XML-Import: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
   //   xmlStr = String
   //     (String, der überprüft werden soll)
@@ -2380,6 +2421,7 @@ let belegImport = {
     // XML-Dokument scheint okay zu sein
     return xmlDoc;
   },
+
   // PPN-Download: Anzeige der Karteikarte für einen PPN-Download auffrischen
   //   typ = String
   //     (Datensatztyp, dessen Formular angezeigt werden soll)
@@ -2389,6 +2431,7 @@ let belegImport = {
     belegImport.Datei.typ = "ppn";
     beleg.formularImport(typ);
   },
+
   // PPN-Download: BibTeX-Datensatz herunterladen
   //   ppn = String
   //     (die PPN, deren Datensatz heruntergeladen werden soll)
@@ -2431,6 +2474,7 @@ let belegImport = {
       resolve(daten.join("\n"));
     });
   },
+
   // PPN-Download: XML-Datensatz herunterladen
   //   ppn = String
   //     (die PPN, deren Datensatz heruntergeladen werden soll)
@@ -2467,6 +2511,7 @@ let belegImport = {
       resolve(xmlDaten);
     });
   },
+
   // PPN-Download: überprüfen, ob der übergebene Text eine PPN sein könnte
   PPNCheck ({ppn}) {
     if (/^([0-9]{9,10}|[0-9]{8,9}X)$/.test(ppn)) {
@@ -2474,6 +2519,7 @@ let belegImport = {
     }
     return false;
   },
+
   // eine Titelaufnahme aus den übergebenen Daten zusammensetzen
   //   td = Object
   //     (Datensatz mit den Titeldaten)
@@ -2646,6 +2692,7 @@ let belegImport = {
       return pers;
     }
   },
+
   // leeren Datensatz für eine Titelaufnahme erstellen
   makeTitleDataObject () {
     return {
@@ -2673,6 +2720,7 @@ let belegImport = {
       ppn: [],
     };
   },
+
   // überprüft, ob eines der Karteiwörter im importierten Text gefunden wurde;
   // außerdem gibt es die Möglichkeit, sich die Textposition der Karteiwörter
   // zurückgeben zu lassen (wird für das Datei-Import-Fenster gebraucht)
@@ -2734,6 +2782,7 @@ let belegImport = {
       });
     }
   },
+
   // Clipboard nach Import leeren
   //   result = Boolean
   //     (Importaktion ist geglückt)

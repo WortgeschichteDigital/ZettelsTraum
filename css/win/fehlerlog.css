@@ -1,18 +1,15 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* STRUKTUR-ELEMENTE ---------------------------- */
 
-/* Animation ------------------------------------ */
-@import url(../animation.css);
-
-/* Struktur-Elemente ---------------------------- */
 body {
   margin: 0;
   overflow-x: hidden;
@@ -54,7 +51,9 @@ main {
   padding: 0 10px 10px 10px;
 }
 
-/* Elemente ------------------------------------- */
+
+/* ELEMENTE ------------------------------------- */
+
 main div {
   margin-top: 25px;
   border-top: 1px solid var(--linie);

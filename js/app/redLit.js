@@ -116,6 +116,7 @@ let redLit = {
       redLit.eingabeHinzufuegen();
     }
   },
+
   // Fenster schließen
   schliessen () {
     if (redLit.db.locked) {
@@ -132,6 +133,7 @@ let redLit = {
       overlay.ausblenden(document.getElementById("red-lit"));
     });
   },
+
   // Speichern wurde via Tastaturkürzel (Strg + S) angestoßen
   async speichern () {
     if (redLit.db.locked) {
@@ -168,6 +170,7 @@ let redLit = {
       redLit.dbSpeichern();
     }
   },
+
   // Datenbank: Speicher für Variablen
   db: {
     ve: 3, // Versionsnummer des aktuellen Datenbankformats
@@ -188,6 +191,7 @@ let redLit = {
     lockedInterval: null, // Intervall für den Lockbildschirm
     konvertiert: false, // temporäre Markierung dafür, dass eine DB konvertiert wurde
   },
+
   // Datenkbank: versuchen, die Offline-Version zu laden
   dbLadenOffline () {
     return new Promise(async resolve => {
@@ -207,6 +211,7 @@ let redLit = {
       resolve(false);
     });
   },
+
   // Datenbank: Anzeige auffrischen
   dbAnzeige () {
     let pfad = document.getElementById("red-lit-pfad-db");
@@ -220,6 +225,7 @@ let redLit = {
     // Änderungsmarkierung zurücksetzen
     redLit.dbGeaendert(redLit.db.konvertiert);
   },
+
   // Datenbank: Inhalt wurde geändert
   //   geaendert = Boolean
   //     (DB wurde geändert)
@@ -232,6 +238,7 @@ let redLit = {
       changed.classList.remove("changed");
     }
   },
+
   // Datenbank: Listener für die Icon-Links
   //   a = Element
   //     (ein Icon-Link zum Speichern, Öffnen usw.)
@@ -251,6 +258,7 @@ let redLit = {
       }
     });
   },
+
   // Datenbank: Verknüpfung mit der Datenbank auflösen
   async dbEntkoppeln () {
     // ggf. Popup schließen
@@ -288,6 +296,7 @@ let redLit = {
     redLit.eingabeLeeren();
     redLit.eingabeStatus("add");
   },
+
   // Datenbank: Datei öffnen
   async dbOeffnen () {
     let opt = {
@@ -335,6 +344,7 @@ let redLit = {
     await redLit.dbOeffnenAbschließen({ergebnis, pfad: result.filePaths[0]});
     redLit.db.konvertiert = false;
   },
+
   // Datenbank: Datei einlesen
   //   pfad = String
   //     (Pfad zur Datei)
@@ -398,6 +408,7 @@ let redLit = {
       resolve(true);
     });
   },
+
   // Datenbank: Öffnen der Datenbank abschließen
   //   ergebnis = true | String
   //     (bei Fehlermeldung String)
@@ -432,12 +443,14 @@ let redLit = {
     redLit.eingabeLeeren();
     redLit.eingabeStatus("add");
   },
+
   // Datenbank: Exportformat erfragen
   dbExportierenFormat () {
     let fenster = document.getElementById("red-lit-export");
     overlay.oeffnen(fenster);
     fenster.querySelector("input:checked").focus();
   },
+
   // Datenbank: Export starten
   //   autoExportFormat = String
   //     (xml | txt)
@@ -505,6 +518,7 @@ let redLit = {
       karteisucheExport.speichern(content, format);
     }
   },
+
   // Datenbank: automatischen Export durchführen
   //   vars = Object
   //     (Pfade: vars.quelle, vars.ziel; ggf. auch das Format: vars.format)
@@ -539,6 +553,7 @@ let redLit = {
     const resultExport = await redLit.dbExportieren(format, vars.ziel);
     return resultExport;
   },
+
   // Datenbank: Titelaufnahme-Snippet in XML erstellen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -568,6 +583,7 @@ let redLit = {
     snippet += "</Fundstelle>";
     return snippet;
   },
+
   // Datenbank: Titelaufnahme-Snippet in Plain-Text erstellen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -591,6 +607,7 @@ let redLit = {
     }
     return snippet;
   },
+
   // Datenbank: Datei speichern
   //   speichernUnter = true | undefined
   //     (Dateidialog in jedem Fall anzeigen)
@@ -628,6 +645,7 @@ let redLit = {
     // Datei soll/muss neu angelegt werden
     redLit.dbSpeichernUnter(speichernUnter);
   },
+
   // Datenkbank: Datei speichern unter
   //   speichernUnter = Boolean
   //     (Speichern unter/verschmelzen mit gewählt)
@@ -699,6 +717,7 @@ let redLit = {
     // Offline-Kopie speichern
     redLit.dbOfflineKopie(result.filePath);
   },
+
   // Datenbank: Datei schreiben
   //   pfad = String
   //     (Pfad zur Datei)
@@ -972,6 +991,7 @@ let redLit = {
       resolve(true);
     });
   },
+
   // Datenbank: Daten zuammentragen, die geschrieben werden sollen
   dbSpeichernSchreibenDaten () {
     return {
@@ -984,6 +1004,7 @@ let redLit = {
       ve: redLit.db.ve,
     };
   },
+
   // Datenbank: Eingabefenster für Bearbeitung sperren
   //   sperren = Boolean
   //     (DB soll gesperrt werden)
@@ -1030,6 +1051,7 @@ let redLit = {
       resolve(true);
     });
   },
+
   // Datenbank: Offline-Kopie im Einstellungenordner anlegen
   //   pfad = String
   //     (Pfad zur Datenkbank)
@@ -1038,6 +1060,7 @@ let redLit = {
     let daten = redLit.dbSpeichernSchreibenDaten();
     io.schreiben(offlinePfad, JSON.stringify(daten));
   },
+
   // Datenbank: Pfad zur Offline-Kopie ermitteln
   //   pfad = String
   //     (Pfad zur Datenkbank)
@@ -1057,6 +1080,7 @@ let redLit = {
     }
     return modules.path.join(appInfo.userData, pfadSplit.join("_"));
   },
+
   // Datenbank: Offline-Kopie im Einstellungenordner löschen
   //   pfad = String
   //     (Pfad zur Datenkbank)
@@ -1070,6 +1094,7 @@ let redLit = {
       modules.fsp.unlink(offlinePfad);
     }
   },
+
   // Datenbank: prüft, ob noch ein Speichervorgang aussteht
   //   fun = Function
   //     (Callback-Funktion)
@@ -1138,6 +1163,7 @@ let redLit = {
       resolve(true);
     });
   },
+
   // Datenbank: alle Titeldaten klonen
   //   quelle = Object
   //     (Quelle der Titeldaten)
@@ -1149,6 +1175,7 @@ let redLit = {
       redLit.dbTitelKlonen(v, ziel[k]);
     }
   },
+
   // Datenbank: Daten der Blockliste klonen
   //   quelle = Object
   //     (Quelle der Blockliste)
@@ -1159,6 +1186,7 @@ let redLit = {
     }
     return bl;
   },
+
   // Datenbank: kompletten Datensatz einer Titelaufnahme klonen
   //   quelle = Object
   //     (der Quell-Datensatz)
@@ -1174,6 +1202,7 @@ let redLit = {
       ziel.push(ds);
     }
   },
+
   // Datenbank: einzelnen Datensatz einer Titelaufnahme klonen
   //   quelle = Object
   //     (der Quell-Datensatz)
@@ -1191,6 +1220,7 @@ let redLit = {
       }
     }
   },
+
   // Datenbank: alle in einer Titelaufnahme nicht vorhandenen Datensätze kopieren
   //   quelle = Array
   //     (der Quell-Titelaufnahme)
@@ -1223,6 +1253,7 @@ let redLit = {
     });
     return ergaenzt;
   },
+
   // Datenbank: an neue Formate anpassen
   // (WICHTIG! Aktuelle Format-Version in redLit.db.ve einstellen!)
   //   daten = Object
@@ -1256,6 +1287,7 @@ let redLit = {
       redLit.dbGeaendert(true);
     }
   },
+
   // Navigation: Listener für das Umschalten
   //   input = Element
   //     (der Radiobutton zum Umschalten der Formulare)
@@ -1265,6 +1297,7 @@ let redLit = {
       redLit.nav(form, true);
     });
   },
+
   // Navigation: Umschalten zwischen Eingabe- und Suchformular
   //   form = String
   //     ("eingabe" od. "suche")
@@ -1305,6 +1338,7 @@ let redLit = {
       ti.focus();
     }
   },
+
   // Suche: Speicher für Variablen
   suche: {
     treffer: [],
@@ -1312,11 +1346,13 @@ let redLit = {
     sonder: "",
     id: null,
   },
+
   // Suche: zum Formular wechseln
   sucheWechseln () {
     redLit.nav("suche");
     document.getElementById("red-lit-suche-text").select();
   },
+
   // Suche: Formular zurücksetzen
   sucheReset () {
     let inputs = document.querySelectorAll("#red-lit-suche p:first-child input");
@@ -1325,6 +1361,7 @@ let redLit = {
     }
     redLit.sucheResetBloecke(true);
   },
+
   // Suche: Formular zurücksetzen (Blöcke)
   //   aus = Boolean
   //     (Blöcke ausstellen)
@@ -1345,6 +1382,7 @@ let redLit = {
       });
     }
   },
+
   // Suche: Listener für die Formularfelder
   //   input = Element
   //     (Formularfeld)
@@ -1415,6 +1453,7 @@ let redLit = {
       }
     });
   },
+
   // Suche: Sondersuche starten
   //   a = Element
   //     (Link für eine Sondersuche)
@@ -1426,6 +1465,7 @@ let redLit = {
       redLit.suche.sonder = "";
     });
   },
+
   // Suche: starten
   sucheStarten () {
     // Suchhilfe schließen
@@ -1752,6 +1792,7 @@ let redLit = {
       return text;
     }
   },
+
   // Suche: Treffer anzeigen
   //   start = Number
   //     (Index, von dem aus die Ergebnisse angezeigt werden sollen)
@@ -1786,6 +1827,7 @@ let redLit = {
     // Trefferanzeige auffrischen
     redLit.sucheAnzeigenNav(start);
   },
+
   // Suche: Anzeige der Navigationsleiste auffrischen
   //   start = Number
   //     (Nummer, ab der die Treffer angezeigt werden; nullbasiert)
@@ -1814,6 +1856,7 @@ let redLit = {
       }
     });
   },
+
   // Suche: in den Treffern blättern
   //   a = Element
   //     (Icon-Link zum Vor- oder Rückwärtsblättern)
@@ -1827,6 +1870,7 @@ let redLit = {
       redLit.sucheAnzeigen(start);
     });
   },
+
   // Suche: Snippet markieren (Listener)
   //   div = Element
   //     (Snippet mit einer Titelaufnahme)
@@ -1839,6 +1883,7 @@ let redLit = {
       redLit.sucheSnippetMarkieren(this);
     });
   },
+
   // Suche: Snippet markieren
   //   div = Element
   //     (Snippet mit einer Titelaufnahme)
@@ -1849,6 +1894,7 @@ let redLit = {
     }
     div.classList.add("markiert");
   },
+
   // Suche: Titelaufnahme auffrischen, falls sie geändert wurde (bearbeitet, gelöscht)
   //   id = String
   //     (ID der Titelaufnahme)
@@ -1894,6 +1940,7 @@ let redLit = {
       titel.parentNode.replaceChild(redLit.anzeigeSnippet(treffer), titel);
     }
   },
+
   // Suche: alle Treffer in den Suchergebnissen auffrischen
   sucheTrefferAlleAuffrischen () {
     document.querySelectorAll("#red-lit-suche-titel:not(.aus) .red-lit-snippet").forEach(i => {
@@ -1920,6 +1967,7 @@ let redLit = {
       i.parentNode.replaceChild(redLit.anzeigeSnippet(ds), i);
     });
   },
+
   // Suche: Schalter ins Suchfeld eintragen
   //   a = Element
   //     (Anker im Hilfefenster)
@@ -1952,6 +2000,7 @@ let redLit = {
       suchfeld.focus();
     });
   },
+
   // Eingabeformular: Speicher für Variablen
   eingabe: {
     fundorte: ["Bibliothek", "DTA", "DWDS", "GoogleBooks", "IDS", "online"], // gültige Werte im Feld "Fundorte"
@@ -1961,6 +2010,7 @@ let redLit = {
     slot: -1, // Slot des aktuellen Datensatzes
     changed: false, // es wurden Eingaben vorgenommen
   },
+
   // Eingabeformular: Listener für alle Inputs
   //   input = Element
   //     (Button oder Textfeld)
@@ -2014,6 +2064,7 @@ let redLit = {
       }
     });
   },
+
   // Eingabeformular: Formular wurde geändert
   eingabeGeaendert () {
     if (redLit.eingabe.changed) {
@@ -2024,6 +2075,7 @@ let redLit = {
     span.textContent = "*";
     document.getElementById("red-lit-eingabe-meldung").appendChild(span);
   },
+
   // Eingabeformular: Status anzeigen
   //   status = String
   //     (der Status, in dem sich das Formular befindet)
@@ -2045,6 +2097,7 @@ let redLit = {
     p.textContent = text[status];
     p.setAttribute("class", status);
   },
+
   // Eingabeformular: Formular leeren
   eingabeLeeren () {
     let inputs = document.querySelectorAll("#red-lit-eingabe input, #red-lit-eingabe textarea");
@@ -2062,6 +2115,7 @@ let redLit = {
     // Metadaten leeren
     redLit.eingabeMetaFuellen({id: "", slot: -1});
   },
+
   // Eingabeformular: ID automatisch aus der Sigle ermitteln
   //   input = Element
   //     (das Sigle-Feld)
@@ -2087,6 +2141,7 @@ let redLit = {
       document.getElementById("red-lit-eingabe-id").value = val;
     });
   },
+
   // Eingabeformular: Automatismen bei Eingabe des Titels
   //   input = Element
   //     (das Titel-Feld)
@@ -2133,6 +2188,7 @@ let redLit = {
       }
     });
   },
+
   // Eingabeformular: Automatismen bei Eingabe einer URL
   //   input = Element
   //     (das URL-Feld)
@@ -2158,6 +2214,7 @@ let redLit = {
       fo.value = fundort;
     });
   },
+
   // Eingabe im Titelfeld formatieren
   //   titel = String
   //     (der Text im Titel-Feld)
@@ -2170,6 +2227,7 @@ let redLit = {
     }
     return titel;
   },
+
   // Eingabeformular: DTA-Import
   async eingabeDTA () {
     // URL-Feld auslesen
@@ -2212,6 +2270,7 @@ let redLit = {
     // Titelfeld fokussieren
     ti.focus();
   },
+
   // Eingabeformular: Titeldaten des DTA herunterladen
   //   url = String
   //     (Link zu einer Ressource des DTA)
@@ -2297,6 +2356,7 @@ let redLit = {
       resolve(titelId);
     });
   },
+
   // Eingabeformular: XML-Import aus der Zwischenablage
   async eingabeXML () {
     // PPN-Feld auslesen
@@ -2363,6 +2423,7 @@ let redLit = {
     // Titelfeld fokussieren
     document.getElementById("red-lit-eingabe-ti").focus();
   },
+
   // Eingabeformular: überprüft, ob sich hinter einem String ein passendes XML-Dokument verbirgt
   //   xmlStr = String
   //     (String, der überprüft werden soll)
@@ -2390,6 +2451,7 @@ let redLit = {
     // kein passendes XML-Dokument
     return false;
   },
+
   // Eingabeformular: einen leeren Datensatz zur Verfügung stellen
   // (der Datensatz muss so strukturiert sein, dass man ihn auch zum
   // Import in eine Karteikarte nutzen kann)
@@ -2406,6 +2468,7 @@ let redLit = {
     };
     return data;
   },
+
   // Eingabeformular: Fundstellen-Snippet auslesen
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
@@ -2475,6 +2538,7 @@ let redLit = {
     // Datensatz zurückgeben
     return data;
   },
+
   // Eingabeformular: MODS-Dokument auslesen
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
@@ -2508,6 +2572,7 @@ let redLit = {
     // Datensatz zurückgeben
     return data;
   },
+
   // Eingabeformular: MODS-Dokument auslesen (Titeldaten)
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
@@ -2663,6 +2728,7 @@ let redLit = {
       }
     }
   },
+
   // Eingabeformular: BibTeX-Import aus der Zwischenablage
   async eingabeBibTeX () {
     // PPN-Feld auslesen
@@ -2748,6 +2814,7 @@ let redLit = {
     // Titel fokussieren
     ti.focus();
   },
+
   // Eingabeformular: Titelaufnahme speichern
   eingabeSpeichern () {
     return new Promise(async resolve => {
@@ -2867,6 +2934,7 @@ let redLit = {
       return;
     });
   },
+
   // Eingabeformular: Formular validieren
   eingabeSpeichernValid () {
     return new Promise(async resolve => {
@@ -3083,6 +3151,7 @@ let redLit = {
       }
     });
   },
+
   // Eingabeformular: einen neuen Datensatz auf Grundlage des Formulars erstellen
   eingabeSpeichernMakeDs () {
     let ds = {
@@ -3114,6 +3183,7 @@ let redLit = {
     ds.td.tg = redLit.eingabeTagsZusammentragen();
     return ds;
   },
+
   // Eingabeformular: ID für einen Datensatz erstellen
   eingabeSpeichernMakeID () {
     const hex = "0123456789abcdef";
@@ -3140,6 +3210,7 @@ let redLit = {
     }
     return id;
   },
+
   // Eingabeformular: ermittelt, ob zwei Titeldatensätze voneinander abweichen
   //   alt = Object
   //     (alter Datensatz mit Titeldaten)
@@ -3160,6 +3231,7 @@ let redLit = {
     }
     return diff;
   },
+
   // Eingabeformular: neue Titelaufnahme hinzufügen
   eingabeHinzufuegen () {
     // ggf. zum Formular wechseln
@@ -3171,6 +3243,7 @@ let redLit = {
     // Formular fokussieren
     document.getElementById("red-lit-eingabe-ti").focus();
   },
+
   // Eingabeformular: Listener für Bearbeitenlinks
   //   a = Element
   //     (Icon-Link zum Bearbeiten eines Eintrags)
@@ -3183,6 +3256,7 @@ let redLit = {
       redLit.dbCheck(() => redLit.eingabeBearbeiten(json), false);
     });
   },
+
   // Eingabeformular: Eintrag bearbeiten
   //   id = String
   //     (ID der Titelaufnahme)
@@ -3226,6 +3300,7 @@ let redLit = {
     // Formular fokussieren
     document.getElementById("red-lit-eingabe-ti").focus();
   },
+
   // Eingabeformular: Tags im Formular zusammentragen
   eingabeTagsZusammentragen () {
     let tags = document.getElementById("red-lit-eingabe-tags").querySelectorAll(".tag"),
@@ -3233,6 +3308,7 @@ let redLit = {
     tags.forEach(i => arr.push(i.textContent));
     return arr;
   },
+
   // Eingabeformular: Tags anzeigen
   //   tags = Array
   //     (Array mit den Tags)
@@ -3247,6 +3323,7 @@ let redLit = {
       eingabe: true,
     });
   },
+
   // Eingabeformular: Tag-Element erzeugen
   //   tag = String
   //     (der Name des Tags)
@@ -3256,6 +3333,7 @@ let redLit = {
     span.innerHTML = redLit.anzeigeSnippetMaskieren(tag);
     return span;
   },
+
   // Eingabeformular: Tag löschen
   //   tag = Element
   //     (Tag, der gelöscht werden soll)
@@ -3265,6 +3343,7 @@ let redLit = {
       redLit.eingabeGeaendert();
     });
   },
+
   // Eingabeformular: Tag hinzufügen
   eingabeTagHinzufuegen () {
     let tg = document.getElementById("red-lit-eingabe-tg"),
@@ -3295,6 +3374,7 @@ let redLit = {
     redLit.eingabeGeaendert();
     tg.value = "";
   },
+
   // Eingabeformular: alle Tags aus der Literaturdatenbank zusammensuchen
   eingabeTagsAuflisten () {
     let tags = new Set();
@@ -3324,6 +3404,7 @@ let redLit = {
     }
     return arr;
   },
+
   // Eingabe: Metadaten eintragen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -3363,11 +3444,13 @@ let redLit = {
       }
     }
   },
+
   // Anzeige: Speicher für Variablen
   anzeige: {
     snippetKontext: "suche", // "suche" | "popup"
     id: "", // ID des im Popup angezeigten Titels
   },
+
   // Anzeige: Snippet einer Titelaufnahme erstellen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -3589,6 +3672,7 @@ let redLit = {
     // Snippet zurückgeben
     return div;
   },
+
   // Anzeige: Suchtreffer im Snippet highlighten
   //   feld = String
   //     (Feld, auf das der String zutrifft)
@@ -3615,6 +3699,7 @@ let redLit = {
     text = redLit.anzeigeSnippetMaskieren(text);
     return text;
   },
+
   // Anzeige: Maskieren von Spitzklammern
   //   text = String
   //     (Text, der gedruckt werden soll)
@@ -3625,6 +3710,7 @@ let redLit = {
     text = text.replace(/&lt;\/mark&gt;/g, `</mark>`);
     return text;
   },
+
   // Anzeige: Listener zum Öffnen des Versionen-Popups
   //   ele = Element
   //     (Element, über das das Popup geöffnet werden soll)
@@ -3637,6 +3723,7 @@ let redLit = {
       redLit.anzeigePopup(json);
     });
   },
+
   // Anzeige: Versionen-Popup für Titelaufnahmen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -3674,6 +3761,7 @@ let redLit = {
     // Tooltips initialisieren
     tooltip.init(win);
   },
+
   // Anzeige: vorhandene Titelaufnahmen im Versionen-Popup auflisten
   //   slot = Number | undefined
   //     (Titelaufnahme, die angezeigt werden soll)
@@ -3707,6 +3795,7 @@ let redLit = {
       vers.scrollTop = aktiv.offsetTop;
     }
   },
+
   // Anzeige: Titelaufnahme aus der Liste auswählen und anzeigen
   //   div = Element
   //     (die angeklickte Titelaufnahme)
@@ -3728,6 +3817,7 @@ let redLit = {
       titel.replaceChild(snippet, titel.firstChild);
     });
   },
+
   // Anzeige: Titelaufnahme im Popup wechseln (Strg + ↑/↓)
   //   evt = Object
   //     (Event-Object des keydown)
@@ -3750,6 +3840,7 @@ let redLit = {
       versionen.scrollTop = div.offsetTop - versionen.offsetHeight + div.offsetHeight;
     }
   },
+
   // Anzeige: Versionen-Popup schließen
   anzeigePopupSchliessen () {
     let win = document.getElementById("red-lit-popup");
@@ -3758,6 +3849,7 @@ let redLit = {
     }
     win.parentNode.removeChild(win);
   },
+
   // Titelaufnahme löschen (Sicherheitsfrage)
   //   a = Element
   //     (Icon-Link zum Löschen)
@@ -3781,6 +3873,7 @@ let redLit = {
       });
     });
   },
+
   // Titelaufnahme löschen
   //   id = String
   //     (ID der Titelaufnahme)
@@ -3825,6 +3918,7 @@ let redLit = {
     // Status Datenbank auffrischen
     redLit.dbGeaendert(true);
   },
+
   // Titelaufnahme in die Zwischenablage
   //   typ = String
   //     (Texttyp, der in die Zwischenablage kopiert werden soll)
@@ -3848,6 +3942,7 @@ let redLit = {
     modules.clipboard.writeText(text);
     helfer.animation("zwischenablage");
   },
+
   // Titelaufnahme an das Redaktionssystem schicken (Listener)
   //   icon = Element
   //     (das XML-Icon)
@@ -3886,6 +3981,7 @@ let redLit = {
       redLit.xmlDatensatz({id});
     });
   },
+
   // Titelaufnahme an das Redaktionssystem schicken
   //   id = String
   //     (die ID der Titelaufnahme)
@@ -3900,6 +3996,7 @@ let redLit = {
     };
     redXml.datensatz({xmlDatensatz});
   },
+
   // Tags auflisten
   //   cont = Element
   //     (Container, in den die Tags eingefügt werden sollen)
@@ -3951,6 +4048,7 @@ let redLit = {
       });
     }
   },
+
   // spezielle Sortierung von Tags
   //   tags = Array
   //     (eindimensionales Array mit den Tags)

@@ -3,6 +3,7 @@
 let bedeutungenWin = {
   // speichert die contentsId des zugehörigen Bedeutungsgerüst-Fensters
   contentsId: 0,
+
   // Bedeutungsgerüst-Fenster öffnen
   async oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -21,6 +22,7 @@ let bedeutungenWin = {
     // Fenster durch Main-Prozess öffnen lassen
     bedeutungenWin.contentsId = await modules.ipc.invoke("bedeutungen-oeffnen", `Bedeutungsgerüst: ${kartei.wort}`);
   },
+
   // Bedeutungsgerüst-Fenster schließen
   schliessen () {
     return new Promise(async resolve => {
@@ -33,6 +35,7 @@ let bedeutungenWin = {
       resolve(true);
     });
   },
+
   // Daten zusammentragen und an das Bedeutungsgerüst-Fenster schicken
   daten () {
     if (!bedeutungenWin.contentsId) {

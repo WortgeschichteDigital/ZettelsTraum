@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Icon-Links ----------------------------------- */
+/* ICON-LINKS ----------------------------------- */
+
 .icon-hoch {
   -webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
   mask-image: url(../img/pfeil-gerade-hoch.svg);
@@ -11,7 +12,9 @@
   mask-image: url(../img/pfeil-gerade-runter.svg);
 }
 
-/* Layout Suchleiste ---------------------------- */
+
+/* LAYOUT SUCHLEISTE ---------------------------- */
+
 #suchleiste {
   position: fixed;
   bottom: -41px;
@@ -54,7 +57,9 @@
   right: 8px;
 }
 
-/* Markierungen --------------------------------- */
+
+/* MARKIERUNGEN --------------------------------- */
+
 mark.suchleiste {
   border-radius: 3px;
   padding: 0 3px;

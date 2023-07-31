@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Betroffene Elemente -------------------------- */
+/* BETROFFENE ELEMENTE -------------------------- */
+
 .dropdown-cont {
   position: relative;
 }
@@ -56,7 +57,9 @@ textarea.dropdown-feld {
   fill: currentcolor;
 }
 
-/* Dropdown-Fensterchen ---------------------------- */
+
+/* DROPDOWN-FENSTERCHEN ---------------------------- */
+
 #dropdown {
   position: absolute;
   z-index: 2; /* sonst überdeckt es nicht die relativ positionierten Tabellenzellen und Checkboxes */

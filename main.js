@@ -600,6 +600,7 @@ appMenu = {
     // neue Liste einhängen
     layoutMenu[1].submenu[pos].submenu = zuletzt;
   },
+
   // Menüpunkt im Untermenü "Zuletzt verwendet" erzeugen
   //   zuletzt = Object
   //     (submenu im Menüpunkt "Zuletzt verwendet")
@@ -618,6 +619,7 @@ appMenu = {
     }
     zuletzt.push(item);
   },
+
   // überprüft, ob die zuletzt verwendeten Karteien noch vorhanden sind
   async zuletztCheck () {
     for (let i of optionen.data.zuletzt) {
@@ -630,8 +632,10 @@ appMenu = {
       appMenu.zuletztVerschwundenInform();
     }
   },
+
   // speichert Dateipfade von Karteien, die verschwunden sind
   zuletztVerschwunden: [],
+
   // informiert die Browserfenster über Dateipfade mit Karteien, die nicht gefunden wurden
   zuletztVerschwundenInform () {
     for (let id in win) {
@@ -645,6 +649,7 @@ appMenu = {
       w.webContents.send("optionen-zuletzt-verschwunden", appMenu.zuletztVerschwunden);
     }
   },
+
   // Menüs in den Hauptfenstern auffrischen
   zuletztUpdate () {
     for (let id in win) {
@@ -668,6 +673,7 @@ appMenu = {
       w.webContents.send("optionen-zuletzt", optionen.data.zuletzt);
     }
   },
+
   // Menü mit zuletzt benutzten Dateien leeren
   zuletztLoeschen () {
     optionen.data.zuletzt = [];
@@ -675,6 +681,7 @@ appMenu = {
     appMenu.zuletzt();
     appMenu.zuletztUpdate();
   },
+
   // Menü-Elemente deaktivieren, wenn keine Kartei offen ist
   //   disable = Boolean
   //     (Menü-Element deaktiveren oder eben nicht)
@@ -718,6 +725,7 @@ appMenu = {
       }
     }
   },
+
   // erzeugt das normale Programm-Menü
   //   id = Number
   //     (ID des Fensters)
@@ -726,6 +734,7 @@ appMenu = {
     let menu = Menu.buildFromTemplate(layoutMenu);
     BrowserWindow.fromId(id).setMenu(menu);
   },
+
   // erzeugt ein Menü, das nur den Punkt Ansicht hat und versteckt wird
   //   fenster = Object
   //     (das Fenster-Objekt, in dem das Menü erscheinen soll)
@@ -739,12 +748,14 @@ appMenu = {
     fenster.setMenu(menu);
     fenster.setMenuBarVisibility(false);
   },
+
   // erzeugt die Menüleiste in macOS
   erzeugenMac (vorlage) {
     appMenu.uovo();
     let menu = Menu.buildFromTemplate(vorlage);
     Menu.setApplicationMenu(menu);
   },
+
   // führt den aufgerufenen Befehl im aktuellen Fenster aus
   //   befehl = String
   //     (die Aktion)
@@ -777,6 +788,7 @@ appMenu = {
       w.webContents.send(befehl);
     }
   },
+
   // Sprache des Menüs ggf. auffrischen
   lang () {
     // App-Sprache ermitteln
@@ -819,6 +831,7 @@ appMenu = {
       }
     }
   },
+
   // uovo di Pasqua
   uovo () {
     const lang = optionen.data?.einstellungen?.sprache;
@@ -841,8 +854,10 @@ appMenu = {
 optionen = {
   // Pfad zur Optionen-Datei
   pfad: path.join(app.getPath("userData"), "einstellungen.json"),
+
   // Objekt mit den gespeicherten Optionen
   data: {},
+
   // liest die Optionen-Datei aus
   lesen () {
     return new Promise(async resolve => {
@@ -862,8 +877,10 @@ optionen = {
       }
     });
   },
+
   // Optionen werden nicht sofort geschrieben, sondern erst nach einem Timeout
   schreibenTimeout: null,
+
   // überschreibt die Optionen-Datei
   schreiben () {
     return new Promise(resolve => {
@@ -1033,6 +1050,7 @@ fenster = {
     // ID des Fensters zurückgeben (wird mitunter direkt benötigt)
     return bw.id;
   },
+
   // Neben-Fenster erstellen
   //   typ = String
   //     (der Typ des Neben-Fensters:
@@ -1227,6 +1245,7 @@ fenster = {
     // ID des Web-Content zurückgeben
     return bw.webContents.id;
   },
+
   // Über-Fenster erstellen
   //   typ = String
   //     (der Typ des Über-Fensters: "app" | "electron")
@@ -1300,6 +1319,7 @@ fenster = {
       delete win[this.id];
     });
   },
+
   // legt ein Fenster-Objekt an
   //   id = Number
   //     (Fenster-ID)
@@ -1312,6 +1332,7 @@ fenster = {
       kartei: "",
     };
   },
+
   // ermittelt das zum Betriebssystem passende Programm-Icon
   icon () {
     if (process.platform === "win32") {
@@ -1324,6 +1345,7 @@ fenster = {
       return null;
     }
   },
+
   // schickt eine IPC-Meldung an ein Hauptfenster
   // (löst das Problem, dass nicht immer klar ist, ob ein Hauptfenster den Fokus hat)
   //   befehl = String
@@ -1348,6 +1370,7 @@ fenster = {
       }
     }
   },
+
   // das übergebene Fenster fokussieren
   //   w = Object
   //     (das Fenster-Objekt)
@@ -1357,6 +1380,7 @@ fenster = {
     }
     setTimeout(() => w.focus(), 25); // Timeout, damit das Fenster zuverlässig den Fokus bekommt
   },
+
   // schließt das aktuelle Fenster
   // (macOS bekommt in Nebenfenstern einen extra Menüpunkt,
   // der nur den Befehl "Fenster schließen" hat)

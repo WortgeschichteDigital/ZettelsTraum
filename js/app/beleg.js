@@ -4,10 +4,13 @@ let beleg = {
   // speichert, ob die Leseansicht gerade angezeigt wird
   // (ansonsten sieht man die Formularansicht)
   leseansicht: false,
+
   // ID der aktuell angezeigten Karte
   id_karte: -1,
+
   // Kopie der Daten der aktuell angezeigten Karte
   data: {},
+
   // Liste häufig verwendeter Korpora für das Dropdown-Menü
   korpora: [
     "DTA",
@@ -34,6 +37,7 @@ let beleg = {
     "DWDS: Die ZEIT",
     "DWDS: ZDL-Regionalkorpus",
   ],
+
   // neue Karteikarte erstellen
   async erstellen () {
     // registrieren, dass die Hauptfunktion "Karteikarte" offen ist
@@ -57,6 +61,7 @@ let beleg = {
       behavior: "smooth",
     });
   },
+
   // ermittelt die nächste ID, die in der aktuellen Kartei vergeben werden sollte
   idErmitteln () {
     let id_karte = 0,
@@ -70,6 +75,7 @@ let beleg = {
     id_karte++;
     return id_karte;
   },
+
   // erstellt ein leeres Daten-Objekt für eine neue Karteikarte
   karteErstellen () {
     return {
@@ -97,6 +103,7 @@ let beleg = {
       up: false, // ungeprüft
     };
   },
+
   // bestehende Karteikarte öffnen
   //   id = Number
   //     (ID der Karte, die geöffnet werden soll)
@@ -143,6 +150,7 @@ let beleg = {
       beleg.formular(false); // wegen der Textarea-Größe *nach* dem Umschalten der Leseansicht
     }
   },
+
   // Formular füllen und anzeigen
   //   neu = Boolean
   //     (neue Karteikarte erstellen)
@@ -234,6 +242,7 @@ let beleg = {
       }
     }
   },
+
   // Bedeutung in das Formular eintragen
   formularBedeutung () {
     // Wert ermitteln
@@ -257,12 +266,14 @@ let beleg = {
     feld.scrollTop = 0;
     helfer.textareaGrow(feld);
   },
+
   // Label der Bedeutung auffrischen
   formularBedeutungLabel () {
     const text = `Bedeutung${bedeutungen.aufbauenH2Details(data.bd, true)}`;
     let label = document.querySelector(`[for="beleg-bd"]`);
     label.textContent = text;
   },
+
   // Änderungen in einem Formular-Feld automatisch übernehmen
   //   feld = Element
   //     (das Formularfeld, das geändert wurde)
@@ -299,6 +310,7 @@ let beleg = {
       beleg.belegGeaendert(true);
     });
   },
+
   // zwischen den Import-Formularen hin- und herschalten (Listener)
   //   radio = Element
   //     (Radio-Button zum Umschalten des Import-Formulars)
@@ -308,6 +320,7 @@ let beleg = {
       beleg.formularImport(src);
     });
   },
+
   // zwischen den Import-Formularen hin- und herschalten
   //   src = String
   //     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || xml || bibtex)
@@ -364,6 +377,7 @@ let beleg = {
       eleAktiv.querySelector("input").focus();
     }
   },
+
   // ggf. Dateiname eintragen
   //   src = String
   //     (ID der Quelle, aus der importiert werden soll: dwds || dereko || xml || bibtex)
@@ -381,6 +395,7 @@ let beleg = {
       name.classList.add("leer");
     }
   },
+
   // Aktionen beim Klick auf einen Formular-Button
   //   button = Element
   //     (der Button, auf den geklickt wurde)
@@ -402,8 +417,10 @@ let beleg = {
       }
     });
   },
+
   // Vormerken, dass die Liste neu aufgebaut werden muss
   listeGeaendert: false,
+
   // Beleg speichern
   //   nieSchliessen = true || undefined
   //     (die Karteikarte sollte nach dem Speichern auf keinen Fall geschlossen werden)
@@ -578,6 +595,7 @@ let beleg = {
       }
     }
   },
+
   // ein Element soll selektiert werden;
   // ist es nicht im Blick => in den Blick scrollen
   //   ele = Element
@@ -602,6 +620,7 @@ let beleg = {
     }
     ele.select();
   },
+
   // visualisiert, dass in einem Elementfeld ein Fehler aufgetreten ist
   // (wird nur aufgerufen, wenn Fehlermeldungen abgestellt wurden)
   //   ele = Element
@@ -616,6 +635,7 @@ let beleg = {
       ele.removeEventListener("blur", fehlerEntfernen);
     }
   },
+
   // Bearbeiten des Belegs beenden, Beleg also schließen
   // (Der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
   aktionAbbrechen () {
@@ -627,6 +647,7 @@ let beleg = {
       beleg.listeGeaendert = false;
     });
   },
+
   // Beleg löschen
   aktionLoeschen () {
     // Beleg wurde noch gar nicht angelegt
@@ -638,6 +659,7 @@ let beleg = {
     // Beleg wirklich löschen?
     beleg.aktionLoeschenFrage(beleg.id_karte);
   },
+
   // Fragen, ob der Beleg wirklich gelöscht werden soll
   // (wird auch in anderen Kontexten gebraucht, darum auslagern)
   //   id = Number
@@ -666,10 +688,13 @@ let beleg = {
       },
     });
   },
+
   // Beleg wurde geändert und noch nicht gespeichert
   geaendert: false,
+
   // Bedeutung wurde geändert und nocht nicht gespeichert
   geaendertBd: false,
+
   // Anzeigen, dass der Beleg geändert wurde
   //   geaendert = Boolean
   belegGeaendert (geaendert) {
@@ -689,6 +714,7 @@ let beleg = {
       beleg.belegReferenz();
     }
   },
+
   // frischt die Beleg-Referenz in der Belegüberschrift auf;
   // Format: Name-Jahr-Belegnummer
   belegReferenz () {
@@ -700,6 +726,7 @@ let beleg = {
     const cont = document.querySelector("#beleg-referenz");
     cont.textContent = ref;
   },
+
   // Speichern oder DTAImport starten (wenn Fokus auf einem Input-Element)
   //   input = Element
   //     (Element, auf dem das Event ausgeführt wird:
@@ -748,8 +775,10 @@ let beleg = {
       });
     }
   },
+
   // blockiert die Verarbeitung von beleg.pasteBs() kurzzeitig
   pasteBsBlock: false,
+
   // fängt das Pasten im Belegfeld ab
   // (wird auch von notizen.paste() benutz)
   //   evt = Object
@@ -784,6 +813,7 @@ let beleg = {
       return text;
     }
   },
+
   // Verteilerfunktion für Klick-Events der Tools
   //   a = Element
   //     (Link, auf den geklickt wurde)
@@ -808,6 +838,7 @@ let beleg = {
       }
     });
   },
+
   // Tool Kopieren: Text aus dem zugehörigen Textfeld komplett kopieren
   //   link = Element
   //     (Link, auf den geklickt wurde)
@@ -825,6 +856,7 @@ let beleg = {
       ele: document.querySelector(`#beleg-lese-${ds} p`),
     });
   },
+
   // führt die Kopieroperation aus (eigene Funktion,
   // weil sie auch für die Kopierfunktion in der Belegliste benutzt wird)
   //   ds = String
@@ -947,6 +979,7 @@ let beleg = {
       helfer.animation("zwischenablage");
     }
   },
+
   // Klammern im Belegtext aufbereiten
   //   text = String
   //     (Belegtext, in dem die Klammern aufbereitet werden sollen)
@@ -982,6 +1015,7 @@ let beleg = {
     // Ergebnis zurückgeben
     return helfer.textTrim(text, true);
   },
+
   // Jahreszahl und/oder ID des Belegs als eine Art Überschrift hinzufügen
   //   text = String
   //     (Text, der ergänzt werden soll)
@@ -1016,6 +1050,7 @@ let beleg = {
     }
     return `${hText}\n\n${text}`;
   },
+
   // Quellenangabe zum Belegtext hinzufügen
   //   text = String
   //     (Text, der um die Quelle ergänzt werden soll)
@@ -1040,6 +1075,7 @@ let beleg = {
     }
     return text;
   },
+
   // Notizen zum Belegtext hinzufügen
   //   text = String
   //     (Text, der um die Notizen ergänzt werden soll)
@@ -1067,6 +1103,7 @@ let beleg = {
     }
     return text;
   },
+
   // Tool Einfügen: Text möglichst unter Beibehaltung der Formatierung einfügen
   //   link = Element
   //     (Link, auf den geklickt wurde)
@@ -1128,6 +1165,7 @@ let beleg = {
       beleg.belegGeaendert(true);
     }
   },
+
   // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
   //   html = String
   //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
@@ -1270,6 +1308,7 @@ let beleg = {
       }
     }
   },
+
   // Texttools Beleg
   //   link = Element
   //     (Link, auf den geklickt wurde)
@@ -1396,6 +1435,7 @@ let beleg = {
     // Änderungsmarkierung setzen
     beleg.belegGeaendert(true);
   },
+
   // illegales Nesting ermitteln
   //   str = String
   //     (String mit [oder ohne] HTML-Tags)
@@ -1451,6 +1491,7 @@ let beleg = {
     }
     return false; // offenbar kein illegales Nesting
   },
+
   // Tools für Quelle-Feld
   //   link = Element
   //     (Link, auf den geklickt wurde)
@@ -1461,6 +1502,7 @@ let beleg = {
       beleg.toolsQuelleDTALink();
     }
   },
+
   // Aufrufdatum in Quelle-Feld einfügen
   toolsAufrufdatum () {
     const qu = document.getElementById("beleg-qu");
@@ -1471,6 +1513,7 @@ let beleg = {
       leerzeichen = / $/.test(start) ? "" : " ";
     qu.value = start + leerzeichen + `(Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})` + ende;
   },
+
   // Inhalt des Quelle-Felds neu laden
   //   shortcut = true || undefined
   async toolsQuelleLaden (shortcut = false) {
@@ -1707,6 +1750,7 @@ let beleg = {
       });
     }
   },
+
   // Zitiertitelanfrage an das DTA
   //   url = String
   //     (DTA-Link)
@@ -1751,6 +1795,7 @@ let beleg = {
       }
     });
   },
+
   // Typ der Daten im bx-Datensatz ermitteln
   //   bx = String
   //     (Datensatz, der überprüft werden soll)
@@ -1807,6 +1852,7 @@ let beleg = {
       daten: "",
     };
   },
+
   // DTA-Link aus dem Quelle-Feld in das Importformular holen
   toolsQuelleDTALink () {
     const quelle = document.querySelector("#beleg-qu").value,
@@ -1829,6 +1875,7 @@ let beleg = {
     dta.dispatchEvent(new Event("input"));
     document.querySelector("#beleg-dta-bis").select();
   },
+
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
   toolsKuerzen () {
     // Absätze ermitteln, die das Wort enthalten
@@ -1877,6 +1924,7 @@ let beleg = {
       beleg.belegGeaendert(true);
     }
   },
+
   // Bewertung des Belegs vor- od. zurücknehmen
   //   stern = Element
   //     (Stern, auf den geklickt wurde, um eine Bewertung vorzunehmen)
@@ -1897,6 +1945,7 @@ let beleg = {
     beleg.belegGeaendert(true);
     beleg.bewertungAnzeigen();
   },
+
   // regelt die Anzeige der Bewertung des Belegs
   bewertungAnzeigen () {
     let sterne = document.querySelectorAll("#beleg-bewertung a");
@@ -1908,6 +1957,7 @@ let beleg = {
       }
     }
   },
+
   // Verteilerfunktion, je nachdem welcher Event gerade stattfindet
   // (diese Funktion wird auch für die Sterne in der Filterliste benutzt)
   //   a = Element
@@ -1949,6 +1999,7 @@ let beleg = {
       }
     });
   },
+
   // Lesansicht umschalten
   //   user = Boolean
   //     (Leseansicht wurde durch User aktiv gewechselt)
@@ -2016,6 +2067,7 @@ let beleg = {
       document.getElementById("beleg-da").focus();
     }
   },
+
   // aktuelle Werte des Belegs in die Leseansicht eintragen
   leseFill () {
     // Sprungmarke zurücksetzen
@@ -2101,6 +2153,7 @@ let beleg = {
       helfer.externeLinks(i);
     });
   },
+
   // Bedeutungsfeld der Leseansicht füllen
   leseFillBedeutung () {
     let feldBd = beleg.bedeutungAufbereiten(),
@@ -2137,6 +2190,7 @@ let beleg = {
       contBd.appendChild(p);
     }
   },
+
   // Bedeutung in der Leseansicht aus dem Formular entfernen
   leseBedeutungEx (a) {
     a.addEventListener("click", function(evt) {
@@ -2153,6 +2207,7 @@ let beleg = {
       }
     });
   },
+
   // Bedeutung aus dem Bedeutungsfeld entfernen
   // (wird auch anderweitig verwendet => darum ausgelagert)
   //   bd = String
@@ -2168,6 +2223,7 @@ let beleg = {
     helfer.textareaGrow(feld);
     return true;
   },
+
   // Verteilerfunktion für die Links im <caption>-Block
   //   a = Element
   //     (Link, auf den geklickt wurde)
@@ -2197,6 +2253,7 @@ let beleg = {
       }
     });
   },
+
   // Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden
   ctrlKuerzen () {
     // Hervorhebung umstellen
@@ -2213,6 +2270,7 @@ let beleg = {
       suchleiste.suchen(true);
     }
   },
+
   // Kürzung des Belegkontexts in der Leseansicht ein- bzw. ausblenden (Anzeige)
   ctrlKuerzenAnzeige () {
     let link = document.getElementById("beleg-link-kuerzen");
@@ -2225,6 +2283,7 @@ let beleg = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Trennstriche in der Leseansicht ein- bzw. ausblenden
   ctrlTrennung () {
     // Hervorhebung umstellen
@@ -2241,6 +2300,7 @@ let beleg = {
       suchleiste.suchen(true);
     }
   },
+
   // Trennstriche in der Leseansicht ein- bzw. ausblenden (Anzeige)
   ctrlTrennungAnzeige () {
     let link = document.getElementById("beleg-link-trennung");
@@ -2253,6 +2313,7 @@ let beleg = {
     }
     tooltip.init(link.parentNode);
   },
+
   // Verteiler für die Sprungfunktion (Ctrl + ↓)
   //   evt = Event-Objekt
   //     (kann fehlen, wenn über den Link im Kopf des Belegs aufgerufen)
@@ -2267,8 +2328,10 @@ let beleg = {
       beleg.ctrlSpringenForm(evt);
     }
   },
+
   // das letzte Element, zu dem in der Karteikarte gesprungen wurde
   ctrlSpringenPos: -1,
+
   // durch die Hervorhebungen in der Leseansicht der Karteikarte springen
   ctrlSpringenLese () {
     let marks = document.querySelectorAll("#beleg mark.suchleiste, #beleg-lese-bs mark.user, #beleg-lese-bs mark.wort");
@@ -2324,11 +2387,13 @@ let beleg = {
       }
     }, 1000);
   },
+
   // regulärer Ausdruck für den Sprung im Beleg-Formular
   ctrlSpringenFormReg: {
     reg: null,
     again: false,
   },
+
   // regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
   ctrlSpringenFormReset () {
     let regs = [];
@@ -2341,6 +2406,7 @@ let beleg = {
     }
     beleg.ctrlSpringenFormReg.reg = new RegExp(regs.join("|"), "gi");
   },
+
   // <textarea> mit dem Belegtext zum Wort scrollen
   ctrlSpringenForm (evt) {
     if (evt) {
@@ -2377,6 +2443,7 @@ let beleg = {
       beleg.ctrlSpringenForm(evt);
     }
   },
+
   // Kopiert den aktuellen Beleg in die Zwischenablage,
   // sodass er in eine andere Kartei kopiert werden kann
   //   dt = Object
@@ -2390,6 +2457,7 @@ let beleg = {
     modules.clipboard.writeText(JSON.stringify(daten));
     helfer.animation("zwischenablage");
   },
+
   // Dupliziert den übergebenen Beleg
   async ctrlDuplikat () {
     // Versuchen noch nicht gespeicherte Änderungen anzuwenden;
@@ -2409,6 +2477,7 @@ let beleg = {
     // Animation anzeigen
     helfer.animation("duplikat");
   },
+
   // zur vorherigen/nächsten Karteikarte in der Belegliste springen
   //   next = Boolean
   //     (nächste Karte anzeigen)
@@ -2475,10 +2544,12 @@ let beleg = {
       icon.focus();
     }
   },
+
   // typographische Aufbereitung des aktuellen Inhalts des Bedeutungsfeldes
   bedeutungAufbereiten () {
     return helfer.textTrim(document.getElementById("beleg-bd").value, true).replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
   },
+
   // sucht eine Bedeutung im Bedeutungsgerüst
   //   bd = String
   //     (die Bedeutung)
@@ -2505,6 +2576,7 @@ let beleg = {
       id: 0,
     };
   },
+
   // manuell eingetragene Bedeutung in den Bedeutungsbaum einhängen
   // (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
   //   bd = String
@@ -2579,6 +2651,7 @@ let beleg = {
     // ID zurückgeben
     return beleg.bedeutungSuchen(bd, gn);
   },
+
   // Alias durch vollen Bedeutungsstring ersetzen
   //   bdS = Array
   //     (in diesen Bedeutungen sollen die Aliasses aufgelöst werden)
@@ -2595,6 +2668,7 @@ let beleg = {
     }
     return bdS;
   },
+
   // trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
   // in einer oder mehreren Karten ein oder aus (Verteilerfunktion)
   //   bd = Object
@@ -2632,6 +2706,7 @@ let beleg = {
       text: `Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn eine der beiden Ansichten aktiv ist.`,
     });
   },
+
   // Bedeutung in eine einzelne Karteikarte eintragen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
@@ -2668,6 +2743,7 @@ let beleg = {
     dropdown.cursor = -1;
     dropdown.auswahl(document.getElementById("beleg-bd"), text);
   },
+
   // Bedeutung aus einer einzelneb Karteikarte entfernen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
@@ -2714,6 +2790,7 @@ let beleg = {
       beleg.leseFillBedeutung();
     }
   },
+
   // Bedeutung in jede Karte der Belegliste eintragen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
@@ -2764,6 +2841,7 @@ let beleg = {
       },
     });
   },
+
   // Bedeutung aus jeder Karte der Belegliste entfernen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])

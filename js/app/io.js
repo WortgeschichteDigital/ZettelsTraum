@@ -17,6 +17,7 @@ let io = {
       });
     });
   },
+
   // Daten dekomprimieren
   //   daten = Buffer
   //     (ein Datei-Buffer, der dekomprimiert werden soll)
@@ -35,6 +36,7 @@ let io = {
       });
     });
   },
+
   // ZTJ/ZTB-Datei lesen
   //   datei = String
   //     (Pfad zur Datei, die eingelesen werden soll)
@@ -64,6 +66,7 @@ let io = {
         .catch(err => resolve(err));
     });
   },
+
   // ZTJ/ZTB-Datei schreiben
   //   datei = String
   //     (Pfad zur Datei, in der die komprimierten Daten gespeichert werden sollen)

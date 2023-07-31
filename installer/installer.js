@@ -20,6 +20,7 @@ module.exports = {
       }
     });
   },
+
   // ggf. leeren Changelog erstellen
   makeChangelog () {
     return new Promise(resolve => {
@@ -36,6 +37,7 @@ module.exports = {
       }
     });
   },
+
   // Schlagwörter ermitteln
   getKeywords () {
     return new Promise(resolve => {
@@ -50,6 +52,7 @@ module.exports = {
         });
     });
   },
+
   // Jahresangaben für Copyright ermitteln
   getYear () {
     let jahr = "2019",

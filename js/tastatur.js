@@ -18,6 +18,7 @@ let tastatur = {
       tastatur.neben(evt);
     }
   },
+
   // Tastatur-Events des Hauptfensters
   //   evt = Object
   //     (Event-Object des keydown)
@@ -188,6 +189,7 @@ let tastatur = {
       return;
     }
   },
+
   // alle Events, die mit den Navigationspfeilen zusammenhängen
   //   evt = Object
   //     (Event-Object des keydown)
@@ -299,6 +301,7 @@ let tastatur = {
     // Das Element kann fokussiert werden
     elemente[pos].focus();
   },
+
   // Tastatur-Events der Nebenfenster
   //   evt = Object
   //     (Event-Object des keydown)
@@ -436,8 +439,10 @@ let tastatur = {
       return;
     }
   },
+
   // Zwischenspeicher für die gedrückten Modifiers
   modifiers: "",
+
   // ermittelt die gedrückten Modifiers und erstellt einen String
   //   evt = Object
   //     (Event-Object des keydown)
@@ -469,6 +474,7 @@ let tastatur = {
     }
     tastatur.modifiers = s.join("+");
   },
+
   // Beschreibung von Tastaturkürzeln unter macOS anpassen
   shortcutsText () {
     if (process.platform !== "darwin") {
@@ -499,6 +505,7 @@ let tastatur = {
       }
     });
   },
+
   // auf Anfrage das aktuelle Kürzel zurückgeben
   // (unter macOS muss es geändert werden)
   //   text = String

@@ -296,6 +296,7 @@ let optionen = {
     // Pfad zur Literaturdatenbank
     "literatur-db": "",
   },
+
   // Sprachen Fenster-Menü
   sprachen: {
     Deutsch: "de",
@@ -303,6 +304,7 @@ let optionen = {
     Français: "fr",
     Italiano: "it",
   },
+
   // Optionen on-the-fly empfangen
   // (wird aufgerufen, wenn in einem anderen Hauptfenster Optionen geändert wurden)
   //   data = Object
@@ -331,6 +333,7 @@ let optionen = {
     // Daten anwenden
     optionen.anwendenEmpfangen();
   },
+
   // liest die vom Main-Prozess übergebenen Optionen ein
   // (zur Sicherheit werden alle Optionen einzeln eingelesen;
   // so kann ich ggf. Optionen einfach löschen)
@@ -357,6 +360,7 @@ let optionen = {
       }
     }
   },
+
   // nach dem Laden müssen manche Optionen direkt angewendet werden
   anwenden () {
     // Quick-Access-Bar auffrischen
@@ -411,6 +415,7 @@ let optionen = {
     // Optionen im Optionen-Fenster eintragen
     optionen.anwendenEinstellungen();
   },
+
   // zieht die nötigen Kosequenzen aus den empfangen Optionen,
   // die in einem anderen Hauptfenster geändert wurden
   anwendenEmpfangen () {
@@ -435,6 +440,7 @@ let optionen = {
     // ggf. Update-Hinweis einblenden
     updates.hinweis();
   },
+
   // die Einstellungen im Einstellungen-Fenster nach dem Empfangen von Optionen anpassen
   anwendenEinstellungen () {
     let ee = document.querySelectorAll("#einstellungen input");
@@ -470,6 +476,7 @@ let optionen = {
       }
     });
   },
+
   // die Anzeige der Notizen in der Filterleiste wird umgestellt
   //   input = Element
   //     (die zugehörige Checkbox in den Einstellungen)
@@ -482,11 +489,13 @@ let optionen = {
       }
     });
   },
+
   // Breite des Notizen-Fensters anpassen
   anwendenNotizenMaxBreite () {
     const breite = optionen.data.einstellungen["notizen-max-breite"];
     document.querySelector("#notizen > div").style.maxWidth = `${breite}px`;
   },
+
   // Anzeige der Metadatenfelder in der Karteikarte
   anwendenMetadatenfelder () {
     const toggle = document.querySelector("#beleg-meta-toggle");
@@ -496,6 +505,7 @@ let optionen = {
       beleg.metadatenToggle(false);
     }
   },
+
   // Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
   //   input = Element
   //     (die zugehörige Checkbox in den Einstellungen)
@@ -506,6 +516,7 @@ let optionen = {
       optionen.anwendenIconsDetails();
     });
   },
+
   // Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar
   anwendenIconsDetails () {
     let iconsDetails = document.querySelector(".liste-opt-anzeige");
@@ -515,6 +526,7 @@ let optionen = {
       iconsDetails.classList.remove("liste-opt-anzeige-an");
     }
   },
+
   // Farbe sehr heller Elemente anpassen (Listener)
   anwendenHelleDunklerListener (input) {
     input.addEventListener("change", function() {
@@ -523,6 +535,7 @@ let optionen = {
       optionen.anwendenHelleDunkler();
     });
   },
+
   // Farbe sehr heller Elemente anpassen
   anwendenHelleDunkler () {
     if (optionen.data.einstellungen["helle-dunkler"]) {
@@ -531,10 +544,12 @@ let optionen = {
       document.documentElement.classList.remove("dunkler");
     }
   },
+
   // erweiterte Sortierfunktionen umschalten
   anwendenSortErweitertListener (input) {
     input.addEventListener("change", () => liste.headerSortierenAnzeige());
   },
+
   // bekannte Typen von Tag-Dateien
   tagsTypen: {
     gebrauchszeitraum: ["Gebrauchszeitraum", "Gebrauchszeiträume"],
@@ -546,6 +561,7 @@ let optionen = {
     standardvarietät: ["Standardvarietät", "Standardvarietäten"],
     themenfelder: ["Themenfeld", "Themenfelder"],
   },
+
   // Check der Tag-Dateien beim Starten der App
   async anwendenTagsInit () {
     if (!optionen.data["tags-autoload-done"]) { // Tag-Dateien aus app/resources laden
@@ -580,6 +596,7 @@ let optionen = {
       });
     }
   },
+
   // Informationen zu den Tag-Dateien im Einstellungen-Fenster auffrischen
   //   check = true || undefined
   //     (eine der Tag-Dateien wurde manuell überprüft)
@@ -691,6 +708,7 @@ let optionen = {
       td.textContent = "keine Tag-Dateien";
     }
   },
+
   // Animation des Reload-Links nach der manuellen Überprüfung einer Tag-Datei
   //   a = Element
   //     (Reload-Icon)
@@ -700,6 +718,7 @@ let optionen = {
     });
     setTimeout(() => a.classList.add("rotieren-bitte"), 250);
   },
+
   // Tag-Dateien aus app/resources laden
   tagsAutoLaden () {
     // Resources-Pfad ermitteln
@@ -734,6 +753,7 @@ let optionen = {
         throw err;
       });
   },
+
   // übergebene Tag-Datei überprüfen, Inhalte ggf. laden
   //   datei = String
   //     (Pfad zur XML-Datei, die überprüft werden soll)
@@ -826,6 +846,7 @@ let optionen = {
         });
     });
   },
+
   // ausgewählte Tag-Liste manuell überprüfen
   //   a = Element
   //     (Reload-Icon)
@@ -845,6 +866,7 @@ let optionen = {
         });
     });
   },
+
   // Tag-Datei manuell laden
   async tagsManuLaden () {
     let opt = {
@@ -923,6 +945,7 @@ let optionen = {
         throw err;
       });
   },
+
   // Content der geladenen Tag-Datei parsen und auf Fehler überprüfen
   //   content = String
   //     (Inhalt der geladenen Tag-Datei)
@@ -1045,14 +1068,17 @@ let optionen = {
     }
     return [xml, typ];
   },
+
   // Fehlertypen, die beim Einlesen einer Tag-Datei aufgetreten sind
   tagsFehlerMeldungen: {},
+
   // Listener für die Fehler-Markierung
   tagsFehlerKlick (img) {
     img.addEventListener("click", function() {
       optionen.tagsFehler(this.dataset.typ);
     });
   },
+
   // Fehlermeldung anzeigen
   //   typ = String
   //     (Typ der Tag-Datei, bei der der Fehler aufgetreten ist)
@@ -1062,6 +1088,7 @@ let optionen = {
       text: `Beim Laden der Tag-Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${optionen.tagsFehlerMeldungen[typ]}</p>`,
     });
   },
+
   // Tag-Datei entfernen, Liste der Tags leeren
   //   a = Element
   //     (Lösch-Icon, auf das geklickt wurde)
@@ -1086,6 +1113,7 @@ let optionen = {
       });
     });
   },
+
   // Liste der geladenen Tags anzeigen
   //   a = Element
   //     (Anker, auf den geklickt wurde)
@@ -1117,6 +1145,7 @@ let optionen = {
       }
     });
   },
+
   // Setzt die Liste der Tag-Dateien auf den Auslieferungszustand zurück
   tagsZuruecksetzen () {
     dialog.oeffnen({
@@ -1138,11 +1167,13 @@ let optionen = {
       },
     });
   },
+
   // Optionen an den Main-Prozess schicken, der sie dann speichern soll
   // (der Main-Prozess setzt einen Timeout, damit das nicht zu häufig geschieht)
   speichern () {
     modules.ipc.invoke("optionen-speichern", optionen.data, winInfo.winId);
   },
+
   // letzten Pfad speichern
   //   pfad = String | undefined
   //     (Pfad, der gespeichert werden soll; wenn leer
@@ -1155,6 +1186,7 @@ let optionen = {
     optionen.data.letzter_pfad = pfad;
     optionen.speichern();
   },
+
   // Personenliste einlesen
   async aenderePersonenliste () {
     let opt = {
@@ -1232,6 +1264,7 @@ let optionen = {
         throw err;
       });
   },
+
   // auf Änderung der Einstellungen achten
   //   ele = Element
   //     (Element, dessen Wert geändert wurde)
@@ -1250,6 +1283,7 @@ let optionen = {
       });
     }
   },
+
   // Einstellung aus dem Einstellungen-Dialog ändern
   //   ele = Element
   //     (Element, dessen Wert geändert wurde)
@@ -1289,6 +1323,7 @@ let optionen = {
     // Erinnerungen-Icon auffrischen
     erinnerungen.check();
   },
+
   // das Optionen-Fenster öffnen
   oeffnen () {
     let fenster = document.getElementById("einstellungen");
@@ -1299,6 +1334,7 @@ let optionen = {
       ele: document.getElementById(inputAktiv.closest("section").id),
     });
   },
+
   // Sektion in den Einstellungen wechseln
   //   link = Element
   //     (Link, der für die Sektion steht, in die gewechsel werden soll)
@@ -1332,6 +1368,7 @@ let optionen = {
       ele: document.getElementById(`einstellungen-sec-${sektion}`),
     });
   },
+
   // Klick-Event zum Wechseln der Sektion in den Einstellungen
   //   a = Element
   //     (Link, auf den geklickt wurde)
@@ -1341,12 +1378,14 @@ let optionen = {
       optionen.sektionWechseln(this);
     });
   },
+
   // Fokussiert das erste Input-Element der aktuellen Sektion
   sektionWechselnInput () {
     let input = document.querySelector("#einstellungen section:not(.aus) input");
     input.focus();
     return input;
   },
+
   // durch die Menüelemente navigieren
   //   evt = Object
   //     (Event-Object des keydown)
@@ -1375,6 +1414,7 @@ let optionen = {
     // Sektion wechseln
     optionen.sektionWechseln(links[pos]);
   },
+
   // erzeugt eine Checkbox für Meldungsfenster, um eine Optione leicht zu ändern
   //   label_text = String
   //     (Text für das Label)
@@ -1409,6 +1449,7 @@ let optionen = {
     // Absatz zurückgeben
     return p;
   },
+
   // Einstellungen importieren oder exportieren
   //   input = Element
   //     (Button, auf den geklickt wurde)

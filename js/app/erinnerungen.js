@@ -15,8 +15,10 @@ let erinnerungen = {
       text: `Sie haben den Artikel erstellt, die Datei mit dem Artikel aber noch nicht mit dieser Kartei verknüpft (<a href="#" class="link-erinnerung" data-funktion="anhaenge">⇨ <i>Kartei &gt; Anhänge</i></a>).`,
     },
   },
+
   // speichert, ob alle Tests bestanden wurden
   allesOkay: false,
+
   // überprüfen, ob auf etwas hingewiesen werden muss
   check () {
     // nicht testen, wenn keine Kartei offen ist
@@ -74,6 +76,7 @@ let erinnerungen = {
     // Icon umschalten
     kopf.icons();
   },
+
   // Erinnerungen auf Klick anzeigen
   show () {
     let text = [];
@@ -96,6 +99,7 @@ let erinnerungen = {
     });
     document.querySelectorAll("#dialog-text a").forEach(a => erinnerungen.listener(a));
   },
+
   // Klick-Listener für die Verlinkungen im Erinnerungenfenser
   //   a = Element
   //     (der Link im Erinnerungenfenster, der zu der Funktion führt)

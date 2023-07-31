@@ -47,6 +47,7 @@ let bedeutungenGeruest = {
       input.focus();
     }, 5); // ohne Timeout fokussiert das Fenster nicht
   },
+
   // Bedeutungsfeld der Karteikarte ggf. fokussieren
   bedeutungsfeldFokus () {
     if (helfer.hauptfunktion === "karte" &&
@@ -54,6 +55,7 @@ let bedeutungenGeruest = {
       document.getElementById("beleg-bd").focus();
     }
   },
+
   // Bedeutungsgerüst global wechseln
   //   gn = String
   //     (Gerüstnummer, auf die gewechselt werden soll)
@@ -99,6 +101,7 @@ let bedeutungenGeruest = {
     }
     kartei.karteiGeaendert(true);
   },
+
   // Listener für Überschriften zum Öffnen des Fensters
   //   ele = Element
   listener (ele) {

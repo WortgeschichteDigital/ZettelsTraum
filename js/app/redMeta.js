@@ -34,6 +34,7 @@ let redMeta = {
       ele: document.getElementById("red-meta-over"),
     });
   },
+
   // Tags auflisten
   tags () {
     let tags = [ "sachgebiete", "stichwortplanung", "themenfelder" ];
@@ -79,6 +80,7 @@ let redMeta = {
       }
     }
   },
+
   // Tags hinzufügen
   //   typ = String
   //     (Typ der Tag-Datei)
@@ -97,6 +99,7 @@ let redMeta = {
     tagger.limit = [typ];
     tagger.oeffnen(`red-meta-${typ}`);
   },
+
   // BearbeiterInnen des Zettels auflisten
   bearbAuflisten () {
     let cont = document.getElementById("red-meta-be-liste");
@@ -124,6 +127,7 @@ let redMeta = {
       p.appendChild(document.createTextNode(data.rd.be[i]));
     }
   },
+
   // BearbeiterIn ergänzen
   bearbErgaenzen () {
     let be = document.getElementById("red-meta-be"),
@@ -156,6 +160,7 @@ let redMeta = {
     // Erinnerungen-Icon auffrischen
     erinnerungen.check();
   },
+
   // BearbeiterIn aus der Liste entfernen
   //   a = Element
   //     (Löschlink vor der Bearbeiterin)
@@ -186,15 +191,18 @@ let redMeta = {
       });
     });
   },
+
   // Klick auf Button
   aktionButton (button) {
     button.addEventListener("click", function() {
       redMeta.bearbErgaenzen();
     });
   },
+
   // Timeout, damit bei Tastureingabe im Behandelt-mit-Feld
   // gewisse Funktionen nicht zu häufig getriggert werden
   behandeltInTimeout: null,
+
   // Tastatureingaben in einem der Textfelder
   //   input = Element
   //     (das Textfeld)

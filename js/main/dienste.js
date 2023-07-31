@@ -22,6 +22,7 @@ module.exports = {
     }
     return svg;
   },
+
   // prüft, ob eine Datei existiert
   //   datei = String
   //     (Pfad zur Datei)
@@ -32,6 +33,7 @@ module.exports = {
         .catch(() => resolve(false));
     });
   },
+
   // Dateidialog anzeigen
   //   open = Boolean
   //     (der showOpenDialog() soll angezeigt werden; sonst showSaveDailog())
@@ -53,6 +55,7 @@ module.exports = {
       }
     });
   },
+
   // führt Roles aus, die nicht über das Programmmenü, sondern Icons in der
   // Quick-Access-Bar aufgerufen wurden
   //   contents = Object

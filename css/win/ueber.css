@@ -1,18 +1,14 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../fonts.css);
+@import url(../global.css);
+@import url(../tooltip.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
-
-/* Tooltip -------------------------------------- */
-@import url(../tooltip.css);
-
-/* Struktur-Elemente ---------------------------- */
+/* STRUKTUR-ELEMENTE ---------------------------- */
 body {
   margin: 0;
   background-color: #fff;
@@ -42,7 +38,9 @@ footer {
   color: #fff;
 }
 
-/* Basis-Elemente ------------------------------- */
+
+/* BASIS-ELEMENTE ------------------------------- */
+
 a {
   color: var(--textFarbe);
   text-decoration: none;

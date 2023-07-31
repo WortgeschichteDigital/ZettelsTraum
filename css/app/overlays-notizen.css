@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Notizen -------------------------------------- */
+/* NOTIZEN -------------------------------------- */
+
 #notizen > div {
   margin-top: 40px;
 }
@@ -10,7 +11,9 @@
   mask-image: url(../../img/stift.svg);
 }
 
-/* Content -------------------------------------- */
+
+/* CONTENT -------------------------------------- */
+
 #notizen-cont {
   padding: 10px;
 }
@@ -50,7 +53,9 @@
   margin-left: 5px;
 }
 
-/* Notizenfeld ---------------------------------- */
+
+/* NOTIZENFELD ---------------------------------- */
+
 #notizen-feld {
   border: 1px solid var(--linie);
   padding: 2px 5px;

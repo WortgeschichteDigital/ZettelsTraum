@@ -1,20 +1,17 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
-@import url(../variablen.css);
+/* IMPORTS -------------------------------------- */
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
-
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
-
-/* Suchleiste ----------------------------------- */
 @import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../suchleiste.css);
+@import url(../variablen.css);
 @import url(../win/suchleiste-extra.css);
 
-/* Struktur-Elemente ---------------------------- */
+
+/* STRUKTUR-ELEMENTE ---------------------------- */
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -60,7 +57,9 @@ main.padding-suchleiste {
   padding-bottom: 51px;
 }
 
-/* Elemente ------------------------------------- */
+
+/* ELEMENTE ------------------------------------- */
+
 a {
   outline: none;
   color: var(--textFarbe);
@@ -192,7 +191,9 @@ li p {
   margin-bottom: 5px;
 }
 
-/* Besonderheiten ------------------------------- */
+
+/* BESONDERHEITEN ------------------------------- */
+
 .datei {
   font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }

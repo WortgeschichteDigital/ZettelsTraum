@@ -1,12 +1,15 @@
 @charset "utf-8";
 
-/* Startsektion --------------------------------- */
+/* STARTSEKTION --------------------------------- */
+
 #start {
   padding: 0 25px 20px 25px;
   text-align: center;
 }
 
-/* Buttons -------------------------------------- */
+
+/* BUTTONS -------------------------------------- */
+
 #start input {
   margin: 65px 25px 0 0;
   border-radius: 3px;
@@ -28,7 +31,9 @@
   background-color: var(--farbe);
 }
 
-/* List der zuletzt verwendeten Karteien -------- */
+
+/* LIST DER ZULETZT VERWENDETEN KARTEIEN -------- */
+
 #start-zuletzt {
   margin-top: 75px;
   text-align: left;

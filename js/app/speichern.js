@@ -4,10 +4,13 @@ let speichern = {
   // speichert, ob gerade eine Überprüfung läuft
   // (sonst bekomme ich wiederholte Aufrufe, die die Callback-Funktion überschreiben)
   checkAktiv: false,
+
   // Funktion, die nach dem Check aufgerufen werden soll
   checkCallback: null,
+
   // Funktionen, die von der Anfrage betroffen sein sollen
   checkScope: {},
+
   // startet den Überprüfungsvorgang
   //   fun = function
   //     (die Funktion, die nach der Überprüfung ausgeführt werden soll)
@@ -39,6 +42,7 @@ let speichern = {
     // Check-Kaskade starten
     speichern.check();
   },
+
   // überprüft, ob Änderungen noch nicht gespeichert wurden
   check () {
     if (speichern.checkScope.notizen && notizen.geaendert) {
@@ -163,6 +167,7 @@ let speichern = {
     speichern.checkAktiv = false; // muss vor dem Callback stehen, weil der wieder zu Aufrufen dieser Funktion führen kann; und die muss dann unbedingt durchlaufen, damit der neue Callback auch aufgerufen wird
     speichern.checkCallback();
   },
+
   // Verteilerfunktion für "Kartei > Speichern" bzw. den Tastaturbefehl Strg + S
   // (es gibt drei verschiedene Verhaltensweisen des Befehls)
   kaskade () {

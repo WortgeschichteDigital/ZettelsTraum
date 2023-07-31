@@ -32,6 +32,7 @@ let notizen = {
     // Feld fokussieren
     feld.focus();
   },
+
   // speichert die Notizen
   speichern () {
     let feld = document.getElementById("notizen-feld");
@@ -69,6 +70,7 @@ let notizen = {
       }
     }
   },
+
   // Notizen schließen
   // (der Button hieß früher "Abbrechen", darum heißt die Funktion noch so)
   abbrechen () {
@@ -104,6 +106,7 @@ let notizen = {
       },
     });
   },
+
   // Notizen löschen
   //   confirmed = Boolean
   //     (Die Löschabsicht wurde schon bestätigt.)
@@ -146,6 +149,7 @@ let notizen = {
       notizen.schliessen();
     }
   },
+
   // Fragt nach, ob gespeicherte Notizen gelöscht werden sollen
   //   schliessen = Boolean
   //     (Notizen sollen geschlossen werden, wenn das Löschen abgelehnt wird)
@@ -164,11 +168,13 @@ let notizen = {
       },
     });
   },
+
   // Funktionen, die beim Schließen aufgerufen werden sollten
   schliessen () {
     notizen.notizenGeaendert(false);
     overlay.ausblenden(document.getElementById("notizen"));
   },
+
   // überprüft, ob überhaupt Notizen vorhanden sind
   vorhanden () {
     let vorhanden = {
@@ -187,6 +193,7 @@ let notizen = {
     vorhanden.feld_value = notiz;
     return vorhanden;
   },
+
   // Notizen vor dem Speichern bereinigen
   //   notiz = String
   bereinigen (notiz) {
@@ -194,6 +201,7 @@ let notizen = {
     notiz = notiz.replace(/\sstyle=".+?"/g, "");
     return notiz;
   },
+
   // Aktionen beim Klick auf einen Button
   //   button = Element
   //     (der Button, auf den geklickt wurde)
@@ -209,8 +217,10 @@ let notizen = {
       }
     });
   },
+
   // der gespeichert Wert wird gerade in das Notizenfeld eingetragen
   eintragen: false,
+
   // registriert, wenn im Textfeld Veränderungen auftreten
   //   div = Element
   //     (<div contenteditable="true">, in dem die Notizen stehen)
@@ -228,8 +238,10 @@ let notizen = {
       characterData: true,
     });
   },
+
   // blockiert die Verarbeitung von notizen.paste() kurzzeitig
   pasteBlock: false,
+
   // fängt das Pasten von Text ab und bereinigt den Text
   //   evt = Object
   //     (das Event-Objekt des Paste-Events)
@@ -244,8 +256,10 @@ let notizen = {
     document.execCommand("paste");
     notizen.pasteBlock = false;
   },
+
   // speichert, ob der Inhalt des Notizenfelds geändert wurde
   geaendert: false,
+
   // Notizen wurden geändert oder gespeichert
   //   geaendert = Boolean
   //     (true = Kartei wurde geändert, false = Änderung wurde gespeichert oder verworfen)
@@ -259,6 +273,7 @@ let notizen = {
       asterisk.classList.add("aus");
     }
   },
+
   // Funktion der Text-Tools auf Notizen-Feld anwenden
   //   a = Element
   //     (der Tools-Link, auf den geklickt wurde)
@@ -306,6 +321,7 @@ let notizen = {
       document.getElementById("notizen-feld").focus();
     });
   },
+
   // Text-Tool zum Einfügen/Entfernen eines <mark>
   //   cl = String
   //     (die class, die der <mark> bekommen soll)
@@ -417,6 +433,7 @@ let notizen = {
       }
     }
   },
+
   // Notizen in der Filterleiste einblenden
   filterleiste () {
     if (!data.no || !optionen.data.einstellungen["notizen-filterleiste"]) {
@@ -432,6 +449,7 @@ let notizen = {
     }
     document.getElementById("filter-notizen-content").innerHTML = data.no;
   },
+
   // Notizen aus der Filterleiste entfernen
   filterleisteEntfernen () {
     let filterkopf = document.getElementById("filter-kopf-notizen");

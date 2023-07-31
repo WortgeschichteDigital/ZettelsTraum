@@ -18,6 +18,7 @@ let helferWin = {
       modules.ipc.send(fenster, abschnitt);
     });
   },
+
   // Changelog über Link öffnen
   //   a = Element
   //     (Link, der zum Changelog führen soll)
@@ -30,6 +31,7 @@ let helferWin = {
       }
     });
   },
+
   // Fehlerlog über Link öffnen
   //   a = Element
   //     (Link, der zum Fehlerlog führen soll)
@@ -39,6 +41,7 @@ let helferWin = {
       modules.ipc.send("hilfe-fehlerlog");
     });
   },
+
   // Bedeutungsgerüst-Fenster: zuvor noch die Dimensionen speichern;
   //   das geschieht asynchron, darum muss hier ein wenig gewartet werden;
   //   danach wird ein endgültiger Schließen-Befehl an Main abgesetzt

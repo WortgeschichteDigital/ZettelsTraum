@@ -1,11 +1,14 @@
 @charset "utf-8";
 
-/* Element ausschalten -------------------------- */
+/* ELEMENT AUSSCHALTEN -------------------------- */
+
 .aus {
   display: none !important;
 }
 
-/* BibTeX typographisch ------------------------- */
+
+/* BIBTEX TYPOGRAPHISCH ------------------------- */
+
 .bibtex {
   display: inline-block;
   overflow: hidden;
@@ -22,7 +25,9 @@
   top: .2em;
 }
 
-/* eingefärbte Klammerungen im Belegtext -------- */
+
+/* EINGEFÄRBTE KLAMMERUNGEN IM BELEGTEXT -------- */
+
 .klammer-anmerkung,
 .klammer-autorenzusatz {
   color: var(--farbeGruenDunkel);
@@ -40,7 +45,9 @@
   color: var(--farbeRot);
 }
 
-/* XML-Pretty-Print ----------------------------- */
+
+/* XML-PRETTY-PRINT ----------------------------- */
+
 .xml-empty {
   color: var(--textWarnung);
   font-weight: bold;
@@ -67,7 +74,8 @@
 }
 
 
-/* Ziehen von Elementen ------------------------- */
+/* ZIEHEN VON ELEMENTEN ------------------------- */
+
 *, *::after, *::before {
   -webkit-app-region: no-drag;
   -webkit-user-drag: none;
@@ -93,7 +101,9 @@ footer a[href^="http"]::after {
   content: url(../img/link-extern-weiss-12.svg);
 }
 
-/* Farbe Textauswahl ---------------------------- */
+
+/* FARBE TEXTAUSWAHL ---------------------------- */
+
 ::selection,
 /* in date und datetime-local funktioniert ::selection nicht */
 input::-webkit-datetime-edit-day-field:focus,
@@ -106,13 +116,17 @@ input::-webkit-datetime-edit-ampm-field:focus {
   color: #fff;
 }
 
-/* Placeholder in Inputs ------------------------ */
+
+/* PLACEHOLDER IN INPUTS ------------------------ */
+
 ::placeholder {
   color: var(--textSehrHell);
   font-style: italic;
 }
 
-/* Fensterladen --------------------------------- */
+
+/* FENSTERLADEN --------------------------------- */
+
 #fensterladen {
   position: fixed;
   top: 0;
@@ -132,7 +146,9 @@ input::-webkit-datetime-edit-ampm-field:focus {
   opacity: 0;
 }
 
-/* Kopf-Icons ----------------------------------- */
+
+/* KOPF-ICONS ----------------------------------- */
+
 #kopf-icons {
   position: relative;
   top: 3px;

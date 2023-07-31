@@ -1,27 +1,18 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
+@import url(../icon-links.css);
+@import url(../suchleiste.css);
+@import url(../tooltip.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* BASIS-ELEMENTE ------------------------------- */
 
-/* Icon-Links ----------------------------------- */
-@import url(../icon-links.css);
-
-/* Animation ------------------------------------ */
-@import url(../animation.css);
-
-/* Suchleiste ----------------------------------- */
-@import url(../suchleiste.css);
-
-/* Tooltip -------------------------------------- */
-@import url(../tooltip.css);
-
-/* Basis-Elemente ------------------------------- */
 abbr {
   text-decoration: none;
 }
@@ -258,7 +249,9 @@ body > section.quick {
   margin-top: 99px;
 }
 
-/* Links ---------------------------------------- */
+
+/* LINKS ---------------------------------------- */
+
 a {
   outline: none;
   color: var(--textFarbe);
@@ -266,7 +259,9 @@ a {
   cursor: default;
 }
 
-/* Formular-Elemente ---------------------------- */
+
+/* FORMULAR-ELEMENTE ---------------------------- */
+
 input,
 textarea {
   margin: 0;
@@ -465,7 +460,9 @@ textarea:focus {
   border-color: var(--farbe);
 }
 
-/* Annotierung Wort ----------------------------- */
+
+/* ANNOTIERUNG WORT ----------------------------- */
+
 #annotierung-wort {
   position: absolute;
   z-index: 1;
@@ -616,7 +613,9 @@ textarea:focus {
   content: url(../../img/annotiert_nicht-taggen.svg);
 }
 
-/* DTA-Auszeichnungen in XML-Dokumenten --------- */
+
+/* DTA-AUSZEICHNUNGEN IN XML-DOKUMENTEN --------- */
+
 .dta-antiqua {
   font-family: "Noto Serif", serif;
   font-size: 110%;

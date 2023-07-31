@@ -13,6 +13,7 @@ let bedeutungenDrag = {
     // (Start mit 1)
     ebene: 0,
   },
+
   // Bewegung bei aktiviertem Drag-Mode abfangen
   mouse (evt) {
     const y = evt.clientY;
@@ -83,6 +84,7 @@ let bedeutungenDrag = {
     // Marker ausblenden
     bedeutungenDrag.markerAus();
   },
+
   // Marker ggf. erzeugen; immer den Verweis auf das Element zurückgeben
   marker () {
     if (document.getElementById("bedeutungen-drag-marker")) {
@@ -93,6 +95,7 @@ let bedeutungenDrag = {
     div.id = "bedeutungen-drag-marker";
     return div;
   },
+
   // Marker ausblenden
   markerAus () {
     let marker = document.getElementById("bedeutungen-drag-marker");
@@ -101,6 +104,7 @@ let bedeutungenDrag = {
       document.getElementById("bedeutungen-cont").classList.remove("move", "no-drop");
     }
   },
+
   // Drag-Mode beenden
   end () {
     setTimeout(() => {
@@ -119,6 +123,7 @@ let bedeutungenDrag = {
       }
     }, 0); // ohne Timeout würde der Bedeutungszweig in jedem Fall aktiviert
   },
+
   // ermittelt, ob die gewünschte Bewegung erlaubt ist
   movable () {
     let zeilen = document.querySelectorAll("#bedeutungen-cont tr"),
@@ -180,6 +185,7 @@ let bedeutungenDrag = {
     // Tests bestanden => Bedeutung kann verschoben werden
     return true;
   },
+
   // Bewegung ausführen
   move () {
     // Move abbrechen

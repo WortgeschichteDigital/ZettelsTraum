@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Importfenster für Dateidatensätze ------------ */
+/* IMPORTFENSTER FÜR DATEIDATENSÄTZE ------------ */
+
 #import > div {
   margin-top: 40px;
   max-width: 750px;

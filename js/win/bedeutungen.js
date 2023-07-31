@@ -3,8 +3,10 @@
 let bedeutungen = {
   // enthält die übergebenen Daten
   data: {},
+
   // ID des aktuellen Gerüsts
   geruest: "",
+
   // Anzeige mit den gelieferten Daten aufbereiten
   aufbauen () {
     // Wort eintragen
@@ -95,10 +97,12 @@ let bedeutungen = {
     }
     tooltip.init(cont);
   },
+
   // Bedeutungsbaum drucken
   drucken () {
     modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-drucken", bedeutungen.geruest);
   },
+
   // Bedeutung in Formular/Belegliste des Hauptfensters umtragen (also ein- oder austragen)
   //   ele = Element
   //     (angeklickte Bedeutung oder angeklicktes Add-Icon)

@@ -30,6 +30,7 @@ let hilfe = {
     const sektion = links[pos].getAttribute("href").replace(/^#/, "");
     hilfe.sektionWechseln(sektion);
   },
+
   // korrigiert den Sprung nach Klick auf einen internen Link,
   // sodass er nicht hinter dem Header verschwindet
   naviSprung (a) {
@@ -43,6 +44,7 @@ let hilfe = {
       hilfe.naviSprungAusfuehren(id);
     });
   },
+
   // Sprung zu dem übergebenen Ziel ausführen
   //   id = String
   //     (Zielangabe, also ID, zu der hin der Sprung ausgeführt werden soll)
@@ -72,8 +74,10 @@ let hilfe = {
     // History: Pfeile auffrischen (nachdem der Scroll beendet wurde)
     hilfe.historyScrollArrows();
   },
+
   // Navi-Details: Timeout für das Ausblenden
   naviDetailsTimeout: null,
+
   // Navi-Details: Öffnen-Icons initialisieren
   naviDetailsInit () {
     document.querySelectorAll("nav > ul a").forEach(i => {
@@ -90,6 +94,7 @@ let hilfe = {
       });
     });
   },
+
   // Navi-Details: Anzeige aufbauen
   //   immerAn = Boolean
   //     (Detail-Navigation nicht umschalten)
@@ -218,6 +223,7 @@ let hilfe = {
     // ersten Link fokussieren
     div.querySelector("a").focus();
   },
+
   // Navi-Details: Infos zur aktiven Sektion ermitteln
   naviDetailsAktiv () {
     let aktiv = document.querySelector("nav > ul a.aktiv"),
@@ -230,6 +236,7 @@ let hilfe = {
       id,
     };
   },
+
   // Navi-Details: Anzeige schließen
   naviDetailsAus () {
     let nd = document.getElementById("navi-details");
@@ -247,6 +254,7 @@ let hilfe = {
       }
     }, 500);
   },
+
   // ermittelt die aktive Sektion
   sektionAktiv () {
     let sek = document.querySelectorAll("section");
@@ -257,6 +265,7 @@ let hilfe = {
     }
     return "";
   },
+
   // Sektion wechseln
   //   sektion = String
   //     (Hinweis auf die Sektion, die eingeblendet werden soll)
@@ -302,6 +311,7 @@ let hilfe = {
       hilfe.sucheFokus();
     }
   },
+
   // lange Dateipfade umbrechen
   dateiBreak () {
     document.querySelectorAll(".datei").forEach(function(i) {
@@ -310,8 +320,10 @@ let hilfe = {
       }
     });
   },
+
   // speichert den Timeout für das Ausblenden des Bildes
   bildTimeout: null,
+
   // Vorschau-Bild auf Klick vergrößern und über die Seite legen
   //   fig = Element
   //     (das <figure>-Element, auf das geklickt wurde)
@@ -352,12 +364,14 @@ let hilfe = {
       setTimeout(() => div.classList.add("einblenden"), 0);
     }
   },
+
   // speichert die <figure>, die dem angezeigten Bild in einer Bilderstrecke
   // vorangeht bzw. folgt
   bilderData: {
     prev: null,
     next: null,
   },
+
   // ggf. Navigationsbilder für eine Bilderstrecke einbauen
   //   fig = Element
   //     (angeklickte <figure>)
@@ -410,6 +424,7 @@ let hilfe = {
     // Tooltips initialisieren
     tooltip.init(cont);
   },
+
   // Navigation durch die Bilder (Klick auf Icon)
   //   img = Element
   //     (Navigationsbild, auf das geklickt wurde)
@@ -421,6 +436,7 @@ let hilfe = {
       }
     });
   },
+
   // Navigation durch die Bilder (Cursor)
   //   evt = Object
   //     (Event-Object des keydown)
@@ -437,6 +453,7 @@ let hilfe = {
       hilfe.bild(hilfe.bilderData[dir]);
     }
   },
+
   // schließt das vergrößte Vorschau-Bild
   bildSchliessen () {
     let bild = document.getElementById("bild");
@@ -444,8 +461,10 @@ let hilfe = {
     clearTimeout(hilfe.bildTimeout);
     hilfe.bildTimeout = setTimeout(() => bild.parentNode.removeChild(bild), 200);
   },
+
   // Variable, in der der Timeout der Suche gespeichert wird
   sucheTimeout: null,
+
   // Listener, über den die Suchfunktion angestoßen wird
   //   input = Element
   //     (das Suchfeld)
@@ -470,6 +489,7 @@ let hilfe = {
       }
     });
   },
+
   // Cache der Suchergebnisse
   suchergebnis: {
     val: "", // letzter bereinigter Suchwert
@@ -479,6 +499,7 @@ let hilfe = {
     treffer: [], // Treffer
     lastClick: -1, // Index des letzten Klicks (verweist auf suchergebnis.treffer)
   },
+
   // Dokument durchsuchen
   //   enter = Boolean
   //     (die Suche wurde via Enter angestoßen)
@@ -605,6 +626,7 @@ let hilfe = {
       }
     }
   },
+
   // Suchtreffer ausdrucken
   sucheDrucken (start) {
     // Ergebnisfeld leeren
@@ -671,6 +693,7 @@ let hilfe = {
       }
     }
   },
+
   // weitere Treffer laden
   //   a = Element
   //     (der Link zum Nachladen der Treffer)
@@ -684,6 +707,7 @@ let hilfe = {
       hilfe.sucheFokus();
     });
   },
+
   // zur Stelle im Text springen, in der der Treffer zu finden ist
   //   a = Element
   //     (Link mit der Vorschau des Treffers)
@@ -717,6 +741,7 @@ let hilfe = {
       }, 500);
     });
   },
+
   // in die Suchsektion wechseln
   sucheWechseln () {
     hilfe.sektionWechseln("suche");
@@ -727,6 +752,7 @@ let hilfe = {
     });
     hilfe.sucheFokus();
   },
+
   // zuletzt fokussierten Link in der Suche wieder fokussieren
   sucheFokus () {
     if (hilfe.suchergebnis.treffer.length) {
@@ -737,6 +763,7 @@ let hilfe = {
       document.querySelectorAll("#suchergebnisse a")[idx].focus();
     }
   },
+
   // Daten
   historyData: {
     pos: [], // Positionen in der Liste
@@ -745,6 +772,7 @@ let hilfe = {
     scrollInterval: null, // Intervall, der schaut, ob scrollAktiv noch true ist
     scrollCheck: null, // Timeout, der das Ende des Scrollen feststellt und scrollAktiv auf false setzt
   },
+
   // aktuelle Position merken, wenn über einen Link ein Sprung ausgeführt wird
   //   sek = String
   //     (die derzeit aktive Sektion)
@@ -776,6 +804,7 @@ let hilfe = {
     // Erfolg melden
     return true;
   },
+
   // zur vorherigen/nächsten Position in der History-Liste springen
   //   next = Boolean
   //     (zur nächsten Position springen)
@@ -811,6 +840,7 @@ let hilfe = {
     // Pfeile auffrischen (nachdem der Scroll beendet wurde)
     hilfe.historyScrollArrows();
   },
+
   // frischt die Pfeile auf, sobald der Scroll beendet wurde
   historyScrollArrows () {
     hilfe.historyData.scrollAktiv = true;
@@ -824,11 +854,13 @@ let hilfe = {
     }, 10);
     document.addEventListener("scroll", hilfe.historyScroll);
   },
+
   // überprüft, ob der Scroll vorbei ist
   historyScroll () {
     clearTimeout(hilfe.historyData.scrollCheck);
     hilfe.historyData.scrollCheck = setTimeout(() => hilfe.historyData.scrollAktiv = false, 25);
   },
+
   // Pfeilfarbe anpassen
   historyArrows () {
     let data = hilfe.historyData,

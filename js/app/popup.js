@@ -7,15 +7,19 @@ let popup = {
     html: "",
     xml: "",
   },
+
   // speichert die ID des Belegs, der bearbeitet werden soll
   belegID: "",
+
   // speichert die ID des Overlay-Fenster, das betroffen ist
   overlayID: "",
+
   // für XML-Kopie: Referenz für das Kopieren eines Belegs
   referenz: {
     data: {}, // Objekt, in dem die Karteikarte liegt, d.i. beleg.data || data.ka[ID]
     id: "", // die ID der Karteikarte
   },
+
   // für Kopie einer Titelaufnahme (verweist auf redLit.db.data[id][slot])
   titelaufnahme: {
     ds: { // Datensatz, der betroffen ist
@@ -24,20 +28,28 @@ let popup = {
     },
     popup: false, // Rechtsklickmenü wird innerhalb des Versionen-Popups aufgerufen
   },
+
   // speichert den Anhang, der geöffnet werden soll
   anhangDatei: "",
+
   // das angeklickte Anhang-Icon steht im Kopf des Hauptfensters
   anhangDateiKopf: false,
+
   // das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
   anhangDateiListe: false,
+
   // speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
   startDatei: "",
+
   // speichert den Pfad aus einer Karteiliste (zur Zeit, 2019-10-26, nur Karteisuche)
   karteiPfad: "",
+
   // speichert den Karteilink, auf dem ein Rechtsklick ausgeführt wurde
   karteiLink: null,
+
   // speichert das Element, auf das sich das Event bezieht
   element: null,
+
   // Popup öffnen
   //   evt = Event-Object
   //     (das Ereignis-Objekt, das beim Rechtsklick erzeugt wird)
@@ -215,6 +227,7 @@ let popup = {
     // Menü vom Main-Prozess erzeugen lassen
     modules.ipc.invoke("popup", items);
   },
+
   // ermittelt das für den Rechtsklick "passendste" Klickziel
   //   pfad = Array
   //     (speichert den Event-Pfad, also die Elementeliste,
@@ -376,6 +389,7 @@ let popup = {
     // keine Kartei offen
     return "kartei";
   },
+
   // Text der Auswahl ermitteln und entscheiden, ob sie berücksichtigt wird
   // (diese Funktion wird nicht nur für Rechtsklicks verwendet, sondern
   // auch für Kopier-Icons!)
@@ -504,6 +518,7 @@ let popup = {
     // keine Kopieranweisung geben
     return false;
   },
+
   // ermittelt, ob eine Selection innerhalb des Belegtextes ist (Belegliste oder Leseansicht)
   selInBeleg () {
     let sel = window.getSelection(),
@@ -517,6 +532,7 @@ let popup = {
     }
     return false;
   },
+
   // Befehl "Belege auflisten" ggf. zu den Items hinzufügen
   belegeAuflisten (items) {
     if (overlay.oben() ||

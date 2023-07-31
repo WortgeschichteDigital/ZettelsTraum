@@ -92,6 +92,7 @@ let fehlerlog = {
       p.appendChild(document.createTextNode(daten[i].data));
     }
   },
+
   // das übergebene Datum formatiert zurückgeben
   //   datum = String
   //     (im ISO 8601-Format)
@@ -101,6 +102,7 @@ let fehlerlog = {
     let d = new Date(datum);
     return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${d.getMinutes() < 10 ? `0${d.getMinutes()}` : d.getMinutes()}:${d.getSeconds() < 10 ? `0${d.getSeconds()}` : d.getSeconds()} Uhr`;
   },
+
   // uovo di Pasqua
   uovo: {
     count: -1,
@@ -164,6 +166,7 @@ let fehlerlog = {
     // Anzeige auffrischen
     fehlerlog.fuellen(fehler);
   },
+
   // Fehler aus dem Fenster kopieren
   //   a = Element
   //     (der Kopier-Link)

@@ -4,9 +4,11 @@ let helfer = {
   // speichert, welche der Hauptfunktionen gerade geöffnet ist;
   // mögliche Werte: "liste" (= Belegliste), "gerüst" (= Bedeutungsgerüst), "karte" (= Karteikarte)
   hauptfunktion: "liste",
+
   // speichert den Timeout für das Resize-Event,
   // dessen Konsequenzen nicht zu häufig gezogen werden sollen
   resizeTimeout: null,
+
   // das Fensterladen-Overlay ausblenden
   fensterGeladen () {
     setTimeout(function() {
@@ -21,8 +23,10 @@ let helfer = {
       });
     }, 500);
   },
+
   // Timeout für das Entfernen des Overflow-Styles
   elementMaxHeightTimeout: null,
+
   // maximale Höhe des übergebenen Elements festlegen
   //   ele = Element
   //     (Element, dessen maximale Höhe festgelegt werden soll)
@@ -174,6 +178,7 @@ let helfer = {
     }
     ele.style.maxHeight = `${maxHeight}px`;
   },
+
   // übergebene Sektion einblenden, alle andere Sektionen ausblenden
   //   sektion = String
   //     (ID der einzublendenden Sektion)
@@ -217,6 +222,7 @@ let helfer = {
       });
     }
   },
+
   // übernimmt das seitenweise Scrollen im Bedeutungsgerüst, der Belegliste und
   // Leseansicht der Karteikarte
   // (Grund: sonst wird Text unter dem Header versteckt)
@@ -257,6 +263,7 @@ let helfer = {
       behavior: "smooth",
     });
   },
+
   // Zufallsgenerator
   //   min = Number
   //     (Minimalwert)
@@ -265,6 +272,7 @@ let helfer = {
   zufall (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
+
   // wählt den Text innerhalb des übergebenen Objekts aus
   //   obj = Element
   //     (das Element, in dem der Text komplett markiert werden soll)
@@ -275,6 +283,7 @@ let helfer = {
     sel.removeAllRanges();
     sel.addRange(range);
   },
+
   // Fokus aus Formularfeldern entfernen
   inputBlur () {
     let aktiv = document.activeElement;
@@ -282,6 +291,7 @@ let helfer = {
       aktiv.blur();
     }
   },
+
   // überprüft, ob in einem Number-Input eine zulässige Ziffer steht
   //   i = Element
   //     (das Number-Feld, das überprüft werden soll)
@@ -291,6 +301,7 @@ let helfer = {
       i.value = i.defaultValue;
     }
   },
+
   // mehrzeilige Textfelder automatisch an die Größe des Inhalts anpassen
   // (größer als die angegebene max-height werden sie dabei nie)
   //   textarea = Element
@@ -301,6 +312,7 @@ let helfer = {
     textarea.style.height = "inherit";
     textarea.style.height = `${textarea.scrollHeight - padding}px`; // normalerweise 4px padding in scrollHeight enthalten
   },
+
   // Standardformatierungen in Edit-Feldern abfangen
   //   edit = Element
   //     (das Edit-Feld, das keine Standardformatierungen erhalten soll
@@ -312,6 +324,7 @@ let helfer = {
       }
     });
   },
+
   // Bereinigt Text, der in Textfeldern eingegeben wurde
   //   text = String
   //     (der Text, der bereinigt werden soll)
@@ -325,6 +338,7 @@ let helfer = {
     }
     return text;
   },
+
   // einen Text typographisch aufhübschen
   //   text = String
   //     (Text, in dem die Anpassungen vorgenommen werden sollen)
@@ -396,6 +410,7 @@ let helfer = {
     // Text zurückgeben
     return text;
   },
+
   // Treffer innerhalb von Tags löschen
   //   text = String
   //     (Text mit Suchmarkierungen)
@@ -410,6 +425,7 @@ let helfer = {
     }
     return text;
   },
+
   // beim Pasten von Text in ein Edit-Feld den Text ggf. vorher bereinigen
   // (wird zur Zeit nur von bedeutungen.js genutzt)
   //   ele = Element
@@ -441,6 +457,7 @@ let helfer = {
       ele.dispatchEvent(new Event("input"));
     });
   },
+
   // ergänzt Style-Information für eine Kopie im HTML-Format;
   // löscht die nicht zum Original gehörenden Markierungen der BenutzerIn
   //   html = String
@@ -506,6 +523,7 @@ let helfer = {
       });
     }
   },
+
   // bereitet einen in HTMl formatierten String für eine XML-Kopie auf
   //   html = String
   //     (der Quelltext, in dem die Ersetzungen vorgenommen werden sollen)
@@ -519,6 +537,7 @@ let helfer = {
     // Ergebnis der Aufbereitung zurückggeben
     return cont.innerHTML;
   },
+
   // Ersetzungsfunktion für zu löschende bzw. umzuwandelnde Element-Container
   //   cont = Element
   //     (in diesem Element sollen die Ersetzungen stattfinden)
@@ -545,6 +564,7 @@ let helfer = {
       quelle = cont.querySelector(selectors);
     }
   },
+
   // Strings für alphanumerische Sortierung aufbereiten
   //   s = String
   //     (String, der aufbereitet werden soll)
@@ -569,6 +589,7 @@ let helfer = {
     helfer.sortAlphaPrepCache[s] = prep;
     return prep;
   },
+
   // alphanumerisch sortieren
   // (geht nur bei eindimensionalen Arrays!)
   //   a = String
@@ -583,6 +604,7 @@ let helfer = {
     }
     return 1;
   },
+
   // Strings nach Länge sortieren (kürzeste zuletzt), Fallback: alphanumerische Sortierung
   //   a = String
   //   b = String
@@ -594,6 +616,7 @@ let helfer = {
     }
     return helfer.sortAlpha(a, b);
   },
+
   // Strings nach Länge sortieren (kürzeste zuerst), Fallback: alphanumerische Sortierung
   //   a = String
   //   b = String
@@ -605,6 +628,7 @@ let helfer = {
     }
     return helfer.sortAlpha(a, b);
   },
+
   // Titelaufnahmen nach ihren Siglen sortieren
   //   a = Object || String
   //   b = Object || String
@@ -640,6 +664,7 @@ let helfer = {
     }
     return 1;
   },
+
   // Titelaufnahmen nach ihren Siglen sortieren (Vorbereitung)
   //   s = String
   //     (String, der aufbereitet werden soll)
@@ -653,6 +678,7 @@ let helfer = {
     helfer.sortSiglenPrepCache[s] = prep;
     return prep;
   },
+
   // Superscript-Ziffern in Siglen in arabische umwandeln
   // (dient für die Sortierung von Siglen, die nach der Elimination der
   // hochgestellten Ziffern identisch wären; das Problem sind die Codepoints
@@ -691,6 +717,7 @@ let helfer = {
     helfer.sortSiglenPrepSuperCache[s] = prep;
     return prep;
   },
+
   // URLs nach Domain sortieren
   //   a = String
   //   b = String
@@ -706,6 +733,7 @@ let helfer = {
     }
     return 0;
   },
+
   // Wortinformationen sortieren
   //   a = Object
   //   b = Object
@@ -726,6 +754,7 @@ let helfer = {
     }
     return 1;
   },
+
   // ein übergebenes Datum formatiert ausgeben
   //   datum = String
   //     (im ISO 8601-Format)
@@ -771,6 +800,7 @@ let helfer = {
       monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
     return `${wochentage[d.getDay()]}, ${d.getDate()}. ${monate[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${m} Uhr`;
   },
+
   // Datum ermitteln, als solches und in einem Sortierformat zurückgeben
   //   datum = String
   //     (Text mit dem Datum)
@@ -851,6 +881,7 @@ let helfer = {
       sortier: datumSort,
     };
   },
+
   // überprüft den Typ des übergebenen Objekts zuverlässig
   // mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
   //   typ = String
@@ -861,11 +892,13 @@ let helfer = {
     const cl = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && cl === typ;
   },
+
   // Sprache der Nutzerumgebung ermitteln
   checkLang () {
     let env = process.env;
     return env.LANG || env.LANGUAGE || env.LC_ALL || env.LC_MESSAGES;
   },
+
   // Variablen um Wortgrenzen zu bestimmen
   ganzesWortRegExp: {
     links: `\\s"„“”‚‘»«›‹/\\\\([\\\]{<>`,
@@ -876,12 +909,14 @@ let helfer = {
     linksWort: `\\s"„“”‚‘»«›‹/\\{<>`,
     rechtsWort: `\\s"„“”‚‘»«›‹/\\!?.:,;<>`,
   },
+
   // Tokens mit spezieller Bedeutung für reguläre Ausdrücke escapen
   //   string = String
   //     (Text, der escaped werden soll)
   escapeRegExp (string) {
     return string.replace(/\/|\(|\)|\[|\]|\{|\}|\.|\?|\\|\+|\*|\^|\$|\|/g, m => `\\${m}`);
   },
+
   // Zeichen maskieren
   //   string = String
   //     (Text, in dem Zeichen maskiert werden sollen)
@@ -911,11 +946,13 @@ let helfer = {
     }
     return string;
   },
+
   // Sammlung der regulären Ausdrücke aller Formvarianten;
   // in jedem Slot ein Objekt mit den Eigenschaften
   //   wort = das Wort, für den der reguläre Ausdruck erstellt wurde
   //   reg = der reguläre Ausdruck
   formVariRegExpRegs: [],
+
   // regulären Ausdruck mit allen Formvarianten erstellen
   formVariRegExp () {
     helfer.formVariRegExpRegs = [];
@@ -959,6 +996,7 @@ let helfer = {
       });
     }
   },
+
   // spezielle Buchstaben für einen regulären Suchausdruck um Sonderzeichen ergänzen
   //   wort = String
   //     (die Zeichenkette, mit der gesucht werden soll
@@ -984,8 +1022,10 @@ let helfer = {
       }
     });
   },
+
   // Zwischenspeicher für den Timeout der Animation
   animationTimeout: null,
+
   // Overlay-Animation, die anzeigt, was gerade geschehen ist
   // (Kopier-Aktion oder Wrap der Suchleiste)
   //   ziel = String
@@ -1053,6 +1093,7 @@ let helfer = {
       }, 500);
     }, 1000);
   },
+
   // entschüsselt die "verschlüsselte" E-Mail-Adresse
   //   kodiert = String
   //     (die "verschlüsselte" Mail-Adresse)
@@ -1069,6 +1110,7 @@ let helfer = {
     }
     return dekodiert.split("trenner")[1];
   },
+
   // öffnet externe Links in einem Browser-Fenster
   //   a = Element
   //     (Link, auf dem geklickt wurde)
@@ -1089,6 +1131,7 @@ let helfer = {
       modules.shell.openExternal(url);
     });
   },
+
   // lädt den Inhalt der übergebenen URL herunter
   //   url = String
   //     (URL, deren Inhalt heruntergeladen werden soll)
@@ -1131,6 +1174,7 @@ let helfer = {
       resolve(feedback);
     });
   },
+
   // öffnet den Dateimanager im Ordner der übergebenen Datei
   //   pfad = String
   //     (Pfad zu einer Datei)
@@ -1143,6 +1187,7 @@ let helfer = {
     }
     modules.shell.showItemInFolder(pfad);
   },
+
   // prüft, ob eine Datei existiert
   //   datei = String
   //     (Pfad zur Datei)
@@ -1153,6 +1198,7 @@ let helfer = {
         .catch(() => resolve(false));
     });
   },
+
   // überprüft Quell- und Zielpfade von CLI-Befehlen
   //   format = String
   //     (Dateiformat)
@@ -1198,6 +1244,7 @@ let helfer = {
     // (könnten sich geändert haben)
     return vars;
   },
+
   // markiert in der Titelleiste des Programms, dass irgendeine Änderung
   // noch nicht gespeichert wurde
   geaendert () {
@@ -1218,6 +1265,7 @@ let helfer = {
     // Dokumententitel
     document.title = appInfo.name + wort + asterisk;
   },
+
   // überprüft, ob das Bedeutungsgerüst offen ist und nicht durch irgendein
   // anderes Fenster verdeckt wird
   bedeutungenOffen () {
@@ -1226,6 +1274,7 @@ let helfer = {
     }
     return false;
   },
+
   // überprüft, ob die Karteikarte offen ist und nicht durch irgendein
   // anderes Fenster verdeckt wird
   belegOffen () {
@@ -1234,6 +1283,7 @@ let helfer = {
     }
     return false;
   },
+
   // Öffnen der Demonstrationskartei
   demoOeffnen () {
     // Resources-Pfad ermitteln
@@ -1256,6 +1306,7 @@ let helfer = {
         throw err;
       });
   },
+
   // Handbuch an einer bestimmten Stelle aufschlagen
   //   a = Element
   //     (der Link, der einen abschnitt im Handbuch referenziert)
@@ -1276,6 +1327,7 @@ let helfer = {
       modules.ipc.send("hilfe-handbuch", abschnitt);
     });
   },
+
   // Fehler an den Main-Prozess melden
   //   evt = Object
   //     (Fehler-Objekt)
@@ -1327,6 +1379,7 @@ let helfer = {
       column = 0;
     }
   },
+
   // führt mitunter asynchrone Operationen aus, die nach und nach
   // vor dem Schließen eines Hauptfensters abgearbeitet werden müssen;
   // danach wird ein endgültiger Schließen-Befehl an Main gegeben

@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Listensektion -------------------------------- */
+/* LISTENSEKTION -------------------------------- */
+
 @keyframes liste-re {
   0% {
     transform: translateX(var(--filterKeyframe));
@@ -71,7 +72,9 @@
   }
 }
 
-/* Filterleiste --------------------------------- */
+
+/* FILTERLEISTE --------------------------------- */
+
 #liste-filter {
   position: sticky;
   top: 70px; /* 70px + margin-top über dem ersten Element in #liste-filter */
@@ -349,7 +352,9 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   display: none;
 }
 
-/* Belegliste: Header --------------------------- */
+
+/* BELEGLISTE: HEADER --------------------------- */
+
 #liste-belege {
   position: relative;
 }
@@ -544,7 +549,9 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   font-weight: bold;
 }
 
-/* Belegliste: Content -------------------------- */
+
+/* BELEGLISTE: CONTENT -------------------------- */
+
 #liste-belege-cont {
   margin: 0 0 25px 0;
 }

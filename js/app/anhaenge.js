@@ -3,6 +3,7 @@
 let anhaenge = {
   // hier stehen Details zu den einzelnen Anhängen (s. anhaenge.scan())
   data: {},
+
   // scannt die übergebenen Anhänge und trägt das Ergebnis
   // in anhaenge.data ein
   //   an = Array | String
@@ -42,6 +43,7 @@ let anhaenge = {
       }
     });
   },
+
   // ermittelt das Array, in dem die aufzulistenden Anhänge zu finden sind
   //   obj = String
   //     (String mit Angaben zu dem Objekt; dieser muss in einen echten Verweis
@@ -59,6 +61,7 @@ let anhaenge = {
     }
     return arr;
   },
+
   // Liste mit Icon-Typen
   iconTypen: {
     ".doc": "datei-doc.svg",
@@ -83,6 +86,7 @@ let anhaenge = {
     ".xml": "datei-xml.svg",
     ".zip": "datei-archiv.svg",
   },
+
   // passendes Icon zum Anhang ermitteln
   //   an = string
   //     (Datei, wie sie sich in anhaenge.data findet)
@@ -95,6 +99,7 @@ let anhaenge = {
     }
     return "img/datei.svg";
   },
+
   // Liste von Icons erstellen, die einzeln angeklickt werden können
   //   arr = Array | null
   //     (Array mit allen Dateien, für die Icons erstellt werden sollen;
@@ -126,6 +131,7 @@ let anhaenge = {
       kopf.icons();
     }
   },
+
   // Anhänge-Fenster einblenden
   async fenster () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -151,6 +157,7 @@ let anhaenge = {
     // Anhänge der Belege auflisten
     anhaenge.auflistenBelege(cont);
   },
+
   // Anhänge auflisten
   //   cont = Element
   //     (Container, in dem die Liste erzeugt werden soll)
@@ -222,6 +229,7 @@ let anhaenge = {
       resolve(true);
     });
   },
+
   // Anhänge der Belege im Anhänge-Fenster auflisten
   async auflistenBelege (cont) {
     for (let id in data.ka) {
@@ -241,6 +249,7 @@ let anhaenge = {
       await anhaenge.auflisten(cont, `data|ka|${id}|an`, false);
     }
   },
+
   // Öffnet einen Anhang
   //   item = Element
   //     (der <div> oder <img>, auf den/das geklickt wurde)
@@ -252,6 +261,7 @@ let anhaenge = {
       anhaenge.oeffnen(this.dataset.datei);
     });
   },
+
   // Öffnet die übergebene Datei
   //   datei = "String"
   //     (Datei, die geöffnet werden soll)
@@ -278,6 +288,7 @@ let anhaenge = {
       }
     }
   },
+
   // Öffnen der Karteikarte durch Klick auf eine Überschrift im Anhänge-Fenster (Listener)
   // (wird auch in kopieren.js benutzt)
   //   ele = Element
@@ -292,6 +303,7 @@ let anhaenge = {
       });
     });
   },
+
   // Sortiert den Anhang um eine Position nach oben
   //   item = Element
   //     (der Icon-Link, auf den geklickt wurde)
@@ -337,6 +349,7 @@ let anhaenge = {
       }
     });
   },
+
   // Löscht einen Anhang aus der Liste
   //   item = Element
   //     (der Icon-Link, auf den geklickt wurde)
@@ -385,6 +398,7 @@ let anhaenge = {
       });
     });
   },
+
   // Anhang hinzufügen
   //   input = Element
   //     (Add-Button zum Hinzufügen von Anhängen)
@@ -435,6 +449,7 @@ let anhaenge = {
       anhaenge.addFiles(result.filePaths, cont, obj);
     });
   },
+
   // Dateien ggf. hinzufügen
   //   dateien = Array
   //     (enthält eine Liste der Dateien, die hinzugefügt werden sollen)
@@ -483,6 +498,7 @@ let anhaenge = {
     // Erinnerungen auffrischen
     erinnerungen.check();
   },
+
   // automatisch alle Dateien im Kartei-Verzeichnis hinzufügen
   //   fenster = Boolean
   //     (die Funktion wurde aus dem Anhänge-Fenster heraus aufgerufen)
@@ -611,6 +627,7 @@ let anhaenge = {
     // Erinnerungen auffrischen
     erinnerungen.check();
   },
+
   // Änderungsmarkierung setzen
   //   cont = Element
   //     (das Contentobjekt, in dem sich die Anhänge befinden; hier ist auch

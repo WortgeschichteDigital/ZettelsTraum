@@ -7,6 +7,7 @@ let konversion = {
   //   kartei.erstellen() u. beleg.karteErstellen() ergänzen!
   // 2.) Diese Versionsnummer hochzählen!
   version: 25,
+
   // Verteilerfunktion
   start () {
     konversion.von1nach2();
@@ -34,6 +35,7 @@ let konversion = {
     konversion.von23nach24();
     konversion.von24nach25();
   },
+
   // Konversion des Dateiformats von Version 1 nach Version 2
   von1nach2 () {
     if (data.ve > 1) {
@@ -51,6 +53,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 2 nach Version 3
   von2nach3 () {
     if (data.ve > 2) {
@@ -68,6 +71,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 3 nach Version 4
   von3nach4 () {
     if (data.ve > 3) {
@@ -85,6 +89,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 4 nach Version 5
   von4nach5 () {
     if (data.ve > 4) {
@@ -117,6 +122,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 5 nach Version 6
   von5nach6 () {
     if (data.ve > 5) {
@@ -144,6 +150,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 6 nach Version 7
   von6nach7 () {
     if (data.ve > 6) {
@@ -156,6 +163,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 7 nach Version 8
   von7nach8 () {
     if (data.ve > 7) {
@@ -173,6 +181,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 8 nach Version 9
   von8nach9 () {
     if (data.ve > 8) {
@@ -208,6 +217,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 9 nach Version 10
   von9nach10 () {
     if (data.ve > 9) {
@@ -228,6 +238,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 10 nach Version 11
   von10nach11 () {
     if (data.ve > 10) {
@@ -240,6 +251,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 11 nach Version 12
   von11nach12 () {
     if (data.ve > 11) {
@@ -257,6 +269,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 12 nach Version 13
   von12nach13 () {
     if (data.ve > 12) {
@@ -279,6 +292,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 13 nach Version 14
   von13nach14 () {
     if (data.ve > 13) {
@@ -291,6 +305,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 14 nach Version 15
   von14nach15 () {
     if (data.ve > 14) {
@@ -303,6 +318,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 15 nach Version 16
   von15nach16 () {
     if (data.ve > 15) {
@@ -317,6 +333,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 16 nach Version 17
   von16nach17 () {
     if (data.ve > 16) {
@@ -337,6 +354,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 17 nach Version 18
   von17nach18 () {
     if (data.ve > 17) {
@@ -361,6 +379,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 18 nach Version 19
   von18nach19 () {
     if (data.ve > 18) {
@@ -375,6 +394,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 19 nach Version 20
   von19nach20 () {
     if (data.ve > 19) {
@@ -393,6 +413,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 20 nach Version 21
   von20nach21 () {
     // BUG-Korrektur: ggf. Datenfeld für Nebenlemmata erzeugen
@@ -417,6 +438,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 21 nach Version 22
   von21nach22 () {
     if (data.ve > 21) {
@@ -429,6 +451,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 22 nach Version 23
   von22nach23 () {
     if (data.ve > 22) {
@@ -443,6 +466,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 23 nach Version 24
   von23nach24 () {
     if (data.ve > 23) {
@@ -455,6 +479,7 @@ let konversion = {
     // Änderungsmarkierung setzen
     kartei.karteiGeaendert(true);
   },
+
   // Konversion des Dateiformats von Version 24 nach Version 25
   von24nach25 () {
     if (data.ve > 24) {

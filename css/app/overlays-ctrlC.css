@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Kopierfenster -------------------------------- */
+/* KOPIERFENSTER -------------------------------- */
+
 #ctrlC > div {
   width: 375px;
 }

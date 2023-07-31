@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* Redaktion: Literaturdatenbank ---------------- */
+/* REDAKTION: LITERATURDATENBANK ---------------- */
+
 #red-lit > div {
   margin-top: 40px;
   max-width: 700px;
@@ -23,7 +24,9 @@
   background-color: var(--text);
 }
 
-/* Tags ----------------------------------------- */
+
+/* TAGS ----------------------------------------- */
+
 #red-lit-eingabe-tags {
   line-height: 20px;
 }
@@ -97,7 +100,9 @@
   padding-top: 5px;
 }
 
-/* Datenkbankpfad ------------------------------- */
+
+/* DATENKBANKPFAD ------------------------------- */
+
 #red-lit-pfad {
   position: relative;
 }
@@ -144,7 +149,9 @@
   margin-left: 12px;
 }
 
-/* Navigation ----------------------------------- */
+
+/* NAVIGATION ----------------------------------- */
+
 #red-lit input[type="radio"]:not(:first-child) {
   margin-left: 25px;
 }
@@ -154,7 +161,9 @@
   font-style: italic;
 }
 
-/* Suche ---------------------------------------- */
+
+/* SUCHE ---------------------------------------- */
+
 #red-lit-suche-form {
   position: relative;
   margin: 0;
@@ -322,7 +331,9 @@
   width: 150px;
 }
 
-/* Eingabeformular ------------------------------ */
+
+/* EINGABEFORMULAR ------------------------------ */
+
 #red-lit-eingabe-meldung {
   margin-bottom: 20px;
   border-width: 2px;
@@ -487,7 +498,9 @@
   font-style: italic;
 }
 
-/* Versionen-Popup ------------------------------ */
+
+/* VERSIONEN-POPUP ------------------------------ */
+
 #red-lit-popup {
   position: absolute;
   top: 70px;
@@ -545,7 +558,9 @@
   padding-top: 10px;
 }
 
-/* Titelsnippet --------------------------------- */
+
+/* TITELSNIPPET --------------------------------- */
+
 .red-lit-snippet.markiert {
   background-color: var(--hover);
 }
@@ -636,7 +651,9 @@
   width: 60px;
 }
 
-/* Sperrbildschirm ------------------------------ */
+
+/* SPERRBILDSCHIRM ------------------------------ */
+
 /* Styles von #red-lit-sperre > #karteisuche-suche-laeuft */
 #red-lit #red-lit-sperre {
   padding: 0;
