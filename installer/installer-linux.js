@@ -71,19 +71,21 @@ function makeConfig () {
       },
       [typ]: {
         packageCategory: "science",
-        afterInstall: "./installer/linux-after-install.sh",
-        afterRemove: "./installer/linux-after-remove.sh",
+        // BUG: s. fileAssociations
+        // afterInstall: "./installer/linux-after-install.sh",
+        // afterRemove: "./installer/linux-after-remove.sh",
         fpm: [ `--${typ}-changelog=../build/changelog` ],
       },
-      // "fileAssociations" funktioniert zwar gut, ordnet den ZTJ-Dateien aber
-      // kein Datei-Icon zu; ich übernehme das lieber selbst in "linux-after-install.sh"
-//       fileAssociations: [
-//         {
-//           ext: "ztj",
-//           name: "x-ztj",
-//           mimeType: "application/x-ztj",
-//         },
-//       ],
+      // BUG: "fileAssociations" funktioniert zwar gut, ordnet den ZTJ-Dateien aber kein Datei-Icon zu;
+      // mein Script (linux-after-install.sh) schafft das, kann aber aus irgendeinem Grund nicht die App mit dem MIME-Type assoziieren;
+      // => vorerst wieder fileAssociations nutzen
+      fileAssociations: [
+        {
+          ext: "ztj",
+          name: "x-ztj",
+          mimeType: "application/x-ztj",
+        },
+      ],
       extraResources: [
         {
           from: "./resources",
