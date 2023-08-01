@@ -1,207 +1,208 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../bedeutungenbaum.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* STRUKTUR-ELEMENTE ---------------------------- */
 
-/* Bedeutungenbaum ------------------------------ */
-@import url(../bedeutungenbaum.css);
-
-/* Struktur-Elemente ---------------------------- */
 body {
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #fff;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	user-select: none;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  user-select: none;
 }
 
 body > header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 3; /* sonst kann die ausgeklappte Dropdown-Liste den Kopf überdecken */
-	border-bottom: 10px solid #fff;
-	padding: 0 10px;
-	width: calc(100% - 20px);
-	height: 60px;
-	background-color: var(--farbe);
-	white-space: nowrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3; /* sonst kann die ausgeklappte Dropdown-Liste den Kopf überdecken */
+  border-bottom: 10px solid #fff;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background-color: var(--farbe);
+  white-space: nowrap;
 }
 
 body > header h1 {
-	display: inline-block;
-	margin: 0;
-	color: #fff;
-	font-size: 30px;
-	font-weight: normal;
-	line-height: 60px;
+  display: inline-block;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 60px;
 }
 
 #icon {
-	position: absolute;
-	top: 6px;
-	right: 0;
-	padding: 0 10px;
-	background-color: var(--farbe);
+  position: absolute;
+  top: 6px;
+  right: 0;
+  padding: 0 10px;
+  background-color: var(--farbe);
 }
 
 main {
-	margin-top: 70px;
-	padding: 0 10px 20px 10px;
+  margin-top: 70px;
+  padding: 0 10px 20px;
 }
 
-/* Basis-Elemente ------------------------------- */
+
+/* BASIS-ELEMENTE ------------------------------- */
+
 h2 {
-	position: relative;
-	margin: 80px 0 15px 0;
-	color: var(--textFarbe);
-	font-size: 24px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 38px;
-	white-space: nowrap;
+  position: relative;
+  margin: 80px 0 15px;
+  color: var(--textFarbe);
+  font-size: 24px;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 38px;
+  white-space: nowrap;
 }
 
 .dropdown-cont {
-	position: absolute;
-	top: 2px;
-	right: -10px;
-	padding: 0 10px 0 50px;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  position: absolute;
+  top: 2px;
+  right: -10px;
+  padding: 0 10px 0 50px;
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
 }
 
 .dropdown-feld {
-	vertical-align: text-bottom;
-	border: 1px solid var(--linie);
-	padding: 2px 24px 2px 5px;
-	width: 75px;
-	color: var(--textSehrHell);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	cursor: default;
+  vertical-align: text-bottom;
+  border: 1px solid var(--linie);
+  padding: 2px 24px 2px 5px;
+  width: 75px;
+  color: var(--textSehrHell);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  cursor: default;
 }
 
 .dropdown-link-td {
-	position: absolute;
-	top: 8px;
-	right: 11px;
-	display: inline-block;
-	outline: none;
-	vertical-align: top;
-	width: 24px;
-	height: 24px;
-	background-color: #fff;
-	color: var(--iconHell);
+  position: absolute;
+  top: 8px;
+  right: 11px;
+  display: inline-block;
+  outline: none;
+  vertical-align: top;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  color: var(--iconHell);
 }
 
 .dropdown-link-td svg {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 .dropdown-link-td svg path {
-	fill: currentcolor;
+  fill: currentcolor;
 }
 
 .dropdown-feld:focus,
 .dropdown-feld:hover {
-	outline: none;
-	border-color: var(--linie);
-	color: var(--text);
+  outline: none;
+  border-color: var(--linie);
+  color: var(--text);
 }
 
 .dropdown-feld:hover ~ a,
 .dropdown-feld:focus ~ a {
-	color: var(--text);
+  color: var(--text);
 }
 
 input:read-only::selection {
-	 /* user-select: none funktioniert nicht
-			auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
-	background-color: transparent;
-	color: inherit;
+   /* user-select: none funktioniert nicht
+      auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
+  background-color: transparent;
+  color: inherit;
 }
 
 #dropdown {
-	margin-top: 2px; /* kleiner Fix, damit das Menü auch hier ein bisschen abgesetzt ist */
+  margin-top: 2px; /* kleiner Fix, damit das Menü auch hier ein bisschen abgesetzt ist */
 }
 
-/* Bedeutungenbaum ------------------------------- */
+
+/* BEDEUTUNGENBAUM ------------------------------- */
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
-	table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  table-layout: fixed;
 }
 
 td {
-	padding: 0;
-	vertical-align: top;
+  padding: 0;
+  vertical-align: top;
 }
 
 td:first-child,
 td:nth-child(2) {
-	width: 24px;
+  width: 24px;
 }
 
 .icon-link {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-color: transparent;
-	text-decoration: none;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  text-decoration: none;
 }
 
 .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 .icon-add {
-	-webkit-mask-image: url(../../img/plus.svg);
-	mask-image: url(../../img/plus.svg);
+  -webkit-mask-image: url(../../img/plus.svg);
+  mask-image: url(../../img/plus.svg);
 }
 
 .icon-remove {
-	-webkit-mask-image: url(../../img/minus.svg);
-	mask-image: url(../../img/minus.svg);
+  -webkit-mask-image: url(../../img/minus.svg);
+  mask-image: url(../../img/minus.svg);
 }
 
 td .icon-link {
-	position: relative;
-	top: 3px;
+  position: relative;
+  top: 3px;
 }
 
 p.bd-win-keine {
-	margin: 0;
-	color: var(--textSehrHell);
-	font-style: italic;
-	text-align: center;
+  margin: 0;
+  color: var(--textSehrHell);
+  font-style: italic;
+  text-align: center;
 }
 
 .bd-win-baum p:hover {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
 mark.paraphrase {
-	border-radius: 0;
-	padding: 0;
-	background-color: transparent;
-	color: var(--farbe);
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  color: var(--farbe);
 }
 
 mark.paraphrase::before {
-	content: "‚";
+  content: "‚";
 }
 
 mark.paraphrase::after {
-	content: "‘";
+  content: "‘";
 }

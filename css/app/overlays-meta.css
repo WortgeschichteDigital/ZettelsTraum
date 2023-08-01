@@ -1,45 +1,46 @@
 @charset "utf-8";
 
-/* Metadaten ------------------------------------ */
+/* METADATEN ------------------------------------ */
+
 #meta > div {
-	margin-top: 40px;
-	max-width: 400px;
+  margin-top: 40px;
+  max-width: 400px;
 }
 
 .icon-h-meta {
-	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
-	mask-image: url(../../img/zeilen-4,0.svg);
+  -webkit-mask-image: url(../../img/zeilen-4,0.svg);
+  mask-image: url(../../img/zeilen-4,0.svg);
 }
 
 #meta-cont {
-	padding: 10px 10px 5px 10px;
+  padding: 10px 10px 5px;
 }
 
 #meta-cont-over {
-	overflow: auto;
-	transition: max-height .5s ease;
+  overflow: auto;
+  transition: max-height .5s ease;
 }
 
 #meta-cont h3 {
-	margin: 10px 0 5px 0;
+  margin: 10px 0 5px;
 }
 
 #meta-cont h3:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 #meta-cont h3 img {
-	margin-left: 15px;
-	vertical-align: bottom;
+  margin-left: 15px;
+  vertical-align: bottom;
 }
 
 #meta-cont p {
-	margin-bottom: 5px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #meta-speicherort {
-	text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
+  text-align: left; /* das Feld ist rtl, bei kurzem Inhalt wäre der Text sonst rechtsbündig */
 }

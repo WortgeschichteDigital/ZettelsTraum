@@ -1,79 +1,82 @@
 @charset "utf-8";
 
-/* Redaktion: Metadaten ------------------------- */
+/* REDAKTION: METADATEN ------------------------- */
+
 #red-meta > div {
-	margin-top: 40px;
-	max-width: 600px;
+  margin-top: 40px;
+  max-width: 600px;
 }
 
 #red-meta-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #red-meta-over {
-	transition: max-height .5s ease;
+  transition: max-height .5s ease;
 }
 
 #red-meta p {
-	padding-left: 140px;
-	text-indent: -140px;
+  padding-left: 140px;
+  text-indent: -140px;
 }
 
 #red-meta label,
 #red-meta span.label {
-	display: inline-block;
-	width: 140px;
-	font-style: italic;
-	text-indent: 0;
+  display: inline-block;
+  width: 140px;
+  font-style: italic;
+  text-indent: 0;
 }
 
 #red-meta-nebenlemmata,
 #red-meta-behandelt-mit,
 #red-meta-notizen {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 #red-meta-themenfelder,
 #red-meta-sachgebiete,
 #red-meta-stichwortplanung {
-	color: var(--text);
+  color: var(--text);
 }
 
 #red-meta .kein-wert {
-	color: var(--textSehrHell);
-	font-style: italic;
+  color: var(--textSehrHell);
+  font-style: italic;
 }
 
 :is(#red-meta-themenfelder, #red-meta-sachgebiete, #red-meta-stichwortplanung):is(:hover, :focus) {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
-/* BearbeiterInnen ------------------------------ */
+
+/* BEARBEITERINNEN ------------------------------ */
+
 /* vgl. zur Liste auch overlays-stamm.css */
 #red-meta-be-liste {
-	margin-bottom: 5px;
-	max-height: 145px;
-	overflow-x: hidden;
-	overflow-y: auto;
+  margin-bottom: 5px;
+  max-height: 145px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #red-meta-be-liste p {
-	margin-bottom: 5px;
-	padding-left: 0;
-	text-indent: 0;
+  margin-bottom: 5px;
+  padding-left: 0;
+  text-indent: 0;
 }
 
 #red-meta .dropdown-cont {
-	margin-bottom: 0;
-	padding-left: 0;
-	text-indent: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  text-indent: 0;
 }
 
 #red-meta-be {
-	width: calc(100% - 121px - 31px); /* Button 121px, 31px padding und border */
+  width: calc(100% - 121px - 31px); /* Button 121px, 31px padding und border */
 }
 
 #red-meta-be-ergaenzen {
-	position: static;
-	margin-left: -15px;
+  position: static;
+  margin-left: -15px;
 }
