@@ -12,16 +12,22 @@
   top: 0;
   left: 0;
   z-index: 2;
+  opacity: 0;
   padding: 0 25px;
   width: calc(100% - 50px); /* 50px padding */
   height: 100%;
-  background-color: rgba(180, 180, 180, .7);
+  background-color: rgb(180 180 180 / 70%);
   backdrop-filter: blur(3px);
+  transition: opacity .2s ease;
+}
+
+.overlay.einblenden {
+  opacity: 1;
 }
 
 .overlay > div {
   position: relative;
-  margin: 80px auto 0 auto;
+  margin: 80px auto 0;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   padding: 0;
@@ -52,13 +58,4 @@
   -webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
   mask-image: url(../../img/kreis-fragezeichen.svg);
   right: 34px !important;
-}
-
-.overlay {
-  opacity: 0;
-  transition: opacity .2s ease;
-}
-
-.overlay.einblenden {
-  opacity: 1;
 }

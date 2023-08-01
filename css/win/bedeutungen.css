@@ -51,7 +51,7 @@ body > header h1 {
 
 main {
   margin-top: 70px;
-  padding: 0 10px 20px 10px;
+  padding: 0 10px 20px;
 }
 
 
@@ -59,7 +59,7 @@ main {
 
 h2 {
   position: relative;
-  margin: 80px 0 15px 0;
+  margin: 80px 0 15px;
   color: var(--textFarbe);
   font-size: 24px;
   font-style: italic;
@@ -73,7 +73,7 @@ h2 {
   top: 2px;
   right: -10px;
   padding: 0 10px 0 50px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
 }
 
 .dropdown-feld {

@@ -22,7 +22,7 @@
 }
 
 #bearbeiterin-rahmen p:last-child {
-  margin: 20px auto 0 auto;
+  margin: 20px auto 0;
   width: max-content;
 }
 

@@ -10,7 +10,7 @@
   position: sticky;
   top: 70px;
   z-index: 2;
-  padding: 0 0 10px 0;
+  padding: 0 0 10px;
   background-color: #fff;
 }
 
@@ -33,7 +33,7 @@
   z-index: 1;
   padding-right: 50px;
   width: fit-content;
-  background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  background-image: linear-gradient(to left, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
 }
 
 #beleg-buttons input:last-child {
@@ -52,7 +52,7 @@
 /* TABELLE DES FORMULARS ------------------------ */
 
 #beleg table {
-  margin: 0 auto 20px auto;
+  margin: 0 auto 20px;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -151,7 +151,7 @@
 }
 
 #beleg hr {
-  margin: 30px 0 10px 0;
+  margin: 30px 0 10px;
   border: none;
   height: 1px;
   background-color: var(--linie);
@@ -528,7 +528,7 @@ textarea#beleg-bs {
 }
 
 .beleg-lese p {
-  margin: 0 auto 10px auto;
+  margin: 0 auto 10px;
   padding: 0 6px;
   max-width: 700px;
   user-select: text;

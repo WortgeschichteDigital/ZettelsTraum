@@ -6,6 +6,7 @@
   0% {
     transform: translateX(var(--filterKeyframe));
   }
+
   100% {
     transform: translateX(0);
   }
@@ -15,6 +16,7 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(var(--filterKeyframe));
   }
@@ -101,8 +103,8 @@
 .filter-kopf {
   position: relative;
   display: block;
-  margin: 0 0 10px 0;
-  padding: 3px 5px 2px 5px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
+  margin: 0 0 10px;
+  padding: 3px 5px 2px; /* ein bisschen krum, damit der Kopf exakt dieselbe Höhe hat, wie ein Listenkopf */
   background-color: var(--farbeB);
   color: #fff;
 }
@@ -215,7 +217,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .filter-cont > .filter-baum {
-  padding: 5px 0 0 0;
+  padding: 5px 0 0;
 }
 
 .filter-cont > .filter-baum:first-child {
@@ -277,7 +279,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 #filter-erweiterte-cont h3 {
-  margin: 15px 0 5px 0;
+  margin: 15px 0 5px;
   color: var(--text);
   font-style: normal;
 }
@@ -363,7 +365,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   position: sticky;
   top: 70px;
   z-index: 2;
-  padding: 0 0 10px 0;
+  padding: 0 0 10px;
   width: 100%;
   height: 24px;
   overflow: hidden;
@@ -436,7 +438,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 .beleg-opt-block a.beleg-opt-anzeige-letztes,
 .filter-ctrl-block a:last-child,
 .liste-opt-block a:last-child,
-.liste-opt-block:not(.liste-opt-anzeige-an):not(:hover):not(:focus-within) a.liste-opt-anzeige-letztes,
+.liste-opt-block:not(.liste-opt-anzeige-an, :hover, :focus-within) a.liste-opt-anzeige-letztes,
 #red-wi-xml {
   border-right: 0;
   border-top-right-radius: 3px;
@@ -509,7 +511,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   position: absolute;
   right: 0;
   padding: 0 5px 0 50px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 25px);
 }
 
 #liste-belege-anzahl.belege-gefiltert {
@@ -553,7 +555,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 /* BELEGLISTE: CONTENT -------------------------- */
 
 #liste-belege-cont {
-  margin: 0 0 25px 0;
+  margin: 0 0 25px;
 }
 
 #liste-belege-cont.padding-suchleiste {
@@ -609,12 +611,12 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   color: #fff;
 }
 
-.liste-kopf.hinweis-beleg .liste-jahr-hinweis:after,
+.liste-kopf.hinweis-beleg .liste-jahr-hinweis::after,
 .liste-kopf.hinweis-beleg mark {
   color: #fff;
 }
 
-.liste-kopf mark:not(.suche):not(.suchleiste) {
+.liste-kopf mark:not(.suche, .suchleiste) {
   padding: 0;
   background-color: transparent;
 }
@@ -655,7 +657,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   font-style: italic;
 }
 
-.liste-jahr-hinweis:after {
+.liste-jahr-hinweis::after {
   content: "*";
   position: relative;
   left: 3px;
@@ -671,7 +673,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 }
 
 .liste-details.blenden-prep {
-  overflow: hidden; /* nicht direkt in .liste-details schreiben, sonst verschwindet das Annotierungsfenster mitunter hinter dem folgenden Belegkopf*/
+  overflow: hidden; /* nicht direkt in .liste-details schreiben, sonst verschwindet das Annotierungsfenster mitunter hinter dem folgenden Belegkopf */
 }
 
 .liste-details.blenden {
@@ -749,7 +751,7 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
 div.liste-label {
   position: relative;
   border-top: 1px dotted var(--linie);
-  padding: 10px 10px 0 10px;
+  padding: 10px 10px 0;
   max-width: 630px;
 }
 

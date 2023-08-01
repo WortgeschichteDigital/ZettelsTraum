@@ -50,7 +50,7 @@ body > header h1 {
 
 main {
   margin-top: 70px;
-  padding: 0 10px 10px 10px;
+  padding: 0 10px 10px;
 }
 
 main.padding-suchleiste {
@@ -89,7 +89,7 @@ code.quelltext {
 }
 
 h2 {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
   font-size: 18px;
   font-weight: normal;
   line-height: 26px;
@@ -109,7 +109,7 @@ h2 time {
 }
 
 h3 {
-  margin: 25px 0 5px 0;
+  margin: 25px 0 5px;
   color: var(--textFarbe);
   font-size: 16px;
   font-style: italic;
@@ -139,7 +139,7 @@ mark.wort {
 }
 
 p {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
 }
 
 p.einzug {
@@ -170,7 +170,7 @@ pre.quelltext {
 }
 
 ul {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
   padding-left: 20px;
   list-style-type: disc;
 }

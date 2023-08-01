@@ -28,7 +28,7 @@
 }
 
 #redaktion-next {
-  padding: 10px 10px 25px 10px;
+  padding: 10px 10px 25px;
 }
 
 #redaktion-next strong {
@@ -37,7 +37,7 @@
 }
 
 #redaktion-cont {
-  padding: 0 10px 10px 10px;
+  padding: 0 10px 10px;
 }
 
 #redaktion-cont .icon-link {
@@ -60,7 +60,7 @@
 }
 
 #redaktion-cont td {
-  padding: 0 5px 5px 5px;
+  padding: 0 5px 5px;
   vertical-align: top;
   line-height: 30px;
   white-space: nowrap;

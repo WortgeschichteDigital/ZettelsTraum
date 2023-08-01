@@ -6,7 +6,7 @@
   position: sticky;
   top: 70px;
   z-index: 1;
-  padding: 0 0 10px 0;
+  padding: 0 0 10px;
   height: 30px;
   background-color: #fff;
 }
@@ -31,7 +31,7 @@
   right: 0;
   padding-left: 50px;
   height: 30px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 25px);
 }
 
 #bedeutungen header > div > div span.dropdown-cont {
@@ -112,7 +112,7 @@
 }
 
 #bedeutungen-cont h2 {
-  margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
+  margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border */
   padding: 0;
   background-color: transparent;
   color: var(--textFarbe);

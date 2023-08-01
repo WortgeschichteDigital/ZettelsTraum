@@ -85,9 +85,6 @@
   padding: 10px 0 0 10px;
   width: calc(50% - 10px);
   vertical-align: top;
-}
-
-#drucken-cont td {
   /* word-break: break-word; ist deprecated! overflow-wrap: anywhere; wird von Chromium, Stand 2020-02-02, aber noch nicht verstanden. */
   word-break: break-word;
   overflow-wrap: anywhere;

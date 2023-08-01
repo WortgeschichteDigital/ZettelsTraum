@@ -56,7 +56,7 @@ main {
 }
 
 section {
-  padding: 0 15px 10px 15px;
+  padding: 0 15px 10px;
 }
 
 section.padding-suchleiste {
@@ -141,7 +141,7 @@ figcaption {
 }
 
 h2 {
-  margin: 30px 0 15px 0;
+  margin: 30px 0 15px;
   color: var(--textFarbe);
   font-size: 24px;
   font-style: italic;
@@ -171,7 +171,7 @@ kbd {
 }
 
 p {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
 }
 
 section > p:first-child {
@@ -266,7 +266,7 @@ nav {
   position: sticky;
   top: 70px;
   z-index: 1;
-  padding: 20px 0 0 0;
+  padding: 20px 0 0;
   overflow: hidden;
   height: calc(100vh - 70px - 20px); /* 70px Header, 20px Padding */
   background-color: var(--hintergrund);
@@ -404,7 +404,7 @@ a.aktiv .nav-details-toggle {
 
 #navi-details a {
   display: block;
-  margin: 0 0 5px 0;
+  margin: 0 0 5px;
   padding: 0 5px;
   overflow: hidden;
   color: #fff;
@@ -650,7 +650,7 @@ mark.wort {
   padding: 25px;
   width: calc(100vw - 50px); /* 50px padding */
   height: 100vh;
-  background-color: rgba(180, 180, 180, .7);
+  background-color: rgb(180 180 180 / 70%);
   backdrop-filter: blur(3px);
   opacity: 0;
   transition: opacity .2s ease;
@@ -670,7 +670,7 @@ mark.wort {
 }
 
 #bild-cont h2 {
-  margin: 0 25px 10px 25px;
+  margin: 0 25px 10px;
   font-size: 20px;
   line-height: 30px;
 }

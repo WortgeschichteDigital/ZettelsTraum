@@ -48,7 +48,7 @@ body > header h1 {
 
 main {
   margin-top: 70px;
-  padding: 0 10px 10px 10px;
+  padding: 0 10px 10px;
 }
 
 
@@ -65,7 +65,7 @@ main div:first-child {
 }
 
 h2 {
-  margin: 0 0 5px 0;
+  margin: 0 0 5px;
   font-size: 16px;
   font-style: italic;
   font-weight: normal;
@@ -107,5 +107,5 @@ p.version span {
 }
 
 .gesperrt {
-  letter-spacing: 0.125em;
+  letter-spacing: .125em;
 }

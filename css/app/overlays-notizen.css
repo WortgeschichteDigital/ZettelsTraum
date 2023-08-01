@@ -36,7 +36,7 @@
 
 #notizen-cont > p:last-child {
   position: relative;
-  margin: 10px 0 0 0;
+  margin: 10px 0 0;
 }
 
 #notizen-cont > p:last-child input:first-child {
@@ -73,7 +73,7 @@
 
 #notizen-feld h3,
 #filter-notizen-content h3 {
-  margin: 25px 0 10px 0;
+  margin: 25px 0 10px;
   font-size: 18px;
   line-height: 28px;
 }

@@ -381,7 +381,7 @@ body > header span {
   right: 0;
   padding-left: 50px;
   height: 48px;
-  background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
+  background-image: linear-gradient(to right, rgb(114 160 207 / 0%), rgb(114 160 207 / 100%) 25px);
 }
 
 #kopf-icons-rechts > span {

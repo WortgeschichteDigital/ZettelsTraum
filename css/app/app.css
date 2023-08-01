@@ -49,7 +49,7 @@ h2 span:first-child {
 }
 
 h3 {
-  margin: 20px 0 10px 0;
+  margin: 20px 0 10px;
   color: var(--textFarbe);
   font-size: 16px;
   font-style: italic;
@@ -223,7 +223,7 @@ mark.mark {
 }
 
 p {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
 }
 
 p.force-wrap {
@@ -448,7 +448,6 @@ input:read-only::selection {
 textarea {
   display: block;
   margin: 0;
-  resize: vertical;
   border: 1px solid var(--linie);
   padding: 2px 5px;
   width: calc(100% - 12px);
@@ -469,7 +468,7 @@ textarea:focus {
   box-shadow: var(--boxShadow);
   border: 1px solid var(--linie);
   border-radius: 5px;
-  padding: 5px 5px;
+  padding: 5px;
   width: 175px;
   background-color: #fff;
   /* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
@@ -630,7 +629,7 @@ textarea:focus {
 }
 
 .dta-gesperrt {
-  letter-spacing: 0.125em;
+  letter-spacing: .125em;
 }
 
 .dta-groesser {

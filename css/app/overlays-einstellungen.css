@@ -22,7 +22,7 @@
 }
 
 #einstellungen-cont > div:first-child {
-  padding: 10px 0 20px 0;
+  padding: 10px 0 20px;
   background-color: var(--hintergrund);
   border-bottom-left-radius: 10px;
 }
@@ -38,7 +38,7 @@
 }
 
 #einstellungen-cont table {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
   border-collapse: collapse;
   border-spacing: 0;
 }

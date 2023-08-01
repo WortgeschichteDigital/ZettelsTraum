@@ -274,7 +274,7 @@
 }
 
 #red-lit-suche-sonder {
-  margin: 5px 0 0 0;
+  margin: 5px 0 0;
   font-size: 12px;
   line-height: 18px;
 }
@@ -584,6 +584,7 @@
   line-height: 24px;
   text-indent: 0;
 }
+
 .red-lit-snippet p.sigle {
   overflow: hidden;
   white-space: nowrap;
@@ -606,7 +607,7 @@
   position: absolute;
   right: 0;
   padding-left: 40px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 40px);
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 40px);
 }
 
 .red-lit-snippet.markiert p.sigle .icons {
@@ -618,12 +619,12 @@
 }
 
 .red-lit-snippet p.aufnahme {
-  margin: 0 0 5px 0;
+  margin: 0 0 5px;
   font-weight: normal;
 }
 
 .red-lit-snippet p.meta {
-  margin: 5px 0 0 0;
+  margin: 5px 0 0;
   color: var(--textHell);
 }
 

@@ -43,7 +43,7 @@
   border-bottom-left-radius: 10px;
   width: 100%;
   height: calc(100% - 28px); /* 28px Kopfleiste */
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgb(255 255 255 / 70%);
   color: var(--farbe);
   font-size: 30px;
   font-style: italic;
@@ -69,7 +69,7 @@
 
 #karteisuche-cont h3 {
   position: relative;
-  margin: 20px 0 0 0;
+  margin: 20px 0 0;
   overflow: hidden;
   padding: 0 0 0 4px;
   background-color: var(--farbeH);
@@ -116,7 +116,7 @@
 }
 
 #karteisuche-filterblock {
-  padding: 10px 0 0 0;
+  padding: 10px 0 0;
   transition: height .3s ease, padding-top .3s ease;
 }
 
@@ -187,7 +187,7 @@
 }
 
 #karteisuche-filter p {
-  margin: 10px 0 0 0;
+  margin: 10px 0 0;
   white-space: nowrap;
 }
 
@@ -261,6 +261,7 @@
 
 #karteisuche-filter label {
   margin-right: 5px;
+  color: var(--textFarbe);
 }
 
 #karteisuche-filter input[type="date"] {
@@ -269,10 +270,6 @@
 
 #karteisuche-filter input[type="checkbox"] {
   z-index: 0;
-}
-
-#karteisuche-filter label {
-  color: var(--textFarbe);
 }
 
 #karteisuche-filter .dropdown-link-td {
