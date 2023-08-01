@@ -510,7 +510,7 @@ const anhaenge = {
           const pfad = modules.path.join(ordner, f);
           const stats = await modules.fsp.lstat(pfad);
           if (!stats.isDirectory() &&
-              !/^(~\$|\.)|\.(bak|ztj)$/.test(f)) {
+              !/^(~\$|\.)|\.(bak|db|ztj)$/.test(f)) {
             dateienA.push(f);
           }
         }
