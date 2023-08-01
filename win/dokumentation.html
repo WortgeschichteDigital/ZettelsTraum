@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
 
-    <title> </title>
+    <title>&nbsp;</title>
 
     <link rel="stylesheet" href="../css/win/hilfe.css">
     <link rel="stylesheet" href="../css/win/hilfe-drucken.css" media="print">
@@ -125,7 +125,7 @@
 
           <pre>$ sudo npm install -g [PROGRAMM]</pre>
 
-          <p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d. h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u. a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
+          <p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d.&nbsp;h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u.&nbsp;a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
 
           <pre>$ cd ./
 $ npm install --save-dev electron</pre>
@@ -137,7 +137,7 @@ $ npm install --save-dev electron</pre>
           <pre class="quelltext">/node_modules/
 /package-lock.json</pre>
 
-          <p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i. d. R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
+          <p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
           <pre>$ npm install --save-dev electron</pre>
 
@@ -152,9 +152,9 @@ $ npm install --save-dev electron</pre>
 
           <pre>$ npm show electron version</pre>
 
-          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36 Wochen</a>, <abbr title="das heißt">d. h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
+          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36&nbsp;Wochen</a>, <abbr title="das heißt">d.&nbsp;h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
 
-          <p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version 5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs 4.1.x zu bekommen:</p>
+          <p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version&nbsp;5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs&nbsp;4.1.x zu bekommen:</p>
 
           <pre>$ npm install --save-dev electron@4-1-x</pre>
 
@@ -187,7 +187,7 @@ $ npm install --save-dev electron</pre>
 
           <pre>$ npm start</pre>
 
-          <p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D. h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
+          <p>Nun sollte <i class="app-name"></i> im Entwickler-Modus gestartet werden. <abbr title="Das heißt">D.&nbsp;h.</abbr> konkret, dass sich über das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>⇧</kbd> + <kbd>I</kbd> die <i lang="en">Developer Tools</i> von <i>Chromium</i> öffnen lassen, die in der paketierten Version nicht mehr aufgerufen werden können. Außerdem erscheint in der Menüleiste des Hauptfensters der Menüpunkt <i>Dev</i>, der beim Paketieren eliminiert wird.</p>
 
           <!-- Paketieren -->
           <h2 id="framework-paketieren">Paketieren der App</h2>
@@ -243,7 +243,7 @@ $ npm install --save-dev electron-packager</pre>
 
           <p>Unter <i>macOS</i> ist die angegebene ausführbare Datei nur interessant, wenn das Programm über die Kommandozeile (also via <i>Terminal</i>) gestartet werden soll. Ansonsten reicht natürlich ein Doppelklick auf den Ordner <span class="datei">zettelstraum.app</span>. Das System erkennt automatisch, dass dahinter ein Programm der Ausführung harrt und startet es.</p>
 
-          <p>Auch wenn die ausführbare Programmdatei (im Falle von <i>Linux</i> und <i>Windows</i>) um die 100 Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paketordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
+          <p>Auch wenn die ausführbare Programmdatei (im Falle von <i>Linux</i> und <i>Windows</i>) um die 100&nbsp;Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paketordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 
           <p>Wenn Sie unter <i>Linux</i> arbeiten: Die <span class="datei">packager.js</span> kann durch das <a href="#framework-buildScript">Build-Script</a> gesteuert werden. Dort besteht auch die Option, das Paket zu archivieren.</p>
 
@@ -295,7 +295,7 @@ $ npm install --save-dev electron-builder</pre>
 
           <p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|dmg|exe|rpm)</p>
 
-          <p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows 10</i>.)</p>
+          <p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows&nbsp;10</i>.)</p>
 
           <p>Die DEB-Datei kann mit <span lang="en">Debian Package</span> installiert werden:</p>
 
@@ -356,7 +356,7 @@ $ npm install --save-dev electron-builder</pre>
           <!-- Ordner -->
           <h2 id="framework-ordner">Programm- und Konfigurationsordner</h2>
 
-          <p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen User-Ordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z. B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
+          <p>Der <strong><abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer</strong> legt das Programm nach Doppelklick in einem lokalen User-Ordner ab: <span class="datei">C:\Users\[BENUTZERNAME]\AppData\Local\Programs\zettelstraum\</span>. Soll eine neuere Version installiert werden, muss man <i class="app-name"></i> nur beenden (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> via <kbd>Strg</kbd> + <kbd>Q</kbd>), auf der Installer-Datei doppelklicken und das war’s.</p>
 
           <p>Deinstalliert werden kann das Programm wie jede andere App über die Systemsteuerung von <i>Windows</i>.</p>
 
@@ -445,7 +445,7 @@ $ npm install --save-dev electron-builder</pre>
 
             <li><span class="datei">./css/app/*.css</span>: Stylesheets, die im Hauptfenster des Programms geladen werden; in der <span class="datei">app.css</span> finden sich viele basale Definitionen, die anderen Dateien regeln das Layout einzelner Teile oder Funktionen der App</li>
 
-            <li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u. a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
+            <li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u.&nbsp;a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
           </ul>
 
           <!-- Fonts -->
@@ -532,7 +532,7 @@ $ node installer/installer-linux.js deb</pre>
 
             <li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die NutzerIn ausgeben</li>
 
-            <li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z. B.</abbr> im Formular der Karteikarte)</li>
+            <li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> im Formular der Karteikarte)</li>
 
             <li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
 
@@ -574,11 +574,11 @@ $ node installer/installer-linux.js deb</pre>
         <section id="sektion-js" class="suche aus">
           <h2 id="js-code">JavaScript-Code</h2>
 
-          <p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z. B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
+          <p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
 
           <p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle über Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
 
-          <p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z. B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
+          <p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
 
           <p>Alle Funktionen stecken in Objekten, um den Namensraum des Dokuments nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
 
@@ -615,7 +615,7 @@ $ node installer/installer-linux.js deb</pre>
 
                 <li><code class="quelltext">winInfo.contentsId</code> (<span class="datentyp">Number</span>): ID des WebContents des aktuellen Fensters;</li>
 
-                <li><code class="quelltext">winInfo.typ</code> (<span class="datentyp">String</span>): Typ des Fensters; mögliche Werte: <code class="quelltext">index | bedeutungen | changelog | dokumentation | handbuch | fehlerlog | app | electron</code> (vgl. den Kommentar in den ersten Zeilen der <span class="datei">./main.js</span>).</li>
+                <li><code class="quelltext">winInfo.typ</code> (<span class="datentyp">String</span>): Typ des Fensters; mögliche Werte: <code class="quelltext">index&nbsp;| bedeutungen&nbsp;| changelog&nbsp;| dokumentation&nbsp;| handbuch&nbsp;| fehlerlog&nbsp;| app&nbsp;| electron</code> (vgl. den Kommentar in den ersten Zeilen der <span class="datei">./main.js</span>).</li>
               </ul>
             </li>
           </ul>
@@ -624,7 +624,7 @@ $ node installer/installer-linux.js deb</pre>
 
           <p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript für gewöhnlich nicht vorhandene Methode <code class="quelltext">require()</code> zum Importieren von Modulen benutzt.</p>
 
-          <p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z. B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z. B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
+          <p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z.&nbsp;B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
 
           <pre class="quelltext">const child_process = require("child_process");
 child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
@@ -657,8 +657,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><code class="quelltext">bd</code></td>
               <td class="datentyp">Object</td>
-              <td> </td>
-              <td>Bedeutungsgerüste;<br><span class="obacht">ab Version 5 gefüllt</span></td>
+              <td>&nbsp;</td>
+              <td>Bedeutungsgerüste;<br><span class="obacht">ab Version&nbsp;5 gefüllt</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">gn</code></p></td>
@@ -669,7 +669,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">gr</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Speicherobjekt für alle Gerüste</td>
             </tr>
             <tr class="ztj-ebene2">
@@ -693,7 +693,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">al</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Alias der Bedeutung</td>
             </tr>
             <tr class="ztj-ebene4">
@@ -720,38 +720,38 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene5">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty].data[id]</code></td>
             </tr>
             <tr class="ztj-ebene5">
               <td><p><code class="quelltext">ty</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Typ des Tags; zeigt auf <code class="quelltext">optionen.data.tags[ty]</code></td>
             </tr>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">za</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Zählzeichen der Bedeutung; also z. B. <code class="quelltext">"1"</code> oder <code class="quelltext">"a"</code></td>
+              <td>&nbsp;</td>
+              <td>Zählzeichen der Bedeutung; also z.&nbsp;B. <code class="quelltext">"1"</code> oder <code class="quelltext">"a"</code></td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">na</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Name des Gerüsts</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">sl</code></p></td>
               <td class="datentyp">Number</td>
               <td><code class="quelltext">0–2</code></td>
-              <td>Start-Level der Zählung; <code class="quelltext">0</code> = A, <code class="quelltext">1</code> = I, <code class="quelltext">2</code> = 1</td>
+              <td>Start-Level der Zählung; <code class="quelltext">0</code>&nbsp;= A, <code class="quelltext">1</code>&nbsp;= I, <code class="quelltext">2</code>&nbsp;= 1</td>
             </tr>
             <tr class="ztj-alt">
               <td><code class="quelltext">be</code></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
-              <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">mit Version 13 nach <code class="quelltext">data.rd.be</code> verschoben</span></td>
+              <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">mit Version&nbsp;13 nach <code class="quelltext">data.rd.be</code> verschoben</span></td>
             </tr>
             <tr>
               <td><code class="quelltext">dc</code></td>
@@ -768,8 +768,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><code class="quelltext">fv</code></td>
               <td class="datentyp">Object</td>
-              <td> </td>
-              <td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden;<br><span class="obacht">mit Version 9 von einem <span class="datentyp">Array</span> in ein <span class="datentyp">Object</span> konvertiert</span></td>
+              <td>&nbsp;</td>
+              <td>Formvarianten zum Wort der Kartei, die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> geladen und/oder manuell eingegeben wurden;<br><span class="obacht">mit Version&nbsp;9 von einem <span class="datentyp">Array</span> in ein <span class="datentyp">Object</span> konvertiert</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td colspan="4"><p>Es folgen beliebig viele <span class="datentyp">Objects</span> mit einmaligen Schlüsseln:</p></td>
@@ -777,7 +777,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p>(WORT)</p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>eines der Wörter, aus denen das Karteiwort besteht</td>
             </tr>
             <tr class="ztj-ebene2">
@@ -786,20 +786,20 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">an</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td><code class="quelltext">true</code> = Wort wird für die <a href="#menueKartei-formvariantenFunktionen" class="link-handbuch">verschiedensten Funktionen</a> berücksichtigt;<br><code class="quelltext">false</code> = Wort wird überhaupt nicht berücksichtigt</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">fa</code></p></td>
               <td class="datentyp">Number</td>
               <td><code class="quelltext">0–17</code></td>
-              <td>Markierungsfarbe;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+              <td>Markierungsfarbe;<br><span class="obacht">mit Version&nbsp;10 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">fo</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-              <td>Formvarianten;<br><span class="obacht">bis Version 8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
+              <td>Formvarianten;<br><span class="obacht">bis Version&nbsp;8 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.fv</code></span></td>
             </tr>
             <tr class="ztj-ebene3">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -813,43 +813,43 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">va</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Formvariante</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ma</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
-              <td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Wort nur markieren, <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch">für gewisse Funktionen</a> jedoch ignorieren;<br><span class="obacht">mit Version&nbsp;10 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">nl</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
-              <td>Nebenlemma (Wort, das zusätzlich zum Hauptwort der Kartei behandelt wird); ähnliche wie <code class="quelltext">ma</code>;<br><span class="obacht">mit Version 16 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Nebenlemma (Wort, das zusätzlich zum Hauptwort der Kartei behandelt wird); ähnliche wie <code class="quelltext">ma</code>;<br><span class="obacht">mit Version&nbsp;16 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ps</code></p></td>
               <td class="datentyp">String</td>
               <td>Part-of-speech-Tag</td>
-              <td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+              <td>Wortart, genauer: ein <a href="http://kaskade.dwds.de/~moocow/mirror/projects/moot/">Part-of-speech-Tag</a>;<br><span class="obacht">mit Version&nbsp;10 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">tr</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
-              <td>Wort trunkiert markieren, sprich: links und rechts erweitern;<br><span class="obacht">mit Version 10 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Wort trunkiert markieren, sprich: links und rechts erweitern;<br><span class="obacht">mit Version&nbsp;10 ergänzt</span></td>
             </tr>
             <tr class="ztj-alt">
               <td><code class="quelltext">ha</code></td>
               <td class="datentyp">Object</td>
-              <td> </td>
-              <td>reserviert für die Kartenhaufen-Funktion;<br><span class="obacht">mit Version 7 entfernt</span></td>
+              <td>&nbsp;</td>
+              <td>reserviert für die Kartenhaufen-Funktion;<br><span class="obacht">mit Version&nbsp;7 entfernt</span></td>
             </tr>
             <tr>
               <td><code class="quelltext">ka</code></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Karteikarten</td>
             </tr>
             <tr class="ztj-ebene1">
@@ -873,26 +873,26 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">au</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Autor des Belegs</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bc</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Buchung (Beleg wurde im Artikel zitiert)</td>
             </tr>
             <tr class="ztj-ebene2 ztj-alt">
               <td><p><code class="quelltext">bd</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
-              <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">Version 1–4</span></td>
+              <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code>;<br><span class="obacht">Version&nbsp;1–4</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bd</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-              <td>Bedeutungen;<br><span class="obacht">ab Version 5</span></td>
+              <td>Bedeutungen;<br><span class="obacht">ab Version&nbsp;5</span></td>
             </tr>
             <tr class="ztj-ebene3">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -913,7 +913,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">be</code></p></td>
               <td class="datentyp">Number</td>
               <td><code class="quelltext">0–5</code></td>
-              <td>Markierung mit Sternen; <code class="quelltext">0</code> = unmarkiert, <code class="quelltext">5</code> = 5 Sterne</td>
+              <td>Markierung mit Sternen; <code class="quelltext">0</code>&nbsp;= unmarkiert, <code class="quelltext">5</code>&nbsp;= 5&nbsp;Sterne</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bi</code></p></td>
@@ -925,7 +925,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">bl</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
-              <td>Wortbildung; mehrere Wortbildungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">mit Version 3 ergänzt</span></td>
+              <td>Wortbildung; mehrere Wortbildungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code>;<br><span class="obacht">mit Version&nbsp;3 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bs</code></p></td>
@@ -936,20 +936,20 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bu</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Bücherdienst (Beleg muss am Original überprüft werden)</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bx</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Beleg im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>- oder Plain-Text-Format, <abbr title="das heißt">d. h.</abbr> die Originaldaten des <a href="#karteikarte-importfunktion" class="link-handbuch">Beleg-Imports</a>;<br><span class="obacht">mit Version 12 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Beleg im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>- oder Plain-Text-Format, <abbr title="das heißt">d.&nbsp;h.</abbr> die Originaldaten des <a href="#karteikarte-importfunktion" class="link-handbuch">Beleg-Imports</a>;<br><span class="obacht">mit Version&nbsp;12 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">da</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Belegdatum; Freitext, enthalten sein muss aber zwingend <code class="quelltext">/[0-9]{4}/</code> und/oder <code class="quelltext">/[0-9]{2}\. Jh\./</code></td>
+              <td>&nbsp;</td>
+              <td>Belegdatum; Freitext, enthalten sein muss aber zwingend <code class="quelltext">/[0-9]{4}/</code> und/oder <code class="quelltext">/[0-9]{2}\.&nbsp;Jh\./</code></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">dc</code></p></td>
@@ -966,20 +966,20 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ko</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Kontext (der Kontext des Belegs ist zu dürftig und muss am Original begutachtet werden)</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">kr</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Korpus, aus dem der Beleg stammt;<br><span class="obacht">mit Version 2 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Korpus, aus dem der Beleg stammt;<br><span class="obacht">mit Version&nbsp;2 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">mt</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
-              <td>Metatext (Beleg ist mit einer analytischen Haltung gegenüber dem Karteiwort verfasst);<br><span class="obacht">mit Version 8 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Metatext (Beleg ist mit einer analytischen Haltung gegenüber dem Karteiwort verfasst);<br><span class="obacht">mit Version&nbsp;8 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">no</code></p></td>
@@ -997,25 +997,25 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">sy</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
-              <td>Synonym; mehrere Synonyme durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code><br><span class="obacht">mit Version 4 ergänzt</span></td>
+              <td>Synonym; mehrere Synonyme durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code><br><span class="obacht">mit Version&nbsp;4 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ts</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
-              <td>Textsorte; mehrere Textsorten durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code></td>
+              <td>Textsorte; mehrere Textsorten durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">un</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Beleg unvollständig (er muss weiter bearbeitet werden)</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">up</code></p></td>
               <td class="datentyp">Boolean</td>
-              <td> </td>
-              <td>Beleg ungeprüft (er muss noch Korrektur gelesen werden);<br><span class="obacht">mit Version 21 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Beleg ungeprüft (er muss noch Korrektur gelesen werden);<br><span class="obacht">mit Version&nbsp;21 ergänzt</span></td>
             </tr>
             <tr>
               <td><p><code class="quelltext">le</code></p></td>
@@ -1026,32 +1026,32 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><p><code class="quelltext">no</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Notizen zur Kartei; kann <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags enthalten;<br><span class="obacht">mit Version 6 von <i lang="en">plain text</i> auf <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr> umgestellt</span></td>
+              <td>&nbsp;</td>
+              <td>Notizen zur Kartei; kann <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags enthalten;<br><span class="obacht">mit Version&nbsp;6 von <i lang="en">plain text</i> auf <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr> umgestellt</span></td>
             </tr>
             <tr>
               <td><p><code class="quelltext">rd</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Redaktionsdaten</td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">be</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
-              <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">bis Version 12 befand sich dieses <span class="datentyp">Array</span> in <code class="quelltext">data.be</code></span></td>
+              <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">bis Version&nbsp;12 befand sich dieses <span class="datentyp">Array</span> in <code class="quelltext">data.be</code></span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">bh</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Wort, mit dem zusammen das aktuelle Karteiwort behandelt wird;<br><span class="obacht">ab Version 13</span></td>
+              <td>&nbsp;</td>
+              <td>Wort, mit dem zusammen das aktuelle Karteiwort behandelt wird;<br><span class="obacht">ab Version&nbsp;13</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">er</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
-              <td>Redaktionsereignisse;<br><span class="obacht">bis Version 12 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.rd</code></span></td>
+              <td>Redaktionsereignisse;<br><span class="obacht">bis Version&nbsp;12 war dieses <span class="datentyp">Array</span> identisch mit <code class="quelltext">data.rd</code></span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -1065,38 +1065,38 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">er</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Redaktionsereignis</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">no</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Notiz;<br><span class="obacht">ab Version 23</span></td>
+              <td>&nbsp;</td>
+              <td>Notiz;<br><span class="obacht">ab Version&nbsp;23</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">pr</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>BearbeiterIn</td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">nl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>kommagetrennte Liste mit Nebenlemmata, die mit dem aktuellen Karteiwort behandelt werden;<br><span class="obacht">ab Version 20</span></td>
+              <td>&nbsp;</td>
+              <td>kommagetrennte Liste mit Nebenlemmata, die mit dem aktuellen Karteiwort behandelt werden;<br><span class="obacht">ab Version&nbsp;20</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">no</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Notizen;<br><span class="obacht">ab Version 22</span></td>
+              <td>&nbsp;</td>
+              <td>Notizen;<br><span class="obacht">ab Version&nbsp;22</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">sg</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Sachgebiete, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 13</span></td>
+              <td>&nbsp;</td>
+              <td>Sachgebiete, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version&nbsp;13</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -1104,7 +1104,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Sachgebiet-Tags; zeigt auf <code class="quelltext">optionen.data.tags.sachgebiete.data[id]</code></td>
             </tr>
             <tr class="ztj-ebene2">
@@ -1116,8 +1116,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">sp</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Kategorie der Stichwortplanung;<br><span class="obacht">ab Version 24</span></td>
+              <td>&nbsp;</td>
+              <td>Kategorie der Stichwortplanung;<br><span class="obacht">ab Version&nbsp;24</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -1125,7 +1125,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Stichwortplanungs-Tags; zeigt auf <code class="quelltext">optionen.data.tags.stichwortplanung.data[id]</code></td>
             </tr>
             <tr class="ztj-ebene2">
@@ -1137,8 +1137,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">tf</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Themenfelder, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version 14</span></td>
+              <td>&nbsp;</td>
+              <td>Themenfelder, zu denen das Karteiwort gehört;<br><span class="obacht">ab Version&nbsp;14</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -1146,7 +1146,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Themenfeld-Tags; zeigt auf <code class="quelltext">optionen.data.tags.themenfelder.data[id]</code></td>
             </tr>
             <tr class="ztj-ebene2">
@@ -1158,8 +1158,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">wi</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Wortinformationen;<br><span class="obacht">ab Version 15</span></td>
+              <td>&nbsp;</td>
+              <td>Wortinformationen;<br><span class="obacht">ab Version&nbsp;15</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
@@ -1168,7 +1168,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">gn</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">/[0-9]+/</code>,<br>Start mit 1</td>
-              <td>Bedeutungsgerüst-ID;<br><span class="obacht">ab Version 17</span></td>
+              <td>Bedeutungsgerüst-ID;<br><span class="obacht">ab Version&nbsp;17</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">lt</code></p></td>
@@ -1179,31 +1179,31 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">tx</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Verweistext, also das verlinkte Wort/der verlinkte Ausdruck</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">vt</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">Wortbildung<br>| Wortfeld<br>| Wortfeldartikel<br>| Wortverbindung</code></td>
-              <td>Verweistyp;<br><span class="obacht">mit Version 17 <code class="quelltext">Assoziation</code> in <code class="quelltext">Wortbildung</code> umbenannt</span>;<br><span class="obacht">mit Version 18 <code class="quelltext">Kollokation</code> in <code class="quelltext">Wortverbindung</code> umbenannt</span></td>
+              <td>Verweistyp;<br><span class="obacht">mit Version&nbsp;17 <code class="quelltext">Assoziation</code> in <code class="quelltext">Wortbildung</code> umbenannt</span>;<br><span class="obacht">mit Version&nbsp;18 <code class="quelltext">Kollokation</code> in <code class="quelltext">Wortverbindung</code> umbenannt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>alle Daten im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
-              <td>Daten des <a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fensters</a>;<br><span class="obacht">ab Version 17</span></td>
+              <td>&nbsp;</td>
+              <td>Daten des <a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fensters</a>;<br><span class="obacht">ab Version&nbsp;17</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ab</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Abschnitte des <i>Kurz gefasst</i></td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1212,7 +1212,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">ct</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Textblöcke des Abschnitts</td>
             </tr>
             <tr class="ztj-ebene4">
@@ -1239,7 +1239,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Content des Textblocks im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1263,7 +1263,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bg</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Bedeutungsgerüste</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1272,14 +1272,14 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">gn</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Bedeutungsgerüsts (immer identisch mit der des Quellgerüsts)</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">la</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
-              <td>Label;<br><span class="obacht">mit Version 19 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Label;<br><span class="obacht">mit Version&nbsp;19 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">nw</code></p></td>
@@ -1290,7 +1290,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">tf</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Textreferenzen</td>
             </tr>
             <tr class="ztj-ebene4">
@@ -1299,25 +1299,25 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">li</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID der Lesart</td>
             </tr>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">ti</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID der Textposition</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Bedeutungsgerüst im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bl</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Belege</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1326,31 +1326,31 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">da</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Datum des Belegs (für die Anzeige)</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">ds</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Datum des Belegs (zum Sortieren)</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Belegs</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Beleg im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">le</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Lemmata</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1377,13 +1377,13 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Lemma im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">lt</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Literatur</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1392,37 +1392,37 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID des Literaturtitels</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">si</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Sigle des Literaturtitels</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Literaturtitel im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">md</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Metadaten</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Artikel-ID</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">re</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Revisionen</td>
             </tr>
             <tr class="ztj-ebene4">
@@ -1431,7 +1431,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">au</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>AutorInnen</td>
             </tr>
             <tr class="ztj-ebene4">
@@ -1443,20 +1443,20 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">no</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Änderungsnotiz</td>
             </tr>
             <tr class="ztj-ebene4">
               <td><p><code class="quelltext">xl</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Revision im <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Format</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">tf</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Themenfelder;<br><span class="obacht">ab Version 20 <span class="datentyp">Array</span> (davor <span class="datentyp">String</span>)</span></td>
+              <td>&nbsp;</td>
+              <td>Themenfelder;<br><span class="obacht">ab Version&nbsp;20 <span class="datentyp">Array</span> (davor <span class="datentyp">String</span>)</span></td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">ty</code></p></td>
@@ -1467,7 +1467,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">tx</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Abschnitte der <i>Wortgeschichte</i></td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1476,7 +1476,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">wi</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Wortinformationen</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1498,7 +1498,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">ty</code></p></td>
               <td class="datentyp">String</td>
               <td>immer <code class="quelltext">"ztj"</code></td>
-              <td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 11, davor immer <code class="quelltext">"wgd"</code></span></td>
+              <td>Dateityp; für Tests beim Öffnen einer Kartei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version&nbsp;11, davor immer <code class="quelltext">"wgd"</code></span></td>
             </tr>
             <tr>
               <td><p><code class="quelltext">ve</code></p></td>
@@ -1509,7 +1509,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><p><code class="quelltext">wo</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Wort, zu dem die Kartei erstellt wurde</td>
             </tr>
           </table>
@@ -1517,7 +1517,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
           <!-- ZTB-Format -->
           <h2 id="ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</h2>
 
-          <p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege &gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege &gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 2</span>):</p>
+          <p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege&nbsp;&gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege&nbsp;&gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version&nbsp;2</span>):</p>
 
           <table class="ztj">
             <tr>
@@ -1529,7 +1529,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><p><code class="quelltext">bl</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Belegliste</td>
             </tr>
             <tr class="ztj-ebene1">
@@ -1548,7 +1548,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">bd</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
-              <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">": "</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
+              <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">gr</code></p></td>
@@ -1578,7 +1578,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">ty</code></p></td>
               <td class="datentyp">String</td>
               <td>immer <code class="quelltext">"ztb"</code></td>
-              <td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version 2, davor immer <code class="quelltext">"bwgd"</code></span></td>
+              <td>Dateityp; für Tests beim Importieren der Datei, damit nicht beliebige <abbr title="JavaScript Object Notation">JSON</abbr>-Daten in einem anderen Dateiformat geladen werden;<br><span class="obacht">ab Version&nbsp;2, davor immer <code class="quelltext">"bwgd"</code></span></td>
             </tr>
             <tr>
               <td><p><code class="quelltext">ve</code></p></td>
@@ -1591,7 +1591,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
           <!-- ZTL-Format -->
           <h2 id="ztj-ztl"><abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Format</h2>
 
-          <p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion &gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version 3</span>):</p>
+          <p>Mithilfe der Funktion <a href="#menueRedaktion-literatur" class="link-handbuch"><i>Redaktion&nbsp;&gt; Literatur</i></a> kann eine Literaturdatenbank angelegt, geladen und bearbeitet werden. Hierfür gibt es ein eigenes Dateiformat. Der Inhalt dieser <abbr title="Zettel’s Traum Literaturdatenbank">ZTL</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version&nbsp;3</span>):</p>
 
           <table class="ztj">
             <tr>
@@ -1603,8 +1603,8 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><code class="quelltext">bl</code></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>Blockliste mit gelöschten und darum gesperrten IDs;<br><span class="obacht">mit Version 3 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>Blockliste mit gelöschten und darum gesperrten IDs;<br><span class="obacht">mit Version&nbsp;3 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td colspan="4"><p>In jedem Slot <span class="datentyp">Objects</span> mit den folgenden Schlüsseln und Werten:</p></td>
@@ -1618,7 +1618,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">id</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>ID der gelöschten Titelaufnahme <abbr title="beziehungsweise">bzw.</abbr> der gelöschten Version einer Titelaufnahme (</td>
             </tr>
             <tr>
@@ -1642,7 +1642,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr>
               <td><code class="quelltext">ti</code></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Titelaufnahmen</td>
             </tr>
             <tr class="ztj-ebene1">
@@ -1660,7 +1660,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">be</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>BearbeiterIn, die diesen Datensatz erstellt hat</td>
             </tr>
             <tr class="ztj-ebene2">
@@ -1678,7 +1678,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">td</code></p></td>
               <td class="datentyp">Object</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Titeldaten</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1690,13 +1690,13 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">fo</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Fundort</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">no</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Notizen</td>
             </tr>
             <tr class="ztj-ebene3">
@@ -1708,25 +1708,25 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">si</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Sigle</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">tg</code></p></td>
               <td class="datentyp">Array</td>
-              <td> </td>
-              <td>in jedem Slot ein Tag;<br><span class="obacht">mit Version 2 ergänzt</span></td>
+              <td>&nbsp;</td>
+              <td>in jedem Slot ein Tag;<br><span class="obacht">mit Version&nbsp;2 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">ti</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>Titelaufnahme</td>
             </tr>
             <tr class="ztj-ebene3">
               <td><p><code class="quelltext">ul</code></p></td>
               <td class="datentyp">String</td>
-              <td> </td>
+              <td>&nbsp;</td>
               <td>URL</td>
             </tr>
             <tr>
@@ -1758,7 +1758,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
     &lt;Datum&gt;1859&lt;/Datum&gt;
     &lt;URL&gt;https://books.google.de/books?id=e2dPAQAAMAAJ&amp;amp;pg=PA305&lt;/URL&gt;
     &lt;Aufrufdatum&gt;30.09.2019&lt;/Datum&gt;
-    &lt;unstrukturiert&gt;N. N.: Briefe aus Californien. Von einem Deutschen. In: Hausblätter 5 (1859), Bd. 4, S. 143–149, 301–308, 384–388, hier 305f.&lt;/unstrukturiert&gt;
+    &lt;unstrukturiert&gt;N.&nbsp;N.: Briefe aus Californien. Von einem Deutschen. In: Hausblätter&nbsp;5 (1859), Bd.&nbsp;4, S.&nbsp;143–149, 301–308, 384–388, hier 305f.&lt;/unstrukturiert&gt;
   &lt;/Fundstelle&gt;
 &lt;/Beleg&gt;</pre>
 
@@ -1794,7 +1794,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
               <p><b>&lt;Datum&gt;:</b> <i>verpflichtend</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}(–[0-9]{4})?</code>. Das Datum wird aus <code class="quelltext">data.ka[ID].da</code> extrahiert. <abbr title="Vergleiche">Vgl.</abbr> <code class="quelltext">xml.datum()</code>.</p>
 
-              <p><b>&lt;Fundort&gt;:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">DTA | DWDS | GoogleBooks | IDS | online | Bibliothek</code>.</p>
+              <p><b>&lt;Fundort&gt;:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle, aus der der Beleg sprudelte. Werte können sein <code class="quelltext">DTA&nbsp;| DWDS&nbsp;| GoogleBooks&nbsp;| IDS&nbsp;| online&nbsp;| Bibliothek</code>.</p>
 
               <p><b>&lt;unstrukturiert&gt;:</b> <i>verpflichtend</i>. Eine klassisch formatierte Literaturangabe.</p>
 
@@ -1809,7 +1809,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
           <pre class="quelltext xml-pretty-print">&lt;Fundstelle xml:id="dwb2"&gt;
   &lt;Sigle&gt;²DWB&lt;/Sigle&gt;
-  &lt;unstrukturiert&gt;Deutsches Wörterbuch von Jacob Grimm und Wilhelm Grimm. Neubearbeitung. Hrsg. von der Berlin-Brandenburgischen Akademie der Wissenschaften (vormals Deutsche Akademie der Wissenschaften) und der Akademie der Wissenschaften zu Göttingen. Bd. 1–9. Stuttgart 1983–2018.&lt;/unstrukturiert&gt;
+  &lt;unstrukturiert&gt;Deutsches Wörterbuch von Jacob Grimm und Wilhelm Grimm. Neubearbeitung. Hrsg. von der Berlin-Brandenburgischen Akademie der Wissenschaften (vormals Deutsche Akademie der Wissenschaften) und der Akademie der Wissenschaften zu Göttingen. Bd.&nbsp;1–9. Stuttgart 1983–2018.&lt;/unstrukturiert&gt;
   &lt;Fundort&gt;Bibliothek&lt;/Fundort&gt;
   &lt;PPN&gt;029986761&lt;/PPN&gt;
 &lt;/Fundstelle&gt;</pre>
@@ -1821,7 +1821,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
             <p><b>&lt;Aufrufdatum&gt;:</b> <i>fakultativ</i>; Format: <code class="quelltext">([0-9]{2}\.[0-9]{2}\.)?[0-9]{4}</code>. Das Datum des Zugriffs auf die angegebene URL. Nur vorhanden, wenn <code class="quelltext">&lt;URL&gt;</code> nicht leer ist.</p>
 
-            <p><b>&lt;Fundort&gt;:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle des Literaturtitels. Werte können sein <code class="quelltext">DTA | DWDS | GoogleBooks | IDS | online | Bibliothek</code>.</p>
+            <p><b>&lt;Fundort&gt;:</b> <i>verpflichtend</i>. Abstrakte Angabe zur Quelle des Literaturtitels. Werte können sein <code class="quelltext">DTA&nbsp;| DWDS&nbsp;| GoogleBooks&nbsp;| IDS&nbsp;| online&nbsp;| Bibliothek</code>.</p>
 
             <p><b>&lt;PPN&gt;:</b> <i>fakultativ, Mehrfachverwendung möglich</i>; Format: <code class="quelltext">/[0-9]{8,10}X?/</code>. Eine Pica-Produktionsnummer des Literaturtitels.</p>
 
@@ -1835,7 +1835,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
           <!-- Referenz Beleg -->
           <h2 id="xml-referenzBeleg">Referenz eines Belegs</h2>
 
-          <p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s. o.</abbr>). Ein Beispiel:</p>
+          <p>Der Referenz-Tag kann genutzt werden, um auf einen in <abbr title="Extensible Markup Language" lang="en">XML</abbr> exportierten Belegschnitt zu verweisen (zur <a href="#xml-belegschnittId">Form der ID</a> <abbr title="siehe oben">s.&nbsp;o.</abbr>). Ein Beispiel:</p>
 
           <pre class="quelltext xml-pretty-print">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</pre>
 
@@ -1916,7 +1916,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             <li>die Lock-Datei wurde vor mehr als zwölf Stunden angelegt.</li>
           </ul>
 
-          <p>Der Name der Sperrdatei folgt demselben Format, das <abbr title="zum Beispiel">z. B.</abbr> auch <i>LibreOffice</i> verwendet: <span class="datei">.~lock.[DATEINAME]#</span>.</p>
+          <p>Der Name der Sperrdatei folgt demselben Format, das <abbr title="zum Beispiel">z.&nbsp;B.</abbr> auch <i>LibreOffice</i> verwendet: <span class="datei">.~lock.[DATEINAME]#</span>.</p>
           <p>Im Inneren der Lock-Datei steht im Plaintext der auf die Millisekunde genaue Zeitpunkt der Anlage der Datei, der Name des sperrenden Rechners und der seiner NutzerIn. Die einzelnen Werte werden durch <code class="quelltext">;;</code> voneinander getrennt. Das Ganze sieht dann in etwa so aus:</p>
 
           <pre class="quelltext">2019-04-24T17:36:47.681Z;;nico-sein-rechner;;Nico</pre>
@@ -1941,7 +1941,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
           <p>Der Quellpfad muss ein Ordner sein. Der Zielpfad kann der Name der Zieldatei oder ein bestehender Ordner sein, in dem die Zieldatei abgelegt werden soll. Ist der Zielpfad ein Ordner, wird der Pfad automatisch um den Dateinamen <code class="quelltext">Karteiliste.[html|md]</code> ergänzt.</p>
 
-          <p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Die Indizes, die hier stehen müssen, sind nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt <abbr title="zum Beispiel">z. B.</abbr> auf die erste Vorlage. Es können auch mehrere, kommagetrennte Indizes angegeben werden, <abbr title="zum Beispiel">z. B.</abbr> <code>--karteiliste-vorlage=0,2</code>. In diesem Fall werden zwei Listen exportiert, und zwar mithilfe der ersten und dritten Vorlage.</p>
+          <p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Die Indizes, die hier stehen müssen, sind nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt <abbr title="zum Beispiel">z.&nbsp;B.</abbr> auf die erste Vorlage. Es können auch mehrere, kommagetrennte Indizes angegeben werden, <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code>--karteiliste-vorlage=0,2</code>. In diesem Fall werden zwei Listen exportiert, und zwar mithilfe der ersten und dritten Vorlage.</p>
 
           <h2 id="verschiedenes-bekannteFehler">Bekannte Fehler</h2>
 
