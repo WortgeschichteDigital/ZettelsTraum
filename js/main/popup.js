@@ -155,7 +155,7 @@ const punkte = {
     label: "Textauswahl",
     icon: "text-markiert.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.textauswahl.text,
         html: popup.textauswahl.html,
       });
@@ -174,7 +174,7 @@ const punkte = {
     label: "Textauswahl kopieren",
     icon: "kopieren.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
       });
     `,
@@ -183,7 +183,7 @@ const punkte = {
     label: "Code kopieren",
     icon: "kopieren.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
       });
     `,
@@ -192,7 +192,7 @@ const punkte = {
     label: "ID kopieren",
     icon: "kopieren.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.kopfID,
       });
     `,
@@ -211,7 +211,7 @@ const punkte = {
     label: "Link kopieren",
     icon: "link.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.element.getAttribute("href"),
       });
     `,
@@ -228,7 +228,7 @@ const punkte = {
     label: "Adresse kopieren",
     icon: "brief.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: popup.element.getAttribute("href").replace(/^mailto:/, ""),
       });
     `,
@@ -293,7 +293,7 @@ const punkte = {
     label: "Referenz",
     icon: "link-pfeil-runter.png",
     click: `
-      helfer.toClipboard({
+      modules.clipboard.write({
         text: xml.belegId({}),
       });
     `,
