@@ -323,7 +323,7 @@ const beleg = {
 
   // zwischen den Import-Formularen hin- und herschalten
   //   src = String
-  //     (ID der Quelle, aus der importiert werden soll: dta || dwds || dereko || xml || bibtex)
+  //     (ID der Quelle, aus der importiert werden soll: dta | dwds | dereko | xml | bibtex)
   formularImport (src) {
     // ggf. src umstellen
     src = src === "ppn" ? "xml" : src;
@@ -380,7 +380,7 @@ const beleg = {
 
   // ggf. Dateiname eintragen
   //   src = String
-  //     (ID der Quelle, aus der importiert werden soll: dwds || dereko || xml || bibtex)
+  //     (ID der Quelle, aus der importiert werden soll: dwds | dereko | xml | bibtex)
   formularImportDatei (src) {
     const name = document.getElementById("beleg-datei-name");
     if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
@@ -422,7 +422,7 @@ const beleg = {
   listeGeaendert: false,
 
   // Beleg speichern
-  //   nieSchliessen = true || undefined
+  //   nieSchliessen = true | undefined
   //     (die Karteikarte sollte nach dem Speichern auf keinen Fall geschlossen werden)
   aktionSpeichern (nieSchliessen = false) {
     // Check: Datum angegeben?
@@ -782,7 +782,7 @@ const beleg = {
   // (wird auch von notizen.paste() benutz)
   //   evt = Object
   //     (das Event-Objekt des Paste-Events)
-  //   pasten = false || undefined
+  //   pasten = false | undefined
   //     (der bereinigte Text soll gepastet werden)
   pasteBs (evt, pasten = true) {
     if (beleg.pasteBsBlock) {
@@ -1169,7 +1169,7 @@ const beleg = {
   // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
   //   html = String
   //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
-  //   minimum = true || undefined
+  //   minimum = true | undefined
   //     (nur ein absolutes Minimum an Tags bleibt erhalten)
   toolsEinfuegenHtml (html, minimum = false) {
     // wenn <body> => splitten
@@ -1515,7 +1515,7 @@ const beleg = {
   },
 
   // Inhalt des Quelle-Felds neu laden
-  //   shortcut = true || undefined
+  //   shortcut = true | undefined
   async toolsQuelleLaden (shortcut = false) {
     // Zwischenspeicher für Änderungen
     const aenderungen = {};
@@ -2549,7 +2549,7 @@ const beleg = {
   // sucht eine Bedeutung im Bedeutungsgerüst
   //   bd = String
   //     (die Bedeutung)
-  //   gn = String || undefined
+  //   gn = String | undefined
   //     (ID des Gerüsts, in dem gesucht werden soll)
   bedeutungSuchen (bd, gn = data.bd.gn) {
     let bdS = bd.split(": ");
@@ -2577,7 +2577,7 @@ const beleg = {
   // (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
   //   bd = String
   //     (die Bedeutung; Hierarchien getrennt durch ": ")
-  //   gn = String || undefined
+  //   gn = String | undefined
   //     (ID des Gerüsts, in dem gesucht werden soll)
   bedeutungErgaenzen (bd, gn = data.bd.gn) {
     // Zeiger auf das betreffende Gerüst ermitteln

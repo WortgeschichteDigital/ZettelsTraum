@@ -39,7 +39,7 @@ const annotieren = {
 
   // speichert wichtige Elemente und Werte, mit denen später gearbeitet wird
   data: {
-    cl: "", // class der Markierung (wort || user)
+    cl: "", // class der Markierung (wort | user)
     p: null, // Absatz mit dem <mark>
     data: null, // der die <mark> umschließende Datenknoten (.annotierung-wort)
     start: null, // erster <mark>
@@ -50,7 +50,7 @@ const annotieren = {
 
   // alle <mark> suchen, die gerade annotiert werden
   //   w = Element
-  //     (<mark class="wort || user">, auf den geklickt wurde)
+  //     (<mark class="wort | user">, auf den geklickt wurde)
   getMarks (w) {
     // Klasse ermitteln
     if (w.classList.contains("wort")) {
@@ -99,7 +99,7 @@ const annotieren = {
 
   // Popup für die Annotierung aufbauen
   //   w = Element
-  //     (<mark class="wort || user">, auf den geklickt wurde)
+  //     (<mark class="wort | user">, auf den geklickt wurde)
   mod (w) {
     if (helfer.hauptfunktion === "liste" && !optionen.data.belegliste.trennung ||
         helfer.hauptfunktion !== "liste" && !optionen.data.beleg.trennung) {
@@ -267,8 +267,8 @@ const annotieren = {
   //   input = Element
   //     (das Input-Feld)
   //   key = String
-  //     (Taste, die gedrückt wurde: "Enter" || "Escape")
-  //   text = String || undefined
+  //     (Taste, die gedrückt wurde: "Enter" | "Escape")
+  //   text = String | undefined
   //     (der Originaltext, der vor dem Speichern im Feld stand)
   modTextSpeichern (input, key, text = "") {
     const feld = input.parentNode;

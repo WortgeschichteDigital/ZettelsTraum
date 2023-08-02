@@ -113,7 +113,7 @@ const stamm = {
   },
 
   // Kopf und Liste aufbauen
-  //   wortAkt = false || undefined
+  //   wortAkt = false | undefined
   aufbauen (wortAkt = true) {
     // ggf. aktuelles Wort ermitteln
     if (wortAkt) {
@@ -984,7 +984,7 @@ const stamm = {
   // Fehler beim Laden der Formvarianten des DTA
   //   fehlertyp = String
   //     (der allgemeine Fehlertyp)
-  //   detail = String || null
+  //   detail = String | null
   //     (falls Details zum Fehler vorhanden sind)
   //   aktiv = Boolean
   //     (das Laden der Lemmaliste wurde von der NutzerIn angestoßen)

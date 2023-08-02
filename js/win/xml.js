@@ -410,7 +410,7 @@ const xml = {
   // Metadaten/Revision: Revisionsblock aufbauen
   //   slot = Number
   //     (Slot, in dem der Datensatz steht)
-  //   restore = true || undefined
+  //   restore = true | undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
   mdRevisionMake ({ slot, restore = false }) {
     // neuen Revisionskopf hinzufügen
@@ -552,7 +552,7 @@ const xml = {
   // Lemma: Lemmablock aufbauen
   //   slot = Number
   //     (Slot, in dem der Datensatz steht)
-  //   restore = true || undefined
+  //   restore = true | undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
   lemmaMake ({ slot, restore = false }) {
     // neuen Lemmakopf hinzufügen
@@ -1472,11 +1472,11 @@ const xml = {
   // Element erzeugen: Standard-Kopf
   //   key = String
   //     (der Schlüssel des Datensatzes)
-  //   slot = Number || undefined
+  //   slot = Number | undefined
   //     (Slot, in dem der Datensatz steht)
-  //   slotBlock = Number || undefined
+  //   slotBlock = Number | undefined
   //     (Slot, in dem der Textblock steht)
-  //   textKopf = String ("abschnitt" || "textblock") || undefined
+  //   textKopf = String ("abschnitt" | "textblock") | undefined
   //     (Typ des Textkopfs)
   elementKopf ({ key, slot = -1, slotBlock = null, textKopf = "" }) {
     const div = document.createElement("div");
@@ -2018,7 +2018,7 @@ const xml = {
   //     (Slot, in dem der Datensatz steht)
   //   cont = Element
   //     (Element, an das der Abschnitt angehängt werden soll)
-  //   restore = true || undefined
+  //   restore = true | undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
   abschnittMake ({ key, slot, cont, restore = false }) {
     // offene Abschnitte und Unterabschnitte schließen
@@ -2200,11 +2200,11 @@ const xml = {
   //     (der Schlüssel des Datensatzes)
   //   slot = Number
   //     (Slot, in dem der Datensatz steht)
-  //   slotBlock = Number || undefined
+  //   slotBlock = Number | undefined
   //     (Slot, in dem der Textblock steht)
   //   element = Element
   //     (Element, an dem sich beim Einfügen orientiert wird)
-  //   restore = true || undefined
+  //   restore = true | undefined
   //     (die Inhalte werden beim Öffnen des Fensters wiederhergestellt)
   textblockMake ({ key, slot, slotBlock, element, restore = false }) {
     // Kopf erzeugen und Textblock-Container hinzufügen
@@ -2463,7 +2463,7 @@ const xml = {
   },
 
   // Textblock: XML-String zusammenbauen
-  //   xmlStr = String || null
+  //   xmlStr = String | null
   //     (null, wenn der String aus dem Datensatz ausgelesen werden soll)
   //   key = String
   //     (der Schlüssel des Datensatzes)
@@ -2930,19 +2930,19 @@ const xml = {
   // XML-Vorschau erzeugen
   //   xmlStr = String
   //     (XML-Snippet, das angezeigt werden soll)
-  //   key = String || undefined
+  //   key = String | undefined
   //     (der Schlüssel des Datensatzes; undefined, wenn Anzeige zurückgesetzt wird)
-  //   slot = Number || undefined
+  //   slot = Number | undefined
   //     (Slot, in dem der Datensatz steht; undefined, wenn Anzeige zurückgesetzt wird)
-  //   slotBlock = Number || undefined
+  //   slotBlock = Number | undefined
   //     (Slot, in dem der Textblock steht)
-  //   after = Element || undefined
+  //   after = Element | undefined
   //     (Elemente, hinter dem das Preview erscheinen soll)
-  //   textblockCont = Element || undefined
+  //   textblockCont = Element | undefined
   //     (Container eines Textblocks: .textblock-cont)
-  //   animation = false || undefined
+  //   animation = false | undefined
   //     (Animation beim Einblenden)
-  //   editable = Boolean || undefined
+  //   editable = Boolean | undefined
   //     (XML-Snippet darf editiert werden)
   preview ({ xmlStr, key, slot, slotBlock = null, after = null, textblockCont = null, animation = true, editable = false }) {
     // Einzüge hinzufügen (wenn möglich)
@@ -3361,7 +3361,7 @@ const xml = {
   //     (.pre-cont)
   //   fun = Function | undefined
   //     (Function, die eigentlich ausgeführt werden soll)
-  //   triggerSave = true || undefined
+  //   triggerSave = true | undefined
   //     (das Speichern des Formulars soll ggf. ausgelöst werden)
   editFrage ({ pre, fun = null, triggerSave = false }) {
     return new Promise(resolve => {
@@ -3858,7 +3858,7 @@ const xml = {
   // Slotangaben bestehender Elemente nach Änderungsoperationen auffrischen
   //   key = String
   //     (Schlüssel des Datensatzes, der betroffen ist)
-  //   abschnitt = Element || null || undefined
+  //   abschnitt = Element | null | undefined
   //     (Abschnitt dessen Köpfe betroffen sind; beim Löschen von Textblöcken)
   refreshSlots ({ key, abschnitt = null }) {
     if (abschnitt) {
@@ -3916,7 +3916,7 @@ const xml = {
   },
 
   // übprüft, ob in einem Abschnitt noch Fehler sind
-  //   cont = Element || null
+  //   cont = Element | null
   //     (ggf. der .abschnitt-cont)
   checkAbschnitt ({ cont }) {
     if (!cont || !cont.classList.contains("abschnitt-cont")) {
@@ -3943,9 +3943,9 @@ const xml = {
   //   ele = Array
   //     (in jedem Slot steht eine Nummer, die für das Element steht, dessen Breite
   //     angepasst werden soll)
-  //   inAbschnitt Element || null || undefined
+  //   inAbschnitt Element | null | undefined
   //     (Abschnitt in dem die Köpfe sind)
-  //   warten = Number || undefined
+  //   warten = Number | undefined
   //     (Millisekunden, die vor dem Berechnen der Maximalbreite gewartet werden
   //     soll; beim Initialisieren muss dies deutlich länger sein)
   async layoutTabellig ({ id, ele, inAbschnitt = null, warten = 15 }) {

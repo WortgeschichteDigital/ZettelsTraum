@@ -80,7 +80,7 @@ const dropdown = {
   // Liste der Bedeutungsgerüste erstellen
   //   gr = Object
   //     (Zweig mit den Gerüsten)
-  //   skipAkt = true || undefined
+  //   skipAkt = true | undefined
   //     (das aktuelle Gerüst wird übersprungen; immer in bedeutungen.data gucken!)
   dataGerueste (gr, skipAkt = false) {
     const arr = [];
@@ -186,7 +186,7 @@ const dropdown = {
   //     (class des Dropdown-Links)
   //   title = String
   //     (Title-Attribut des Dropdown-Links)
-  //    noTab = true || undefined
+  //    noTab = true | undefined
   //     (Link wird aus der Tabliste ausgeschlossen
   makeLink (cl, title, noTab = false) {
     const a = document.createElement("a");

@@ -598,9 +598,9 @@ const optionen = {
   },
 
   // Informationen zu den Tag-Dateien im Einstellungen-Fenster auffrischen
-  //   check = true || undefined
+  //   check = true | undefined
   //     (eine der Tag-Dateien wurde manuell überprüft)
-  //   checkTyp = String || undefined
+  //   checkTyp = String | undefined
   //     (der Typ der Tag-Datei, der manuell überprüft wurde)
   anwendenTags (check = false, checkTyp = "") {
     const cont = document.getElementById("tags-cont");
@@ -757,7 +757,7 @@ const optionen = {
   // übergebene Tag-Datei überprüfen, Inhalte ggf. laden
   //   datei = String
   //     (Pfad zur XML-Datei, die überprüft werden soll)
-  //   typ = String || undefined
+  //   typ = String | undefined
   //     (Typ der Datei, entspricht dem Namen des Wurzelelements)
   tagsCheckLaden ({ datei, typ = "-" }) {
     return new Promise(resolve => {

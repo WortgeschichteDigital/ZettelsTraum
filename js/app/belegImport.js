@@ -768,11 +768,11 @@ const belegImport = {
   },
 
   // DWDS-Import: Daten parsen
-  //   content = String || Object
+  //   content = String | Object
   //     (die Daten; String, bei Datei-Daten; Object bei XML-Daten)
   //   pfad = String
   //     (die Pfadangabe)
-  //   autoImport = false || undefined
+  //   autoImport = false | undefined
   //     (nach dem Parsen soll ein automatischer Import angestoßen werden)
   DWDS (content, pfad, autoImport = true) {
     // Daten überprüfen
@@ -822,7 +822,7 @@ const belegImport = {
   //     (Clipboard-Content)
   //   xml = Document
   //     (das geparste XML-Dokument)
-  //   returnResult = true || undefined
+  //   returnResult = true | undefined
   //     (das Ergebnis der Analyse soll nicht in den Datei-Zwischenspeicher
   //     geschrieben, sondern direkt zurückgegeben werden)
   DWDSLesenXML ({ clipboard, xml, returnResult = false }) {
@@ -1090,9 +1090,9 @@ const belegImport = {
   //     (Datensatz)
   //   txt = String
   //     (Text)
-  //   data = Object || undefined
+  //   data = Object | undefined
   //     (Datenobjekt für Korrekturen, die nicht nur einen Datensatz betreffen)
-  //   titeldaten = Object || undefined
+  //   titeldaten = Object | undefined
   //     (ergänzende Titeldaten)
   //   korpus = String
   //     (das DWDS-Korpus)
@@ -1276,7 +1276,7 @@ const belegImport = {
   },
 
   // DWDS-Import: überprüft, ob Daten in Zwischenablage DWDS-Snippet sind
-  //   cb = String || undefined
+  //   cb = String | undefined
   //     (Text-Inhalt des Clipboards)
   DWDSXMLCheck (cb) {
     if (!cb) {
@@ -1307,7 +1307,7 @@ const belegImport = {
   },
 
   // DWDS-Import: überprüft, ob die geladen Datei ein DWDS-JSON-Export ist
-  //   json = Object || Array
+  //   json = Object | Array
   //     (JSON-Daten)
   DWDSJSONCheck (json) {
     if (!json[0] || !json[0].ctx_ || !json[0].meta_) {
@@ -1319,7 +1319,7 @@ const belegImport = {
   // Datei-Import: speichert die Daten der geladenen Datei zwischen
   Datei: {
     pfad: "", // Pfad zur Datei
-    typ: "", // Typ der Datei (dwds || dereko || xml || bibtex)
+    typ: "", // Typ der Datei (dwds | dereko | xml | bibtex)
     meta: "", // Metadaten für alle Belege in belegImport.Datei.data
     data: [], // Daten der Datei; s. pushBeleg()
   },
@@ -1450,7 +1450,7 @@ const belegImport = {
   //   pfad = String
   //     (Pfad zur geladenen Datei)
   //   typ = String
-  //     (Typ der Datei, also dwds || dereko || xml || bibtex)
+  //     (Typ der Datei, also dwds | dereko | xml | bibtex)
   DateiMeta (pfad, typ) {
     let dataPfad = "";
     let dataTyp = "";
@@ -1984,7 +1984,7 @@ const belegImport = {
   //     (Inhalt der Datei)
   //   pfad = String
   //     (Pfad zur Datei)
-  //   autoImport = false || undefined
+  //   autoImport = false | undefined
   //     (nach dem Parsen soll ein automatischer Import angestoßen werden)
   BibTeX (content, pfad, autoImport = true) {
     // Daten einlesen
@@ -2027,7 +2027,7 @@ const belegImport = {
   // BibTeX-Import: Daten einlesen
   //   content = String
   //     (Inhalt der Datei)
-  //   returnResult = true || undefined
+  //   returnResult = true | undefined
   //     (die Titeldaten sollen zurückgegeben werden)
   BibTeXLesen (content, returnResult = false) {
     // Content fixen
@@ -2335,7 +2335,7 @@ const belegImport = {
   //     (Inhalt der Datei)
   //   pfad = String
   //     (Pfad zur Datei)
-  //   autoImport = false || undefined
+  //   autoImport = false | undefined
   //     (nach dem Parsen soll ein automatischer Import angestoßen werden)
   XML (content, pfad, autoImport = true) {
     // Liegen passende XML-Daten vor?
@@ -2365,7 +2365,7 @@ const belegImport = {
   // XML-Import: Daten einlesen
   //   content = String
   //     (Inhalt der Datei)
-  //   returnResult = true || undefined
+  //   returnResult = true | undefined
   //     (die Titeldaten sollen zurückgegeben werden)
   XMLLesen ({ xmlDoc, xmlStr, returnResult = false }) {
     // Zwischenspeicher der Titel

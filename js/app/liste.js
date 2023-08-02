@@ -370,9 +370,9 @@ const liste = {
   // Detailblock aufbauen
   //   id = Number
   //     (ID der Karteikarte)
-  //   folgekopf = Element || undefined
+  //   folgekopf = Element | undefined
   //     (der Belegkopf, der dem mit der übergebenen ID folgt)
-  //   einblenden = true || undefined
+  //   einblenden = true | undefined
   //     (die Detailansicht soll eingeblendet werden)
   aufbauenDetails ({ id, folgekopf, einblenden = false }) {
     // Detailblock aufbauen
@@ -1117,7 +1117,7 @@ const liste = {
   //     (Text, in dem der Beleg hervorgehoben werden soll)
   //   immer = Boolean
   //     (das Wort soll immer hervorgehoben werden, egal was in der Option steht)
-  //   keinNurMarkieren = true || undefined
+  //   keinNurMarkieren = true | undefined
   //     (Wörter, die nur markiert werden sollen, von der Hervorhebung ausschließen)
   belegWortHervorheben (schnitt, immer, keinNurMarkieren = false) {
     // Wort soll nicht hervorgehoben werden
@@ -1622,7 +1622,7 @@ const liste = {
 
   // Text der Überschrift für die Detailanzeige erstellen
   // (die Funktion brauch ich auch in anhaenge.js, drucken.js und popup.js, darum ausgelagert)
-  //   beleg_id = String || Object
+  //   beleg_id = String | Object
   //     (ID des Belegs; soll die aktuelle Karteikarte gedruckt werden ist es ein Object)
   detailAnzeigenH3 (beleg_id) {
     let obj = {};

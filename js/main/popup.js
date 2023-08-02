@@ -427,11 +427,11 @@ module.exports = {
   //     (Name der PNG-Datei)
   //   click = String
   //     (Funktionen, die auf Klick ausgeführt werden sollen)
-  //   accelerator = String || undefined
+  //   accelerator = String | undefined
   //     (Tastaturkürzel, das eine informative Funktion hat)
-  //   sub = true || undefined
+  //   sub = true | undefined
   //     (Item ist ein Submenü)
-  //   obj = true || undefined
+  //   obj = true | undefined
   //     (die Funktion soll ein Konfigurationsobjekt und kein MenuItem() zurückgeben)
   makeItem ({
     contents, label, icon,

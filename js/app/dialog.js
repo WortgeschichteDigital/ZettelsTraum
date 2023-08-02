@@ -6,7 +6,7 @@ const dialog = {
   callback: null,
 
   // Speicherort für die Nutzerantwort, die aus einem Bestätigungsdialog resultiert.
-  // Mögliche Werte: true (Okay od. Ja) || false (Abbrechen od. Nein) || null (Schließen durch Link)
+  // Mögliche Werte: true (Okay od. Ja) | false (Abbrechen od. Nein) | null (Schließen durch Link)
   antwort: null,
 
   // Dialog-Fenster öffnen
@@ -14,9 +14,9 @@ const dialog = {
   //     (gibt den Dialog-Typ an, Werte: "alert", "prompt", "confirm")
   //   text = String
   //     (Text, der in das Meldungsfeld eingetragen werden soll)
-  //   platzhalter = String || undefined
+  //   platzhalter = String | undefined
   //     (Platzhaltertext für das Prompt-Feld)
-  //   funktion = function || undefined
+  //   funktion = function | undefined
   //     (Funktion, die nach dem Schließen des Dialogs ausgeführt werden soll)
   oeffnen ({ typ, text, platzhalter = "", callback = null }) {
     // Text eintragen

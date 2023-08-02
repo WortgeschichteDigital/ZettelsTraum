@@ -502,9 +502,9 @@ const xml = {
   },
 
   // Beleg-ID ermitteln
-  //   data = Object || undefined
+  //   data = Object | undefined
   //     (das Datenobjekt der betreffenden Karteikarte)
-  //   id = String || undefined
+  //   id = String | undefined
   //     (ID der betreffenden Karteikarte)
   belegId ({ data = popup.referenz.data, id = popup.referenz.id }) {
     // Autor

@@ -530,7 +530,7 @@ const kopieren = {
   // (wird auch für zum Duplizieren von Belegen genutzt)
   //   daten = Array
   //     (in jedem Slot ist eine Zettelkopie, wie sie in kopieren.datenBeleg() erstellt wird)
-  //   duplikat = true || undefined
+  //   duplikat = true | undefined
   //     (der übergebene Beleg soll dupliziert werden)
   async einfuegenEinlesen (daten, duplikat = false) {
     // Bedeutungsmapper (welche Bedeutungen in welche Gerüste kommen)

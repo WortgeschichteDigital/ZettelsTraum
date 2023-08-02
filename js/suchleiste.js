@@ -136,7 +136,7 @@ const suchleiste = {
   suchenZuletzt: "",
 
   // Suche starten
-  //   neuaufbau = true || undefined
+  //   neuaufbau = true | undefined
   //     (die Suchergebnisse sollen nur neu aufgebaut werden, sonst nichts)
   suchen (neuaufbau = false) {
     // Suchtext vorhanden?

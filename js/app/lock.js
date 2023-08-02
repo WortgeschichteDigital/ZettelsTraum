@@ -114,9 +114,9 @@ const lock = {
   },
 
   // Sperrmeldung ausgeben
-  //   info = Boolean || Array
+  //   info = Boolean | Array
   //     (Array enhält Informationen zu Person/Computer, die die Datei gerade benutzen)
-  //   typ = String || undefined
+  //   typ = String | undefined
   //     (Typ der Datei, die gespeichert werden soll; falls generisches "Datei" unerwünscht)
   locked ({ info, typ = "Datei" }) {
     let durch = "";

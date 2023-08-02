@@ -306,7 +306,7 @@ const helfer = {
   // (größer als die angegebene max-height werden sie dabei nie)
   //   textarea = Element
   //     (Textfeld, dessen Eingaben hier abgefangen werden)
-  //   padding = Number || undefined
+  //   padding = Number | undefined
   //     (steuert, ob ein padding abgezogen werden muss)
   textareaGrow (textarea, padding = 4) {
     textarea.style.height = "inherit";
@@ -412,7 +412,7 @@ const helfer = {
   // Treffer innerhalb von Tags löschen
   //   text = String
   //     (Text mit Suchmarkierungen)
-  //   cl = String || undefined
+  //   cl = String | undefined
   //     (die Class des <mark>)
   suchtrefferBereinigen (text, cl = "suche") {
     const reg = new RegExp(`(<[^>]*?)<mark class="${cl}">(.+?)</mark>`, "g");
@@ -539,9 +539,9 @@ const helfer = {
   //     (in diesem Element sollen die Ersetzungen stattfinden)
   //   selectors = String
   //     (Liste der Selektoren)
-  //   typ = String || undefined
+  //   typ = String | undefined
   //     (Tag-Name des Ersatz-Containers)
-  //   style = String || undefined
+  //   style = String | undefined
   //     (Style des Ersatz-Containers)
   clipboardHtmlErsetzen (cont, selectors, typ = "frag", style = "") {
     let quelle = cont.querySelector(selectors);
@@ -626,8 +626,8 @@ const helfer = {
   },
 
   // Titelaufnahmen nach ihren Siglen sortieren
-  //   a = Object || String
-  //   b = Object || String
+  //   a = Object | String
+  //   b = Object | String
   //     (wenn Objekte: enthalten sind Schlüssel "id" [String] und "slot" [Number];
   //     wenn String: direkt die Sigle der Titelaufnahme)
   sortSiglen (a, b) {
@@ -757,7 +757,7 @@ const helfer = {
   // ein übergebenes Datum formatiert ausgeben
   //   datum = String
   //     (im ISO 8601-Format)
-  //   format = String || undefined
+  //   format = String | undefined
   //     (steuert die verschiedenen Formatierungstypen)
   datumFormat (datum, format = "") {
     // Minuten und Sekunden formatieren

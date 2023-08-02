@@ -492,7 +492,7 @@ const quick = {
   },
 
   // Konfigurationsanzeige im Einstellungen-Fenster aufbauen
-  //   toTop = true || undefined
+  //   toTop = true | undefined
   //     (die Konfigurationsfelder nach oben scrollen
   fillConfig (toTop = false) {
     const contSelected = document.getElementById("quick-config-selected");

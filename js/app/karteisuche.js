@@ -1202,7 +1202,7 @@ const karteisuche = {
   },
 
   // fügt einen neuen Filter hinzu
-  //   manuell = Boolean || undefined
+  //   manuell = Boolean | undefined
   //     (der Filter wurde manuell hinzugefügt)
   filterHinzufuegen (manuell = true) {
     const cont = document.getElementById("karteisuche-filter");
@@ -1747,7 +1747,7 @@ const karteisuche = {
     for (let i = optionen.data.karteisuche.filter.length - 1; i >= 0; i--) {
       const werte = optionen.data.karteisuche.filter[i];
       // Korrektur Redaktionsfilter
-      // (ab Version 0.32.0 gibt es ein Logikfeld: = || !=)
+      // (ab Version 0.32.0 gibt es ein Logikfeld: = | !=)
       if (werte[0] === "Redaktion" && werte.length === 3) {
         werte.splice(1, 0, "=");
       }

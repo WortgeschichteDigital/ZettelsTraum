@@ -40,9 +40,9 @@ const helferXml = {
   // Datum extrahieren
   //   text = String
   //     (Text, aus dem heraus das Datum extrahiert werden soll)
-  //   normJh = false || undefined
+  //   normJh = false | undefined
   //     (die Jahrhundertangabe soll in eine Jahreszahl umgewandelt werden)
-  //   sonder = true || undefined
+  //   sonder = true | undefined
   //     (die übergebene Textstelle soll auf spezielle Formate überprüft werden)
   datum (text, normJh = true, sonder = false) {
     // Sonderformate
@@ -128,7 +128,7 @@ const helferXml = {
   // geschützte Zeichen maskieren
   //   text = String
   //     (String, der maskiert werden soll)
-  //   demaskieren = true || undefined
+  //   demaskieren = true | undefined
   //     (geschützte Zeichen demaskieren)
   maskieren ({ text, demaskieren = false }) {
     const zeichen = new Map([
@@ -154,7 +154,7 @@ const helferXml = {
   // ID normieren
   //   id = String
   //     (die ID)
-  //   input = Element || undefined
+  //   input = Element | undefined
   //     (das Input-Element, aus dem die ID ausgelesen wurde)
   normId ({ id, input = null }) {
     // erhalten bleiben: . - _
@@ -189,7 +189,7 @@ const helferXml = {
   // XML-Snippet einfärben
   //   xmlStr = String
   //     (das XML-Snippet, das eingefärbt werden soll)
-  //   xmlErr = Object || null || undefined
+  //   xmlErr = Object | null | undefined
   prettyPrint ({ xmlStr, xmlErr = null }) {
     // geschützte Leerzeichen markieren
     xmlStr = xmlStr.replace(/\u{a0}/ug, "␣");

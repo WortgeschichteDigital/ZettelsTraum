@@ -118,7 +118,7 @@ const bedeutungen = {
   // Bedeutungen durchzählen
   //   arr = Array
   //     (Array mit den Bedeutungen, die durchgezählt werden sollen)
-  //   sl = Number || undefined
+  //   sl = Number | undefined
   //     (Start-Level der Zählung)
   konstitZaehlung (arr = bedeutungen.akt.bd, sl = bedeutungen.akt.sl) {
     bedeutungen.zaehlungen = [];
@@ -144,7 +144,7 @@ const bedeutungen = {
   // gibt das richtige Zählzeichen zurück
   //   bd = Array
   //     (Array mit allen Bedeutungen)
-  //   sl = Number || undefined
+  //   sl = Number | undefined
   //     (Start-Level der Zählung)
   zaehlung (bd, sl = bedeutungen.akt.sl) {
     // Ebene ermitteln
@@ -186,15 +186,15 @@ const bedeutungen = {
   //     (ID der Gerüst-Nummer)
   //   id = Number
   //     (ID der Bedeutung)
-  //   za = false || undefined
+  //   za = false | undefined
   //     (das Zählzeichen soll angezeigt werden)
-  //   zaCl = true || undefined
+  //   zaCl = true | undefined
   //     (das Zählzeichen soll die class "zaehlung" erhalten)
-  //   al = true || undefined
+  //   al = true | undefined
   //     (hat die Bedeutung einen Alias, soll der Alias zurückgegeben werden)
-  //   leer = true || undefined
+  //   leer = true | undefined
   //     (vor und hinter den Zählzeichen werden Leerzeichen eingefügt)
-  //   strip = true || undefined
+  //   strip = true | undefined
   //     (Tags werden aus der Bedeutung entfernt)
   bedeutungenTief ({ gr, id, za = true, zaCl = false, al = false, leer = false, strip = false }) {
     const arr = [];
@@ -270,9 +270,9 @@ const bedeutungen = {
   // überprüft, ob die übergebene Bedeutung schon vorhanden ist
   //   bd = String
   //     (die Bedeutung, Hierarchien getrennt durch ": ")
-  //   cache = true || undefined
+  //   cache = true | undefined
   //     (ist die Bedeutung vorhanden, soll sie gecacht werden
-  //   arr = Array || undefined
+  //   arr = Array | undefined
   //     (Array, in dem geschaut werden soll, ob die Bedeutung vorhanden ist)
   bedeutungVorhandenCache: {},
   bedeutungVorhanden (bd, cache = false, arr = bedeutungen.akt.bd) {
@@ -669,7 +669,7 @@ const bedeutungen = {
   },
 
   // die vorherige oder nächste Bedeutung aufrufen
-  // (wird nur aufgerufen, wenn Ctrl + ↑ || Ctrl + ↓)
+  // (wird nur aufgerufen, wenn Ctrl + ↑ | Ctrl + ↓)
   //   evt = Object
   //     (Event-Object des keydown)
   navi (evt) {
@@ -803,7 +803,7 @@ const bedeutungen = {
   // Bedeutung (mit allen Unterbedeutungen) aktivieren
   //   idx = Number
   //     (Index der aktiven Zeile)
-  //   moved = true || undefined
+  //   moved = true | undefined
   //     (die zu aktivierende Bedeutung wurde gerade bewegt)
   moveAn (idx, moved = false) {
     bedeutungen.moveAktiv = true;
@@ -1097,7 +1097,7 @@ const bedeutungen = {
   // erstellt eine unabhängige Kopie eines Datensatzes
   //   idx = Number
   //     (Index des Eintrags, von dem eine Kopie erstellt werden soll)
-  //    obj = Object || undefined
+  //    obj = Object | undefined
   //      (das Objekt, aus dem die Kopie angefertigt werden soll
   makeCopy (idx, obj = bedeutungen.akt) {
     const kopie = { ...obj.bd[idx] };
@@ -1415,7 +1415,7 @@ const bedeutungen = {
   // Toolbox einblenden und positionieren oder ausblenden
   //   an = Boolean
   //     (Toolbox an- oder ausstellen)
-  //   ele = Element || undefined
+  //   ele = Element | undefined
   //     (ggf. das Element, an dem sich die Positionierung ausrichten soll)
   editTools (an, ele) {
     if (!an) {
@@ -1627,7 +1627,7 @@ const bedeutungen = {
   //     (die Bedeutung; kann HTML-Tags enthalten)
   //   idx = Number
   //     (die Position der Bedeutung im Gerüst)
-  //   ebene = Number || undefined
+  //   ebene = Number | undefined
   //     (die Ebene, in der getestet werden soll
   editBdTest ({ wert, idx, ebene }) {
     const wertTest = helfer.textTrim(wert.replace(/<.+?>/g, ""), true);

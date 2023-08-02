@@ -271,7 +271,7 @@ const hilfe = {
   // Sektion wechseln
   //   sektion = String
   //     (Hinweis auf die Sektion, die eingeblendet werden soll)
-  //   history = false || undefined
+  //   history = false | undefined
   //     (die Bewegung soll gemerkt werden)
   sektionWechseln (sektion, history = true) {
     // History: Position merken

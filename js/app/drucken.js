@@ -44,7 +44,7 @@ const drucken = {
   // Druckanzeige initialisieren (nur für Karteikarte und Belegliste)
   //   id = String
   //     (ID des Links, über den gedruckt wurde)
-  //   gn = String || undefined
+  //   gn = String | undefined
   //     (enthält die Bedeutungsgerüst-Nummer, wenn aus dem Bedeutungsgerüst-Fenster gedruckt wird)
   init (id, gn) {
     const fenster = document.getElementById("drucken");

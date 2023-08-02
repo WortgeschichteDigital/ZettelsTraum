@@ -97,7 +97,7 @@ const tastatur = {
       speichern.checkInit(() => kopieren.einfuegenAusfuehren());
       return;
     }
-    // Key " " || "PageUp" || "PageDown"
+    // Key " " | "PageUp" | "PageDown"
     if (!m && /^( |PageDown|PageUp)$/.test(evt.key)) {
       const leiste = document.getElementById("suchleiste");
       if (leiste && leiste.classList.contains("an")) {
@@ -125,7 +125,7 @@ const tastatur = {
       kopieren.einfuegenBasisdaten(true);
       return;
     }
-    // Key "ArrowDown" || "ArrowLeft" || "ArrowRight" || "ArrowUp"
+    // Key "ArrowDown" | "ArrowLeft" | "ArrowRight" | "ArrowUp"
     if ((!m || m === "Ctrl") && /^(ArrowDown|ArrowLeft|ArrowRight|ArrowUp)$/.test(evt.key)) {
       tastatur.hauptArrows(evt, overlayId);
       return;
@@ -145,7 +145,7 @@ const tastatur = {
         m === "Ctrl+Shift" && evt.key === "F") {
       document.getElementById("liste-link-filter").click();
     }
-    // KARTEIKARTE: Key "d" || "i" || "k" || "m" || "t" || "u"
+    // KARTEIKARTE: Key "d" | "i" | "k" | "m" | "t" | "u"
     if (helfer.belegOffen()) {
       if (m === "Ctrl") {
         if (evt.key === "d") {
@@ -174,7 +174,7 @@ const tastatur = {
       }
       return;
     }
-    // LITERATURDATENBANK: Key "f" || "h" || "s"
+    // LITERATURDATENBANK: Key "f" | "h" | "s"
     if (m === "Ctrl" && overlayId === "red-lit") {
       if (evt.key === "f" && !kartei.wort) {
         filter.suche();
@@ -234,7 +234,7 @@ const tastatur = {
       quick.moveConfig(dir);
       return;
     }
-    // NAVIGATION HOCH || RUNTER
+    // NAVIGATION HOCH | RUNTER
     if (/^(ArrowDown|ArrowUp)$/.test(evt.key)) {
       if (m === "Ctrl" && overlayId === "einstellungen") {
         evt.preventDefault();
@@ -249,7 +249,7 @@ const tastatur = {
     if (m === "Ctrl") {
       return;
     }
-    // NAVIGATION LINKS || RECHTS
+    // NAVIGATION LINKS | RECHTS
     const aktiv = document.activeElement;
     // Ist das aktive Element ein Anker oder ein Button?
     if (!(aktiv.nodeName === "A" || aktiv.nodeName === "INPUT" && aktiv.type === "button")) {
@@ -353,19 +353,19 @@ const tastatur = {
       button.dispatchEvent(new MouseEvent("click"));
       return;
     }
-    // Key " " || "PageUp" || "PageDown" (Changelog, Dokumentation, Handbuch)
+    // Key " " | "PageUp" | "PageDown" (Changelog, Dokumentation, Handbuch)
     if (/changelog|dokumentation|handbuch/.test(winInfo.typ) &&
         !m && /^( |PageDown|PageUp)$/.test(evt.key)) {
       suchleiste.scrollen(evt);
       return;
     }
-    // Key "ArrowDown" || "ArrowUp" (Dokumentation, Handbuch)
+    // Key "ArrowDown" | "ArrowUp" (Dokumentation, Handbuch)
     if (/dokumentation|handbuch/.test(winInfo.typ) &&
         m === "Ctrl" && /^(ArrowDown|ArrowUp)$/.test(evt.key)) {
       hilfe.naviMenue(evt);
       return;
     }
-    // Key "ArrowLeft" || "ArrowRight (Dokumentation, Handbuch)
+    // Key "ArrowLeft" | "ArrowRight (Dokumentation, Handbuch)
     if (/dokumentation|handbuch/.test(winInfo.typ) &&
         (m === "Alt" || m === "Ctrl") &&
         /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
@@ -386,13 +386,13 @@ const tastatur = {
       }
       return;
     }
-    // Key "ArrowLeft" || "ArrowRight (Handbuch)
+    // Key "ArrowLeft" | "ArrowRight (Handbuch)
     if (winInfo.typ === "handbuch" &&
         !m && /^(ArrowLeft|ArrowRight)$/.test(evt.key)) {
       hilfe.bilderTastatur(evt);
       return;
     }
-    // Key "ArrowDown" || "ArrowLeft" || "ArrowRight" || "ArrowUp" (Dialog im XML-Fenster)
+    // Key "ArrowDown" | "ArrowLeft" | "ArrowRight" | "ArrowUp" (Dialog im XML-Fenster)
     if (overlayId && !m && /^(ArrowDown|ArrowLeft|ArrowRight|ArrowUp)$/.test(evt.key)) {
       tastatur.hauptArrows(evt, overlayId);
       return;
