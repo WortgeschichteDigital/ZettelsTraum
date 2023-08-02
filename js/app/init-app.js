@@ -550,6 +550,13 @@ window.addEventListener("load", async () => {
     bilderPreload.push(img);
   }
 
+  // INDENT.XSL LADEN
+  await helfer.resourcesLoad({
+    file: "indent.xsl",
+    targetObj: helferXml,
+    targetKey: "indentXsl",
+  });
+
   // FENSTER FREISCHALTEN
   updates.hinweis();
   helfer.fensterGeladen();

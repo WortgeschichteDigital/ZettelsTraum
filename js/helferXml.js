@@ -167,20 +167,16 @@ const helferXml = {
     return val;
   },
 
+  // XSL, um XML-Dokumente mit Einzügen zu versehen
+  // (wird vor dem Entsperren des Fensters aus resources geladen)
+  indentXsl: "",
+
   // XML-Dokument mit Einzügen versehen
   // (s. https://stackoverflow.com/a/376503)
   //   xml = Document
   //     (das XML-Snippet)
   indent (xml) {
-    const xslt = new DOMParser().parseFromString(`<xsl:stylesheet version="1.0"
- xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output omit-xml-declaration="yes" indent="yes"/>
-  <xsl:template match="node()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="node()|@*"/>
-    </xsl:copy>
-  </xsl:template>
-</xsl:stylesheet>`, "application/xml");
+    const xslt = new DOMParser().parseFromString(helferXml.indentXsl, "application/xml");
     const processor = new XSLTProcessor();
     processor.importStylesheet(xslt);
     return processor.transformToDocument(xml);

@@ -1020,6 +1020,34 @@ const helfer = {
     });
   },
 
+  // ermittelt den Resources-Pfad
+  resourcesPfad () {
+    let resources = process.resourcesPath;
+    if (/node_modules/.test(resources)) {
+      // App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
+      resources = `${resources.replace(/node_modules.+/, "")}resources`;
+    }
+    return resources;
+  },
+
+  // Datei aus dem Resources-Ordner laden
+  //   file = string (Dateiname)
+  //   targetObj = object (Zielobjekt)
+  //   targetKey = string (Zielschlüssel)
+  async resourcesLoad ({ file, targetObj, targetKey }) {
+    const resources = helfer.resourcesPfad();
+    try {
+      const pfad = modules.path.join(resources, file);
+      const content = await modules.fsp.readFile(pfad, { encoding: "utf8" });
+      targetObj[targetKey] = content;
+    } catch (err) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Das Einlesen der Datei „${file}“ ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+      });
+    }
+  },
+
   // Zwischenspeicher für den Timeout der Animation
   animationTimeout: null,
 
@@ -1279,12 +1307,7 @@ const helfer = {
 
   // Öffnen der Demonstrationskartei
   demoOeffnen () {
-    // Resources-Pfad ermitteln
-    let resources = process.resourcesPath;
-    if (/node_modules/.test(resources)) {
-      // App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
-      resources = `${resources.replace(/node_modules.+/, "")}resources`;
-    }
+    const resources = helfer.resourcesPfad();
     const quelle = modules.path.join(resources, "Demonstrationskartei Team.ztj");
     const ziel = modules.path.join(appInfo.temp, "Demonstrationskartei Team.ztj");
     modules.fsp.copyFile(quelle, ziel)

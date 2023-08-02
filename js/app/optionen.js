@@ -709,13 +709,8 @@ const optionen = {
 
   // Tag-Dateien aus app/resources laden
   tagsAutoLaden () {
-    // Resources-Pfad ermitteln
-    let resources = process.resourcesPath;
-    if (/node_modules/.test(resources)) {
-      // App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
-      resources = `${resources.replace(/node_modules.+/, "")}resources`;
-    }
     // XML-Dateien ermitteln => Dateien überprüfen + laden
+    const resources = helfer.resourcesPfad();
     const xml = [];
     const promises = [];
     modules.fsp.readdir(resources, { withFileTypes: true })

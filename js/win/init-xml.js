@@ -43,6 +43,13 @@ window.addEventListener("load", async () => {
   // ÄNDERUNGSNOTIZ
   document.querySelector("#md-re-no").value = "Erstpublikation";
 
+  // INDENT.XSL LADEN
+  await helfer.resourcesLoad({
+    file: "indent.xsl",
+    targetObj: helferXml,
+    targetKey: "indentXsl",
+  });
+
   // FENSTER FREISCHALTEN
   helfer.fensterGeladen();
 });
