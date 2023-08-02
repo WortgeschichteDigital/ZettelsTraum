@@ -1742,7 +1742,7 @@ const karteisuche = {
       // Filterfelder füllen
       const inputs = document.querySelectorAll("#karteisuche-filter p:first-child input");
       for (let j = 1, len = werte.length; j < len; j++) {
-        if (helfer.checkType("Boolean", werte[j])) {
+        if (typeof werte[j] === "boolean") {
           inputs[j].checked = werte[j];
         } else {
           inputs[j].value = werte[j];

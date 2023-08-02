@@ -632,7 +632,7 @@ const helfer = {
     let siB;
     let oriA;
     let oriB;
-    if (helfer.checkType("String", a)) {
+    if (typeof a === "string") {
       oriA = a;
       oriB = b;
       siA = helfer.sortAlphaPrep(helfer.sortSiglenPrep(a));
@@ -876,17 +876,6 @@ const helfer = {
       anzeige: datum,
       sortier: datumSort,
     };
-  },
-
-  // überprüft den Typ des übergebenen Objekts zuverlässig
-  // mögliche Rückgabewerte u.a.: Arguments, Array, Boolean, Date, Element, Error, Function, JSON, Math, NodeList, Number, Object, RegExp, String
-  //   typ = String
-  //     (Typ, auf den das übergebene Objekt überprüft werden soll)
-  //   obj = Object
-  //     (das Objekt, das auf den übergebenen Typ überprüft wird)
-  checkType (typ, obj) {
-    const cl = Object.prototype.toString.call(obj).slice(8, -1);
-    return obj !== undefined && obj !== null && cl === typ;
   },
 
   // Sprache der Nutzerumgebung ermitteln

@@ -1015,9 +1015,9 @@ const stamm = {
       // ein eindimensionales Array mit allen Varianten erzeugen
       let varianten = [];
       for (const i of token.eqlemma) {
-        if (helfer.checkType("Object", i) && i.hi) {
+        if (typeof i === "object" && i.hi) {
           varianten.push(i.hi.toLowerCase());
-        } else if (helfer.checkType("String", i)) {
+        } else if (typeof i === "string") {
           varianten.push(i.toLowerCase());
         }
       }

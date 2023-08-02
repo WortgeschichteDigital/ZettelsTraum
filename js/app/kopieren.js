@@ -806,7 +806,7 @@ const kopieren = {
     }
     // Datei einlesen
     const content = await io.lesen(result.filePaths[0]);
-    if (!helfer.checkType("String", content)) {
+    if (typeof content !== "string") {
       dialog.oeffnen({
         typ: "alert",
         text: `Beim Öffnen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`,

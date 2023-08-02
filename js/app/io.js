@@ -48,7 +48,7 @@ const io = {
           const content = await io.unzipData(buffer);
           // Daten sind nicht String => Fehlermeldung => Daten im Buffer wohl gar nicht komprimiert
           // (Dateien wurden erst mit Version 0.24.0 komprimiert)
-          if (!helfer.checkType("String", content)) {
+          if (typeof content !== "string") {
             try {
               // sind die Datei-Daten schon JSON => Daten zurückgeben
               const daten = buffer.toString();

@@ -1627,7 +1627,7 @@ const liste = {
   detailAnzeigenH3 (beleg_id) {
     let obj = {};
     let nr = beleg_id;
-    if (helfer.checkType("String", beleg_id)) {
+    if (typeof beleg_id === "string") {
       obj = data.ka[beleg_id];
     } else { // falls die aktuelle Karteikarte als Objekt übergeben wird
       obj = beleg_id;

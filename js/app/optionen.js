@@ -343,7 +343,7 @@ const optionen = {
       if (typeof opt[o] === "undefined") {
         continue;
       }
-      if (helfer.checkType("Object", obj[o])) {
+      if (typeof obj[o] === "object") {
         if (o === "tags") {
           optionen.data.tags = { ...opt[o] };
         } else {
@@ -1478,7 +1478,7 @@ const optionen = {
       }
     } else {
       const opt = await io.lesen(result.filePaths[0]);
-      if (!helfer.checkType("String", opt)) {
+      if (typeof opt !== "string") {
         dialog.oeffnen({
           typ: "alert",
           text: `Beim Importieren der Einstellungen ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${opt.name}: ${opt.message}</p>`,

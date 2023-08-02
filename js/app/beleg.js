@@ -2041,7 +2041,7 @@ const beleg = {
     // Datensätze, die String sind
     for (const [ key, val ] of Object.entries(beleg.data)) {
       // String?
-      if (!helfer.checkType("String", val)) {
+      if (typeof val !== "string") {
         continue;
       }
       // Container leeren

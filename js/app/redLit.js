@@ -349,7 +349,7 @@ const redLit = {
   async dbOeffnenEinlesen ({ pfad, offline = false, zusammenfuehren = false }) {
     const content = await io.lesen(pfad);
     return new Promise(resolve => {
-      if (!helfer.checkType("String", content)) {
+      if (typeof content !== "string") {
         resolve(`Beim Öffnen der Literaturdatenbank ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${content.name}: ${content.message}</p>`);
         throw content;
       }
@@ -1188,7 +1188,7 @@ const redLit = {
   //     (der Ziel-Datensatz)
   dbTitelKlonenAufnahme (quelle, ziel) {
     for (const [ k, v ] of Object.entries(quelle)) {
-      if (helfer.checkType("Object", v)) { // Objects
+      if (typeof v === "object") { // Objects
         ziel[k] = {};
         redLit.dbTitelKlonenAufnahme(v, ziel[k]);
       } else if (Array.isArray(v)) { // Arrays

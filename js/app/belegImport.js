@@ -775,7 +775,7 @@ const belegImport = {
     // Daten überprüfen
     let xml;
     let json;
-    if (helfer.checkType("Object", content)) {
+    if (typeof content === "object") {
       xml = content;
     } else {
       try {
@@ -962,7 +962,7 @@ const belegImport = {
       const bs = [];
       for (const s of i.ctx_) {
         let satz = "";
-        if (helfer.checkType("String", s)) {
+        if (typeof s === "string") {
           satz = s;
         } else {
           for (const w of s) {
