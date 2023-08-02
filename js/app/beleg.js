@@ -117,24 +117,7 @@ const beleg = {
     // ID zwischenspeichern
     beleg.id_karte = id;
     // Daten des Belegs kopieren
-    beleg.data = {};
-    for (const i in data.ka[id]) {
-      if (!data.ka[id].hasOwnProperty(i)) {
-        continue;
-      }
-      if (helfer.checkType("Array", data.ka[id][i])) {
-        if (helfer.checkType("Object", data.ka[id][i][0])) {
-          beleg.data[i] = [];
-          for (let j = 0, len = data.ka[id][i].length; j < len; j++) {
-            beleg.data[i].push({ ...data.ka[id][i][j] });
-          }
-        } else {
-          beleg.data[i] = [ ...data.ka[id][i] ];
-        }
-      } else {
-        beleg.data[i] = data.ka[id][i];
-      }
-    }
+    beleg.data = structuredClone(data.ka[id]);
     // in Lese- oder in Formularansicht öffnen?
     if (optionen.data.einstellungen.leseansicht) {
       beleg.formular(false); // wegen der Bedeutungen *vor* dem Füllen der Leseansicht
@@ -555,23 +538,7 @@ const beleg = {
     // (für die Hervorhebung in der Liste)
     liste.statusGeaendert = beleg.id_karte.toString();
     // Objekt mit neuen Werten füllen
-    for (const i in beleg.data) {
-      if (!beleg.data.hasOwnProperty(i)) {
-        continue;
-      }
-      if (helfer.checkType("Array", beleg.data[i])) {
-        if (helfer.checkType("Object", beleg.data[i][0])) {
-          data.ka[beleg.id_karte][i] = [];
-          for (let j = 0, len = beleg.data[i].length; j < len; j++) {
-            data.ka[beleg.id_karte][i].push({ ...beleg.data[i][j] });
-          }
-        } else {
-          data.ka[beleg.id_karte][i] = [ ...beleg.data[i] ];
-        }
-      } else {
-        data.ka[beleg.id_karte][i] = beleg.data[i];
-      }
-    }
+    data.ka[beleg.id_karte] = structuredClone(beleg.data);
     // Änderungsdatum speichern
     const dm = new Date().toISOString();
     beleg.data.dm = dm;
@@ -1459,15 +1426,12 @@ const beleg = {
       auf: {},
       zu: {},
     };
-    for (const i in treffer) {
-      if (!treffer.hasOwnProperty(i)) {
+    for (const [ i, val ] of Object.entries(treffer)) {
+      if (!val) {
         continue;
       }
-      if (!treffer[i]) {
-        continue;
-      }
-      for (let j = 0, len = treffer[i].length; j < len; j++) {
-        const tag = treffer[i][j].replace(/<|>|\//g, "");
+      for (let j = 0, len = val.length; j < len; j++) {
+        const tag = val[j].replace(/<|>|\//g, "");
         if (!tags[i][tag]) {
           tags[i][tag] = 0;
         }
@@ -1480,11 +1444,8 @@ const beleg = {
     for (let i = 0; i < 2; i++) {
       const a = arr[i];
       const b = arr[i === 1 ? 0 : 1];
-      for (const tag in tags[a]) {
-        if (!tags[a].hasOwnProperty(tag)) {
-          continue;
-        }
-        if (!tags[b][tag] || tags[a][tag] !== tags[b][tag]) {
+      for (const [ tag, val ] of Object.entries(tags[a])) {
+        if (!tags[b][tag] || val !== tags[b][tag]) {
           return true; // offenbar illegales Nesting
         }
       }
@@ -2078,27 +2039,23 @@ const beleg = {
       cont.parentNode.classList.remove("aus");
     }
     // Datensätze, die String sind
-    for (const wert in beleg.data) {
-      if (!beleg.data.hasOwnProperty(wert)) {
-        continue;
-      }
+    for (const [ key, val ] of Object.entries(beleg.data)) {
       // String?
-      const v = beleg.data[wert];
-      if (!helfer.checkType("String", v)) {
+      if (!helfer.checkType("String", val)) {
         continue;
       }
       // Container leeren
-      const cont = document.getElementById(`beleg-lese-${wert}`);
+      const cont = document.getElementById(`beleg-lese-${key}`);
       if (!cont) { // manche Datensätze (dc, dm, bx) werden nicht angezeigt
         continue;
       }
       cont.replaceChildren();
       // Absätze einhängen
-      const p = liste.belegErstellenPrepP(v).split("\n");
+      const p = liste.belegErstellenPrepP(val).split("\n");
       let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
       for (let i = 0, len = p.length; i < len; i++) {
         let text = p[i];
-        if (!text && wert === "no" && i === 0 && len > 1) {
+        if (!text && key === "no" && i === 0 && len > 1) {
           // der erste Absatz im Notizenfeld kann leer sein, soll aber nicht gedruckt
           // werden, wenn er leer ist; dies gilt allerdings nur, wenn darauf noch ein Absatz folgt
           continue;
@@ -2111,7 +2068,7 @@ const beleg = {
           text = "\u00A0";
         } else {
           // Absatz ggf. kürzen
-          if (wert === "bs" &&
+          if (key === "bs" &&
               optionen.data.beleg.kuerzen &&
               !liste.wortVorhanden(text)) {
             if (zuletzt_gekuerzt) {
@@ -2127,13 +2084,13 @@ const beleg = {
           if (!optionen.data.beleg.trennung) {
             text = liste.belegTrennungWeg(text, true);
           }
-          if (wert !== "bd" && wert !== "bs") {
+          if (key !== "bd" && key !== "bs") {
             text = helfer.escapeHtml(text);
           }
-          if (/^(no|qu)$/.test(wert)) {
+          if (/^(no|qu)$/.test(key)) {
             text = liste.linksErkennen(text);
           }
-          if (wert === "bs") {
+          if (key === "bs") {
             text = liste.belegWortHervorheben(text, true);
             text = liste.belegKlammernHervorheben({ text });
           }

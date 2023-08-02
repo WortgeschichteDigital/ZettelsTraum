@@ -45,10 +45,7 @@ const lexika = {
     cont.replaceChildren();
     // Array erstellen
     const l = [];
-    for (const i in lexika.preset) {
-      if (!lexika.preset.hasOwnProperty(i)) {
-        continue;
-      }
+    for (const i of Object.keys(lexika.preset)) {
       l.push(i);
     }
     for (let i = 0, len = data.le.length; i < len; i++) {

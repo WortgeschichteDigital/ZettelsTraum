@@ -42,11 +42,8 @@ const konversion = {
       return;
     }
     // Datenfeld "kr" (Korpus) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].kr = "";
+    for (const val of Object.values(data.ka)) {
+      val.kr = "";
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -60,11 +57,8 @@ const konversion = {
       return;
     }
     // Datenfeld "bl" (Wortbildung) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].bl = "";
+    for (const val of Object.values(data.ka)) {
+      val.bl = "";
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -78,11 +72,8 @@ const konversion = {
       return;
     }
     // Datenfeld "sy" (Wortbildung) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].sy = "";
+    for (const val of Object.values(data.ka)) {
+      val.sy = "";
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -99,16 +90,13 @@ const konversion = {
     bedeutungen.konstit();
     // Datenfeld "bd" (Wortbildung) in allen Karteikarten auf das neue Format umstellen
     const gr = data.bd.gr["1"].bd;
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      const bd = data.ka[id].bd.split("\n");
-      data.ka[id].bd = [];
+    for (const val of Object.values(data.ka)) {
+      const bd = val.bd.split("\n");
+      val.bd = [];
       for (let i = 0, len = bd.length; i < len; i++) {
         for (let j = 0, len = gr.length; j < len; j++) {
           if (bd[i] === gr[j].bd.join(": ")) {
-            data.ka[id].bd.push({
+            val.bd.push({
               gr: "1",
               id: gr[j].id,
             });
@@ -170,11 +158,8 @@ const konversion = {
       return;
     }
     // Datenfeld "mt" (Metatext) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].mt = false;
+    for (const val of Object.values(data.ka)) {
+      val.mt = false;
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -226,14 +211,11 @@ const konversion = {
       return;
     }
     // Datenfelder "fa", "ma", "ps" und "tr" in allen Wörtern der Formvarianten ergänzen
-    for (const wort in data.fv) {
-      if (!data.fv.hasOwnProperty(wort)) {
-        continue;
-      }
-      data.fv[wort].fa = 0;
-      data.fv[wort].ma = false;
-      data.fv[wort].ps = "";
-      data.fv[wort].tr = true;
+    for (const val of Object.values(data.fv)) {
+      val.fa = 0;
+      val.ma = false;
+      val.ps = "";
+      val.tr = true;
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -260,11 +242,8 @@ const konversion = {
       return;
     }
     // Datenfeld "bx" (Beleg-XML) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].bx = "";
+    for (const val of Object.values(data.ka)) {
+      val.bx = "";
     }
     // Versionsnummer hochzählen
     data.ve++;
@@ -429,11 +408,8 @@ const konversion = {
       return;
     }
     // Datenfeld "up" (ungeprüft) in allen Karteikarten ergänzen
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      data.ka[id].up = false;
+    for (const val of Object.values(data.ka)) {
+      val.up = false;
     }
     // Versionsnummer hochzählen
     data.ve++;

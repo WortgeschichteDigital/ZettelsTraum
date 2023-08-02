@@ -309,10 +309,7 @@ const filter = {
     // werden kann; in solchen Fällen lässt sie sich nicht mehr deaktivieren, weswegen
     // in der Liste keine Belege mehr gefunden werden können => solche Bedeutungen
     // müssen deaktiviert werden
-    for (const a in filter.aktiveFilter) {
-      if (!filter.aktiveFilter.hasOwnProperty(a)) {
-        continue;
-      }
+    for (const a of Object.keys(filter.aktiveFilter)) {
       if (!/^bedeutungen-/.test(a)) {
         continue;
       }
@@ -330,20 +327,17 @@ const filter = {
     // dynamische Filter drucken
     const cont = document.getElementById("liste-filter-dynamisch");
     cont.replaceChildren();
-    for (const block in filter.typen) {
-      if (!filter.typen.hasOwnProperty(block)) {
+    for (const [ block, val ] of Object.entries(filter.typen)) {
+      if (!val.filter_vorhanden) {
         continue;
       }
-      if (!filter.typen[block].filter_vorhanden) {
-        continue;
-      }
-      cont.appendChild(filter.aufbauenCont(filter.typen[block].name));
+      cont.appendChild(filter.aufbauenCont(val.name));
       if (block === "verschiedenes") {
         cont.lastChild.appendChild(filter.aufbauenFilterlogik());
       }
-      const f = filter.typen[block].filter_folge;
+      const f = val.filter_folge;
       for (let i = 0, len = f.length; i < len; i++) {
-        const neuer_filter = filter.aufbauenFilter(f[i], filter.typen[block].filter[f[i]]);
+        const neuer_filter = filter.aufbauenFilter(f[i], val.filter[f[i]]);
         // kein neuer Filter
         if (!neuer_filter[0]) {
           continue;
@@ -546,11 +540,8 @@ const filter = {
   aufbauenZeitraumTreffer (y, step) {
     const ende = y + step - 1;
     let treffer = 0;
-    for (const id in filter.jahrBelege) {
-      if (!filter.jahrBelege.hasOwnProperty(id)) {
-        continue;
-      }
-      if (filter.jahrBelege[id] >= y && filter.jahrBelege[id] <= ende) {
+    for (const val of Object.values(filter.jahrBelege)) {
+      if (val >= y && val <= ende) {
         treffer++;
       }
     }
@@ -1040,14 +1031,8 @@ const filter = {
       filter.aktiveFilter.kartendatum = true;
     }
     // dynamische Filter
-    for (const typ in filter.typen) {
-      if (!filter.typen.hasOwnProperty(typ)) {
-        continue;
-      }
-      for (const f in filter.typen[typ].filter) {
-        if (!filter.typen[typ].filter.hasOwnProperty(f)) {
-          continue;
-        }
+    for (const typ of Object.keys(filter.typen)) {
+      for (const f of Object.keys(filter.typen[typ].filter)) {
         const f_check = document.getElementById(`filter-${encodeURI(f)}`);
         if (f_check && f_check.checked) {
           filter.aktiveFilter[typ] = true;
@@ -1207,10 +1192,7 @@ const filter = {
       sy: [],
       ts: [],
     };
-    for (const i in filter.aktiveFilter) {
-      if (!filter.aktiveFilter.hasOwnProperty(i)) {
-        continue;
-      }
+    for (const i of Object.keys(filter.aktiveFilter)) {
       if (!/^(bedeutungen|wortbildungen|synonyme||korpora|textsorten)-/.test(i)) {
         continue;
       }
@@ -1291,11 +1273,7 @@ const filter = {
         }
       }
       // Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten
-      for (const bf in baumfilter) {
-        if (!baumfilter.hasOwnProperty(bf)) {
-          continue;
-        }
-        const arr = baumfilter[bf];
+      for (const [ bf, arr ] of Object.entries(baumfilter)) {
         if (arr.length) {
           let okay = false;
           if (bf === "bd") { // Bedeutungen
@@ -1809,16 +1787,18 @@ const filter = {
     // Ausgangsdatum an Erstellungsdatum der Karten anpassen
     let von = null;
     let bis = null;
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      const datum = new Date(data.ka[id].dc);
-      if (!von || datum < von) {
-        von = datum;
-      }
-      if (!bis || datum > bis) {
-        bis = datum;
+    if (data.ka) {
+      // beim Öffnen einer Kartei wird diese Funktion zweimal aufgerufen;
+      // beim ersten Aufruf ist data.ka noch nicht gefüllt;
+      // besser nicht anpacken
+      for (const val of Object.values(data.ka)) {
+        const datum = new Date(val.dc);
+        if (!von || datum < von) {
+          von = datum;
+        }
+        if (!bis || datum > bis) {
+          bis = datum;
+        }
       }
     }
     if (!von) { // es gibt noch keine Karteikarten

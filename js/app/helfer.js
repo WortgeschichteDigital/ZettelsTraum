@@ -503,10 +503,7 @@ const helfer = {
       "dta-kapitaelchen": "font-variant: small-caps",
       "dta-rot": "color: red",
     };
-    for (const style in styles) {
-      if (!styles.hasOwnProperty(style)) {
-        continue;
-      }
+    for (const style of Object.keys(styles)) {
       stylesAnpassen(style);
     }
     // Ergebnis der Bereinigung zurückggeben

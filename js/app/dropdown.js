@@ -8,11 +8,8 @@ const dropdown = {
   //   ds = String
   //     (der Datensatz, aus dem die Daten zusammengetragen werden sollen)
   dataFormular (ds) {
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      const d = data.ka[id][ds].split("\n");
+    for (const val of Object.values(data.ka)) {
+      const d = val[ds].split("\n");
       for (let i = 0, len = d.length; i < len; i++) {
         const d_tmp = helfer.textTrim(d[i]);
         if (!d_tmp) {
@@ -44,11 +41,8 @@ const dropdown = {
   dataKorpora () {
     const korpora = [ ...beleg.korpora ];
     const korpora_ergaenzt = [];
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
-      const kr = data.ka[id].kr;
+    for (const val of Object.values(data.ka)) {
+      const { kr } = val;
       if (kr && !korpora.includes(kr) && !korpora_ergaenzt.includes(kr)) {
         korpora_ergaenzt.push(kr);
       }
@@ -67,11 +61,8 @@ const dropdown = {
       return arr;
     }
     const data = optionen.data.tags[typ].data;
-    for (const id in data) {
-      if (!data.hasOwnProperty(id)) {
-        continue;
-      }
-      arr.push(data[id].name);
+    for (const val of Object.values(data)) {
+      arr.push(val.name);
     }
     arr.sort(helfer.sortAlpha);
     return arr;

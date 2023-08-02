@@ -459,10 +459,7 @@ const belegImport = {
       ana(analyse[i]);
     }
     // Textauszeichnungen umsetzen
-    for (const typ in rend) {
-      if (!rend.hasOwnProperty(typ)) {
-        continue;
-      }
+    for (const typ of Object.keys(rend)) {
       const reg = new RegExp(`\\[(${typ})\\](.+?)\\[\\/${typ}\\]`, "g");
       while (text.match(reg)) { // bei komischen Verschachtelungen kann es dazu kommen, dass beim 1. Durchgang nicht alle Tags ersetzt werden
         text = text.replace(reg, function (m, p1, p2) {

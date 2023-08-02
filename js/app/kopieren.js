@@ -674,16 +674,13 @@ const kopieren = {
   //     (Datenquelle des Belegs)
   datenBeleg (quelle) {
     const kopie = {};
-    for (const wert in quelle) {
-      if (!quelle.hasOwnProperty(wert)) {
-        continue;
-      }
+    for (const key of Object.keys(quelle)) {
       // Zeitpunkt Erstellung/Speicherung nicht kopieren
-      if (wert === "dc" || wert === "dm") {
+      if (key === "dc" || key === "dm") {
         continue;
       }
       // Sonderbehandlung Bedeutung
-      if (wert === "bd") {
+      if (key === "bd") {
         kopie.bd = [];
         for (let i = 0, len = quelle.bd.length; i < len; i++) {
           kopie.bd.push({
@@ -699,10 +696,10 @@ const kopieren = {
         continue;
       }
       // Wert kopieren
-      if (Array.isArray(quelle[wert])) {
-        kopie[wert] = [ ...quelle[wert] ];
+      if (Array.isArray(quelle[key])) {
+        kopie[key] = [ ...quelle[key] ];
       } else {
-        kopie[wert] = quelle[wert];
+        kopie[key] = quelle[key];
       }
     }
     return kopie;

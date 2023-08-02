@@ -636,11 +636,8 @@ const appMenu = {
 
   // informiert die Browserfenster über Dateipfade mit Karteien, die nicht gefunden wurden
   zuletztVerschwundenInform () {
-    for (const id in win) {
-      if (!win.hasOwnProperty(id)) {
-        continue;
-      }
-      if (win[id].typ !== "index") {
+    for (const [ id, val ] of Object.entries(win)) {
+      if (val.typ !== "index") {
         continue;
       }
       const w = BrowserWindow.fromId(parseInt(id, 10));
@@ -650,11 +647,8 @@ const appMenu = {
 
   // Menüs in den Hauptfenstern auffrischen
   zuletztUpdate () {
-    for (const id in win) {
-      if (!win.hasOwnProperty(id)) {
-        continue;
-      }
-      if (win[id].typ !== "index") {
+    for (const [ id, val ] of Object.entries(win)) {
+      if (val.typ !== "index") {
         continue;
       }
       // Fenster des Renderer-Prozesses ermitteln
@@ -662,7 +656,7 @@ const appMenu = {
       // App-Menü des Renderer-Prozesses auffrischen
       if (process.platform !== "darwin") {
         let disable = false;
-        if (!win[id].kartei) {
+        if (!val.kartei) {
           disable = true;
         }
         appMenu.deaktivieren(disable, w.id);
@@ -767,11 +761,8 @@ const appMenu = {
   befehl (befehl, parameter) {
     const w = BrowserWindow.getFocusedWindow();
     if (befehl === "app-beenden") {
-      for (const id in win) {
-        if (!win.hasOwnProperty(id)) {
-          continue;
-        }
-        if (/^bedeutungen|xml$/.test(win[id].typ)) {
+      for (const [ id, val ] of Object.entries(win)) {
+        if (/^bedeutungen|xml$/.test(val.typ)) {
           // Bedeutungsgerüst- und XML-Fenster werden vom zugehörigen Hauptfenster
           // geschlossen (kann zu einem Fehler führen, wenn hier auch noch einmal
           // versucht wird, sie zu schließen)
@@ -1046,11 +1037,8 @@ const fenster = {
 
       // Sind noch Hauptfenster vorhanden?
       let hauptfensterOffen = false;
-      for (const id in win) {
-        if (!win.hasOwnProperty(id)) {
-          continue;
-        }
-        if (win[id].typ === "index") {
+      for (const val of Object.values(win)) {
+        if (val.typ === "index") {
           hauptfensterOffen = true;
           break;
         }
@@ -1086,11 +1074,8 @@ const fenster = {
     // (bei Bedeutungsgerüst- und XML-Fenstern wissen die Hauptfenster,
     // ob sie auf sind)
     if (!/^(bedeutungen|xml)$/.test(typ)) {
-      for (const id in win) {
-        if (!win.hasOwnProperty(id)) {
-          continue;
-        }
-        if (win[id].typ === typ) {
+      for (const [ id, val ] of Object.entries(win)) {
+        if (val.typ === typ) {
           const w = BrowserWindow.fromId(parseInt(id, 10));
           fenster.fokus(w);
           if (abschnitt) {
@@ -1392,12 +1377,9 @@ const fenster = {
       bw.webContents.send(befehl, arg);
       return;
     }
-    for (const w in win) {
-      if (!win.hasOwnProperty(w)) {
-        continue;
-      }
-      if (win[w].typ === "index") {
-        const bw = BrowserWindow.fromId(parseInt(w, 10));
+    for (const [ id, val ] of Object.entries(win)) {
+      if (val.typ === "index") {
+        const bw = BrowserWindow.fromId(parseInt(id, 10));
         bw.webContents.send(befehl, arg);
         fenster.fokus(bw);
         return;
@@ -1573,11 +1555,8 @@ if (cliCommandFound || !locked) {
       return;
     }
     setTimeout(() => {
-      for (const id in win) {
-        if (!win.hasOwnProperty(id)) {
-          continue;
-        }
-        if (win[id].typ !== "index") {
+      for (const [ id, val ] of Object.entries(win)) {
+        if (val.typ !== "index") {
           continue;
         }
         const w = BrowserWindow.fromId(parseInt(id, 10));
@@ -1674,11 +1653,8 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
   }
 
   // Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen ID
-  for (const id in win) {
-    if (!win.hasOwnProperty(id)) {
-      continue;
-    }
-    if (win[id].typ !== "index") {
+  for (const [ id, val ] of Object.entries(win)) {
+    if (val.typ !== "index") {
       continue;
     }
     const idInt = parseInt(id, 10);
@@ -1837,11 +1813,8 @@ ipcMain.handle("red-xml-fokussieren", (evt, contentsId) => {
 // neue Kartei zu einem neuen Wort anlegen
 ipcMain.on("neues-wort", () => {
   // Bestehendes Fenster nutzen?
-  for (const id in win) {
-    if (!win.hasOwnProperty(id)) {
-      continue;
-    }
-    if (win[id].typ === "index" && !win[id].kartei) {
+  for (const [ id, val ] of Object.entries(win)) {
+    if (val.typ === "index" && !val.kartei) {
       const w = BrowserWindow.fromId(parseInt(id, 10));
       fenster.fokus(w);
       w.webContents.send("kartei-erstellen");
@@ -1855,11 +1828,8 @@ ipcMain.on("neues-wort", () => {
 
 // überprüft, ob die übergebene Kartei schon offen ist
 ipcMain.handle("kartei-schon-offen", (evt, kartei) => {
-  for (const id in win) {
-    if (!win.hasOwnProperty(id)) {
-      continue;
-    }
-    if (win[id].kartei === kartei) {
+  for (const [ id, val ] of Object.entries(win)) {
+    if (val.kartei === kartei) {
       fenster.fokus(BrowserWindow.fromId(parseInt(id, 10)));
       return true;
     }
@@ -1870,11 +1840,8 @@ ipcMain.handle("kartei-schon-offen", (evt, kartei) => {
 // die übergebene Kartei laden (in einem neuen oder bestehenden Hauptfenster)
 ipcMain.on("kartei-laden", (evt, kartei, in_leerem_fenster = true) => {
   if (in_leerem_fenster) {
-    for (const id in win) {
-      if (!win.hasOwnProperty(id)) {
-        continue;
-      }
-      if (win[id].typ === "index" && !win[id].kartei) {
+    for (const [ id, val ] of Object.entries(win)) {
+      if (val.typ === "index" && !val.kartei) {
         const w = BrowserWindow.fromId(parseInt(id, 10));
         w.webContents.send("kartei-oeffnen", kartei);
         fenster.fokus(w);
@@ -1900,14 +1867,11 @@ ipcMain.on("fenster-oeffnen", () => fenster.erstellen(""));
 
 // feststellen, ob ein weiteres Hauptfenster offen ist
 ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
-  for (const id in win) {
-    if (!win.hasOwnProperty(id)) {
-      continue;
-    }
+  for (const [ id, val ] of Object.entries(win)) {
     if (parseInt(id, 10) === idFrage) {
       continue;
     }
-    if (win[id].typ === "index") {
+    if (val.typ === "index") {
       return true;
     }
   }
@@ -1934,10 +1898,7 @@ ipcMain.on("kopieren-basisdaten", (evt, winId) => {
   };
 
   // Daten aus den Fenstern holen
-  for (const id in win) {
-    if (!win.hasOwnProperty(id)) {
-      continue;
-    }
+  for (const id of Object.keys(win)) {
     const idInt = parseInt(id, 10);
     if (idInt === winId) {
       continue;

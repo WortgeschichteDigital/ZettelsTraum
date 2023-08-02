@@ -133,16 +133,13 @@ const bedeutungenGerueste = {
             return;
           }
           // betroffene Bedeutungen aus den Karteikarten zum Löschen vormerken
-          for (const i in data.ka) {
-            if (!data.ka.hasOwnProperty(i)) {
-              continue;
-            }
-            for (let j = 0, len = data.ka[i].bd.length; j < len; j++) {
-              if (data.ka[i].bd[j].gr === id) {
+          for (const val of Object.values(data.ka)) {
+            for (let j = 0, len = val.bd.length; j < len; j++) {
+              if (val.bd[j].gr === id) {
                 bedeutungen.aendernFuellen({
                   del: true,
                   gr: id,
-                  id: data.ka[i].bd[j].id,
+                  id: val.bd[j].id,
                 });
               }
             }

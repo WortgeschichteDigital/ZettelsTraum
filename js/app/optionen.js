@@ -311,10 +311,7 @@ const optionen = {
   //     (die Optionen, strukturiert wie optionen.data)
   empfangen (data) {
     // Daten bereinigen um alles, was nicht synchronisiert werden soll
-    for (const block in data) {
-      if (!data.hasOwnProperty(block)) {
-        continue;
-      }
+    for (const block of Object.keys(data)) {
       if (!/^(beleg|fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
         delete data[block];
         // diese Einstellungen werden nicht aus einem anderen Fenster übernommen
@@ -342,11 +339,8 @@ const optionen = {
   //   opt = Object
   //     (Objekt-Referenz der durch den Main-Prozess übergebenen Daten)
   einlesen (obj, opt) {
-    for (const o in obj) {
-      if (!obj.hasOwnProperty(o)) {
-        continue;
-      }
-      if (!opt.hasOwnProperty(o)) {
+    for (const o of Object.keys(obj)) {
+      if (typeof opt[o] === "undefined") {
         continue;
       }
       if (helfer.checkType("Object", obj[o])) {
@@ -579,13 +573,10 @@ const optionen = {
       }
       // Tag-Dateien abgleichen
       const promises = [];
-      for (const typ in optionen.data.tags) {
-        if (!optionen.data.tags.hasOwnProperty(typ)) {
-          continue;
-        }
+      for (const [ typ, val ] of Object.entries(optionen.data.tags)) {
         promises.push(optionen.tagsCheckLaden({
           typ,
-          datei: optionen.data.tags[typ].datei,
+          datei: val.datei,
         }));
       }
       Promise.all(promises).then(result => {
@@ -608,10 +599,7 @@ const optionen = {
     // Tabelle erstellen
     const table = document.createElement("table");
     cont.appendChild(table);
-    for (const typ in optionen.data.tags) {
-      if (!optionen.data.tags.hasOwnProperty(typ)) {
-        continue;
-      }
+    for (const [ typ, val ] of Object.entries(optionen.data.tags)) {
       // Lösch-Icon
       let tr = document.createElement("tr");
       table.appendChild(tr);
@@ -642,7 +630,7 @@ const optionen = {
       td = document.createElement("td");
       tr.appendChild(td);
       td.setAttribute("dir", "rtl");
-      const pfad = `\u200E${optionen.data.tags[typ].datei}\u200E`; // vgl. meta.oeffnen()
+      const pfad = `\u200E${val.datei}\u200E`; // vgl. meta.oeffnen()
       td.textContent = pfad;
       td.title = pfad;
       // Fehler-Markierung
@@ -672,7 +660,7 @@ const optionen = {
       tdSub.appendChild(a);
       a.dataset.typ = typ;
       a.href = "#";
-      const len = Object.keys(optionen.data.tags[typ].data).length;
+      const len = Object.keys(val.data).length;
       let text;
       if (!optionen.tagsTypen[typ]) {
         text = len === 1 ? "Tag" : "Tags";
@@ -688,13 +676,13 @@ const optionen = {
       let i = document.createElement("i");
       tdSub.appendChild(i);
       i.textContent = "Abgleich:";
-      let datum = helfer.datumFormat(optionen.data.tags[typ].abgleich, "minuten");
+      let datum = helfer.datumFormat(val.abgleich, "minuten");
       tdSub.appendChild(document.createTextNode(datum));
       tdSub.appendChild(document.createElement("br"));
       i = document.createElement("i");
       tdSub.appendChild(i);
       i.textContent = "Update:";
-      datum = helfer.datumFormat(optionen.data.tags[typ].update, "minuten");
+      datum = helfer.datumFormat(val.update, "minuten");
       tdSub.appendChild(document.createTextNode(datum));
     }
     tooltip.init(cont);
@@ -796,28 +784,22 @@ const optionen = {
           // Einlesen
           if (optionen.data.tags[typ]) { // Typ existiert => Änderungen ggf. übernehmen
             const data = optionen.data.tags[typ].data;
-            for (const id in data) { // veraltete Einträge löschen
-              if (!data.hasOwnProperty(id)) {
-                continue;
-              }
+            for (const id of Object.keys(data)) { // veraltete Einträge löschen
               if (!tagsNeu[id]) {
                 update = true;
                 delete data[id];
               }
             }
-            for (const id in tagsNeu) { // neue Einträge anlegen, geänderte auffrischen
-              if (!tagsNeu.hasOwnProperty(id)) {
-                continue;
-              }
+            for (const [ id, val ] of Object.entries(tagsNeu)) { // neue Einträge anlegen, geänderte auffrischen
               if (!data[id] ||
-                  data[id].name !== tagsNeu[id].name ||
-                  data[id].abbr !== tagsNeu[id].abbr) {
+                  data[id].name !== val.name ||
+                  data[id].abbr !== val.abbr) {
                 update = true;
                 data[id] = {
-                  name: tagsNeu[id].name,
+                  name: val.name,
                 };
-                if (tagsNeu[id].abbr) {
-                  data[id].abbr = tagsNeu[id].abbr;
+                if (val.abbr) {
+                  data[id].abbr = val.abbr;
                 }
               }
             }
@@ -1120,11 +1102,8 @@ const optionen = {
       evt.preventDefault();
       const typ = this.dataset.typ;
       const tags = [];
-      for (const id in optionen.data.tags[typ].data) {
-        if (!optionen.data.tags[typ].data.hasOwnProperty(id)) {
-          continue;
-        }
-        tags.push(optionen.data.tags[typ].data[id].name);
+      for (const val of Object.values(optionen.data.tags[typ].data)) {
+        tags.push(val.name);
       }
       tags.sort(helfer.sortAlpha);
       let h3 = "Tags";
@@ -1154,10 +1133,7 @@ const optionen = {
           return;
         }
         // Verknüpfungen aufheben
-        for (const typ in optionen.data.tags) {
-          if (!optionen.data.tags.hasOwnProperty(typ)) {
-            continue;
-          }
+        for (const typ of Object.keys(optionen.data.tags)) {
           delete optionen.data.tags[typ];
         }
         // Tag-Dateien neu laden

@@ -48,14 +48,11 @@ const bedeutungen = {
     data.bd.gr["1"].sl = 2;
     data.bd.gr["1"].bd = [];
     bedeutungen.bedeutungVorhandenCache = {};
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
+    for (const val of Object.values(data.ka)) {
+      if (!val.bd) {
         continue;
       }
-      if (!data.ka[id].bd) {
-        continue;
-      }
-      const bd = data.ka[id].bd.split("\n");
+      const bd = val.bd.split("\n");
       for (let i = 0, len = bd.length; i < len; i++) {
         bedeutungen.konstitErgaenzen(bd[i]);
       }
@@ -359,8 +356,7 @@ const bedeutungen = {
     speichern.checkInit(async () => {
       helfer.hauptfunktion = "geruest";
       await overlay.alleSchliessen();
-      bedeutungen.data = {};
-      bedeutungen.copyData(data.bd, bedeutungen.data);
+      bedeutungen.data = structuredClone(data.bd);
       bedeutungen.akt = bedeutungen.data.gr[bedeutungen.data.gn];
       document.getElementById("bedeutungen-gerueste").value = `Gerüst ${bedeutungen.data.gn}`;
       document.getElementById("bedeutungen-hierarchie").value = bedeutungen.hierarchieEbenen[bedeutungen.akt.sl];
@@ -368,40 +364,6 @@ const bedeutungen = {
       helfer.sektionWechseln("bedeutungen");
       bedeutungen.idInit();
     });
-  },
-
-  // fertigt eine tiefe Kopie der Bedeutungsgerüstdaten an
-  //   q = Object
-  //     (Quell-Objekt)
-  //   z = Object
-  //     (Ziel-Objekt)
-  copyData (q, z) {
-    z.gn = q.gn;
-    z.gr = {};
-    kopieren(q.gr, z.gr);
-    function kopieren (q, z) {
-      for (const o in q) {
-        if (!q.hasOwnProperty(o)) {
-          continue;
-        }
-        if (helfer.checkType("Object", q[o])) {
-          z[o] = {};
-          kopieren(q[o], z[o]);
-        } else if (Array.isArray(q[o])) {
-          if (helfer.checkType("Object", q[o][0])) {
-            z[o] = Array(q[o].length);
-            for (let i = 0, len = q[o].length; i < len; i++) {
-              z[o][i] = {};
-              kopieren(q[o][i], z[o][i]);
-            }
-          } else {
-            z[o] = [ ...q[o] ];
-          }
-        } else {
-          z[o] = q[o];
-        }
-      }
-    }
   },
 
   // das Bedeutungsgerüst aufbauen
@@ -824,11 +786,8 @@ const bedeutungen = {
     bedeutungen.moveGetData();
     // Icon ändern
     const rose = [];
-    for (const n in bedeutungen.moveData) {
-      if (!bedeutungen.moveData.hasOwnProperty(n)) {
-        continue;
-      }
-      if (bedeutungen.moveData[n].movable) {
+    for (const [ n, val ] of Object.entries(bedeutungen.moveData)) {
+      if (val.movable) {
         rose.push(n);
       }
     }
@@ -893,14 +852,11 @@ const bedeutungen = {
   // ermitteln, in welche Richtung der aktive Block bewegt werden kann
   moveGetData () {
     // Daten zurücksetzen
-    for (const dir in bedeutungen.moveData) {
-      if (!bedeutungen.moveData.hasOwnProperty(dir)) {
-        continue;
-      }
-      bedeutungen.moveData[dir].movable = false;
-      bedeutungen.moveData[dir].steps = 0;
-      if (bedeutungen.moveData[dir].pad) {
-        bedeutungen.moveData[dir].pad = [];
+    for (const dir of Object.values(bedeutungen.moveData)) {
+      dir.movable = false;
+      dir.steps = 0;
+      if (dir.pad) {
+        dir.pad = [];
       }
     }
     // neue Daten ermitteln
@@ -1873,7 +1829,7 @@ const bedeutungen = {
     // Änderungen in Karteikarten anwenden
     bedeutungen.aendernAnwenden();
     // Kopieren: bedeutungen.data => data.bd
-    bedeutungen.copyData(bedeutungen.data, data.bd);
+    data.bd = structuredClone(bedeutungen.data);
     // Bedeutungsgerüst-Fenster mit neuen Daten versorgen
     bedeutungenWin.daten();
     // Änderungsmarkierung setzen/zurücksetzen und schließen
@@ -1922,11 +1878,8 @@ const bedeutungen = {
         data.rd.wi = arr;
         continue;
       }
-      for (const id in data.ka) {
-        if (!data.ka.hasOwnProperty(id)) {
-          continue;
-        }
-        const bd = data.ka[id].bd;
+      for (const val of Object.values(data.ka)) {
+        const { bd } = val;
         for (let j = bd.length - 1; j >= 0; j--) {
           if (bd[j].gr === a[i].gr && bd[j].id === a[i].id) {
             if (a[i].del) { // Löschen
@@ -2142,11 +2095,8 @@ const bedeutungen = {
   // (der Fehler war von 0.10.0 [2019-07-02] an da und wurde mit 0.13.2 [2019-07-30] behoben)
   korruptionCheck () {
     let korrupt = false;
-    forX: for (const id in data.bd.gr) {
-      if (!data.bd.gr.hasOwnProperty(id)) {
-        continue;
-      }
-      const bd = data.bd.gr[id].bd;
+    forX: for (const val of Object.values(data.bd.gr)) {
+      const { bd } = val;
       for (let i = 1, len = bd.length; i < len; i++) {
         if (bd[i].bd.length === 1) { // die oberste Ebene *darf* nicht überprüft werden
           continue;
@@ -2182,11 +2132,8 @@ const bedeutungen = {
 
   // repariert ein korruptes Bedeutungsgerüst
   korruptionRepair () {
-    for (const id in data.bd.gr) {
-      if (!data.bd.gr.hasOwnProperty(id)) {
-        continue;
-      }
-      const bd = data.bd.gr[id].bd;
+    for (const val of Object.values(data.bd.gr)) {
+      const { bd } = val;
       for (let i = 1, len = bd.length; i < len; i++) {
         if (bd[i].bd.length === 1) { // die oberste Ebene *darf* nicht geändert werden
           continue;

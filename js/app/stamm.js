@@ -260,13 +260,10 @@ const stamm = {
     helfer.externeLinks(link);
     // Checkbox: aktivieren
     let an = 0;
-    for (const w in data.fv) {
+    for (const val of Object.values(data.fv)) {
       // mindestens ein Wort muss aktiviert sein; sonst darf dieses Wort nicht deaktiviert werden;
       // ist derzeit mehr als ein Wort aktiviert?
-      if (!data.fv.hasOwnProperty(w)) {
-        continue;
-      }
-      if (data.fv[w].an) {
+      if (val.an) {
         an++;
       }
     }
@@ -510,13 +507,10 @@ const stamm = {
           delete data.fv[stamm.wortAkt];
           // ist kein Wort mehr aktiv => erstes Wort aktivieren
           let an = 0;
-          for (const w in data.fv) {
+          for (const val of Object.values(data.fv)) {
             // mindestens ein Wort muss aktiviert sein;
             // ist derzeit mehr als ein Wort aktiviert?
-            if (!data.fv.hasOwnProperty(w)) {
-              continue;
-            }
-            if (data.fv[w].an) {
+            if (val.an) {
               an++;
             }
           }
@@ -821,10 +815,7 @@ const stamm = {
             // Wurden manuell Wörter ergänzt? Wenn ja => auch diese müssen aufgefrischt werden
             let str = kartei.wort;
             const woerter = stamm.dtaPrepParole(kartei.wort);
-            for (const wort in data.fv) {
-              if (!data.fv.hasOwnProperty(wort)) {
-                continue;
-              }
+            for (const wort of Object.keys(data.fv)) {
               if (!woerter.includes(wort)) {
                 str += ` ${wort}`;
               }

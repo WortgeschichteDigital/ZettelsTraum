@@ -58,10 +58,7 @@ const tagger = {
     const cont = document.getElementById("tagger-typen");
     cont.replaceChildren();
     const typen = [];
-    for (const typ in optionen.data.tags) {
-      if (!optionen.data.tags.hasOwnProperty(typ)) {
-        continue;
-      }
+    for (const typ of Object.keys(optionen.data.tags)) {
       if (tagger.limit.length &&
           !tagger.limit.includes(typ)) {
         continue;
@@ -160,12 +157,9 @@ const tagger = {
       }
       tags[i.ty].push(optionen.data.tags[i.ty].data[i.id].name);
     }
-    for (const i in tags) {
-      if (!tags.hasOwnProperty(i)) {
-        continue;
-      }
+    for (const [ i, val ] of Object.entries(tags)) {
       const feld = document.getElementById(`tagger-${i}`);
-      feld.textContent = tags[i].join(", ");
+      feld.textContent = val.join(", ");
     }
     setTimeout(function () {
       // der MutationObserver reagiert verzögert, darum muss hier ein Timeout stehen;
@@ -220,11 +214,8 @@ const tagger = {
         if (!tag) {
           continue;
         }
-        for (const id in optionen.data.tags[kat].data) {
-          if (!optionen.data.tags[kat].data.hasOwnProperty(id)) {
-            continue;
-          }
-          if (optionen.data.tags[kat].data[id].name === tag) {
+        for (const [ id, val ] of Object.entries(optionen.data.tags[kat].data)) {
+          if (val.name === tag) {
             // ist der Tag schon in der Speicherliste?
             // (das könnte passieren, wenn man die Tags nicht aus dem Dropdown-Menü auswählt,
             // sondern händisch eintippt)

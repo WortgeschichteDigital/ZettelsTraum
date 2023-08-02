@@ -738,10 +738,7 @@ const quick = {
     } else if (document.querySelector("#quick-config-selectable .aktiv")) {
       aktiv.links = true;
     }
-    for (const i in aktiv) {
-      if (!aktiv.hasOwnProperty(i)) {
-        continue;
-      }
+    for (const i of Object.keys(aktiv)) {
       const src = `img/pfeil-gerade-${i}${aktiv[i] ? "" : "-grau"}.svg`;
       document.getElementById(`quick-config-${i}`).src = src;
     }

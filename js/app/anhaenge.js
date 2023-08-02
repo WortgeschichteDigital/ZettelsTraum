@@ -220,12 +220,9 @@ const anhaenge = {
 
   // Anhänge der Belege im Anhänge-Fenster auflisten
   async auflistenBelege (cont) {
-    for (const id in data.ka) {
-      if (!data.ka.hasOwnProperty(id)) {
-        continue;
-      }
+    for (const [ id, val ] of Object.entries(data.ka)) {
       // Anhänge vorhanden?
-      if (!data.ka[id].an.length) {
+      if (!val.an.length) {
         continue;
       }
       // Anhänge drucken

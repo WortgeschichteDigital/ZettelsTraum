@@ -80,14 +80,11 @@ const erinnerungen = {
   // Erinnerungen auf Klick anzeigen
   show () {
     const text = [];
-    for (const i in erinnerungen.data) {
-      if (!erinnerungen.data.hasOwnProperty(i)) {
+    for (const val of Object.values(erinnerungen.data)) {
+      if (val.okay) {
         continue;
       }
-      if (erinnerungen.data[i].okay) {
-        continue;
-      }
-      text.push(`• ${erinnerungen.data[i].text}`);
+      text.push(`• ${val.text}`);
     }
     let punkt = "Der folgende Punkt sollte";
     if (text.length > 1) {

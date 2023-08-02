@@ -33,10 +33,7 @@ const speichern = {
       beleg: true,
       kartei: false,
     };
-    for (const i in scope) {
-      if (!scope.hasOwnProperty(i)) {
-        continue;
-      }
+    for (const i of Object.keys(scope)) {
       speichern.checkScope[i] = scope[i];
     }
     // Check-Kaskade starten

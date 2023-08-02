@@ -1349,11 +1349,8 @@ const karteisuche = {
   //     (das Input-Feld, in dem der ausgeschriebene Tag-Typ steht)
   filterTagTyp (feld) {
     const typ = feld.value;
-    for (const key in optionen.tagsTypen) {
-      if (!optionen.tagsTypen.hasOwnProperty(key)) {
-        continue;
-      }
-      if (optionen.tagsTypen[key][1] === typ) {
+    for (const [ key, val ] of Object.entries(optionen.tagsTypen)) {
+      if (val[1] === typ) {
         return key;
       }
     }
@@ -1421,11 +1418,8 @@ const karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-        for (const id in optionen.data.tags[tagName].data) {
-          if (!optionen.data.tags[tagName].data.hasOwnProperty(id)) {
-            continue;
-          }
-          if (optionen.data.tags[tagName].data[id].name === tag) {
+        for (const [ id, val ] of Object.entries(optionen.data.tags[tagName].data)) {
+          if (val.name === tag) {
             obj.id = id;
             break;
           }
@@ -1456,11 +1450,8 @@ const karteisuche = {
           karteisuche.filterIgnorieren(filter, true);
           continue;
         }
-        for (const id in optionen.data.tags[obj.tagTyp].data) {
-          if (!optionen.data.tags[obj.tagTyp].data.hasOwnProperty(id)) {
-            continue;
-          }
-          if (optionen.data.tags[obj.tagTyp].data[id].name === tag) {
+        for (const [ id, val ] of Object.entries(optionen.data.tags[obj.tagTyp].data)) {
+          if (val.name === tag) {
             obj.tagId = id;
             break;
           }
@@ -1611,11 +1602,8 @@ const karteisuche = {
         }
         // Datenfelder Karteikarten
         for (const ds of karteisuche.filterVolltext.karten) {
-          for (const id in datei.ka) {
-            if (!datei.ka.hasOwnProperty(id)) {
-              continue;
-            }
-            let text_rein = datei.ka[id][ds];
+          for (const val of Object.values(datei.ka)) {
+            let text_rein = val[ds];
             if (ds === "bs") {
               text_rein = liste.belegTrennungWeg(text_rein, true);
             }
@@ -1625,11 +1613,8 @@ const karteisuche = {
           }
         }
         // Bedeutungen
-        for (const id in datei.bd.gr) {
-          if (!datei.bd.gr.hasOwnProperty(id)) {
-            continue;
-          }
-          const bd = datei.bd.gr[id].bd;
+        for (const val of Object.values(datei.bd.gr)) {
+          const { bd } = val;
           for (const i of bd) {
             const bedeutung = i.bd[i.bd.length - 1];
             if (filter.reg.test(bedeutung)) {
@@ -1641,11 +1626,8 @@ const karteisuche = {
       } else if (filter.typ === "Tag") {
         // Tag
         let gefunden = false;
-        forTag: for (const id in datei.bd.gr) {
-          if (!datei.bd.gr.hasOwnProperty(id)) {
-            continue;
-          }
-          const bd = datei.bd.gr[id].bd;
+        forTag: for (const val of Object.values(datei.bd.gr)) {
+          const { bd } = val;
           for (const i of bd) {
             for (const j of i.ta) {
               if (j.ty === filter.tagTyp &&
