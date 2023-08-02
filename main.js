@@ -1448,7 +1448,7 @@ for (let i = 0, len = process.argv.length; i < len; i++) {
     for (const k of Object.keys(cliCommand)) {
       cliCommand[k] = "";
     }
-    cliCommand.ztj = process.argv[i];
+    cliCommand.ztj = makeAbsolute("ztj", process.argv[i]);
     break;
   }
   const arg = process.argv[i].match(/^--([^\s=]+)(?:=(.+))?/);
@@ -1456,7 +1456,16 @@ for (let i = 0, len = process.argv.length; i < len; i++) {
     // Kommando unbekannt oder Wert fehlt
     continue;
   }
-  cliCommand[arg[1]] = arg[2].replace(/^"|"$/g, "");
+  cliCommand[arg[1]] = makeAbsolute(arg[1], arg[2].replace(/^"|"$/g, ""));
+}
+
+// stellt sicher, dass Pfade absolut sind
+function makeAbsolute (command, value) {
+  if (/(quelle|ziel|ztj)$/.test(command) && !path.isAbsolute(value)) {
+    value = path.join(process.cwd(), value);
+    value = path.normalize(value);
+  }
+  return value;
 }
 
 let cliCommandFound = false;
