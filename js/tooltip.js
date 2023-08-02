@@ -38,6 +38,11 @@ const tooltip = {
         clearInterval(tooltip.observe);
         const timeout = tooltip.noDefer ? 0 : 500;
         tooltip.defer = setTimeout(() => {
+          // is the target already gone?
+          if (!this.closest("body") || this.closest(".aus")) {
+            return;
+          }
+
           // show tooltip
           tooltip.on(this);
 
