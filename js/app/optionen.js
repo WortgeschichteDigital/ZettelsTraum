@@ -339,6 +339,9 @@ const optionen = {
   //   opt = Object
   //     (Objekt-Referenz der durch den Main-Prozess übergebenen Daten)
   einlesen (obj, opt) {
+    if (!obj) {
+      return;
+    }
     for (const o of Object.keys(obj)) {
       if (typeof opt[o] === "undefined") {
         continue;
