@@ -192,6 +192,10 @@ const importTei = {
     result = result.replace(/ {2,}/g, " ").trim();
     // remove <br> at the end of the text
     result = result.replace(/<br>$/, "");
+    // decode entities
+    const decoder = document.createElement("textarea");
+    decoder.innerHTML = result;
+    result = decoder.value;
 
     // return result
     return result;
