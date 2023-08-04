@@ -792,8 +792,11 @@ const appMenu = {
     if (optionen.data?.einstellungen?.sprache) {
       // Sprache aus Einstellungen übernehmen
       lang = optionen.data.einstellungen.sprache;
-    } else if (optionen.data.einstellungen && !optionen.data.einstellungen.sprache) {
+    } else if (!optionen?.data?.einstellungen?.sprache) {
       // Sprache der locale in den Einstellungen übernehmen, wenn der Wert noch nicht gesetzt ist
+      if (!optionen.data.einstellungen) {
+        optionen.data.einstellungen = {};
+      }
       optionen.data.einstellungen.sprache = lang;
     }
 
