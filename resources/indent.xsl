@@ -7,6 +7,8 @@
     omit-xml-declaration="yes"
     indent="yes"/>
 
+  <xsl:strip-space elements="body div front text"/>
+
   <xsl:template match="node()|@*">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
