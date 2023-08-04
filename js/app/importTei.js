@@ -55,7 +55,7 @@ const importTei = {
     const xmlTrans = processor.transformToDocument(xmlOri);
     let result = new XMLSerializer().serializeToString(xmlTrans);
 
-    // map renditions
+    // replace rendition tags
     // (Chrome has severe issues with fn:document(); that's why we're unable
     // to map the renditions in a sane manner within the XSL)
     // TODO dta- > tei-
@@ -145,37 +145,59 @@ const importTei = {
       },
     };
 
-    while (/<span data-rendition/.test(result)) {
-      // while loop, otherwise nested tags are not replaced
-      result = result.replace(/<span data-rendition="(.*?)">(.*?)<\/span>/g, (...args) => {
-        if (renditions[args[1]]) {
-          return replaceRendition(renditions[args[1]], args[2]);
-        }
-        for (const i of Object.values(renditions)) {
-          if (i.css.test(args[1])) {
-            return replaceRendition(i, args[2]);
-          }
-        }
-        return args[2];
-      });
-    }
-
-    function replaceRendition (rendition, text) {
-      const tag = rendition.tag;
-      let cl = "";
-      if (rendition.class) {
-        cl = ` class="${rendition.class}"`;
+    const rend = document.createElement("div");
+    rend.innerHTML = result;
+    rend.querySelectorAll("[data-rendition]").forEach(i => {
+      const r = i.dataset.rendition;
+      // rendition key found
+      if (renditions[r]) {
+        addRendition(i, r);
+        return;
       }
-      return `<${tag}${cl}>${text}</${tag}>`;
+      // search for matching css style
+      for (const [ k, v ] of Object.entries(renditions)) {
+        if (v.css.test(r)) {
+          addRendition(i, k);
+          return;
+        }
+      }
+    });
+
+    function addRendition (node, renditionKey) {
+      const start = document.createTextNode(`[[[${renditionKey}]]]`);
+      const end = document.createTextNode(`[[[/${renditionKey}]]]`);
+      node.insertBefore(start, node.firstChild);
+      node.appendChild(end);
     }
 
-    // transform HTMl result
+    result = rend.innerHTML;
+
+    while (/<span data-rendition/.test(result)) {
+      result = result.replace(/<span data-rendition=".+?">(.+?)<\/span>/g, (...args) => args[1]);
+    }
+
+    result = result.replace(/\[\[\[(.+?)\]\]\]/g, (...args) => {
+      let r = args[1];
+      let end = "";
+      if (/^\//.test(r)) {
+        end = "/";
+        r = r.substring(1);
+      }
+      const tag = renditions[r].tag;
+      let cl = "";
+      if (!end && renditions[r].class) {
+        cl = ` class="${renditions[r].class}"`;
+      }
+      return `<${end}${tag}${cl}>`;
+    });
+
+    // amend HTML result
     result = result.replace(/.+<body>(.+)<\/body>.+/, (...args) => args[1]);
     result = result.replace(/\r?\n/g, "");
     // <p> to paragraphs divided by a blank line
     result = result.replace(/ *<p> */g, "\n\n").replace(/ *<\/p> */g, "");
     // line break after <br>
-    result = result.replace(/ *<br \/> */g, "<br>\n");
+    result = result.replace(/ *<br> */g, "<br>\n");
     // erase last <br> in a line
     result = result.replace(/<br>\n\n/g, "\n");
     // ensure that there are spaces around <cb> and <pb>
