@@ -27,23 +27,10 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="byline|closer|dateline|head|item|lg|sp">
+<xsl:template match="byline|closer|dateline|head|item|lg|sp|titlePage">
   <p>
     <xsl:apply-templates/>
   </p>
-</xsl:template>
-
-<xsl:template match="p">
-  <xsl:choose>
-    <xsl:when test="ancestor::sp">
-      <xsl:apply-templates/>
-    </xsl:when>
-    <xsl:otherwise>
-      <p>
-        <xsl:apply-templates/>
-      </p>
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="choice">
@@ -107,6 +94,19 @@
     <xsl:apply-templates/>
     <xsl:text>/Anmerkung] </xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="p">
+  <xsl:choose>
+    <xsl:when test="ancestor::sp">
+      <xsl:apply-templates/>
+    </xsl:when>
+    <xsl:otherwise>
+      <p>
+        <xsl:apply-templates/>
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="speaker">
