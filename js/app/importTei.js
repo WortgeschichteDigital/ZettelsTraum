@@ -63,85 +63,85 @@ const importTei = {
       "#aq": {
         tag: "span",
         class: "dta-antiqua",
-        css: /font-family: ?sans-serif/,
+        reg: /font-family:.*?sans-serif|antiqua/,
       },
       "#b": {
         tag: "b",
         class: "",
-        css: /font-weight: ?bold/,
+        reg: /font-weight: ?bold/,
       },
       // TODO remove
       "#blue": {
         tag: "span",
         class: "dta-blau",
-        css: /placeholder/,
+        reg: /placeholder/,
       },
       "#fr": {
         tag: "span",
         // TODO dta-groesser > tei-fr
         class: "dta-groesser",
-        css: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
+        reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
       },
       "#g": {
         tag: "span",
         class: "dta-gesperrt",
-        css: /letter-spacing:/,
+        reg: /letter-spacing:/,
       },
       "#i": {
         tag: "i",
         class: "",
-        css: /font-style: ?italic/,
+        reg: /font-style: ?italic/,
       },
       "#in": {
         tag: "span",
         class: "dta-initiale",
-        css: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
+        reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
       },
       "#k": {
         tag: "span",
         class: "dta-kapitaelchen",
-        css: /font-variant: ?small-caps/,
+        reg: /font-variant: ?small-caps/,
       },
       "#larger": {
         tag: "span",
         class: "dta-groesser",
-        css: /font-size: ?larger/,
+        reg: /font-size: ?larger/,
       },
       // TODO remove
       "#red": {
         tag: "span",
         class: "dta-rot",
-        css: /placeholder/,
+        reg: /placeholder/,
       },
       "#s": {
         tag: "s",
         class: "",
-        css: /text-decoration: ?line-through/,
+        reg: /text-decoration: ?line-through/,
       },
       "#smaller": {
         tag: "small",
         class: "",
-        css: /font-size: ?smaller/,
+        reg: /font-size: ?smaller/,
       },
       "#sub": {
         tag: "sub",
         class: "",
-        css: /vertical-align: ?sub/,
+        reg: /vertical-align: ?sub/,
       },
       "#sup": {
         tag: "sup",
         class: "",
-        css: /vertical-align: ?super/,
+        reg: /vertical-align: ?super/,
       },
       "#u": {
         tag: "u",
         class: "",
-        css: /text-decoration: ?underline/,
+        reg: /text-decoration: ?underline/,
       },
       "#uu": {
         tag: "span",
         class: "dta-doppelt",
-        css: /border-bottom: ?double/,
+        reg: /border-bottom: ?double/,
       },
     };
 
@@ -156,7 +156,7 @@ const importTei = {
       }
       // search for matching css style
       for (const [ k, v ] of Object.entries(renditions)) {
-        if (v.css.test(r)) {
+        if (v.reg.test(r)) {
           addRendition(i, k);
           return;
         }
@@ -171,10 +171,8 @@ const importTei = {
     }
 
     result = rend.innerHTML;
-
-    while (/<span data-rendition/.test(result)) {
-      result = result.replace(/<span data-rendition=".+?">(.+?)<\/span>/g, (...args) => args[1]);
-    }
+    result = result.replace(/<span data-rendition=".+?">(\[\[\[.+?\]\]\])/g, (...args) => args[1]);
+    result = result.replace(/(\[\[\[\/.+?\]\]\])<\/span>/g, (...args) => args[1]);
 
     result = result.replace(/\[\[\[(.+?)\]\]\]/g, (...args) => {
       let r = args[1];
