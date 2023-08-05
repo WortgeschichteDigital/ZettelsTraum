@@ -28,9 +28,9 @@
 </xsl:template>
 
 <xsl:template match="byline|closer|dateline|div|head|item|lg|sp|titlePage">
-  <p>
+  <div>
     <xsl:apply-templates/>
-  </p>
+  </div>
 </xsl:template>
 
 <xsl:template match="choice">
@@ -107,9 +107,9 @@
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
-      <p>
+      <div>
         <xsl:apply-templates/>
-      </p>
+      </div>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

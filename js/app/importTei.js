@@ -205,10 +205,10 @@ const importTei = {
     // amend HTML result
     result = result.replace(/.+<body>(.+)<\/body>.+/, (...args) => args[1]);
     result = result.replace(/\r?\n/g, "");
-    // <p> to paragraphs divided by a blank line
-    result = result.replace(/<\/p> +<p>/g, "</p><p>");
-    result = result.replace(/<p> */g, "\n\n");
-    result = result.replace(/ *<\/p>/g, "");
+    // <div> to paragraphs divided by a blank line
+    result = result.replace(/<\/div> +<div>/g, "</div><div>");
+    result = result.replace(/<div> */g, "\n\n");
+    result = result.replace(/ *<\/div>/g, "");
     // line break after <br>
     result = result.replace(/ *<br> */g, "<br>\n");
     // erase last <br> in a line
