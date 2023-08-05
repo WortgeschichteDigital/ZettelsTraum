@@ -35,7 +35,7 @@ const importTei = {
     // load xsl if needed
     if (!importTei.transformXsl) {
       await helfer.resourcesLoad({
-        file: "tei.xsl",
+        file: "xml-import-tei.xsl",
         targetObj: importTei,
         targetKey: "transformXsl",
       });
