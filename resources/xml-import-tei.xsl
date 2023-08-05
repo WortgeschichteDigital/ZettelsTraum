@@ -27,7 +27,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="byline|closer|dateline|head|item|lg|sp|titlePage">
+<xsl:template match="byline|closer|dateline|div|head|item|lg|sp|titlePage">
   <p>
     <xsl:apply-templates/>
   </p>
@@ -87,7 +87,8 @@
 </xsl:template>
 
 <xsl:template match="note">
-  <xsl:if test="not(@type = 'editorial')">
+  <xsl:variable name="notEmpty" select="./node()"/>
+  <xsl:if test="not(@type = 'editorial') and $notEmpty">
     <xsl:text>[Anmerkung</xsl:text>
     <xsl:if test="@n">
       <xsl:text> </xsl:text>
