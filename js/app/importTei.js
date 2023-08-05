@@ -178,17 +178,17 @@ const importTei = {
     }
 
     result = rend.innerHTML;
-    result = result.replace(/<span data-rendition=".+?">(\[\[\[.+?\]\]\])/g, (...args) => args[1]);
-    result = result.replace(/(\[\[\[\/.+?\]\]\])<\/span>/g, (...args) => args[1]);
+    result = result.replace(/<span data-rendition="[^"]+">(\[{3}.+?\]{3})/g, (...args) => args[1]);
+    result = result.replace(/(\[{3}\/.+?\]{3})<\/span>/g, (...args) => args[1]);
 
-    result = result.replace(/\[\[\[(.+?)\]\]\]/g, (...args) => {
+    result = result.replace(/\[{3}(.+?)\]{3}/g, (...args) => {
       let r = args[1];
       let end = "";
       if (/^\//.test(r)) {
         end = "/";
         r = r.substring(1);
       }
-      if (!renditions[r].tag) {
+      if (!renditions?.[r]?.tag) {
         // these renditions should be ignored
         return "";
       }
