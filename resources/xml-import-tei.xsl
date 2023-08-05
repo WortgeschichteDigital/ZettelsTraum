@@ -102,6 +102,7 @@
 <xsl:template match="p">
   <xsl:choose>
     <xsl:when test="ancestor::sp">
+      <xsl:text> </xsl:text>
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
