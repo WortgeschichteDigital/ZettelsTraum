@@ -227,6 +227,14 @@ const importTei = {
     result = result.replace(/ {2,}/g, " ").trim();
     // remove <br> at the end of the text
     result = result.replace(/<br>$/, "");
+    // trim paragraphs
+    const p = result.split("\n\n");
+    for (let i = 0, len = p.length; i < len; i++) {
+      p[i] = p[i].replace(/^(<[^>]+?>) +/, (...args) => args[1]);
+      p[i] = p[i].replace(/ +(<[^>]+?>)$/, (...args) => args[1]);
+      p[i] = p[i].trim();
+    }
+    result = p.join("\n\n");
     // decode entities
     const decoder = document.createElement("textarea");
     decoder.innerHTML = result;
