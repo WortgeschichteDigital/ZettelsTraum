@@ -45,33 +45,36 @@
 </xsl:template>
 
 <xsl:template match="hi">
-  <xsl:choose>
-    <xsl:when test="@rend or @rendition">
-      <xsl:variable name="currentRendition" select="@rend | @rendition"/>
-      <xsl:variable name="renditionHeader">
-        <xsl:value-of select="//tagsDecl/rendition[@xml:id = substring($currentRendition, 2)]"/>
-      </xsl:variable>
-      <span>
-        <xsl:attribute name="data-rendition">
-          <xsl:choose>
-            <xsl:when test="$teiType = 'dtabf'">
-              <xsl:value-of select="$currentRendition"/>
-            </xsl:when>
-            <xsl:when test="$renditionHeader">
-              <xsl:value-of select="$renditionHeader"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$currentRendition"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
+  <xsl:variable name="notEmpty" select="./node()"/>
+  <xsl:if test="$notEmpty">
+    <xsl:choose>
+      <xsl:when test="@rend or @rendition">
+        <xsl:variable name="currentRendition" select="@rend | @rendition"/>
+        <xsl:variable name="renditionHeader">
+          <xsl:value-of select="//tagsDecl/rendition[@xml:id = substring($currentRendition, 2)]"/>
+        </xsl:variable>
+        <span>
+          <xsl:attribute name="data-rendition">
+            <xsl:choose>
+              <xsl:when test="$teiType = 'dtabf'">
+                <xsl:value-of select="$currentRendition"/>
+              </xsl:when>
+              <xsl:when test="$renditionHeader">
+                <xsl:value-of select="$renditionHeader"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$currentRendition"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:apply-templates/>
+        </span>
+      </xsl:when>
+      <xsl:otherwise>
         <xsl:apply-templates/>
-      </span>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates/>
-    </xsl:otherwise>
-  </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="l">
