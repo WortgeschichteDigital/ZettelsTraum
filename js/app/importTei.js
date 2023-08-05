@@ -156,16 +156,18 @@ const importTei = {
     rend.innerHTML = result;
     rend.querySelectorAll("[data-rendition]").forEach(i => {
       const r = i.dataset.rendition;
-      // rendition key found
-      if (renditions[r]) {
-        addRendition(i, r);
-        return;
-      }
-      // search for matching css style
-      for (const [ k, v ] of Object.entries(renditions)) {
-        if (v?.reg?.test(r)) {
-          addRendition(i, k);
-          return;
+      for (const rend of r.split(/(?<!:) /)) {
+        // rendition key found
+        if (renditions[rend]) {
+          addRendition(i, rend);
+          continue;
+        }
+        // search for matching css style
+        for (const [ k, v ] of Object.entries(renditions)) {
+          if (v?.reg?.test(rend)) {
+            addRendition(i, k);
+            continue;
+          }
         }
       }
     });
