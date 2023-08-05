@@ -102,7 +102,7 @@
 
 <xsl:template match="p">
   <xsl:choose>
-    <xsl:when test="ancestor::sp">
+    <xsl:when test="name(parent::*/*[1]) = 'speaker' and parent::*/*[2] = .">
       <xsl:text> </xsl:text>
       <xsl:apply-templates/>
     </xsl:when>
@@ -118,6 +118,14 @@
   <b>
     <xsl:apply-templates/>
   </b>
+</xsl:template>
+
+<xsl:template match="stage">
+  <div>
+    <i>
+      <xsl:apply-templates/>
+    </i>
+  </div>
 </xsl:template>
 
 </xsl:stylesheet>
