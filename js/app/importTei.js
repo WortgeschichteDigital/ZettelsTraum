@@ -56,7 +56,8 @@ const importTei = {
     let result = new XMLSerializer().serializeToString(xmlTrans);
 
     // replace rendition tags
-    // (Chrome has severe issues with fn:document(); that's why we're unable
+    // (keys are DTA renditions; renditions with empty objects are being deleted;
+    // Chrome has severe issues with fn:document(); that's why we're unable
     // to map the renditions in a sane manner within the XSL)
     // TODO dta- > tei-
     const renditions = {
@@ -70,12 +71,17 @@ const importTei = {
         class: "",
         reg: /font-weight: ?bold/,
       },
-      // TODO remove
+      // TODO ignore
       "#blue": {
         tag: "span",
         class: "dta-blau",
         reg: /placeholder/,
       },
+      "#c": {},
+      "#et": {},
+      "#et2": {},
+      "#et3": {},
+      "#f": {},
       "#fr": {
         tag: "span",
         // TODO dta-groesser > tei-fr
@@ -107,12 +113,13 @@ const importTei = {
         class: "dta-groesser",
         reg: /font-size: ?larger/,
       },
-      // TODO remove
+      // TODO ignore
       "#red": {
         tag: "span",
         class: "dta-rot",
         reg: /placeholder/,
       },
+      "#right": {},
       "#s": {
         tag: "s",
         class: "",
@@ -156,7 +163,7 @@ const importTei = {
       }
       // search for matching css style
       for (const [ k, v ] of Object.entries(renditions)) {
-        if (v.reg.test(r)) {
+        if (v?.reg?.test(r)) {
           addRendition(i, k);
           return;
         }
@@ -180,6 +187,10 @@ const importTei = {
       if (/^\//.test(r)) {
         end = "/";
         r = r.substring(1);
+      }
+      if (!renditions[r].tag) {
+        // these renditions should be ignored
+        return "";
       }
       const tag = renditions[r].tag;
       let cl = "";
