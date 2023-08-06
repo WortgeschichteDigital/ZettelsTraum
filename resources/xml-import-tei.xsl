@@ -10,7 +10,7 @@
 
 <!--
   available variables:
-    $teiType = "" | "dtabf"
+    $teiType = "" | "dta"
 -->
 
 <xsl:template match="TEI/text">
@@ -35,7 +35,7 @@
 
 <xsl:template match="choice">
   <xsl:choose>
-    <xsl:when test="$teiType = 'dtabf'">
+    <xsl:when test="$teiType = 'dta'">
       <xsl:apply-templates select="abbr|corr|orig"/>
     </xsl:when>
     <xsl:otherwise>
@@ -56,7 +56,7 @@
         <span>
           <xsl:attribute name="data-rendition">
             <xsl:choose>
-              <xsl:when test="$teiType = 'dtabf'">
+              <xsl:when test="$teiType = 'dta'">
                 <xsl:value-of select="$currentRendition"/>
               </xsl:when>
               <xsl:when test="$renditionHeader">

@@ -26,7 +26,7 @@ const importTei = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dtabf)
+  //   type = string (tei | tei-dta)
   async transformXml ({ tei, type }) {
     // preprocess tei
     // mark hyphens that appear immediately before a <lb>
@@ -235,7 +235,7 @@ const importTei = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dtabf)
+  //   type = string (tei | tei-dta)
   //   xmlDoc = document
   //   xmlPlain = string
   getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlPlain }) {
@@ -245,7 +245,7 @@ const importTei = {
     let pbStart;
     let pbEndSel;
     let pbEnd;
-    if (type === "tei-dtabf") {
+    if (type === "tei-dta") {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
