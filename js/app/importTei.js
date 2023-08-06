@@ -223,6 +223,37 @@ const importTei = {
       div[i] = div[i].replace(/ +(<[^>]+?>) *$/, (...args) => args[1]);
     }
     result = div.join("\n\n");
+    // merge twin tags
+    result = result.replace(/((<[^>]+>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
+      // detect twins
+      const start = args[1].match(/(?<=<).+?(?=>)/g);
+      const end = args[4].match(/(?<=<).+?(?=>)/g);
+      const ex = [];
+      for (let i = 1, len = start.length; i < len; i++) {
+        if (/span/.test(start[i])) {
+          continue;
+        }
+        if (start[i] === start[i - 1]) {
+          ex.push(i);
+        }
+      }
+
+      // remove twins
+      end.reverse();
+      const startMerged = [];
+      const endMerged = [];
+      for (let i = 0, len = start.length; i < len; i++) {
+        if (ex.includes(i)) {
+          continue;
+        }
+        startMerged.push(`<${start[i]}>`);
+        endMerged.push(`<${end[i]}>`);
+      }
+      endMerged.reverse();
+
+      // return result
+      return startMerged.join("") + args[3] + endMerged.join("");
+    });
     // decode entities
     const decoder = document.createElement("textarea");
     decoder.innerHTML = result;
