@@ -59,11 +59,10 @@ const importTei = {
     // (keys are DTA renditions; renditions with empty objects are being deleted;
     // Chrome has severe issues with fn:document(); that's why we're unable
     // to map the renditions in a sane manner within the XSL)
-    // TODO dta- > tei-
     const renditions = {
       "#aq": {
         tag: "span",
-        class: "dta-antiqua",
+        class: "tei-antiqua",
         reg: /font-family:.*?sans-serif|antiqua/,
       },
       "#b": {
@@ -71,12 +70,7 @@ const importTei = {
         class: "",
         reg: /font-weight: ?bold/,
       },
-      // TODO ignore
-      "#blue": {
-        tag: "span",
-        class: "dta-blau",
-        reg: /placeholder/,
-      },
+      "#blue": {},
       "#c": {},
       "#et": {},
       "#et2": {},
@@ -84,13 +78,12 @@ const importTei = {
       "#f": {},
       "#fr": {
         tag: "span",
-        // TODO dta-groesser > tei-fr
-        class: "dta-groesser",
+        class: "tei-fr",
         reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
       },
       "#g": {
         tag: "span",
-        class: "dta-gesperrt",
+        class: "tei-gesperrt",
         reg: /letter-spacing:/,
       },
       "#i": {
@@ -100,25 +93,20 @@ const importTei = {
       },
       "#in": {
         tag: "span",
-        class: "dta-initiale",
+        class: "tei-initiale",
         reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
       },
       "#k": {
         tag: "span",
-        class: "dta-kapitaelchen",
+        class: "tei-kapitaelchen",
         reg: /font-variant: ?small-caps/,
       },
       "#larger": {
         tag: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
         reg: /font-size: ?larger/,
       },
-      // TODO ignore
-      "#red": {
-        tag: "span",
-        class: "dta-rot",
-        reg: /placeholder/,
-      },
+      "#red": {},
       "#right": {},
       "#s": {
         tag: "s",
@@ -147,7 +135,7 @@ const importTei = {
       },
       "#uu": {
         tag: "span",
-        class: "dta-doppelt",
+        class: "tei-doppelt",
         reg: /border-bottom: ?double/,
       },
     };
