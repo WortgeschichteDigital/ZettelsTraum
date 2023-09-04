@@ -136,54 +136,54 @@ const tastatur = {
       return;
     }
     // DRUCKEN: Key "p"
-    if (m === "Ctrl" && evt.key === "p") {
+    if (m === "Ctrl" && evt.code === "KeyP") {
       drucken.tastatur();
       return;
     }
     // BELEGLISTE: Key "f"
     if (helfer.hauptfunktion === "liste" && !overlayId &&
-        m === "Ctrl+Shift" && evt.key === "F") {
+        m === "Ctrl+Shift" && evt.code === "KeyF") {
       document.getElementById("liste-link-filter").click();
     }
     // KARTEIKARTE: Key "d" | "i" | "k" | "m" | "t" | "u"
     if (helfer.belegOffen()) {
       if (m === "Ctrl") {
-        if (evt.key === "d") {
+        if (evt.code === "KeyD") {
           beleg.toolsQuelleLaden(true);
-        } else if (evt.key === "i") {
+        } else if (evt.code === "KeyI") {
           if (kopieren.an) {
             kopieren.addKarte();
           } else {
             beleg.ctrlZwischenablage(beleg.data);
           }
-        } else if (evt.key === "k") {
+        } else if (evt.code === "KeyK") {
           beleg.ctrlKuerzen();
-        } else if (evt.key === "m") {
+        } else if (evt.code === "KeyM") {
           const id = document.activeElement.id;
           if (/^beleg-(bd|bs)$/.test(id)) {
             const a = document.getElementById(id).closest("tr").previousSibling.querySelector(".icon-tools-sonderzeichen");
             a.dispatchEvent(new MouseEvent("click"));
           }
-        } else if (evt.key === "t") {
+        } else if (evt.code === "KeyT") {
           beleg.ctrlTrennung();
-        } else if (evt.key === "u") {
+        } else if (evt.code === "KeyU") {
           beleg.leseToggle(true);
         }
-      } else if (m === "Ctrl+Shift" && evt.key === "D") {
+      } else if (m === "Ctrl+Shift" && evt.code === "KeyD") {
         beleg.toolsQuelleDTALink();
       }
       return;
     }
     // LITERATURDATENBANK: Key "f" | "h" | "s"
     if (m === "Ctrl" && overlayId === "red-lit") {
-      if (evt.key === "f" && !kartei.wort) {
+      if (evt.code === "KeyF" && !kartei.wort) {
         filter.suche();
-      } else if (evt.key === "h") {
+      } else if (evt.code === "KeyH") {
         if (redLit.db.locked) {
           return;
         }
         redLit.dbCheck(() => redLit.eingabeHinzufuegen(), false);
-      } else if (evt.key === "s" && !kartei.wort) {
+      } else if (evt.code === "KeyS" && !kartei.wort) {
         speichern.kaskade();
       }
     }
@@ -409,7 +409,7 @@ const tastatur = {
       return;
     }
     // Key "f" (Changelog, Dokumentation, Handbuch)
-    if (m === "Ctrl" && evt.key === "f") {
+    if (m === "Ctrl" && evt.code === "KeyF") {
       if (winInfo.typ === "changelog") {
         suchleiste.einblenden();
       } else if (/dokumentation|handbuch/.test(winInfo.typ)) {
@@ -418,7 +418,7 @@ const tastatur = {
       return;
     }
     // Key "p" (Bedeutungsgerüst, Changelog, Dokumentation, Handbuch)
-    if (m === "Ctrl" && evt.key === "p") {
+    if (m === "Ctrl" && evt.code === "KeyP") {
       if (winInfo.typ === "bedeutungen") {
         bedeutungen.drucken();
       } else if (/changelog|dokumentation|handbuch/.test(winInfo.typ)) {
@@ -428,11 +428,11 @@ const tastatur = {
     }
     // Key "e" | "n" | "s" (XML-Fenster)
     if (winInfo.typ === "xml" && m === "Ctrl") {
-      if (evt.key === "e") {
+      if (evt.code === "KeyE") {
         xml.exportieren();
-      } else if (evt.key === "n") {
+      } else if (evt.code === "KeyN") {
         xml.abschnittAddShortcut();
-      } else if (evt.key === "s") {
+      } else if (evt.code === "KeyS") {
         xml.speichernKartei();
       }
     }

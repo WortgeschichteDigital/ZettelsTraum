@@ -319,7 +319,7 @@ const helfer = {
   editNoFormat (edit) {
     edit.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
-      if (tastatur.modifiers === "Ctrl" && /^(b|i|u)$/.test(evt.key)) {
+      if (tastatur.modifiers === "Ctrl" && /^Key[BIU]$/.test(evt.code)) {
         evt.preventDefault();
       }
     });
