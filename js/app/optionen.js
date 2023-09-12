@@ -346,7 +346,7 @@ const optionen = {
       if (typeof opt[o] === "undefined") {
         continue;
       }
-      if (typeof obj[o] === "object") {
+      if (typeof obj[o] === "object" && !Array.isArray(obj[o])) {
         if (o === "tags") {
           optionen.data.tags = { ...opt[o] };
         } else {
