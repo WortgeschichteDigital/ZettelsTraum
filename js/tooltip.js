@@ -111,6 +111,10 @@ const tooltip = {
     }
     tip.style.zIndex = ++tooltip.zIndex;
     tip.classList.add("visible");
+    // break letters there is a text overflow to the right
+    if (tip.scrollWidth > tip.offsetWidth) {
+      tip.classList.add("break-words");
+    }
   },
 
   // Tooltip ausblenden
