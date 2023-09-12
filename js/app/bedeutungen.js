@@ -2001,7 +2001,7 @@ const bedeutungen = {
       }
       // Text
       let text = bd.bd[bd.bd.length - 1];
-      text = text.replace(/<mark class="paraphrase">(.+?)<\/mark>/g, (m, p1) => splitParaphrase(p1));
+      text = text.replace(/<mark class="paraphrase">(.+?)<\/mark>/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
       text = text.replace(/<i>(.+?)<\/i>/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
       text = text.replace(/<b>(.+?)<\/b>/g, (m, p1) => `<Hervorhebung Stil="#b">${p1}</Hervorhebung>`);
       text = text.replace(/<u>(.+?)<\/u>/g, (m, p1) => `<Hervorhebung Stil="#u">${p1}</Hervorhebung>`);
@@ -2009,20 +2009,7 @@ const bedeutungen = {
       text = helfer.typographie(text);
       text = helferXml.abbrTagger({ text });
       if (!/<Paraphrase>/.test(text)) { // gesamter Text ist Paraphrase
-        text = splitParaphrase(text);
-      }
-      let relevanzHoch = false;
-      for (const p of text.split(/<Paraphrase>.+?<\/Paraphrase>/)) {
-        if (!p) {
-          continue;
-        }
-        if (p !== "; ") {
-          relevanzHoch = true;
-          break;
-        }
-      }
-      if (relevanzHoch) {
-        text = text.replace(/<Paraphrase>/g, "<Paraphrase Relevanz='hoch'>");
+        text = `<Paraphrase>${text}</Paraphrase>`;
       }
       lesart.txt = text;
       // Ebene eintragen...
@@ -2080,15 +2067,6 @@ const bedeutungen = {
       },
     };
     redXml.datensatz({ xmlDatensatz });
-    // Paraphrase aufsplitten
-    function splitParaphrase (text) {
-      const p = text.split(";");
-      const pr = [];
-      for (const i of p) {
-        pr.push(`<Paraphrase>${i.trim()}</Paraphrase>`);
-      }
-      return pr.join("; ");
-    }
   },
 
   // überprüft, ob das Bedeutungsgerüst beim Umbenennen einer Bedeutung korrumpiert wurde
