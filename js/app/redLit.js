@@ -1188,11 +1188,11 @@ const redLit = {
   //     (der Ziel-Datensatz)
   dbTitelKlonenAufnahme (quelle, ziel) {
     for (const [ k, v ] of Object.entries(quelle)) {
-      if (typeof v === "object") { // Objects
+      if (Array.isArray(v)) { // Arrays
+        ziel[k] = [ ...v ];
+      } else if (typeof v === "object") { // Objects
         ziel[k] = {};
         redLit.dbTitelKlonenAufnahme(v, ziel[k]);
-      } else if (Array.isArray(v)) { // Arrays
-        ziel[k] = [ ...v ];
       } else { // Primitiven
         ziel[k] = v;
       }
