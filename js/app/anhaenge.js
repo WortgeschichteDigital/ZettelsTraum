@@ -31,7 +31,7 @@ const anhaenge = {
       anhaenge.data[datei] = {
         exists,
         path: pfad,
-        ext: modules.path.parse(pfad).ext,
+        ext: modules.path.parse(pfad).ext.toLowerCase(),
       };
     }
   },
