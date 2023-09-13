@@ -41,6 +41,7 @@ window.addEventListener("load", async () => {
   modules.ipc.on("kartei-speichern", () => speichern.kaskade());
   modules.ipc.on("kartei-speichern-unter", () => kartei.speichern(true));
   modules.ipc.on("kartei-schliessen", () => kartei.schliessen());
+  modules.ipc.on("kartei-lemmata", () => lemmata.oeffnen());
   modules.ipc.on("kartei-formvarianten", () => stamm.oeffnen());
   modules.ipc.on("kartei-notizen", () => notizen.oeffnen());
   modules.ipc.on("kartei-anhaenge", () => anhaenge.fenster());
@@ -159,6 +160,7 @@ window.addEventListener("load", async () => {
         "karteisuche-karteien",
         "kopieren-einfuegen-over",
         "kopieren-liste-cont",
+        "lemmata-over",
         "meta-cont-over",
         "notizen-feld",
         "quick-ein-over",
@@ -364,6 +366,12 @@ window.addEventListener("load", async () => {
   // Quick-Access-Einstellung
   document.getElementById("quick-ein-uebernehmen").addEventListener("click", () => quickEin.uebernehmen());
   document.getElementById("quick-ein-schliessen").addEventListener("click", () => quickEin.schliessen());
+  // Lemmata-Fenster
+  document.getElementById("lemmata-okay").addEventListener("click", () => lemmata.schliessen());
+  document.getElementById("lemmata-wf").addEventListener("change", function () {
+    data.la.wf = this.checked;
+    lemmata.liste();
+  });
   // Formvarianten-Fenster
   document.querySelectorAll("#stamm input").forEach(i => {
     if (i.type === "button") {

@@ -6,7 +6,7 @@ const konversion = {
   // 1.) Beim Anlegen neuer Datenwerte Objekte in
   //   kartei.erstellen() u. beleg.karteErstellen() ergänzen!
   // 2.) Diese Versionsnummer hochzählen!
-  version: 25,
+  version: 26,
 
   // Verteilerfunktion
   start () {
@@ -447,6 +447,61 @@ const konversion = {
     for (const i of Object.values(data.ka)) {
       i.bi = "";
     }
+    // Versionsnummer hochzählen
+    data.ve++;
+    // Änderungsmarkierung setzen
+    kartei.karteiGeaendert(true);
+  },
+
+  // Konversion des Dateiformats nach Version 26
+  nach26 () {
+    if (data.ve > 25) {
+      return;
+    }
+    // Datenfeld "la" (Lemmaliste) ergänzt
+    data.la = {
+      wf: false,
+      la: [],
+    };
+    for (let i of data.wo.split(",")) {
+      i = i.trim();
+      if (!i) {
+        continue;
+      }
+      let ko = i.match(/ \((.+?)\)$/)?.[1] || "";
+      if (/^Wortfeld/.test(ko)) {
+        data.la.wf = true;
+        ko = "";
+      }
+      const la = i.replace(/ \(.+?\)$/g, "");
+      const sc = [];
+      for (const s of la.split(/ ?\/ ?/)) {
+        sc.push(s);
+      }
+      data.la.la.push({
+        ko,
+        sc,
+        nl: false,
+      });
+    }
+    for (let la of data.rd.nl.split(",")) {
+      la = la.trim();
+      if (!la) {
+        continue;
+      }
+      const sc = [];
+      for (const s of la.split(/ ?\/ ?/)) {
+        sc.push(s);
+      }
+      data.la.la.push({
+        ko: "",
+        sc,
+        nl: true,
+      });
+    }
+    // TODO Löschen veralteter Datensätze einschalten
+    // delete data.wo;
+    // delete data.rd.nl;
     // Versionsnummer hochzählen
     data.ve++;
     // Änderungsmarkierung setzen

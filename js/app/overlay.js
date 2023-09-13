@@ -63,6 +63,9 @@ const overlay = {
     } else if (fenster.id === "notizen") {
       notizen.abbrechen();
       return;
+    } else if (fenster.id === "lemmata") {
+      lemmata.schliessen();
+      return;
     } else if (fenster.id === "stamm") {
       stamm.schliessen();
       return;

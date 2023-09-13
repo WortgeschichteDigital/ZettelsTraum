@@ -28,6 +28,10 @@ const kartei = {
       dm: "", // Datum Kartei-Änderung
       fv: {}, // Formvarianten
       ka: {}, // Karteikarten
+      la: { // Lemmaliste
+        la: [], // Lemmata
+        wf: false, // ist Wortfeldartikel
+      },
       le: [], // überprüfte Lexika usw.
       no: "", // Notizen
       rd: { // Redaktion
@@ -41,7 +45,6 @@ const kartei = {
             pr: "",
           },
         ],
-        nl: "", // Nebenlemmata
         no: "", // Notizen
         sg: [], // Sachgebiete
         sp: [], // Stichwortplanung
@@ -52,7 +55,6 @@ const kartei = {
       re: 0, // Revision
       ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
       ve: konversion.version, // Version des Dateiformats
-      wo: kartei.wort, // Wort
     };
     // Formvarianten aus dem DTA importieren
     stamm.dtaGet(kartei.wort, false);
@@ -510,6 +512,11 @@ const kartei = {
     const cont = document.getElementById("wort");
     cont.classList.remove("keine-kartei");
     cont.textContent = kartei.wort;
+  },
+
+  // Anzeige des Karteiworts auffrischen
+  wortUpdate () {
+    // TODO
   },
 
   // Kartei wurde geändert und nocht nicht gespeichert

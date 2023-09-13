@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/app/overlays-karteisuche.css">
     <link rel="stylesheet" href="css/app/overlays-karteisucheExport.css">
     <link rel="stylesheet" href="css/app/overlays-kopieren.css">
+    <link rel="stylesheet" href="css/app/overlays-lemmata.css">
     <link rel="stylesheet" href="css/app/overlays-lexika.css">
     <link rel="stylesheet" href="css/app/overlays-meta.css">
     <link rel="stylesheet" href="css/app/overlays-notizen.css">
@@ -73,6 +74,7 @@
     <script src="js/app/kopf.js"></script>
     <script src="js/app/konversion.js"></script>
     <script src="js/app/kopieren.js"></script>
+    <script src="js/app/lemmata.js"></script>
     <script src="js/app/lexika.js"></script>
     <script src="js/app/liste.js"></script>
     <script src="js/app/lock.js"></script>
@@ -1041,6 +1043,21 @@
         ><input type="button" value="Exportieren" id="karteisuche-export-exportieren"
         ><input type="button" value="Abbrechen" id="karteisuche-export-abbrechen"
       ></p>
+    </div></div>
+
+    <!-- OVERLAY: Lemmata -->
+    <div id="lemmata" class="overlay aus"><div>
+      <h2><span class="icon-h icon-h-lemmata">&nbsp;</span
+        >Lemmata<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueKartei-lemmata">&nbsp;</a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)">&nbsp;</a></h2>
+      <div id="lemmata-cont">
+        <div id="lemmata-over">
+          <p
+            ><input type="checkbox" id="lemmata-wf"><label for="lemmata-wf">Worfeldartikel</label
+            ><input type="button" value="Okay" id="lemmata-okay"
+          ></p>
+          <div id="lemmata-liste"></div>
+        </div>
+      </div>
     </div></div>
 
     <!-- OVERLAY: Formvarianten -->

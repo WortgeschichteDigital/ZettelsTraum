@@ -100,6 +100,9 @@ const helfer = {
       "kopieren-liste-cont": {
         queries: [],
       },
+      "lemmata-over": {
+        queries: [],
+      },
       "meta-cont-over": {
         queries: [],
       },
@@ -1390,7 +1393,8 @@ const helfer = {
   // danach wird ein endgültiger Schließen-Befehl an Main gegeben
   async beforeUnload () {
     // Schließen unterbrechen, wenn ungespeicherte Änderungen
-    if (notizen.geaendert ||
+    if (lemmata.geaendert ||
+        notizen.geaendert ||
         redLit.eingabe.changed ||
         redLit.db.changed ||
         tagger.geaendert ||

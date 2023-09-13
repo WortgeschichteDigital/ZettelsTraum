@@ -42,6 +42,18 @@ const speichern = {
 
   // überprüft, ob Änderungen noch nicht gespeichert wurden
   check () {
+    if (lemmata.geaendert) {
+      speichern.checkAktiv = false;
+      const text = lemmata.fehlersuche().length ? "Im Lemmaformular gibt es noch Fehler, die behoben werden müssen." : "Die Änderungen im Lemmaformular müssen noch übernommen werden.";
+      dialog.oeffnen({
+        typ: "alert",
+        text,
+        callback: () => {
+          setTimeout(() => lemmata.oeffnen(), 200);
+        },
+      });
+      return;
+    }
     if (speichern.checkScope.notizen && notizen.geaendert) {
       dialog.oeffnen({
         typ: "confirm",
