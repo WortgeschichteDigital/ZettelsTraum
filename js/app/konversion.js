@@ -10,34 +10,14 @@ const konversion = {
 
   // Verteilerfunktion
   start () {
-    konversion.von1nach2();
-    konversion.von2nach3();
-    konversion.von3nach4();
-    konversion.von4nach5();
-    konversion.von5nach6();
-    konversion.von6nach7();
-    konversion.von7nach8();
-    konversion.von8nach9();
-    konversion.von9nach10();
-    konversion.von10nach11();
-    konversion.von11nach12();
-    konversion.von12nach13();
-    konversion.von13nach14();
-    konversion.von14nach15();
-    konversion.von15nach16();
-    konversion.von16nach17();
-    konversion.von17nach18();
-    konversion.von18nach19();
-    konversion.von19nach20();
-    konversion.von20nach21();
-    konversion.von21nach22();
-    konversion.von22nach23();
-    konversion.von23nach24();
-    konversion.von24nach25();
+    const konvFun = Object.keys(konversion).filter(i => /^nach/.test(i));
+    for (const fun of konvFun) {
+      konversion[fun]();
+    }
   },
 
-  // Konversion des Dateiformats von Version 1 nach Version 2
-  von1nach2 () {
+  // Konversion des Dateiformats nach Version 2
+  nach2 () {
     if (data.ve > 1) {
       return;
     }
@@ -51,8 +31,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 2 nach Version 3
-  von2nach3 () {
+  // Konversion des Dateiformats nach Version 3
+  nach3 () {
     if (data.ve > 2) {
       return;
     }
@@ -66,8 +46,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 3 nach Version 4
-  von3nach4 () {
+  // Konversion des Dateiformats nach Version 4
+  nach4 () {
     if (data.ve > 3) {
       return;
     }
@@ -81,8 +61,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 4 nach Version 5
-  von4nach5 () {
+  // Konversion des Dateiformats nach Version 5
+  nach5 () {
     if (data.ve > 4) {
       return;
     }
@@ -111,8 +91,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 5 nach Version 6
-  von5nach6 () {
+  // Konversion des Dateiformats nach Version 6
+  nach6 () {
     if (data.ve > 5) {
       return;
     }
@@ -139,8 +119,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 6 nach Version 7
-  von6nach7 () {
+  // Konversion des Dateiformats nach Version 7
+  nach7 () {
     if (data.ve > 6) {
       return;
     }
@@ -152,8 +132,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 7 nach Version 8
-  von7nach8 () {
+  // Konversion des Dateiformats nach Version 8
+  nach8 () {
     if (data.ve > 7) {
       return;
     }
@@ -167,8 +147,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 8 nach Version 9
-  von8nach9 () {
+  // Konversion des Dateiformats nach Version 9
+  nach9 () {
     if (data.ve > 8) {
       return;
     }
@@ -205,8 +185,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 9 nach Version 10
-  von9nach10 () {
+  // Konversion des Dateiformats nach Version 10
+  nach10 () {
     if (data.ve > 9) {
       return;
     }
@@ -223,8 +203,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 10 nach Version 11
-  von10nach11 () {
+  // Konversion des Dateiformats nach Version 11
+  nach11 () {
     if (data.ve > 10) {
       return;
     }
@@ -236,8 +216,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 11 nach Version 12
-  von11nach12 () {
+  // Konversion des Dateiformats nach Version 12
+  nach12 () {
     if (data.ve > 11) {
       return;
     }
@@ -251,8 +231,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 12 nach Version 13
-  von12nach13 () {
+  // Konversion des Dateiformats nach Version 13
+  nach13 () {
     if (data.ve > 12) {
       return;
     }
@@ -274,8 +254,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 13 nach Version 14
-  von13nach14 () {
+  // Konversion des Dateiformats nach Version 14
+  nach14 () {
     if (data.ve > 13) {
       return;
     }
@@ -287,8 +267,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 14 nach Version 15
-  von14nach15 () {
+  // Konversion des Dateiformats nach Version 15
+  nach15 () {
     if (data.ve > 14) {
       return;
     }
@@ -300,8 +280,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 15 nach Version 16
-  von15nach16 () {
+  // Konversion des Dateiformats nach Version 16
+  nach16 () {
     if (data.ve > 15) {
       return;
     }
@@ -315,8 +295,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 16 nach Version 17
-  von16nach17 () {
+  // Konversion des Dateiformats nach Version 17
+  nach17 () {
     if (data.ve > 16) {
       return;
     }
@@ -336,8 +316,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 17 nach Version 18
-  von17nach18 () {
+  // Konversion des Dateiformats nach Version 18
+  nach18 () {
     if (data.ve > 17) {
       return;
     }
@@ -361,8 +341,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 18 nach Version 19
-  von18nach19 () {
+  // Konversion des Dateiformats nach Version 19
+  nach19 () {
     if (data.ve > 18) {
       return;
     }
@@ -376,8 +356,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 19 nach Version 20
-  von19nach20 () {
+  // Konversion des Dateiformats nach Version 20
+  nach20 () {
     if (data.ve > 19) {
       return;
     }
@@ -395,8 +375,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 20 nach Version 21
-  von20nach21 () {
+  // Konversion des Dateiformats nach Version 21
+  nach21 () {
     // BUG-Korrektur: ggf. Datenfeld für Nebenlemmata erzeugen
     // (das Feld wurde beim Erzeugen neuer Karteien nicht angelegt)
     if (data.ve === 21 &&
@@ -417,8 +397,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 21 nach Version 22
-  von21nach22 () {
+  // Konversion des Dateiformats nach Version 22
+  nach22 () {
     if (data.ve > 21) {
       return;
     }
@@ -430,8 +410,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 22 nach Version 23
-  von22nach23 () {
+  // Konversion des Dateiformats nach Version 23
+  nach23 () {
     if (data.ve > 22) {
       return;
     }
@@ -445,8 +425,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 23 nach Version 24
-  von23nach24 () {
+  // Konversion des Dateiformats nach Version 24
+  nach24 () {
     if (data.ve > 23) {
       return;
     }
@@ -458,8 +438,8 @@ const konversion = {
     kartei.karteiGeaendert(true);
   },
 
-  // Konversion des Dateiformats von Version 24 nach Version 25
-  von24nach25 () {
+  // Konversion des Dateiformats nach Version 25
+  nach25 () {
     if (data.ve > 24) {
       return;
     }
