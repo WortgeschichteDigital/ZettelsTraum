@@ -24,7 +24,7 @@ const redXml = {
       return false;
     }
     // Fenster durch Main-Prozess öffnen lassen
-    redXml.contentsId = await modules.ipc.invoke("red-xml-oeffnen", `XML: ${kartei.wort}`);
+    redXml.contentsId = await modules.ipc.invoke("red-xml-oeffnen", `XML: ${kartei.titel}`);
     return true;
   },
 

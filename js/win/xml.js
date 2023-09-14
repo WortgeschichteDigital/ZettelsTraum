@@ -179,7 +179,7 @@ const xml = {
       xml.counter = xml.counterGenerator(1);
     }
     // Wort eintragen
-    document.querySelector("h1").textContent = xml.data.wort;
+    document.querySelector("h1").innerHTML = xml.data.wort;
     // Init: Metadaten
     const mdId = document.getElementById("md-id");
     const mdTy = document.getElementById("md-ty");

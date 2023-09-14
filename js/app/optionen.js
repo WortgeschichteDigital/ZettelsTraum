@@ -1284,8 +1284,7 @@ const optionen = {
       quick.toggle();
     } else if (e === "filter-unterbedeutungen") { // Verhalten Bedeutungen-Filter umgestellt
       liste.status(true);
-    } else if (/^belegliste-(referenz|mark|notizen|textsorte)$/.test(e) &&
-        kartei.wort) { // Details für Belegkopf der Belegliste umgestellt
+    } else if (/^belegliste-(referenz|mark|notizen|textsorte)$/.test(e) && kartei.wort) { // Details für Belegkopf der Belegliste umgestellt
       liste.status(false);
     }
     // Optionen speichern

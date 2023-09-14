@@ -1,7 +1,12 @@
 "use strict";
 
 const kartei = {
-  // aktuelles Wort
+  // aktuelles Wort für Fenstertitel
+  // (ohne Kommentare zu den Wörtern)
+  titel: "",
+
+  // aktuelles Wort für Fensterkopf
+  // (mit Kommentaren zu den Wörtern)
   wort: "",
 
   // Pfad der geladenen Datei (dient zum automatischen Speichern der Datei)
@@ -206,8 +211,9 @@ const kartei = {
     // Okay! Content kann eingelesen werden
     data = JSON.parse(content);
     // Karteiwort eintragen
-    // (muss wegen konversion.von8nach9() vor der Konersion geschehen)
-    kartei.wort = data.wo;
+    // (muss wegen Konversion nach v9 vor der Konversion geschehen;
+    // mit der Konversion nach v26 wird data.wo entfernt)
+    kartei.wort = data.wo || "";
     // Version des Datenformats der Kartei für das Metadatenfenster merken
     // (muss vor der Konversion geschehen)
     meta.ve = data.ve;
@@ -215,7 +221,7 @@ const kartei = {
     konversion.start();
     // Einleseoperationen
     helfer.formVariRegExp();
-    kartei.wortEintragen();
+    kartei.wortUpdate();
     kartei.pfad = datei;
     optionen.aendereLetzterPfad();
     zuletzt.aendern();
@@ -331,10 +337,9 @@ const kartei = {
 
   // Speichern: Pfad ermitteln
   async speichernUnter () {
-    const wort = kartei.wort.split(/[\\/]/)[0];
     const opt = {
       title: "Kartei speichern",
-      defaultPath: modules.path.join(appInfo.documents, `${wort}.ztj`),
+      defaultPath: modules.path.join(appInfo.documents, `${kartei.titel}.ztj`),
       filters: [
         {
           name: `${appInfo.name} JSON`,
@@ -348,7 +353,7 @@ const kartei = {
     };
     // Wo wurde zuletzt eine Datei gespeichert oder geöffnet?
     if (optionen.data.letzter_pfad) {
-      opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, `${wort}.ztj`);
+      opt.defaultPath = modules.path.join(optionen.data.letzter_pfad, `${kartei.titel}.ztj`);
     }
     // Dialog anzeigen
     const result = await modules.ipc.invoke("datei-dialog", {
@@ -407,6 +412,7 @@ const kartei = {
     bedeutungenWin.schliessen();
     redXml.schliessen();
     data = {};
+    kartei.titel = "";
     kartei.wort = "";
     kartei.pfad = "";
     belegImport.Datei.typ = "dta";
@@ -425,6 +431,7 @@ const kartei = {
   },
 
   // Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
+  // TODO
   wortErfragen () {
     // Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
     if (kartei.wort) {
@@ -509,16 +516,33 @@ const kartei = {
     prompt_text.select();
   },
 
-  // Wort der aktuellen Kartei in den Kopf eintragen
-  wortEintragen () {
-    const cont = document.getElementById("wort");
-    cont.classList.remove("keine-kartei");
-    cont.textContent = kartei.wort;
-  },
-
   // Anzeige des Karteiworts auffrischen
   wortUpdate () {
-    // TODO
+    // Wortformen erzeugen
+    const wort = [];
+    const titel = [];
+    for (const lemma of data.la.la) {
+      if (lemma.nl) {
+        continue;
+      }
+      let text = lemma.sc.join("/");
+      titel.push(text);
+      if (lemma.ko) {
+        text += `<span>${lemma.ko}</span>`;
+      }
+      wort.push(text);
+    }
+    kartei.wort = wort.join(", ");
+    kartei.titel = titel.join(", ");
+    if (data.la.wf) {
+      kartei.wort += " (Wortfeld)";
+      kartei.titel += " (Wortfeld)";
+    }
+
+    // Wort in den Fensterkopf eintragen
+    const cont = document.getElementById("wort");
+    cont.classList.remove("keine-kartei");
+    cont.innerHTML = kartei.wort;
   },
 
   // Kartei wurde geändert und nocht nicht gespeichert

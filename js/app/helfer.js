@@ -1306,8 +1306,8 @@ const helfer = {
     }
     // Wort
     let wort = "";
-    if (kartei.wort) {
-      wort = `: ${kartei.wort}`;
+    if (kartei.titel) {
+      wort = `: ${kartei.titel}`;
     }
     // Dokumententitel
     document.title = appInfo.name + wort + asterisk;
@@ -1400,7 +1400,7 @@ const helfer = {
     // Fehler-Objekt erzeugen
     const err = {
       time: new Date().toISOString(),
-      word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
+      word: typeof kartei === "undefined" ? winInfo.typ : kartei.titel,
       fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
       fileJs,
       message,

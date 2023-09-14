@@ -70,8 +70,7 @@ const kopf = {
   iconRedaktion () {
     const iconRedaktion = document.getElementById("redaktion-icon");
     const er = redaktion.naechstesEreignis(false);
-    if (optionen.data.einstellungen["kopf-icon-redaktion"] &&
-        kartei.wort) {
+    if (optionen.data.einstellungen["kopf-icon-redaktion"] && kartei.wort) {
       if (er.abgeschlossen) {
         iconRedaktion.title = er.title[0];
       } else {

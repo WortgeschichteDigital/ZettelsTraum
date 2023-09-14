@@ -41,6 +41,19 @@ body > header h1 {
   line-height: 60px;
 }
 
+body > header h1 span {
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+body > header h1 span::before {
+  content: "(";
+}
+
+body > header h1 span::after {
+  content: ")";
+}
+
 #icon {
   position: absolute;
   top: 6px;
