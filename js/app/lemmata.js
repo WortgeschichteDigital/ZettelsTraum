@@ -26,13 +26,13 @@ const lemmata = {
     }
 
     // Lemmata ermitteln
-    lemmata.lemmataStart = lemmata.lemmaliste();
+    lemmata.lemmataStart = helfer.lemmaliste();
 
     // Fenster füllen
     document.getElementById("lemmata-wf").checked = data.la.wf;
     lemmata.liste();
 
-    // Maximalhöhe der Lemmaliste festlegen
+    // Maximalhöhe des Fenster-Contents festlegen
     helfer.elementMaxHeight({
       ele: document.getElementById("lemmata-over"),
     });
@@ -61,7 +61,7 @@ const lemmata = {
       }
 
       // ggf. Formvarianten auffrischen
-      const lemmaliste = lemmata.lemmaliste();
+      const lemmaliste = helfer.lemmaliste();
       let variantenUpdate = false;
       if (lemmata.lemmataStart.size !== lemmaliste.size) {
         variantenUpdate = true;
@@ -130,6 +130,10 @@ const lemmata = {
 
       // Kartei-Wort auffrischen
       kartei.wortUpdate();
+
+      // Daten in externen Fenster auffrischen
+      bedeutungenWin.daten();
+      redXml.daten();
 
       // Änderungsmarkierung für Kartei setzen
       kartei.karteiGeaendert(true);
@@ -223,17 +227,6 @@ const lemmata = {
     return errors;
   },
 
-  // Liste der aktuellen Lemmata erstellen
-  lemmaliste () {
-    const liste = new Set();
-    for (const lemma of data.la.la) {
-      for (const schreibung of lemma.sc) {
-        liste.add(schreibung);
-      }
-    }
-    return liste;
-  },
-
   // Liste aufbauen
   liste () {
     const liste = document.getElementById("lemmata-liste");
@@ -242,8 +235,8 @@ const lemmata = {
     const table = document.createElement("table");
     liste.appendChild(table);
     let keineSchreibungen = true;
-    for (const i of data.la.la) {
-      if (i.sc.length > 1) {
+    for (const lemma of data.la.la) {
+      if (lemma.sc.length > 1) {
         keineSchreibungen = false;
         break;
       }

@@ -61,9 +61,9 @@ const redXml = {
       autorinnen: [],
       contentsId: winInfo.contentsId,
       gerueste: {},
+      lemmata: data.la,
       letzter_pfad: optionen.data.letzter_pfad,
       themenfelder: [],
-      nebenlemmata: data.rd.nl,
       wort: kartei.wort,
       xl: data.rd.xl,
     };

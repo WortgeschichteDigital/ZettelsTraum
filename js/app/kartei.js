@@ -57,7 +57,7 @@ const kartei = {
       ve: konversion.version, // Version des Dateiformats
     };
     // Formvarianten aus dem DTA importieren
-    const woerter = [ ...lemmata.lemmaliste() ];
+    const woerter = [ ...helfer.lemmaliste() ];
     stamm.dtaGet(woerter, false);
     // ggf. für diesen Rechner registrierte BearbeiterIn eintragen
     if (optionen.data.einstellungen.bearbeiterin) {
@@ -460,6 +460,7 @@ const kartei = {
   },
 
   // Wort durch Benutzer ändern
+  // TODO diese Funktion kann weg => Lemmata-Fenster nutzen
   wortAendern () {
     // noch keine Kartei geöffnet
     if (!kartei.wort) {

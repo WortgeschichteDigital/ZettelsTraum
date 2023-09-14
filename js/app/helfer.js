@@ -936,6 +936,25 @@ const helfer = {
     return string;
   },
 
+  // Liste der aktuellen Lemmata ausgeben
+  //   daten = Object | undefined
+  //     (Verweis auf das Datenobjekt mit den Lemmata)
+  //   join = true | undefined
+  //     (Schreibungen des Lemmas in einen String, getrennt mit /)
+  lemmaliste (daten = data.la.la, join = false) {
+    const liste = new Set();
+    for (const lemma of daten) {
+      if (join) {
+        liste.add(lemma.sc.join("/"));
+      } else {
+        for (const schreibung of lemma.sc) {
+          liste.add(schreibung);
+        }
+      }
+    }
+    return liste;
+  },
+
   // Sammlung der regulären Ausdrücke aller Formvarianten;
   // in jedem Slot ein Objekt mit den Eigenschaften
   //   wort = das Wort, für den der reguläre Ausdruck erstellt wurde

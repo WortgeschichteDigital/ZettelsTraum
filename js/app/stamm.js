@@ -814,7 +814,7 @@ const stamm = {
               return;
             }
             // Wurden manuell Wörter ergänzt? Wenn ja => auch diese müssen aufgefrischt werden
-            const woerter = lemmata.lemmaliste();
+            const woerter = helfer.lemmaliste();
             for (const wort of Object.keys(data.fv)) {
               woerter.add(wort);
             }
