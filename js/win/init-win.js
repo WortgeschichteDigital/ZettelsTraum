@@ -19,8 +19,10 @@ const initWin = {
         // beim Ändern des Karteiworts werden alle Daten noch einmal
         // an das bereits offene Fenster geschickt; in diesem Fall
         // darf xml.init() nicht aufgerufen werden (macht Probleme)
+        xml.data.titel = xmlDaten.titel;
         xml.data.wort = xmlDaten.wort;
-        document.querySelector("h1").textContent = xml.data.wort;
+        document.title = xml.data.titel;
+        document.querySelector("h1").innerHTML = xml.data.wort;
       } else {
         xml.data = xmlDaten;
         xml.init();

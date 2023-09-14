@@ -375,6 +375,7 @@ window.addEventListener("load", async () => {
   });
   document.getElementById("lemmata-wf").addEventListener("change", function () {
     data.la.wf = this.checked;
+    lemmata.geaendert = true;
     lemmata.liste();
   });
   // Formvarianten-Fenster

@@ -40,6 +40,7 @@ const bedeutungenWin = {
     }
     // Daten zusammentragen
     const daten = {
+      titel: `Bedeutungsgerüst: ${kartei.titel}`,
       wort: kartei.wort,
       bd: data.bd,
       contentsId: winInfo.contentsId,

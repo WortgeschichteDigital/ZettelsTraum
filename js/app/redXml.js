@@ -64,6 +64,7 @@ const redXml = {
       lemmata: data.la,
       letzter_pfad: optionen.data.letzter_pfad,
       themenfelder: [],
+      titel: `XML: ${kartei.titel}`,
       wort: kartei.wort,
       xl: data.rd.xl,
     };

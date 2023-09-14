@@ -16,6 +16,7 @@ const bedeutungen = {
   // Anzeige mit den gelieferten Daten aufbereiten
   aufbauen () {
     // Wort eintragen
+    document.title = bedeutungen.data.titel;
     document.querySelector("h1").innerHTML = bedeutungen.data.wort;
     // ggf. Gerüstnummer zwischenspeichern
     if (!bedeutungen.geruest) {
