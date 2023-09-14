@@ -499,9 +499,9 @@ const konversion = {
         nl: true,
       });
     }
-    // TODO Löschen veralteter Datensätze einschalten
-    // delete data.wo;
-    // delete data.rd.nl;
+    // Löschen veralteter Datensätze einschalten
+    delete data.wo;
+    delete data.rd.nl;
     // Versionsnummer hochzählen
     data.ve++;
     // Änderungsmarkierung setzen
