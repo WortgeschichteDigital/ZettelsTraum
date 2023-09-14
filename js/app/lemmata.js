@@ -373,6 +373,16 @@ const lemmata = {
 
   // Liste: Events für die einzelnen Elemente
   listeEvents () {
+    // Textfelder hören auf Enter => Eingabe beenden
+    document.querySelectorAll("#lemmata-liste input[type='text']").forEach(i => {
+      i.addEventListener("keydown", evt => {
+        tastatur.detectModifiers(evt);
+        if (!tastatur.modifiers && evt.key === "Enter") {
+          lemmata.schliessen();
+        }
+      });
+    });
+
     // Lemma hinzufügen
     document.querySelector("#lemmata-liste .lemma-hinzu").addEventListener("click", function (evt) {
       evt.preventDefault();
