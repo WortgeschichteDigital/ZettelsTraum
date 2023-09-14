@@ -64,6 +64,10 @@ const overlay = {
       notizen.abbrechen();
       return;
     } else if (fenster.id === "lemmata") {
+      if (lemmata.karteiInit) {
+        lemmata.abgebrochen = true;
+        lemmata.geaendert = false;
+      }
       lemmata.schliessen();
       return;
     } else if (fenster.id === "stamm") {

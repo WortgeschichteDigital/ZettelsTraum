@@ -1,6 +1,9 @@
 "use strict";
 
 const lemmata = {
+  // Eingabe wurde abgebrochen
+  abgebrochen: false,
+
   // Formular wurde geändert
   geaendert: false,
 
@@ -8,15 +11,26 @@ const lemmata = {
   // (dient zum Abgleich nach dem Schließen)
   lemmataStart: new Set(),
 
+  // beim Öffnen einer neuen Kartei darf das Fenster ohne Eingabe geschlossen werden
+  karteiInit: false,
+
   // Lemmata-Fenster einblenden
   oeffnen () {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
-    if (!kartei.wort) {
+    if (!lemmata.karteiInit && !kartei.wort) {
       dialog.oeffnen({
         typ: "alert",
         text: "Um die Funktion <i>Kartei &gt; Lemmata</i> zu nutzen, muss eine Kartei geöffnet sein.",
       });
       return;
+    }
+
+    // Abbrechen-Button ein- oder ausblenden
+    const abbrechen = document.getElementById("lemmata-abbrechen");
+    if (lemmata.karteiInit) {
+      abbrechen.classList.remove("aus");
+    } else {
+      abbrechen.classList.add("aus");
     }
 
     // Fenster öffnen oder in den Vordergrund holen
@@ -31,6 +45,7 @@ const lemmata = {
     // Fenster füllen
     document.getElementById("lemmata-wf").checked = data.la.wf;
     lemmata.liste();
+    document.querySelector("#lemmata-liste input").select();
 
     // Maximalhöhe des Fenster-Contents festlegen
     helfer.elementMaxHeight({
@@ -40,7 +55,8 @@ const lemmata = {
 
   // Lemmata-Fenster ausblenden
   async schliessen () {
-    if (lemmata.geaendert) {
+    if (lemmata.geaendert ||
+        lemmata.karteiInit && !lemmata.abgebrochen) {
       // Gibt es Fehler beim Ausfüllen des Formulars?
       const fehler = lemmata.fehlersuche();
       if (fehler.length) {

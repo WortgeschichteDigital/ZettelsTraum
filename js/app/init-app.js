@@ -368,6 +368,11 @@ window.addEventListener("load", async () => {
   document.getElementById("quick-ein-schliessen").addEventListener("click", () => quickEin.schliessen());
   // Lemmata-Fenster
   document.getElementById("lemmata-okay").addEventListener("click", () => lemmata.schliessen());
+  document.getElementById("lemmata-abbrechen").addEventListener("click", () => {
+    lemmata.abgebrochen = true;
+    lemmata.geaendert = false;
+    lemmata.schliessen();
+  });
   document.getElementById("lemmata-wf").addEventListener("change", function () {
     data.la.wf = this.checked;
     lemmata.liste();

@@ -14,8 +14,15 @@ const kartei = {
 
   // neue Kartei erstellen
   async erstellen () {
+    // alte Kartei ggf. entsperren
+    lock.actions({ datei: kartei.pfad, aktion: "unlock" });
+
     // Kartei-Pfad löschen
     kartei.pfad = "";
+
+    // Main-Prozess mitteilen, dass in diesem Fenster eine Kartei geöffnet ist
+    modules.ipc.send("kartei-geoeffnet", winInfo.winId, "neu");
+
     // globales Datenobjekt initialisieren
     data = {
       an: [], // Anhänge
@@ -34,7 +41,13 @@ const kartei = {
       fv: {}, // Formvarianten
       ka: {}, // Karteikarten
       la: { // Lemmaliste
-        la: [], // Lemmata
+        la: [ // Lemmata
+          {
+            ko: "", // Kommentar
+            nl: false, // ist Nebenlemma
+            sc: [ "" ], // Schreibungen
+          },
+        ],
         wf: false, // ist Wortfeldartikel
       },
       le: [], // überprüfte Lexika usw.
@@ -61,27 +74,59 @@ const kartei = {
       ty: "ztj", // Datei ist eine ZTJ-Datei (immer dieser Wert! Bis Version 0.24.0 stand in dem Feld "wgd")
       ve: konversion.version, // Version des Dateiformats
     };
-    // Formvarianten aus dem DTA importieren
-    const woerter = [ ...helfer.lemmaliste() ];
-    stamm.dtaGet(woerter, false);
+
+    // Lemmata-Fenster öffnen und auf Eingabe warten
+    lemmata.karteiInit = true;
+    lemmata.oeffnen();
+    await new Promise(resolve => {
+      const interval = setInterval(() => {
+        if (document.getElementById("lemmata").classList.contains("aus")) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 50);
+    });
+    lemmata.karteiInit = false;
+
+    // Erstellen abgebrochen
+    if (lemmata.abgebrochen) {
+      data = {};
+      modules.ipc.send("kartei-geschlossen", winInfo.winId);
+      lemmata.abgebrochen = false;
+      return;
+    }
+
     // ggf. für diesen Rechner registrierte BearbeiterIn eintragen
     if (optionen.data.einstellungen.bearbeiterin) {
       data.rd.be.push(optionen.data.einstellungen.bearbeiterin);
       data.rd.er[0].pr = optionen.data.einstellungen.bearbeiterin;
     }
+
     // Kartendatum-Filter initialisieren
+    filter.ctrlReset(false);
     filter.kartendatumInit();
+
     // Belegliste leeren: Es könnten noch Belege von einer vorherigen Karte vorhanden sein;
     // außerdem könnte es sein, dass die Bearbeiter*in keinen Beleg erstellt
     liste.aufbauen(true);
+
     // alle Overlays schließen
     await overlay.alleSchliessen();
+
     // Bedeutungsgerüst-Fenster schließen
     bedeutungenWin.schliessen();
+
     // XML-Fenster schließen
     redXml.schliessen();
+
     // neue Karte erstellen
     beleg.erstellen();
+
+    // Fenstermenüs aktivieren
+    modules.ipc.send("menus-deaktivieren", false, winInfo.winId);
+
+    // Erinnerungen initialisieren
+    erinnerungen.check();
   },
 
   // bestehende Kartei öffnen (über den Öffnen-Dialog)
@@ -431,89 +476,24 @@ const kartei = {
   },
 
   // Benutzer nach dem Wort fragen, für das eine Kartei angelegt werden soll
-  // TODO
   wortErfragen () {
-    // Ist schon eine Kartei offen? Wenn ja => neues Fenster öffnen, direkt nach dem Wort fragen
+    // Kartei offen => neues Fenster öffnen und direkt nach dem Wort fragen
     if (kartei.wort) {
       modules.ipc.send("neues-wort");
       return;
     }
-    // Es ist noch keine Kartei offen => nach dem Wort fragen
-    dialog.oeffnen({
-      typ: "prompt",
-      text: "Zu welchem Wort soll die Kartei angelegt werden?",
-      platzhalter: "Karteiwort",
-      callback: async () => {
-        const wort = dialog.getPromptText();
-        if (dialog.antwort && !wort) {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Sie müssen ein Wort eingeben, sonst kann keine Kartei angelegt werden.",
-          });
-        } else if (dialog.antwort && wort) {
-          lock.actions({ datei: kartei.pfad, aktion: "unlock" });
-          modules.ipc.send("kartei-geoeffnet", winInfo.winId, "neu");
-          kartei.karteiGeaendert(true);
-          filter.ctrlReset(false);
-          kartei.wort = wort;
-          helfer.formVariRegExp();
-          kartei.wortEintragen();
-          await kartei.erstellen();
-          modules.ipc.send("menus-deaktivieren", false, winInfo.winId);
-          erinnerungen.check();
-        }
-      },
-    });
+
+    // keine Kartei offen => nach dem Wort fragen
+    kartei.erstellen();
   },
 
   // Wort durch Benutzer ändern
-  // TODO diese Funktion kann weg => Lemmata-Fenster nutzen
   wortAendern () {
-    // noch keine Kartei geöffnet
     if (!kartei.wort) {
       kartei.wortErfragen();
       return;
     }
-    // anbieten, das Wort zu ändern
-    dialog.oeffnen({
-      typ: "prompt",
-      text: "Soll das Wort geändert werden?",
-      platzhalter: "Karteiwort",
-      callback: async () => {
-        const wort = dialog.getPromptText();
-        if (dialog.antwort && wort === kartei.wort) {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Das Wort wurde nicht geändert.",
-          });
-        } else if (dialog.antwort && wort) {
-          kartei.karteiGeaendert(true);
-          kartei.wort = wort;
-          data.wo = wort;
-          kartei.wortEintragen();
-          bedeutungenWin.daten();
-          redXml.daten();
-          // Formvarianten auffrischen
-          //   - neue Varianten laden (falls nötig)
-          //   - Varianten deaktivieren, die nicht zum neuen Wort gehören
-          await stamm.dtaGet(kartei.wort, false);
-          const woerter = stamm.dtaPrepParole(wort);
-          for (const [ k, v ] of Object.entries(data.fv)) {
-            v.an = woerter.includes(k);
-          }
-          helfer.formVariRegExp();
-        } else if (dialog.antwort && !wort) {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Sie müssen ein Wort eingeben, sonst kann das bestehende nicht geändert werden.",
-          });
-        }
-      },
-    });
-    // Text im Prompt-Input eintragen
-    const prompt_text = document.getElementById("dialog-prompt-text");
-    prompt_text.value = kartei.wort;
-    prompt_text.select();
+    lemmata.oeffnen();
   },
 
   // Anzeige des Karteiworts auffrischen

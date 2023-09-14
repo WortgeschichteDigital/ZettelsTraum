@@ -28,7 +28,7 @@
   padding-left: 1px;
 }
 
-#lemmata-over > p input:last-child {
+#lemmata-over > p span {
   position: absolute;
   top: 0;
   right: 0;
