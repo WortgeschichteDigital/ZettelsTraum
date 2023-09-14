@@ -155,24 +155,6 @@
 }
 
 
-/* SPERRE --------------------------------------- */
-
-#stamm-sperre {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px; /* für #stamm-cont müssen es 10px sein, für #stamm-popup würden 5px reichen */
-  width: 100%;
-  height: 100%;
-  background-color: rgb(255 255 255 / 70%);
-  backdrop-filter: blur(2px);
-}
-
-
 /* FORMENLISTE ---------------------------------- */
 
 #stamm-cont {

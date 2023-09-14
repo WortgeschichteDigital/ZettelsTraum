@@ -1111,6 +1111,21 @@ const helfer = {
     }, 1000);
   },
 
+  // Sperr-Overlay erzeugen
+  //   cont = Element
+  //     (Container, in den das Overlay eingehängt werden soll)
+  sperre (cont) {
+    const div = document.createElement("div");
+    div.classList.add("sperre", "rotieren-bitte");
+    const img = document.createElement("img");
+    div.appendChild(img);
+    img.src = "img/pfeil-kreis-blau-96.svg";
+    img.width = "96";
+    img.height = "96";
+    cont.appendChild(div);
+    return div;
+  },
+
   // entschüsselt die "verschlüsselte" E-Mail-Adresse
   //   kodiert = String
   //     (die "verschlüsselte" Mail-Adresse)

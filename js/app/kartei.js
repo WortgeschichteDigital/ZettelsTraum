@@ -57,7 +57,8 @@ const kartei = {
       ve: konversion.version, // Version des Dateiformats
     };
     // Formvarianten aus dem DTA importieren
-    stamm.dtaGet(kartei.wort, false);
+    const woerter = [ ...lemmata.lemmaliste() ];
+    stamm.dtaGet(woerter, false);
     // ggf. für diesen Rechner registrierte BearbeiterIn eintragen
     if (optionen.data.einstellungen.bearbeiterin) {
       data.rd.be.push(optionen.data.einstellungen.bearbeiterin);

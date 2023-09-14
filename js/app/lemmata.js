@@ -39,7 +39,7 @@ const lemmata = {
   },
 
   // Lemmata-Fenster ausblenden
-  schliessen () {
+  async schliessen () {
     if (lemmata.geaendert) {
       // Gibt es Fehler beim Ausfüllen des Formulars?
       const fehler = lemmata.fehlersuche();
@@ -63,7 +63,7 @@ const lemmata = {
       // ggf. Formvarianten auffrischen
       const lemmaliste = lemmata.lemmaliste();
       let variantenUpdate = false;
-      if (lemmata.lemmataStart.length !== lemmaliste.length) {
+      if (lemmata.lemmataStart.size !== lemmaliste.size) {
         variantenUpdate = true;
       } else {
         for (const i of lemmaliste) {
@@ -73,29 +73,68 @@ const lemmata = {
           }
         }
       }
+
       if (variantenUpdate) {
+        // hinzugefügte Lemmata
         const hinzu = new Set();
         for (const i of lemmaliste) {
           if (!lemmata.lemmataStart.has(i)) {
             hinzu.add(i);
           }
         }
+        const woerter = [];
+        for (const lemma of hinzu) {
+          if (data.fv[lemma]) {
+            data.fv[lemma].an = true;
+          } else {
+            woerter.push(lemma);
+          }
+        }
+        if (woerter.length) {
+          // Fenster sperren und Formvarianten laden
+          document.activeElement.blur();
+          const sperre = helfer.sperre(document.getElementById("lemmata-cont"));
+          await new Promise(resolve => setTimeout(() => resolve(true), 250));
+          await stamm.dtaGet(woerter, false);
+          sperre.parentNode.removeChild(sperre);
+
+          // neue Wörter ggf. als Nebenlemma markieren
+          for (const wort of woerter) {
+            for (const lemma of data.la.la) {
+              if (lemma.sc.includes(wort)) {
+                if (lemma.nl) {
+                  data.fv[wort].nl = true;
+                }
+                break;
+              }
+            }
+          }
+        }
+
+        // entfernte Lemmata
         const weg = new Set();
         for (const i of lemmata.lemmataStart) {
           if (!lemmaliste.has(i)) {
             weg.add(i);
           }
         }
-        // TODO
+        for (const i of weg) {
+          if (data.fv[i]) {
+            data.fv[i].an = false;
+          }
+        }
+
+        // reguläre Ausdrücke auffrischen
+        helfer.formVariRegExp();
       }
 
       // Kartei-Wort auffrischen
       kartei.wortUpdate();
 
-      // Änderungsmarkierung setzen
+      // Änderungsmarkierung für Kartei setzen
       kartei.karteiGeaendert(true);
 
-      // Änderungsmarkierung zurücksetzen
+      // Änderungsmarkierung für Fenster zurücksetzen
       lemmata.geaendert = false;
     }
 
@@ -187,8 +226,8 @@ const lemmata = {
   // Liste der aktuellen Lemmata erstellen
   lemmaliste () {
     const liste = new Set();
-    for (const i of data.la.la) {
-      for (const schreibung of i.sc) {
+    for (const lemma of data.la.la) {
+      for (const schreibung of lemma.sc) {
         liste.add(schreibung);
       }
     }
