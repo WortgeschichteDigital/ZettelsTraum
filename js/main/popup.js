@@ -352,8 +352,8 @@ const punkte = {
     click: "redLit.xmlDatensatz({ id: popup.titelaufnahme.ds.id })",
   },
   wort: {
-    label: "Wort ändern",
-    icon: "text-pfeil-kreis.png",
+    label: "Lemmata ändern",
+    icon: "lemmata.png",
     click: "kartei.wortAendern()",
   },
   xml: {
