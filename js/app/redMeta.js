@@ -17,8 +17,6 @@ const redMeta = {
       return;
     }
     fenster.querySelector("input").focus();
-    // Nebenlemmata-Feld füllen
-    document.getElementById("red-meta-nebenlemmata").value = data.rd.nl;
     // Behandelt-mit-Feld füllen
     document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
     // Notizen-Feld füllen
@@ -91,7 +89,7 @@ const redMeta = {
       dialog.oeffnen({
         typ: "alert",
         text: `Das Programm muss zunächst mit einer ${typ.substring(0, 1).toUpperCase()}${typ.substring(1)}-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
-        callback: () => document.getElementById("red-meta-nebenlemmata").focus(),
+        callback: () => document.getElementById("red-meta-behandelt-mit").focus(),
       });
       return;
     }
@@ -207,10 +205,9 @@ const redMeta = {
   //   input = Element
   //     (das Textfeld)
   aktionText (input) {
-    if (/red-meta-(nebenlemmata|behandelt-mit|notizen)/.test(input.id)) {
+    if (/red-meta-(behandelt-mit|notizen)/.test(input.id)) {
       input.addEventListener("input", function () {
         const map = {
-          "red-meta-nebenlemmata": "nl",
           "red-meta-behandelt-mit": "bh",
           "red-meta-notizen": "no",
         };
