@@ -434,7 +434,24 @@ const karteisuche = {
         };
       }
       // Werden in der Kartei mehrere Wörter behandelt?
-      const woerter = datei.wo.split(", ");
+      let woerter = [];
+      if (datei.la) {
+        for (const lemma of datei.la.la) {
+          if (lemma.nl) {
+            continue;
+          }
+          let wort = lemma.sc.join("/");
+          if (lemma.ko) {
+            wort += ` (${lemma.ko})`;
+          }
+          if (datei.la.wf) {
+            wort += " (Wortfeld)";
+          }
+          woerter.push(wort);
+        }
+      } else if (datei.wo) {
+        woerter = datei.wo.split(", ");
+      }
       for (let i = 0, len = woerter.length; i < len; i++) {
         let ziel = kartei;
         if (i > 0) {
@@ -455,7 +472,28 @@ const karteisuche = {
         ziel.wort = woerter[i];
         ziel.wortSort = karteisuche.wortSort(woerter[i]);
         // Nebenlemmata
-        if (datei.rd.nl) {
+        if (datei.la) {
+          for (const lemma of datei.la.la) {
+            if (!lemma.nl) {
+              continue;
+            }
+            let nl = lemma.sc.join("/");
+            if (lemma.ko) {
+              nl += ` (${lemma.ko})`;
+            }
+            nebenlemmata.add(nl);
+            ziel.nebenlemmata.push(nl);
+            if (!ziel.behandeltMit.includes(nl)) {
+              ziel.behandeltMit.push(nl);
+            }
+            if (!ztjMit[woerter[i]]) {
+              ztjMit[woerter[i]] = [];
+            }
+            if (!ztjMit[woerter[i]].includes(nl)) {
+              ztjMit[woerter[i]].push(nl);
+            }
+          }
+        } else if (datei.rd.nl) {
           datei.rd.nl.split(/, */).forEach(nl => {
             if (!nl) {
               return;
@@ -1535,7 +1573,9 @@ const karteisuche = {
   // String-Datensätze, die der Volltextfilter berücksichtigt
   // (für die Bedeutungen wird es komplizierter)
   filterVolltext: {
+    // data.wo wurde mit v26 entfernt
     datei: [ "no", "wo" ],
+    // data.rd.nl wurde mit v26 entfernt
     redaktion: [ "bh", "nl", "no" ],
     karten: [ "au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts" ],
   },
@@ -1563,7 +1603,8 @@ const karteisuche = {
     const redErgReg = new RegExp([ ...redErg ].join("|"), "i");
     forX: for (const filter of karteisuche.filterWerte) {
       if (filter.typ === "Karteiwort" &&
-          !filter.reg.test(datei.wo)) {
+          (datei.wo && !filter.reg.test(datei.wo) ||
+          datei.la && !searchLemma(filter.reg, datei.la.la))) {
         // Karteiwort
         return false;
       } else if (/^(Themenfeld|Sachgebiet)$/.test(filter.typ)) {
@@ -1590,13 +1631,13 @@ const karteisuche = {
         // Volltext
         // Datenfelder Kartei
         for (const ds of karteisuche.filterVolltext.datei) {
-          if (filter.reg.test(datei[ds])) {
+          if (datei[ds] && filter.reg.test(datei[ds])) {
             continue forX;
           }
         }
         // Datenfelder Redaktion
         for (const ds of karteisuche.filterVolltext.redaktion) {
-          if (filter.reg.test(datei.rd[ds])) {
+          if (datei.rd[ds] && filter.reg.test(datei.rd[ds])) {
             continue forX;
           }
         }
@@ -1608,6 +1649,15 @@ const karteisuche = {
               text_rein = liste.belegTrennungWeg(text_rein, true);
             }
             if (filter.reg.test(text_rein)) {
+              continue forX;
+            }
+          }
+        }
+        // Datenfelder Lemmata
+        if (datei.la) {
+          for (const lemma of datei.la.la) {
+            if (filter.reg.test(lemma.ko) ||
+                lemma.sc.some(x => filter.reg.test(x))) {
               continue forX;
             }
           }
@@ -1652,7 +1702,7 @@ const karteisuche = {
           return false;
         }
       } else if (filter.typ === "BearbeiterIn" &&
-          !hasSome(be, filter.reg)) {
+          !be.some(x => filter.reg.test(x))) {
         // BearbeiterIn
         return false;
       } else if (filter.typ === "Redaktion") {
@@ -1695,14 +1745,17 @@ const karteisuche = {
       }
     }
     return true;
-    // testet, ob die Bedingungen zutreffen
-    // (ausgelagert, damit die Funktionen nicht in der Schleife sind)
-    //   arr = Array
-    //     (hier wird gesucht)
-    //   reg = RegExp
-    //     (regulärer Ausdruck, mit dem gesucht wird)
-    function hasSome (arr, reg) {
-      return arr.some(v => reg.test(v));
+
+    // Suchfunktion für Lemmata
+    function searchLemma (reg, arr) {
+      let found = false;
+      for (const lemma of arr) {
+        if (lemma.sc.some(i => reg.test(i))) {
+          found = true;
+          break;
+        }
+      }
+      return found;
     }
   },
 
