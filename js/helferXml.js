@@ -269,6 +269,7 @@ const helferXml = {
     "e\\.\\sV\\.": "eingetragener Verein",
     "eigentl\\.": "eigentlich",
     "etc\\.": "et cetera",
+    "ff\\.": "folgende",
     "f\\.": "Femininum",
     "fem\\.": "feminin",
     "Fem\\.": "Femininum",
