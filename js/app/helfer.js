@@ -941,9 +941,13 @@ const helfer = {
   //     (Verweis auf das Datenobjekt mit den Lemmata)
   //   join = true | undefined
   //     (Schreibungen des Lemmas in einen String, getrennt mit /)
-  lemmaliste (daten = data.la.la, join = false) {
+  lemmaliste (daten = data.la, join = false) {
     const liste = new Set();
-    for (const lemma of daten) {
+    for (const lemma of daten.la) {
+      if (daten.wf && !lemma.nl) {
+        // Titel von Wortfeldartikeln sind keine Lemmata
+        continue;
+      }
       if (join) {
         liste.add(lemma.sc.join("/"));
       } else {

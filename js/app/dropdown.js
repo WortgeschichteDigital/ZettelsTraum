@@ -322,7 +322,7 @@ const dropdown = {
     } else if (feld_id === "md-re-au") {
       dropdown.data = [ ...xml.data.autorinnen ];
     } else if (feld_id === "le-le") {
-      dropdown.data = [ ...helfer.lemmaliste(xml.data.lemmata.la, true) ];
+      dropdown.data = [ ...helfer.lemmaliste(xml.data.lemmata, true) ];
       dropdown.data.sort(helfer.sortAlpha);
     } else if (feld_id === "le-ty") {
       dropdown.data = [ ...xml.dropdown.lemmaTypen ];

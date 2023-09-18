@@ -385,6 +385,8 @@ const karteisuche = {
               behandeltIn: "",
               behandeltMit: [],
               passt: false,
+              wf: false,
+              wfLemmata: [],
             });
           }
         }
@@ -465,8 +467,14 @@ const karteisuche = {
             behandeltIn: "",
             behandeltMit: [],
             passt: false,
+            wf: false,
+            wfLemmata: [],
           });
           ziel = ztjAdd[ztjAdd.length - 1];
+        }
+        // Wortfeldartikel markieren
+        if (datei.la) {
+          ziel.wf = datei.la.wf;
         }
         // Wort merken
         ziel.wort = woerter[i];
@@ -481,9 +489,13 @@ const karteisuche = {
             if (lemma.ko) {
               nl += ` (${lemma.ko})`;
             }
-            nebenlemmata.add(nl);
-            ziel.nebenlemmata.push(nl);
-            if (!ziel.behandeltMit.includes(nl)) {
+            if (ziel.wf) {
+              ziel.wfLemmata.push(nl);
+            } else {
+              nebenlemmata.add(nl);
+              ziel.nebenlemmata.push(nl);
+            }
+            if (!ziel.wf && !ziel.behandeltMit.includes(nl)) {
               ziel.behandeltMit.push(nl);
             }
             if (!ztjMit[woerter[i]]) {
@@ -546,7 +558,7 @@ const karteisuche = {
       // Wörter ergänzen, die mit dem Wort der aktuellen Kartei behandelt werden
       if (ztjMit[i.wort]) {
         for (const mit of ztjMit[i.wort]) {
-          if (!i.behandeltMit.includes(mit)) {
+          if (!i.wf && !i.behandeltMit.includes(mit)) {
             i.behandeltMit.push(mit);
           }
         }
@@ -569,6 +581,8 @@ const karteisuche = {
             behandeltIn: i.wort,
             behandeltMit: [],
             passt: i.passt,
+            wf: false,
+            wfLemmata: [],
           };
           karteisuche.ztj.push(obj);
         }
@@ -723,6 +737,8 @@ const karteisuche = {
           behandeltIn: "",
           behandeltMit: [],
           passt: false,
+          wf: false,
+          wfLemmata: [],
         });
       }
       return true;

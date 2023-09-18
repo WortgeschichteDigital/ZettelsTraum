@@ -118,7 +118,7 @@ const lemmata = {
           for (const wort of woerter) {
             for (const lemma of data.la.la) {
               if (lemma.sc.includes(wort)) {
-                if (lemma.nl) {
+                if (!data.la.wf && lemma.nl) {
                   data.fv[wort].nl = true;
                 }
                 break;
@@ -168,28 +168,43 @@ const lemmata = {
     const errors = [];
 
     // Fehler Wortfeldartikel
-    if (data.la.wf && data.la.la.length > 1) {
-      errors.push("• Wortfeldartikel mit mehr als einem Titel");
-    }
-    if (data.la.wf && data.la.la[0].sc.length > 1) {
-      errors.push("• Wortfeldartikel mit Alternativtitel");
-    }
-    if (data.la.wf && data.la.la.some(i => i.nl)) {
-      errors.push("• Wortfeldartikel mit Nebenlemmata");
+    if (data.la.wf) {
+      let titel = 0;
+      let alternativen = 0;
+      let feldlemmata = 0;
+      for (const entry of data.la.la) {
+        if (entry.nl) {
+          feldlemmata++;
+        } else {
+          titel++;
+          if (entry.sc.length > 1) {
+            alternativen++;
+          }
+        }
+      }
+      if (!titel) {
+        errors.push("• Wortfeldartikel ohne Titel");
+      } else if (titel > 1) {
+        errors.push("• Wortfeldartikel mit mehr als einem Titel");
+      }
+      if (alternativen) {
+        errors.push("• Wortfeldartikel mit Alternativtitel");
+      }
+      if (!feldlemmata) {
+        errors.push("• Wortfeldartikel ohne Feldlemmata");
+      } else if (feldlemmata < 2) {
+        errors.push("• Wortfeldartikel mit zu wenig Feldlemmata");
+      }
     }
 
     // Fehler: nur Nebenlemmata
-    if (!data.la.la.some(i => !i.nl)) {
+    if (!data.la.wf && !data.la.la.some(i => !i.nl)) {
       errors.push("• nur Nebenlemmata angegeben");
     }
 
     // Fehler: leere Lemmafelder
-    if (data.la.la.length === 1 && !data.la.la[0].sc.some(i => i)) {
-      if (data.la.wf) {
-        errors.push("• keinen Titel angegeben");
-      } else {
-        errors.push("• kein Hauptlemma angegeben");
-      }
+    if (!data.la.wf && data.la.la.length === 1 && !data.la.la[0].sc.some(i => i)) {
+      errors.push("• kein Hauptlemma angegeben");
     } else {
       let leereFelder = false;
       for (const i of data.la.la) {
@@ -212,6 +227,9 @@ const lemmata = {
     const getrennt = [];
     const illegal = [];
     for (const i of data.la.la) {
+      if (data.la.wf && !i.nl) {
+        continue;
+      }
       for (const s of i.sc) {
         if (!s) {
           continue;
@@ -309,6 +327,8 @@ const lemmata = {
         let placeholder = data.la.la[i].nl ? "Nebenlemma" : "Hauptlemma";
         if (j > 0) {
           placeholder = `Schreibung ${j + 1}`;
+        } else if (data.la.wf && i > 0) {
+          placeholder = "Lemma";
         } else if (data.la.wf) {
           placeholder = "Titel";
         }
@@ -327,7 +347,7 @@ const lemmata = {
       const label = document.createElement("label");
       nl.appendChild(label);
       label.setAttribute("for", "nl-" + i);
-      label.textContent = "Nebenlemma";
+      label.textContent = data.la.wf ? "Feldlemma" : "Nebenlemma";
       if (data.la.la[i].nl) {
         nlI.checked = true;
       }
