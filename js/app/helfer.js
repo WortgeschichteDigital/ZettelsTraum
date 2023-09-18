@@ -101,7 +101,7 @@ const helfer = {
         queries: [],
       },
       "lemmata-over": {
-        queries: [],
+        queries: ["#lemmata h2"],
       },
       "meta-cont-over": {
         queries: [],
