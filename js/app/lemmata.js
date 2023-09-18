@@ -99,11 +99,29 @@ const lemmata = {
           }
         }
         const woerter = [];
+        const ausWortverbindung = new Set();
         for (const lemma of hinzu) {
           if (data.fv[lemma]) {
             data.fv[lemma].an = true;
+            if (/ /.test(lemma)) {
+              // Formvarianten für Einzelwörter aus Wortverbindungen aktivieren
+              for (const wort of lemma.split(" ")) {
+                if (data.fv[wort]) {
+                  data.fv[wort].an = true;
+                }
+              }
+            }
           } else {
             woerter.push(lemma);
+            if (/ /.test(lemma)) {
+              // Formvarianten für Einzelwörter aus Wortverbindungen aufnehmen
+              for (const wort of lemma.split(" ")) {
+                if (!woerter.includes(wort)) {
+                  woerter.push(wort);
+                  ausWortverbindung.add(wort);
+                }
+              }
+            }
           }
         }
         if (woerter.length) {
@@ -125,18 +143,29 @@ const lemmata = {
               }
             }
           }
+
+          // Farbe der Einzelwörter aus Wortverbindugnen anpassen
+          for (const wort of ausWortverbindung) {
+            data.fv[wort].fa = 14;
+          }
         }
 
         // entfernte Lemmata
         const weg = new Set();
-        for (const i of lemmata.lemmataStart) {
-          if (!lemmaliste.has(i)) {
-            weg.add(i);
+        for (const lemma of lemmata.lemmataStart) {
+          if (!lemmaliste.has(lemma)) {
+            weg.add(lemma);
+            if (/ /.test(lemma)) {
+              // Einzelwörter aus einer Wortverbindungen ebenfalls als verschwunden markieren
+              for (const wort of lemma.split(" ")) {
+                weg.add(wort);
+              }
+            }
           }
         }
-        for (const i of weg) {
-          if (data.fv[i]) {
-            data.fv[i].an = false;
+        for (const lemma of weg) {
+          if (data.fv[lemma]) {
+            data.fv[lemma].an = false;
           }
         }
 
