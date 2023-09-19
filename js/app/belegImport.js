@@ -923,6 +923,7 @@ const belegImport = {
       data.no = belegImport.DWDSKorrekturen({
         typ: "no",
         txt: nDok.firstChild.nodeValue,
+        data,
         korpus,
       });
     }
@@ -1255,16 +1256,34 @@ const belegImport = {
       return ts;
     } else if (typ === "no") { // NOTIZEN
       if (korpus) {
-        const hauptlemmata = [];
+        // Lemma ermitteln, das tatsächlich im Belegtext steht
+        const lemmata = [];
         for (const lemma of window.data.la.la) {
-          if (lemma.nl) {
-            continue;
-          }
           for (const schreibung of lemma.sc) {
-            hauptlemmata.push(schreibung);
+            if (/ /.test(schreibung)) {
+              // Wortverbindungen ignorieren
+              continue;
+            }
+            lemmata.push(schreibung);
           }
         }
-        const query = encodeURIComponent(`${hauptlemmata.join(" && ")} #HAS[basename,'${txt}']`);
+        lemmata.sort((a, b) => b.length - a.length);
+        let lemma = "";
+        for (const l of lemmata) {
+          const form = helfer.formVariRegExpRegs.find(i => i.wort === l);
+          if (!form) {
+            continue;
+          }
+          const reg = new RegExp(`(^|[${helfer.ganzesWortRegExp.links}])${form.reg}($|[${helfer.ganzesWortRegExp.rechts}])`, "i");
+          if (reg.test(data.bs)) {
+            lemma = form.wort;
+            break;
+          }
+        }
+        // Query zusammenbauen
+        const woerter = lemma || lemmata.join(" && ");
+        const query = encodeURIComponent(`${woerter} #HAS[basename,'${txt}']`);
+        // ggf. Zeitungsname in die erste Zeile einfügen
         let ersteZeile = "\n";
         if (optionen.data.einstellungen["notizen-zeitung"] &&
             belegImport.DWDSKorpora[korpus] &&
