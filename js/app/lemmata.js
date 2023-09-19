@@ -91,6 +91,15 @@ const lemmata = {
       }
 
       if (variantenUpdate) {
+        // Nebenlemmata sammeln
+        const nl = new Set();
+        for (const lemma of data.la.la) {
+          if (!lemma.nl) {
+            continue;
+          }
+          lemma.sc.forEach(i => nl.add(i));
+        }
+
         // hinzugefügte Lemmata
         const hinzu = new Set();
         for (const i of lemmaliste) {
@@ -100,6 +109,7 @@ const lemmata = {
         }
         const woerter = [];
         const ausWortverbindung = new Set();
+        const ausWortverbindungNl = new Set();
         for (const lemma of hinzu) {
           if (data.fv[lemma]) {
             data.fv[lemma].an = true;
@@ -119,6 +129,9 @@ const lemmata = {
                 if (!woerter.includes(wort)) {
                   woerter.push(wort);
                   ausWortverbindung.add(wort);
+                  if (nl.has(lemma)) {
+                    ausWortverbindungNl.add(wort);
+                  }
                 }
               }
             }
@@ -134,6 +147,10 @@ const lemmata = {
 
           // neue Wörter ggf. als Nebenlemma markieren
           for (const wort of woerter) {
+            if (ausWortverbindungNl.has(wort)) {
+              data.fv[wort].nl = true;
+              continue;
+            }
             for (const lemma of data.la.la) {
               if (lemma.sc.includes(wort)) {
                 if (!data.la.wf && lemma.nl) {
