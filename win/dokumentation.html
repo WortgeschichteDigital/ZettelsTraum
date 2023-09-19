@@ -639,7 +639,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
           <p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-          <p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version&nbsp;25</span>):</p>
+          <p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version&nbsp;26</span>):</p>
 
           <table class="ztj">
             <tr>
@@ -1018,6 +1018,45 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>Beleg ungeprüft (er muss noch Korrektur gelesen werden);<br><span class="obacht">mit Version&nbsp;21 ergänzt</span></td>
             </tr>
             <tr>
+              <td><p><code class="quelltext">la</code></p></td>
+              <td class="datentyp">Object</td>
+              <td>&nbsp;</td>
+              <td>Lemmaliste;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">la</code></p></td>
+              <td class="datentyp">Array</td>
+              <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
+              <td>Lemmata</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">ko</code></p></td>
+              <td class="datentyp">String</td>
+              <td>&nbsp;</td>
+              <td>Kommentar zum Lemma</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">nl</code></p></td>
+              <td class="datentyp">Boolean</td>
+              <td>&nbsp;</td>
+              <td>ist Nebenlemma</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">sc</code></p></td>
+              <td class="datentyp">Array</td>
+              <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
+              <td>Schreibungen des Lemmas</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">wf</code></p></td>
+              <td class="datentyp">Boolean</td>
+              <td>&nbsp;</td>
+              <td>ist Wortfeldartikel</td>
+            </tr>
+            <tr>
               <td><p><code class="quelltext">le</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
@@ -1080,11 +1119,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>&nbsp;</td>
               <td>BearbeiterIn</td>
             </tr>
-            <tr class="ztj-ebene1">
+            <tr class="ztj-ebene1 ztj-alt">
               <td><p><code class="quelltext">nl</code></p></td>
               <td class="datentyp">String</td>
               <td>&nbsp;</td>
-              <td>kommagetrennte Liste mit Nebenlemmata, die mit dem aktuellen Karteiwort behandelt werden;<br><span class="obacht">ab Version&nbsp;20</span></td>
+              <td>kommagetrennte Liste mit Nebenlemmata, die mit dem aktuellen Karteiwort behandelt werden;<br><span class="obacht">ab Version&nbsp;20; mit Version&nbsp;26 entfernt</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">no</code></p></td>
@@ -1506,11 +1545,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><code class="quelltext">/[0-9]+/</code></td>
               <td>Versionsnummer des <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformats</td>
             </tr>
-            <tr>
+            <tr class="ztj-alt">
               <td><p><code class="quelltext">wo</code></p></td>
               <td class="datentyp">String</td>
               <td>&nbsp;</td>
-              <td>Wort, zu dem die Kartei erstellt wurde</td>
+              <td>Wort, zu dem die Kartei erstellt wurde;<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
             </tr>
           </table>
 

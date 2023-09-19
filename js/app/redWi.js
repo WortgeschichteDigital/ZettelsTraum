@@ -13,6 +13,7 @@ const redWi = {
 
   // Dropdown: Verweistextvorschläge sammeln
   dropdownVerweistexte () {
+    const lemmata = helfer.lemmaliste();
     const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
     const set = new Set();
     const felder = [ "sy", "bl" ]; // Synonmye und Wortbildungen
@@ -28,14 +29,15 @@ const redWi = {
             const sp = i.split(": ");
             wort = sp[sp.length - 1];
           }
-          if (!data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
+          if (!lemmata.has(wort) &&
+              !data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
             set.add(wort);
           }
         }
       }
     }
     for (const wort of Object.keys(data.fv)) { // Formvarianten
-      if (wort !== kartei.wort &&
+      if (!lemmata.has(wort) &&
           !data.rd.wi.some(i => i.gn === gn && i.tx === wort)) {
         set.add(wort);
       }

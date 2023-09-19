@@ -36,6 +36,21 @@
 
 /* ROTATIONS-ANIMATION -------------------------- */
 
+.sperre {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255 255 255 / 70%);
+  backdrop-filter: blur(2px);
+}
+
 @keyframes rotieren {
   25% {
     transform: rotate(90deg);
@@ -61,7 +76,7 @@
   animation-timing-function: linear;
 }
 
-#stamm-sperre.rotieren-bitte img,
+.sperre.rotieren-bitte img,
 #updatesWin-header .rotieren-bitte img {
   animation-name: rotieren;
   animation-duration: 1s;

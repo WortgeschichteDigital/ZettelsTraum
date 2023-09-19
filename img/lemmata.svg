@@ -3,5 +3,5 @@
 <metadata>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Akademie der Wissenschaften zu Göttingen, „Wortgeschichte digital“ („Zentrum für digitale Lexikographie der deutschen Sprache“)" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
 </metadata>
-<path d="m7.002 4c-1.6635 0-3.002 1.3384-3.002 3.002v9.9961c0 1.6635 1.3384 3.002 3.002 3.002h9.9961c1.6635 0 3.002-1.3384 3.002-3.002v-9.9961c0-1.6635-1.3384-3.002-3.002-3.002h-9.9961zm1.7266 2.2871h6.543v1.9844h-4.1602v2.9453h3.873v1.9824h-3.873v4.5137h-2.3828v-11.426z" fill="#212121"/>
+<path d="m6.9883 4c-1.655 0-2.9883 1.3333-2.9883 2.9883v10.023c0 1.655 1.3333 2.9883 2.9883 2.9883h10.023c1.655 0 2.9883-1.3333 2.9883-2.9883v-10.023c0-1.655-1.3333-2.9883-2.9883-2.9883h-10.023zm1.4844 2.2871h2.416v9.4258h4.6387v2h-7.0547v-11.426z" fill="#212121"/>
 </svg>

@@ -1255,8 +1255,16 @@ const belegImport = {
       return ts;
     } else if (typ === "no") { // NOTIZEN
       if (korpus) {
-        const wort = kartei.wort.replace(/\s/g, " && ");
-        const query = encodeURIComponent(`${wort} #HAS[basename,'${txt}']`);
+        const hauptlemmata = [];
+        for (const lemma of window.data.la.la) {
+          if (lemma.nl) {
+            continue;
+          }
+          for (const schreibung of lemma.sc) {
+            hauptlemmata.push(schreibung);
+          }
+        }
+        const query = encodeURIComponent(`${hauptlemmata.join(" && ")} #HAS[basename,'${txt}']`);
         let ersteZeile = "\n";
         if (optionen.data.einstellungen["notizen-zeitung"] &&
             belegImport.DWDSKorpora[korpus] &&

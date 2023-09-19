@@ -321,7 +321,7 @@ const drucken = {
     const h3 = document.createElement("h3");
     h3.textContent = h;
     const i = document.createElement("i");
-    i.textContent = kartei.wort;
+    i.textContent = kartei.titel;
     h3.appendChild(i);
     cont.insertBefore(h3, cont.firstChild);
   },

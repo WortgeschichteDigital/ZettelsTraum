@@ -467,7 +467,7 @@ const stamm = {
           }
           // Sperrbildschirm anzeigen und kurz warten
           document.activeElement.blur();
-          const sperre = stamm.sperre(document.getElementById("stamm-popup"));
+          const sperre = helfer.sperre(document.getElementById("stamm-popup"));
           await new Promise(resolve => setTimeout(() => resolve(true), 250));
           // Request stellen
           const request = await stamm.dtaRequest(stamm.wortAkt, true);
@@ -668,7 +668,7 @@ const stamm = {
     if (importieren.length) {
       // ggf. Sperrbildschirm anzeigen und kurz warten
       document.activeElement.blur();
-      sperre = stamm.sperre(document.getElementById("stamm-cont"));
+      sperre = helfer.sperre(document.getElementById("stamm-cont"));
       await new Promise(resolve => setTimeout(() => resolve(true), 250));
       // Promises erzeugen
       const promises = [];
@@ -683,6 +683,7 @@ const stamm = {
             },
           ],
           ma: false,
+          nl: false,
           ps: "",
           tr: true,
         };
@@ -813,15 +814,12 @@ const stamm = {
               return;
             }
             // Wurden manuell Wörter ergänzt? Wenn ja => auch diese müssen aufgefrischt werden
-            let str = kartei.wort;
-            const woerter = stamm.dtaPrepParole(kartei.wort);
+            const woerter = helfer.lemmaliste();
             for (const wort of Object.keys(data.fv)) {
-              if (!woerter.includes(wort)) {
-                str += ` ${wort}`;
-              }
+              woerter.add(wort);
             }
             // alle Wörter auffrischen
-            stamm.dtaGet(str, true);
+            stamm.dtaGet([ ...woerter ], true);
           },
         });
       }
@@ -853,21 +851,20 @@ const stamm = {
   },
 
   // Formvarianten aller Karteiwörter initialisieren oder noch einmal laden
-  //   str = String
-  //     (enthält das Wort oder die Wörter)
+  //   woerter = Array
+  //     (enthält die Wörter, zu denen Formvarianten bezogen werden sollen)
   //   aktiv = Boolean
   //     (der Download der Varianten wurde bewusst angestoßen => ggf. Fehlermeldungen anzeigen)
-  async dtaGet (str, aktiv) {
+  async dtaGet (woerter, aktiv) {
     stamm.ladevorgang = true;
     // ggf. Sperrbildschirm anzeigen und kurz warten
     let sperre;
     if (aktiv) {
       document.activeElement.blur();
-      sperre = stamm.sperre(document.getElementById("stamm-cont"));
+      sperre = helfer.sperre(document.getElementById("stamm-cont"));
       await new Promise(resolve => setTimeout(() => resolve(true), 250));
     }
     // Objekte anlegen
-    const woerter = stamm.dtaPrepParole(str);
     for (const wort of woerter) {
       if (data.fv[wort]) {
         // die Objekte sollten nicht überschrieben werden,
@@ -885,12 +882,13 @@ const stamm = {
           },
         ],
         ma: false,
+        nl: false,
         ps: "",
         tr: true,
       };
     }
     // Formvarianten abrufen und eintragen
-    const request = await stamm.dtaRequest(str, aktiv);
+    const request = await stamm.dtaRequest(woerter.join(" "), aktiv);
     if (!request) {
       // Fehler in der Promise => keine Formvarianten;
       // aber das Wort ist eingetragen => einfach abschließen
@@ -1116,21 +1114,5 @@ const stamm = {
     kartei.karteiGeaendert(true);
     stamm.auflisten();
     document.getElementById("stamm-text").focus();
-  },
-
-  // Sperrbildschirm erzeugen
-  //   cont = Element
-  //     (Container, in den der Bildschirm eingehängt werden soll)
-  sperre (cont) {
-    const div = document.createElement("div");
-    div.classList.add("rotieren-bitte");
-    div.id = "stamm-sperre";
-    const img = document.createElement("img");
-    div.appendChild(img);
-    img.src = "img/pfeil-kreis-blau-96.svg";
-    img.width = "96";
-    img.height = "96";
-    cont.appendChild(div);
-    return div;
   },
 };

@@ -2,6 +2,12 @@
 
 const bedeutungen = {
   // enthält die übergebenen Daten
+  //   wort = String
+  //     (Wort für den Fensterkopf)
+  //   bd = Object
+  //     (Bedeutungsgerüstdaten)
+  //   contentsId = Number
+  //     (ID des öffnenden Fensters)
   data: {},
 
   // ID des aktuellen Gerüsts
@@ -10,7 +16,8 @@ const bedeutungen = {
   // Anzeige mit den gelieferten Daten aufbereiten
   aufbauen () {
     // Wort eintragen
-    document.querySelector("h1").textContent = bedeutungen.data.wort;
+    document.title = bedeutungen.data.titel;
+    document.querySelector("h1").innerHTML = bedeutungen.data.wort;
     // ggf. Gerüstnummer zwischenspeichern
     if (!bedeutungen.geruest) {
       bedeutungen.geruest = bedeutungen.data.bd.gn;

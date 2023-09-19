@@ -1,0 +1,126 @@
+@charset "utf-8";
+
+/* LEMMATA -------------------------------------- */
+
+#lemmata > div {
+  margin-top: 40px;
+  max-width: 750px;
+}
+
+.icon-h-lemmata {
+  -webkit-mask-image: url(../../img/lemmata.svg);
+  mask-image: url(../../img/lemmata.svg);
+}
+
+#lemmata-cont {
+  position: relative;
+  padding: 10px;
+}
+
+#lemmata-over {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#lemmata-over > p {
+  position: relative;
+  margin-bottom: 15px;
+  padding-left: 1px;
+}
+
+#lemmata-over > p span {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+/* LISTE ---------------------------------------- */
+
+#lemmata-liste table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+#lemmata-liste td {
+  vertical-align: top;
+  border-top: 1px solid var(--linie);
+  padding: 15px 5px;
+  white-space: nowrap;
+}
+
+#lemmata-liste td:first-child {
+  padding: 18px 0 5px;
+  width: 48px;
+}
+
+#lemmata-liste .nur-ein-lemma td:first-child {
+  width: 24px;
+}
+
+#lemmata-liste td:nth-child(2) {
+  padding-left: 0;
+  width: 415px;
+}
+
+#lemmata-liste .keine-schreibungen td:nth-child(2) {
+  width: 391px;
+}
+
+#lemmata-liste td:last-child {
+  padding-right: 0;
+}
+
+#lemmata-liste tr:last-child td {
+  padding-bottom: 0;
+}
+
+#lemmata-liste p:last-child {
+  margin-bottom: 0;
+}
+
+#lemmata-liste .p-lemma {
+  margin-left: 24px;
+}
+
+#lemmata-liste .keine-schreibungen .p-lemma {
+  margin-left: 0;
+}
+
+#lemmata-liste .p-nl {
+  margin-left: 53px;
+}
+
+#lemmata-liste .keine-schreibungen .p-nl {
+  margin-left: 29px;
+}
+
+#lemmata-liste .icon-link {
+  background-color: var(--iconHell);
+}
+
+#lemmata-liste .icon-link:focus {
+  background-color: var(--farbe);
+}
+
+#lemmata-liste .icon-link:hover {
+  background-color: var(--text);
+}
+
+#lemma-liste .icon-link + .icon-link {
+  margin-left: 10px;
+}
+
+#lemmata-liste input.lemma {
+  width: 350px;
+}
+
+#lemmata-liste input.kommentar {
+  width: calc(100% - 12px);
+}
+
+#lemmata-liste .icon-link + input {
+  margin-left: 5px;
+}

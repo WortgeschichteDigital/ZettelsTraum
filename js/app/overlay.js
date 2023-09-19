@@ -63,6 +63,13 @@ const overlay = {
     } else if (fenster.id === "notizen") {
       notizen.abbrechen();
       return;
+    } else if (fenster.id === "lemmata") {
+      if (lemmata.karteiInit) {
+        lemmata.abgebrochen = true;
+        lemmata.geaendert = false;
+      }
+      lemmata.schliessen();
+      return;
     } else if (fenster.id === "stamm") {
       stamm.schliessen();
       return;

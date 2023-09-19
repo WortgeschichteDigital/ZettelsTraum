@@ -322,15 +322,8 @@ const dropdown = {
     } else if (feld_id === "md-re-au") {
       dropdown.data = [ ...xml.data.autorinnen ];
     } else if (feld_id === "le-le") {
-      dropdown.data = xml.lemmata();
-      if (xml.data.nebenlemmata) {
-        xml.data.nebenlemmata.split(/, */).forEach(nl => {
-          if (!nl) {
-            return;
-          }
-          dropdown.data.push(nl);
-        });
-      }
+      dropdown.data = [ ...helfer.lemmaliste(xml.data.lemmata, true) ];
+      dropdown.data.sort(helfer.sortAlpha);
     } else if (feld_id === "le-ty") {
       dropdown.data = [ ...xml.dropdown.lemmaTypen ];
     } else if (/^(le-re|bg-tf-ti)$/.test(feld_id)) {

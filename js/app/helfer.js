@@ -100,6 +100,9 @@ const helfer = {
       "kopieren-liste-cont": {
         queries: [],
       },
+      "lemmata-over": {
+        queries: ["#lemmata h2"],
+      },
       "meta-cont-over": {
         queries: [],
       },
@@ -933,6 +936,29 @@ const helfer = {
     return string;
   },
 
+  // Liste der aktuellen Lemmata ausgeben
+  //   daten = Object | undefined
+  //     (Verweis auf das Datenobjekt mit den Lemmata)
+  //   join = true | undefined
+  //     (Schreibungen des Lemmas in einen String, getrennt mit /)
+  lemmaliste (daten = data.la, join = false) {
+    const liste = new Set();
+    for (const lemma of daten.la) {
+      if (daten.wf && !lemma.nl) {
+        // Titel von Wortfeldartikeln sind keine Lemmata
+        continue;
+      }
+      if (join) {
+        liste.add(lemma.sc.join("/"));
+      } else {
+        for (const schreibung of lemma.sc) {
+          liste.add(schreibung);
+        }
+      }
+    }
+    return liste;
+  },
+
   // Sammlung der regulären Ausdrücke aller Formvarianten;
   // in jedem Slot ein Objekt mit den Eigenschaften
   //   wort = das Wort, für den der reguläre Ausdruck erstellt wurde
@@ -1108,6 +1134,21 @@ const helfer = {
     }, 1000);
   },
 
+  // Sperr-Overlay erzeugen
+  //   cont = Element
+  //     (Container, in den das Overlay eingehängt werden soll)
+  sperre (cont) {
+    const div = document.createElement("div");
+    div.classList.add("sperre", "rotieren-bitte");
+    const img = document.createElement("img");
+    div.appendChild(img);
+    img.src = "img/pfeil-kreis-blau-96.svg";
+    img.width = "96";
+    img.height = "96";
+    cont.appendChild(div);
+    return div;
+  },
+
   // entschüsselt die "verschlüsselte" E-Mail-Adresse
   //   kodiert = String
   //     (die "verschlüsselte" Mail-Adresse)
@@ -1269,8 +1310,8 @@ const helfer = {
     }
     // Wort
     let wort = "";
-    if (kartei.wort) {
-      wort = `: ${kartei.wort}`;
+    if (kartei.titel) {
+      wort = `: ${kartei.titel}`;
     }
     // Dokumententitel
     document.title = appInfo.name + wort + asterisk;
@@ -1363,7 +1404,7 @@ const helfer = {
     // Fehler-Objekt erzeugen
     const err = {
       time: new Date().toISOString(),
-      word: typeof kartei === "undefined" ? winInfo.typ : kartei.wort,
+      word: typeof kartei === "undefined" ? winInfo.typ : kartei.titel,
       fileZtj: typeof kartei === "undefined" ? "Nebenfenster" : kartei.pfad,
       fileJs,
       message,
@@ -1390,7 +1431,8 @@ const helfer = {
   // danach wird ein endgültiger Schließen-Befehl an Main gegeben
   async beforeUnload () {
     // Schließen unterbrechen, wenn ungespeicherte Änderungen
-    if (notizen.geaendert ||
+    if (lemmata.geaendert ||
+        notizen.geaendert ||
         redLit.eingabe.changed ||
         redLit.db.changed ||
         tagger.geaendert ||

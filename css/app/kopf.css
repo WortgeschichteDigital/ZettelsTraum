@@ -337,6 +337,19 @@ body > header span {
   text-overflow: ellipsis;
 }
 
+#wort span {
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+#wort span::before {
+  content: "(";
+}
+
+#wort span::after {
+  content: ")";
+}
+
 #wort.keine-kartei {
   font-size: 20px;
   font-style: italic;

@@ -196,7 +196,7 @@
 
             <figure title="zum Vergrößern anklicken">
               <img src="../img/win/kurzanleitung-dialogfenster.png" alt="">
-              <figcaption>3. Dialogfenster: Eingabeaufforderung für ein Karteiwort</figcaption>
+              <figcaption>3. Dialogfenster: Eingabeaufforderung für die Karteiwörter</figcaption>
             </figure>
           </div>
 
@@ -247,7 +247,7 @@
           <ol>
             <li><b>Registrieren</b> Sie sich! Die App wird Sie beim Öffnen des Hauptfenster dazu auffordern. Der im Registrierungsfenster eingegebene Name wird in den Einstellungen gespeichert und kann unter <i><span class="app-name"></span> &gt; Einstellungen &gt; Allgemeines &gt; <a href="#einstellungen-allgemeines">BearbeiterIn auf diesem Rechner</a></i> geändert werden. Die Registrierung ist besonders für größere Projekte wichtig, damit man später leicht nachvollziehen kann, wer eine Wortkartei bearbeitet hat.</li>
 
-            <li><a href="#menueKartei-erstellen">Erstellen</a> Sie eine <b>Wortkartei</b>, indem Sie nach dem Programmstart in der <a href="#menueApp-neuesFenster">Startansicht</a> auf den großen Button <i>Kartei erstellen</i> klicken. Sie werden nach einem Wort gefragt. Geben Sie in dem Dialog ein Wort (Substantiv, Adjektiv oder <abbr title="dergleichen">dgl.</abbr>) oder eine Wortverbindung (Syntagma, Redewendung oder <abbr title="dergleichen">dgl.</abbr>) ein. Eingaben, die an den Beginn eines klassischen Lexikonartikels erinnern (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>Auto, das</q>), sind <a href="#menueKartei-erstellenForm">eher dysfunktional</a>, können aber <abbr title="unter Umständen">u.&nbsp;U.</abbr> durchaus Sinn machen (wie bei <q>Mensch, das</q>). Sammeln Sie in ein und derselben Kartei Belege zu mehreren Wörtern gleichzeitig, geben Sie die Wörter getrennt durch Komma und Leerzeichen ein: <q>Großfamilie, Kleinfamilie, Kernfamilie</q>.</li>
+            <li><a href="#menueKartei-erstellen">Erstellen</a> Sie eine <b>Wortkartei</b>, indem Sie nach dem Programmstart in der <a href="#menueApp-neuesFenster">Startansicht</a> auf den großen Button <i>Kartei erstellen</i> klicken. Das <a href="#menueKartei-lemmata">Dialogfenster für Lemmata</a> erscheint. Geben Sie in dem Feld <i>Hauptlemma</i> ein Wort (Substantiv, Adjektiv oder <abbr title="dergleichen">dgl.</abbr>) oder eine Wortverbindung (Syntagma, Redewendung oder <abbr title="dergleichen">dgl.</abbr>) ein. Eingaben, die an den Beginn eines klassischen Lexikonartikels erinnern (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>Auto, das</q>), sind nicht erlaubt, da das Komma nicht zu den in diesem Feld erlaubten Zeichen gehört. Sammeln Sie in ein und derselben Kartei Belege zu mehreren Wörtern gleichzeitig, klicken Sie im Dialogfenster auf das Icon <img src="../img/plus-dick.svg" width="24" height="24" alt=""> ganz links, um ein weiteres Lemma hinzuzufügen.</li>
 
             <li>
               <p><a href="#karteikarte">Füllen</a> Sie die neue Kartei mit <b>Karteikarten</b>. Nach dem Erstellen einer neuen Kartei wird umgehend ein leeres <a href="#karteikarte-formularansicht">Karteikartenformular</a> geöffnet. Die Datenfelder <i>Datum, Beleg</i> und <i>Quelle</i> müssen ausgefüllt werden, ansonsten lässt sich die Karte nicht speichern. Alle anderen Felder sind optional.</p>
@@ -3826,7 +3826,7 @@ Mustermann, Erika
 
             <p class="add-navi-details" id="menueApp-karteisucheKarteiwort"><b><i>Karteiwort:</i></b> Der Filter sucht nach passenden Karteiwörtern. Die Suche verläuft trunkiert, es werden also auch Wortteile gefunden; Groß- und Kleinschreibung werden ignoriert. <i class="app-name"></i> bietet zwar an, eine neue Kartei mit dem Karteiwort als Namen abzuspeichern. Der Karteiname spielt für diese Suche jedoch keine Rolle. Es wird lediglich das Datenfeld für das Karteiwort <em>innerhalb</em> der Kartei ausgewertet, das vom Dateinamen durchaus abweichen kann und darf.</p>
 
-            <p class="add-navi-details" id="menueApp-karteisucheLemmatyp"><b><i>Lemmatyp:</i></b> Mit diesem Filter kann die Anzeige auf Hautlemmata (eigenständig behandelte Wörter) oder Nebenlemmata (zusammen mit Hauptlemmata kursorisch mitbehandelte Wörter) eingeschränkt werden, je nachdem wie der Filter eingestellt wurde. <abbr title="Vergleich">Vgl.</abbr> auch das <a href="#menueRedaktion-metadatenNebenlemmata">Nebenlemmata-Feld in den Redaktionsmetadaten</a>.</p>
+            <p class="add-navi-details" id="menueApp-karteisucheLemmatyp"><b><i>Lemmatyp:</i></b> Mit diesem Filter kann die Anzeige auf Hautlemmata (eigenständig behandelte Wörter) oder Nebenlemmata (zusammen mit Hauptlemmata mitbehandelte Wörter) eingeschränkt werden, je nachdem wie der Filter eingestellt wurde.</p>
 
             <p class="add-navi-details" id="menueApp-karteisucheThemenfelder"><b><i>Themenfelder:</i></b> Mit diesem Filter können Sie nach Karteien suchen, die mit einem oder mehreren Themenfeldern verknüpft wurden. Durchsucht wird das Datenfeld <i>Themenfelder</i>, das über das <a href="#menueRedaktion-metadaten">Redaktionsmetadaten-Fenster</a> gefüllt werden kann. Wollen Sie Karteien finden, in denen Bedeutungen im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> mit bestimmten Themenfeldern verknüpft wurden, müssen Sie den <a href="#menueApp-karteisucheTag">Tag-Filter</a> nutzen.</p>
 
@@ -3955,13 +3955,13 @@ Mustermann, Erika
 
             <p>Ist im aktuellen Fenster bereits eine Kartei geöffnet, wird ein <b>neues Programmfenster</b> aufgebaut. In diesem Fenster wiederum poppt eine Dialogfenster auf, in dem Sie das gewünschte Wort, Sprichwort, Syntagma eingeben können. Danach haben Sie eine initiale Kartei, in der sich umgehend eine leere Karteikarte öffnet, in der Sie Ihren ersten Beleg einpflegen können.</p>
 
-            <p id="menueKartei-erstellenForm">Zur <b>Form der Eingabe</b>: Es ist in aller Regel nicht sinnvoll, in dem Dialogfenster, das Sie nach dem Wort fragt, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbuchartikels erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, <a href="#menueKartei-formvarianten">Formvarianten</a> zu finden, um diese auf Wunsch im Belegtext hervorzuheben, um den Belegkontext zu kürzen <abbr title="und so weiter">usw.</abbr> Unter Umständen kann es gerade für ein solides Funktionieren der automatisierten Kürzung sogar kontraproduktiv sein, wenn der Artikel mit angegeben wird. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie der Artikel <i>das</i> wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein. In gewissen Fällen ist es freilich dennoch sinnvoll, einen Artikel mit anzugeben, weil er ein für die Semantik entscheidender Marker ist (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>Mensch, das</q>). In solchen Fällen ist es allerdings angezeigt, die Hervorhebung des Artikels in den <a href="#menueKartei-formvarianten">Formvarianten</a> zu deaktivieren.</p>
+            <p id="menueKartei-erstellenForm">Zur <b>Form der Eingabe</b>: Es ist in aller Regel nicht sinnvoll, im <a href="#menueKartei-lemmata">Lemmata-Fenster</a>, das beim Erstellen der Kartei aufgerufen wird, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbuchartikels erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, <a href="#menueKartei-formvarianten">Formvarianten</a> zu finden, um diese auf Wunsch im Belegtext hervorzuheben, um den Belegkontext zu kürzen <abbr title="und so weiter">usw.</abbr> Unter Umständen kann es gerade für ein solides Funktionieren der automatisierten Kürzung sogar kontraproduktiv sein, wenn der Artikel in der Lemmaansetzung mit angegeben wird. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie das Auftreten des Artikels <i>das</i> in den Belegen wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein. In gewissen Fällen ist es freilich dennoch sinnvoll, einen Artikel mit anzugeben, weil er ein für die Semantik entscheidender Marker ist (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>das Mensch</q>). In solchen Fällen ist es allerdings angezeigt, die Hervorhebung des Artikels in den <a href="#menueKartei-formvarianten">Formvarianten</a> zu deaktivieren. Da der Zeichenvorrat für dieses Datenfeld begrenzt wurde, ist ferner das Komma (neben vielen anderen Sonderzeichen) nicht erlaubt.</p>
 
             <p>Vollkommen unproblematisch ist es andererseits, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man darum <a href="#menueKartei-formvariantenAktivieren">abstellen</a>, ebenso wie die <a href="#menueKartei-formvariantenErweitern">automatische Erweiterung</a>.</p>
 
-            <p>Sammeln Sie in ein und derselben Kartei Belege zu <b>mehreren Wörtern</b>, sollten Sie diese Wörter auch alle mit angeben. Dies kann besonders für die <a href="#menueApp-karteisucheTrefferliste">Trefferliste der Karteisuche</a> hilfreich sein: In solchen Fällen werden die Wörter dort einzeln aufgeführt. Dafür müssen Sie bei der Eingabe nur die Regel beachten, dass Einzelwörter durch Komma und Leerzeichen voneinander getrennt werden. Dies könnte dann so aussehen: <q>Großfamilie, Kleinfamilie, Kernfamilie</q>.</p>
+            <p>Sammeln Sie in ein und derselben Kartei Belege zu <b>mehreren Wörtern</b>, sollten Sie diese Wörter auch alle mit angeben. Dies kann besonders für die <a href="#menueApp-karteisucheTrefferliste">Trefferliste der Karteisuche</a> hilfreich sein: In solchen Fällen werden die Wörter dort einzeln aufgeführt. Das <a href="#menueKartei-lemmata">Lemmata-Fenster</a> stellt hierfür alles bereit: Klicken Sie auf das <img src="../img/plus-dick.svg" width="20" height="20" alt=""> ganz links neben dem ersten Hauptlemma und ein neuer Formularabschnitt wird erzeugt, in dem Sie ein weiteres Lemma eingeben können.</p>
 
-            <p>Hat ein Lemma <b>variierende Schreibungen</b> sollten Sie diese mit Schrägstrich voneinander trennen. Eine Eingabe könnte also so aussehen: <q>Clan/Klan</q> oder <q>Getto/Ghetto, gehttoisieren/ghettoisieren</q>. Die Varianten werden <abbr title="zum Beispiel">z.&nbsp;B.</abbr> in der <a href="#menueApp-karteisucheExport">Exportfunktion der Karteisuche</a> als solche erkannt. Außerdem werden in diesem Fall auch für die alternierenden Schreibungen automatisch entsprechende <a href="#menueKartei-formvarianten">Formvarianten</a> gesucht.</p>
+            <p>Hat ein Lemma <b>variierende Schreibungen</b>, die zur Ansetzung des Wortes gehören, fügen Sie mit dem <img src="../img/plus-dick.svg" width="20" height="20" alt=""> direkt neben dem passenden Lemmafeld ein weiteres Textfeld hinzu, in dem Sie die Alternativschreibung notieren. Die Varianten werden <abbr title="zum Beispiel">z.&nbsp;B.</abbr> in der <a href="#menueApp-karteisucheExport">Exportfunktion der Karteisuche</a> als solche erkannt. Außerdem werden in diesem Fall auch für die  Alternativschreibungen automatisch entsprechende <a href="#menueKartei-formvarianten">Formvarianten</a> gesucht.</p>
           </div>
 
           <p class="erklaerung-icon-menues" id="menueKartei-oeffnen"><img src="../img/oeffnen.svg" width="24" height="24" alt="">Öffnen</p>
@@ -4026,6 +4026,38 @@ Mustermann, Erika
             <p>Da Sie in <i class="app-name"></i> mit mehreren Wortkarteien parallel arbeiten können: Gibt es noch <b>andere Hauptfenster</b>, in denen Wortkarteien aktiv sind, verschwindet das Fenster, in dem Sie den <i>Schließen</i>-Befehl ausführen, komplett. Handelt es sich um das letzte verbliebene Hauptfenster, wird das Programm nicht verlassen, sondern die <b>Startansicht</b> der App angzeigt (<abbr title="siehe">s.</abbr> dazu die Funktion <a href="#menueApp-neuesFenster"><i><span class="app-name"></span>&nbsp;&gt; Neues Fenster</i></a>).</p>
 
             <p>Zum endgültigen <b>Verlassen des Programms</b>, was mit einem Schließen aller Fenster einhergeht, ist der Befehle <a href="#menueApp-beenden"><i><span class="app-name"></span>&nbsp;&gt; Beenden</i></a> besser geeignet.</p>
+          </div>
+
+          <p class="erklaerung-icon-menues" id="menueKartei-lemmata"><img src="../img/lemmata.svg" width="24" height="24" alt="">Lemmata</p>
+
+          <div class="info">
+            <p>Lemmata der aktuellen Kartei.</p>
+
+            <p>Jede <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Kartei wird zu einem oder mehreren Wörtern angelegt. Hier können Sie die Wörter verwalten (ergänzen, löschen, ändern), zu denen Ihre Kartei Belege sammelt. Änderungen in diesem Dialogfenster haben immer Auswirkungen auf die <a href="#menueKartei-formvarianten">Formvarianten</a>: Löschen Sie ein Lemma oder die Schreibung eines Lemmas, wird das Wort in den Formvarianten automatisch deaktiviert. Fügen Sie ein neues Lemma oder eine neue Schreibung hinzu, werden die Formvarianten entsprechend ergänzt.</p>
+
+            <p>Da es sich bei den Lemmata um ein zentrales Element der Kartei handelt, kann das Fenster nur geschlossen werden, wenn Ihre Eingaben formal korrekt sind: In den Lemma-Feldern sind <abbr title="zum Beispiel">z.&nbsp;B.</abbr> nicht alle Zeichen erlaubt, leere Felder dürfen nicht stehen bleiben <abbr title="und so weiter">usw.</abbr> Darum werden vor dem Schließen des Fensters diverse Prüfungen vorgenommen. Sollte dabei ein Fehler gefunden werden, bekommen Sie eine entsprechende Meldung angezeigt.</p>
+
+            <p>Zu den <b>erlaubten Zeichen</b> gehören alle Buchstaben und Ziffern. Und alle, meint alle: Der Umfang der erlaubten Buchstaben und Ziffern geht über die lateinische Buchstaben und ihre Varianten hinaus. Arabisch <i>شمس</i> (<q class="bedeutung">Sonne</q>) ist darum genauso erlaubt wie die arabische Ziffer <i>٢٠٠٠</i> (2000). Außerdem können ein paar wenige Sonderzeichen verwendet werden: Leerzeichen, Punkt, Bindestrich und Apostroph (nur das typographisch korrekte ’).</p>
+
+            <p>Terminologie und Struktur des Fensters orientiert sich an der Arbeitsweise von <a href="https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/"><i>Wortgeschichte digital</i></a>:</p>
+
+            <ul>
+              <li><b>Hauptlemma:</b> Ein eigenständig behandeltes Wort, zu dem ein eigener Artikel geschrieben wird. Die Hauptlemmata werden im Fensterkopf der Kartei angezeigt.</li>
+
+              <li><b>Nebenlemma:</b> Ein zusammen mit den Hauptlemmata eines Artikels mitbehandeltes Wort. Auch zu den Nebenlemmata werden Belege aufgenommen, sie werden in einem Artikel allerdings weniger umfangreich thematisiert als Hauptlemmata.</li>
+
+              <li><b>Wortfeldartikel:</b> Überblicksartikel zu mehreren Lemmata, die in einem wortfeldartigen Zusammenhang stehen. Bei diesem Artikeltyp müssen Sie zwingend mehrere Lemmablöcke anlegen: Im ersten Block sollten Sie den Titel des Wortfeldartikels eintragen. In den folgenden Lemmablöcken folgen dann die Feldlemmata, also diejenigen Lemmata, die in diesem Wortfeldartikel überblicksartig behandelt werden. Sie müssen mindestens zwei Feldlemmata angeben. Außerdem müssen Sie bei den Feldlemmata immer die Checkbox <i>Feldlemma</i> abhaken. Für diese Lemmata werden vor dem Schließen des Lemmata-Fensters automatisch Formvarianten angelegt (für den Titel jedoch nicht). Sollte es ein Feldlemma geben, das identisch mit dem Titel des Wortfeldartikels ist, müssen Sie für dieses Lemma unbedingt einen eigenen Lemmablock erstellen und die Checkbox <i>Feldlemma</i> abhaken.</li>
+            </ul>
+
+            <p>Die Icons haben alle einen erläuternden Tooltip:</p>
+
+            <p class="erklaerung-icon"><img src="../img/plus-dick.svg" width="20" height="20" alt="">Fügt einen neuen Lemmablock oder eine Schreibung zum direkt daneben stehenden Lemma hinzu.</p>
+
+            <p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt="">Schiebt den Lemmablock oder die Schreibung um eine Position nach oben.</p>
+
+            <p class="erklaerung-icon"><img src="../img/pfeil-gerade-hoch.svg" width="20" height="20" alt="">Löscht den Lemmablock oder die Schreibung.</p>
+
+            <p>Das Feld <b>Kommentar</b> können Sie frei mit Text befüllen. Steht der Kommentar neben einem Hauptlemma, wird er im Artikelkopf eingeklammert und in kleinerer Type angezeigt.</p>
           </div>
 
           <p class="erklaerung-icon-menues" id="menueKartei-formvarianten"><img src="../img/formvarianten.svg" width="24" height="24" alt="">Formvarianten</p>
@@ -4491,8 +4523,6 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
           <div class="info">
             <p>Registriert Metadaten, die in unterschiedlicher Weise die Redaktion von Artikeln betreffen.</p>
-
-            <p id="menueRedaktion-metadatenNebenlemmata"><b><i>Karteiwort&nbsp;&gt; Nebenlemmata:</i></b> Werden zusammen mit dem aktuellen Karteiwort Nebenlemmata behandelt, für die keine eigenen Karteikästen erstellt werden, können diese hier vermerkt werden. Die einzelnen Nebenlemmata müssen durch ein Komma voneinander getrennt werden. Ist dieses Feld gefüllt, werden die genannten Nebenlemmata auch dann in der <a href="#menueApp-karteisuche">Karteisuche</a> aufgelistet, wenn für sie kein Karteikasten existiert.</p>
 
             <p id="menueRedaktion-metadatenBehandeltMit"><b><i>Karteiwort&nbsp;&gt; behandelt mit:</i></b> Wird zum aktuellen Karteiwort kein eigener Artikel erstellt, es aber in einem Artikel zu einem anderen Wort mit behandelt, kann das Bezugswort hier vermerkt werden.</p>
 

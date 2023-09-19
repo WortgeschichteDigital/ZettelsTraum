@@ -178,6 +178,12 @@ const layoutMenu = [
       },
       { type: "separator" },
       {
+        label: "Lemmata",
+        icon: path.join(__dirname, "img", "menu", "lemmata.png"),
+        click: () => appMenu.befehl("kartei-lemmata"),
+        id: "kartei-lemmata",
+      },
+      {
         label: "Formvarianten",
         icon: path.join(__dirname, "img", "menu", "formvarianten.png"),
         click: () => appMenu.befehl("kartei-formvarianten"),
@@ -686,7 +692,7 @@ const appMenu = {
     }
 
     // zu deaktivierende Menüpunkte durchgehen
-    const elemente = [ "kartei-speichern", "kartei-speichern-unter", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege" ];
+    const elemente = [ "kartei-speichern", "kartei-speichern-unter", "kartei-lemmata", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege" ];
     for (let j = 0, len = layoutMenu.length; j < len; j++) {
       // sollen vielleicht alle Menüpunkte deaktiviert werden?
       let alle = false;

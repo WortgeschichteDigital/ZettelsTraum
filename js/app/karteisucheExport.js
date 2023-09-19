@@ -379,6 +379,12 @@ const karteisucheExport = {
           });
         }
       }
+      if (ztj.wf && liste.lemmata.length) {
+        const listeLast = liste.lemmata.length - 1;
+        for (const lemma of ztj.wfLemmata) {
+          liste.lemmata[listeLast].behandeltInMit.push(`→\u00A0${lemma}`);
+        }
+      }
       if (opt.feldArtikel &&
           artLemmas.length) {
         const idxArtikel = liste.artikel.length;
@@ -389,7 +395,7 @@ const karteisucheExport = {
           lemmas: artLemmas,
           lemmaSort: karteisuche.wortSort(artLemmas[0]),
           lemmasHl: artLemmasHl,
-          lemmasNl: artLemmasNl,
+          lemmasNl: ztj.wf ? [ ...ztj.wfLemmata ] : artLemmasNl,
           redaktionStatus: redaktion.status,
           artikelErstellt,
           artikelOnline,

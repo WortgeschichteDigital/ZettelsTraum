@@ -8,10 +8,10 @@ const xml = {
   //     (ID des webContents, von dem aus das Fenster geöffnet wurde)
   //   gerueste = Object
   //     (Namen der bekannten Bedeutungsgerüste: geruest[ID])
+  //   lemmata = Object
+  //     (die Kartei-Lemmata: data.la)
   //   letzter_pfad = String
   //     (zuletzt verwendeter Pfad)
-  //   nebenlemmata = String
-  //     (Nebenlemmata der Kartei)
   //   themenfelder = Array
   //     (Liste der bekannten Themenfelder)
   //   wort = String
@@ -179,7 +179,7 @@ const xml = {
       xml.counter = xml.counterGenerator(1);
     }
     // Wort eintragen
-    document.querySelector("h1").textContent = xml.data.wort;
+    document.querySelector("h1").innerHTML = xml.data.wort;
     // Init: Metadaten
     const mdId = document.getElementById("md-id");
     const mdTy = document.getElementById("md-ty");
@@ -321,16 +321,15 @@ const xml = {
   mdIdMake () {
     // ID erstellen
     const id = document.getElementById("md-id");
-    const lemmata = xml.lemmata();
-    for (let i = 0, len = lemmata.length; i < len; i++) {
-      lemmata[i] = lemmata[i].replace(/[\s’]/g, "_");
+    const hauptlemmata = [];
+    for (const lemma of xml.data.lemmata.la) {
+      if (lemma.nl) {
+        continue;
+      }
+      hauptlemmata.push(lemma.sc[0]);
     }
-    let wortfeld = "";
-    if (/Wortfeld/.test(xml.data.wort) ||
-        xml.data.xl.md.ty === "Wortfeldartikel") {
-      wortfeld = "Wortfeldartikel_";
-    }
-    id.value = `WGd-${wortfeld}${lemmata.join("-")}-1`;
+    const wortfeld = xml.data.lemmata.wf ? "Wortfeldartikel_" : "";
+    id.value = `WGd-${wortfeld}${hauptlemmata.join("-")}-1`;
     // Datensatz speichern
     xml.data.xl.md.id = id.value;
     xml.speichern();
@@ -3977,20 +3976,6 @@ const xml = {
         k.childNodes[e].style.width = `${max + 1}px`; // +1, sonst ist die Textellipse immer sichtbar
       }
     }
-  },
-
-  // extrahiert die Lemmata aus dem Karteiwort
-  lemmata () {
-    const arr = [];
-    const lemmata = xml.data.wort.replace(/\s?\(.+?\)/g, "").split(",");
-    for (let i = 0, len = lemmata.length; i < len; i++) {
-      const lemma = helfer.textTrim(lemmata[i], true);
-      if (lemma) {
-        arr.push(lemma);
-      }
-    }
-    arr.sort(helfer.sortAlpha);
-    return arr;
   },
 
   // Änderungen in der Kartei speichern

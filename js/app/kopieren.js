@@ -653,7 +653,7 @@ const kopieren = {
   basisdatenSenden () {
     const daten = {
       id: winInfo.winId,
-      wort: kartei.wort,
+      wort: kartei.titel,
       belege: kopieren.belege.length,
       gerueste: Object.keys(data.bd.gr),
     };
@@ -731,7 +731,7 @@ const kopieren = {
     }
     const opt = {
       title: "Belege exportieren",
-      defaultPath: modules.path.join(appInfo.documents, `${kartei.wort}, ${kopieren.belege.length} ${num}.ztb`),
+      defaultPath: modules.path.join(appInfo.documents, `${kartei.titel}, ${kopieren.belege.length} ${num}.ztb`),
       filters: [
         {
           name: `${appInfo.name} Belege`,

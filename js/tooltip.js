@@ -34,6 +34,11 @@ const tooltip = {
         return;
       }
       i.addEventListener("mouseover", function () {
+        if (tooltip.target && this !== tooltip.target) {
+          // if the target elements vanish in rapid succession,
+          // the tooltipmight not be turned off at all
+          tooltip.off();
+        }
         clearTimeout(tooltip.defer);
         clearInterval(tooltip.observe);
         const timeout = tooltip.noDefer ? 0 : 500;

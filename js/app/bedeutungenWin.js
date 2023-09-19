@@ -20,7 +20,7 @@ const bedeutungenWin = {
       return;
     }
     // Fenster durch Main-Prozess öffnen lassen
-    bedeutungenWin.contentsId = await modules.ipc.invoke("bedeutungen-oeffnen", `Bedeutungsgerüst: ${kartei.wort}`);
+    bedeutungenWin.contentsId = await modules.ipc.invoke("bedeutungen-oeffnen", `Bedeutungsgerüst: ${kartei.titel}`);
   },
 
   // Bedeutungsgerüst-Fenster schließen
@@ -40,6 +40,7 @@ const bedeutungenWin = {
     }
     // Daten zusammentragen
     const daten = {
+      titel: `Bedeutungsgerüst: ${kartei.titel}`,
       wort: kartei.wort,
       bd: data.bd,
       contentsId: winInfo.contentsId,

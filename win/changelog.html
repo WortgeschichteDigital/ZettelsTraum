@@ -48,16 +48,20 @@
       <div>
         <h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
+        <p><span class="obacht">Das Dateiformat hat sich geändert!</span> Ältere <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien werden automatisch konvertiert; dabei wird eine Änderungsmarkierung gesetzt.</p>
+
         <h3>Entfernte Funktionen</h3>
 
         <ul>
+          <li><a href="#menueRedaktion-metadaten" class="link-handbuch">Redaktionsmetadaten</a>: Das Feld für Nebenlemmata wurde entfernt. Nutzen Sie stattdessen das neue <a href="#menueKartei-lemmata" class="link-handbuch">Dialogfenster für Lemmata</a>, in dem sowohl Haupt- als auch Nebenlemmata eingetragen werden können.</li>
+
           <li>Die Tag-Dateien für Gebrauchszeiträume und Register wurden bereinigt. Die Werte <i>historisch, veraltend</i> und <i>veraltet</i> wurden entfernt.</li>
         </ul>
 
         <h3>Neue Funktionen</h3>
 
         <ul>
-          <li></li>
+          <li><a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Fenster</a>: Es gab bisher keine Möglichkeit, die in einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei behandelten Wörter und ihre Schreibvarianten, strukturiert in einer einheitlichen Oberfläche zu verwalten. Die verstreuten, unstrukturierten Datenfelder, in denen Lemmata notiert wurden, sind alle in das mit dieser Version neue Lemmata-Fenster aufgegangen. Das Dialogfenster wird auch für das Erstellen einer neuen Kartei genutzt. Zu Details <abbr title="siehe">s.</abbr> den verlinkten Handbuch-Abschnitt.</li>
         </ul>
 
         <h3>Verbesserungen</h3>
@@ -1405,7 +1409,7 @@
           <li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Mit dem neuen Filter <a href="#menueApp-karteisucheLemmatyp" class="link-handbuch">Lemmatyp</a> können die Suchergebnisse nach Haupt- <abbr title="beziehungsweise">bzw.</abbr> Nebenlemmata gefiltert werden.</li>
 
           <li>
-            <p>Für Nebenlemmata muss nun keine eigene Kartei mehr erstellt werden. Werden die mit dem Karteiwort zusammen beschriebenen Lemmata in das <a href="#menueRedaktion-metadatenNebenlemmata" class="link-handbuch">neue Textfeld in den Redaktionsmetadaten</a> eingetragen, erscheinen sie auch dann in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>, wenn für diese Lemmata keine Kartei vorhanden ist.</p>
+            <p>Für Nebenlemmata muss nun keine eigene Kartei mehr erstellt werden. Werden die mit dem Karteiwort zusammen beschriebenen Lemmata in das neue Textfeld in den Redaktionsmetadaten eingetragen, erscheinen sie auch dann in der <a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>, wenn für diese Lemmata keine Kartei vorhanden ist.</p>
 
             <p>Außerdem müssen die <a href="#menueRedaktion-ereignisse" class="link-handbuch">Redaktionsereignisse</a> für Karteien, in denen Belege für Nebenlemmata gesammelt werden, nun nicht mehr eigens gepflegt werden. In der Karteisuche werden <abbr title="gegebenenfalls">ggf.</abbr> die Ereignisse desjenigen Hauptlemmas angezeigt, dem das jeweilige Nebenlemma zugeordnet wurde.</p>
           </li>
