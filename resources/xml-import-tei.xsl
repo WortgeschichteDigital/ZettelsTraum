@@ -121,11 +121,21 @@
 </xsl:template>
 
 <xsl:template match="stage">
-  <div>
-    <i>
-      <xsl:apply-templates/>
-    </i>
-  </div>
+  <xsl:choose>
+    <xsl:when test="(name(parent::*/*[1]) = 'speaker' and parent::*/*[2] = .) or name(parent::*) = 'p'">
+      <xsl:text> </xsl:text>
+      <i>
+        <xsl:apply-templates/>
+      </i>
+    </xsl:when>
+    <xsl:otherwise>
+      <div>
+        <i>
+          <xsl:apply-templates/>
+        </i>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
