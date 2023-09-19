@@ -22,7 +22,7 @@ const helferXml = {
   redXmlData () {
     return {
       ab: [], // Abstract
-      bg: [], // Bedeutungsgerüst
+      bg: [], // Bedeutungsgerüste
       bl: [], // Belege
       le: [], // Lemmata
       lt: [], // Literatur

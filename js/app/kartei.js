@@ -263,7 +263,10 @@ const kartei = {
     // (muss vor der Konversion geschehen)
     meta.ve = data.ve;
     // Konversion des Dateiformats anstoßen
-    konversion.start();
+    const karteiKonvertiert = konversion.start(data);
+    if (karteiKonvertiert) {
+      kartei.karteiGeaendert(true);
+    }
     // Einleseoperationen
     helfer.formVariRegExp();
     kartei.wortUpdate();

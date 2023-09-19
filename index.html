@@ -2,7 +2,20 @@
 <html lang="de">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://www.deutschestextarchiv.de https://github.com/WortgeschichteDigital/ZettelsTraum/ https://unapi.k10plus.de/">
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src
+        'self'
+      ;
+      script-src
+        'self'
+        'sha256-ifg7ZWJQ70RfFLzs0CeT4nQG4KUEdF/eYPtLRCAUcHQ='
+      ;
+      connect-src
+        https://www.deutschestextarchiv.de
+        https://github.com/WortgeschichteDigital/ZettelsTraum/
+        https://unapi.k10plus.de/
+      ;
+    ">
 
     <title>&nbsp;</title>
 
@@ -44,6 +57,11 @@
     <link rel="stylesheet" href="css/app/start.css">
     <link rel="stylesheet" href="css/app/drucken.css" media="print">
 
+    <script type="module">
+      import konversion from "./js/app/konversion.mjs";
+      window.konversion = konversion;
+    </script>
+
     <script src="js/helferXml.js"></script>
     <script src="js/suchleiste.js"></script>
     <script src="js/tastatur.js"></script>
@@ -72,7 +90,6 @@
     <script src="js/app/karteisuche.js"></script>
     <script src="js/app/karteisucheExport.js"></script>
     <script src="js/app/kopf.js"></script>
-    <script src="js/app/konversion.js"></script>
     <script src="js/app/kopieren.js"></script>
     <script src="js/app/lemmata.js"></script>
     <script src="js/app/lexika.js"></script>

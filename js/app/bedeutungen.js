@@ -31,7 +31,8 @@ const bedeutungen = {
   },
 
   // baut ein initiales, alphabetisch sortiertes Bedeutungsgerüst auf
-  // (falls in der Kartei noch keiner vorhanden ist; irgendwann ist diese Funktion wohl tot)
+  // (falls in der Kartei noch keines vorhanden ist; irgendwann ist diese Funktion tot,
+  // weil sie nur von konversion.mjs aufgerufen wird)
   konstit () {
     // Bedeutungsgerüst ist vorhanden
     if (data.bd.gn) {
