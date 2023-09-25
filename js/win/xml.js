@@ -3402,6 +3402,7 @@ const xml = {
     str = str.replace(/<</g, "«");
     str = str.replace(/>>/g, "»");
     str = str.replace(/\[(.+?)\]\(www\.(.+?)\)/g, (m, p1, p2) => `[${p1}](https://www.${p2})`);
+    str = str.replace(/(?<=[ .,;])_ _(?=\p{Letter})|(?<=\p{Letter})_ _(?=[ .,;])/gu, "__");
     // hochgestellte Ziffern taggen
     str = str.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, hochgestellt);
     // Attribute maskieren
@@ -3419,7 +3420,7 @@ const xml = {
     // <sogenannt>
     str = str.replace(/»(.+?)«/g, (m, p1) => `<sogenannt>${p1}</sogenannt>`);
     // <Stichwort>
-    str = str.replace(/(?<![\p{Letter}.-])_(.+?)_(?![\p{Letter}-])/ug, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
+    str = str.replace(/(?<![\p{Letter}.-])_(.+?)_(?![\p{Letter}-])/gu, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
     // <Paraphrase>
     str = str.replace(/‚(.+?)‘/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // deutsch
     str = str.replace(/‘(.+?)’/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`); // englisch
