@@ -8,14 +8,14 @@
 <standardvarietät>
   <item>
     <id>1</id>
-    <name>Bundesdeutsches Hochdeutsch</name>
+    <name>Deutschland</name>
   </item>
   <item>
     <id>2</id>
-    <name>Österreichisches Hochdeutsch</name>
+    <name>Österreich</name>
   </item>
   <item>
     <id>3</id>
-    <name>Schweizer Hochdeutsch</name>
+    <name>Schweiz</name>
   </item>
 </standardvarietät>
