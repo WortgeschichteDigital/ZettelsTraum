@@ -43,10 +43,13 @@ const filter = {
       belege.sort(liste.belegeSortieren);
       optionen.data.belegliste.sort_typ = bak;
     }
+
     // Backup des Klappstatus und der Scrollposition erstellen
     filter.backupKlappMake();
+
     // Backup der Filtereinstellungen erstellen
     const filter_backup = filter.backup();
+
     // Zeitraum-Filter
     if (!optionen.data.belegliste.sort_aufwaerts) {
       belege.reverse();
@@ -60,6 +63,7 @@ const filter = {
       filter.jahrBelegeFuellen(belege);
     }
     filter.aufbauenZeitraum();
+
     // Variablen für dynamische Filter
     filter.typen = {
       bedeutungen: {
@@ -110,57 +114,12 @@ const filter = {
       verschiedenes: {
         name: "Verschiedenes",
         filter_vorhanden: filter.exklusivAktiv.length,
-        filter: {
-          "verschiedenes-unvollstaendig": {
-            name: "unvollständig",
-            wert: 0,
-          },
-          "verschiedenes-ungeprueft": {
-            name: "ungeprüft",
-            wert: 0,
-          },
-          "verschiedenes-kontext": {
-            name: "Kontext?",
-            wert: 0,
-          },
-          "verschiedenes-buecherdienst": {
-            name: "Bücherdienst",
-            wert: 0,
-          },
-          "verschiedenes-notizen": {
-            name: "Notizen",
-            wert: 0,
-          },
-          "verschiedenes-buchung": {
-            name: "Buchung",
-            wert: 0,
-          },
-          "verschiedenes-metatext": {
-            name: "Metatext",
-            wert: 0,
-          },
-          "verschiedenes-annotierung": {
-            name: "Annotierung",
-            wert: 0,
-          },
-          "verschiedenes-markierung": {
-            name: "Markierung",
-            wert: 0,
-          },
-        },
-        filter_folge: [
-          "verschiedenes-unvollstaendig",
-          "verschiedenes-ungeprueft",
-          "verschiedenes-kontext",
-          "verschiedenes-buecherdienst",
-          "verschiedenes-notizen",
-          "verschiedenes-buchung",
-          "verschiedenes-annotierung",
-          "verschiedenes-metatext",
-          "verschiedenes-markierung",
-        ],
+        filter: {},
+        filter_folge: [],
       },
     };
+
+    // Filter, die Bäume bilden
     const baeume = [
       {
         data: "bl",
@@ -179,6 +138,7 @@ const filter = {
         typen: "textsorten",
       },
     ];
+
     // alle Bedeutungen aus dem aktuellen Bedeutungsgerüst pushen
     const bd = data.bd.gr[data.bd.gn].bd;
     for (let i = 0, len = bd.length; i < len; i++) {
@@ -193,38 +153,59 @@ const filter = {
       };
       filter.typen.bedeutungen.filter_folge.push(id);
     }
+
     // dynamische Filter und Anzahl der passenden Karten ermitteln
+    const verschTags = {};
+    const verschWeitere = {
+      notizen: {
+        name: "Notizen",
+        wert: 0,
+      },
+      annotierung: {
+        name: "Annotierung",
+        wert: 0,
+      },
+      markierung: {
+        name: "Markierung",
+        wert: 0,
+      },
+    };
+
     let regAnnotierung = /farbe[1-9]/;
     if (optionen.data.einstellungen["filter-transparente"]) {
       regAnnotierung = /farbe[0-9]/;
     }
-    for (let x = 0, len = belege.length; x < len; x++) {
-      const id = belege[x];
+
+    for (let i = 0, len = belege.length; i < len; i++) {
+      const id = belege[i];
+      const karte = data.ka[id];
+
       // BEDEUTUNGEN
       let bdGefunden = false;
-      for (let i = 0, len = data.ka[id].bd.length; i < len; i++) {
-        if (data.ka[id].bd[i].gr !== data.bd.gn) {
+      for (let i = 0, len = karte.bd.length; i < len; i++) {
+        if (karte.bd[i].gr !== data.bd.gn) {
           continue;
         }
         bdGefunden = true;
-        const idBd = `bedeutungen-${data.bd.gn}_${data.ka[id].bd[i].id}`;
+        const idBd = `bedeutungen-${data.bd.gn}_${karte.bd[i].id}`;
         filter.typen.bedeutungen.filter[idBd].wert++;
       }
       if (!bdGefunden) {
         filter.typen.bedeutungen.filter["bedeutungen-undefined"].wert++;
       }
+
       // WORTBILDUNGEN, SYNONYME, KORPORA UND TEXTSORTEN
       for (let i = 0, len = baeume.length; i < len; i++) {
         const d = baeume[i].data;
         const t = baeume[i].typen;
-        if (!data.ka[id][d]) {
+        if (!karte[d]) {
           if (!/^(bl|sy)$/.test(d)) { // Wortbildung und Synonym hat kein undefined-Feld
             filter.typen[t].filter[`${t}-undefined`].wert++;
           }
           continue;
         }
         const schon_gezaehlt = new Set();
-        const b = filter.baumExtrakt(data.ka[id][d], t);
+        const b = filter.baumExtrakt(karte[d], t);
         for (let j = 0, len = b.length; j < len; j++) {
           if (!filter.typen[t].filter[b[j]]) {
             const name = b[j].replace(/^.+?-/, "").split(": ");
@@ -247,63 +228,63 @@ const filter = {
           schon_gezaehlt.add(b[j]);
         }
       }
+
       // WORTBILDUNGEN
-      if (data.ka[id].bl) {
+      if (karte.bl) {
         filter.typen.wortbildungen.filter_vorhanden = true;
       }
+
       // SYNONYM
-      if (data.ka[id].sy) {
+      if (karte.sy) {
         filter.typen.synonyme.filter_vorhanden = true;
       }
+
       // VERSCHIEDENES
-      // Vollständigkeit
-      if (data.ka[id].un) {
-        filter.typen.verschiedenes.filter["verschiedenes-unvollstaendig"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
+      // Tags
+      for (const tag of karte.tg) {
+        if (!verschTags[tag]) {
+          verschTags[tag] = {
+            name: tag,
+            wert: 0,
+          };
+        }
+        verschTags[tag].wert++;
       }
-      // ungeprüft
-      if (data.ka[id].up) {
-        filter.typen.verschiedenes.filter["verschiedenes-ungeprueft"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
-      }
-      // Kontext
-      if (data.ka[id].ko) {
-        filter.typen.verschiedenes.filter["verschiedenes-kontext"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
-      }
-      // Bücherdienst
-      if (data.ka[id].bu) {
-        filter.typen.verschiedenes.filter["verschiedenes-buecherdienst"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
-      }
+
       // Notizen
-      if (data.ka[id].no) {
-        filter.typen.verschiedenes.filter["verschiedenes-notizen"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
+      if (karte.no) {
+        verschWeitere.notizen.wert++;
       }
-      // Buchung
-      if (data.ka[id].bc) {
-        filter.typen.verschiedenes.filter["verschiedenes-buchung"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
-      }
+
       // Annotierung
-      if (/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs)) {
-        filter.typen.verschiedenes.filter["verschiedenes-annotierung"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
+      if (/annotierung-wort/.test(karte.bs) && regAnnotierung.test(karte.bs)) {
+        verschWeitere.annotierung.wert++;
       }
-      // Metatext
-      if (data.ka[id].mt) {
-        filter.typen.verschiedenes.filter["verschiedenes-metatext"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
-      }
+
       // Markierung
-      if (data.ka[id].be) {
-        filter.typen.verschiedenes.filter["verschiedenes-markierung"].wert++;
-        filter.typen.verschiedenes.filter_vorhanden = true;
+      if (karte.be) {
+        verschWeitere.markierung.wert++;
       }
     }
+
+    const versch = Object.keys(verschTags).sort(beleg.tagsSort).concat(Object.keys(verschWeitere));
+    for (const i of versch) {
+      const id = "verschiedenes-" + (verschTags[i] ? "tag-" : "") + i;
+      const obj = verschTags[i] || verschWeitere[i];
+      if (!obj.wert) {
+        continue;
+      }
+      filter.typen.verschiedenes.filter_vorhanden = true;
+      filter.typen.verschiedenes.filter[id] = {
+        name: obj.name,
+        wert: obj.wert,
+      };
+      filter.typen.verschiedenes.filter_folge.push(id);
+    }
+
     // statistische Angaben der Bedeutungen um die untergeordneten Bedeutungen ergänzen
     filter.statistikBd(belege);
+
     // wegen der Möglichkeit, aus dem Bedeutungsgerüst-Fenster Bedeutungen zu entfernen,
     // kann es sein, dass eine Bedeutung aktiv ist, aber gar nicht mehr gefunden
     // werden kann; in solchen Fällen lässt sie sich nicht mehr deaktivieren, weswegen
@@ -318,12 +299,14 @@ const filter = {
         filter_backup[`filter-${a}`] = false;
       }
     }
+
     // Wortbildungen, Synonyme, Korpora und Textsorten sortieren
     const arr_typen = [ "wortbildungen", "synonyme", "korpora", "textsorten" ];
     for (let i = 0, len = arr_typen.length; i < len; i++) {
       const arr = filter.typen[arr_typen[i]].filter_folge;
       arr.sort(filter.baumSort);
     }
+
     // dynamische Filter drucken
     const cont = document.getElementById("liste-filter-dynamisch");
     cont.replaceChildren();
@@ -373,14 +356,19 @@ const filter = {
       }
     }
     tooltip.init(cont);
+
     // Notizen anhängen
     notizen.filterleiste();
+
     // Backup der Filtereinstellungen wiederherstellen
     filter.backupWiederher(filter_backup);
+
     // ggf. Markierung der Sterne wiederherstellen
     filter.markierenSterne();
+
     // erneut aktive Filter ermitteln
     filter.aktiveFilterErmitteln(true);
+
     // die Funktionen sucht den <div>, in den ein Filter verschachtelt werden muss
     //   f = String
     //     (Filter, ggf. mit Hierarchieebenen ": ")
@@ -1180,10 +1168,12 @@ const filter = {
     // zwei Fliegen mit einer Klappe: ermitteln, ob Filter aktiv sind;
     // Array mit Jahren besorgen, die durch die Filter passen
     const filter_zeitraum = filter.aktiveFilterErmitteln(false);
+
     // keine Filter aktiv
     if (!Object.keys(filter.aktiveFilter).length) {
       return karten;
     }
+
     // aktive Filter in Bedeutungen, Wortbildungen, Synonymen, Korpora und Textsorten
     const baumfilter = {
       bd: [],
@@ -1192,6 +1182,7 @@ const filter = {
       sy: [],
       ts: [],
     };
+
     for (const i of Object.keys(filter.aktiveFilter)) {
       if (!/^(bedeutungen|wortbildungen|synonyme||korpora|textsorten)-/.test(i)) {
         continue;
@@ -1209,9 +1200,11 @@ const filter = {
         baumfilter.ts.push(f[2]);
       }
     }
+
     // das Bedeutungsarray ggf. um übergeordnete Bedeutungen auffüllen
     const bdErg = filter.kartenUnterBd(baumfilter.bd);
     baumfilter.bd = baumfilter.bd.concat(bdErg);
+
     // bei vorhandemen Verschiedenes-Filtern
     const filter_logik = document.getElementById("filter-logik-inklusiv");
     let filter_inklusiv = true;
@@ -1221,17 +1214,20 @@ const filter = {
     } else {
       filter.exklusivAktiv = [];
     }
+
     // bei vorhandemen Bewertungsfilter
     const filter_bewertung = document.getElementById("filter-verschiedenes-bewertung");
     let be = 0;
     if (filter_bewertung) {
       be = parseInt(filter_bewertung.dataset.bewertung, 10);
     }
+
     // Volltextsuche vorbereiten
     // (wird zwar auch "oninput" aufgerufen, es könnte aber sein, dass die Suche
     // durch eine Änderung der Checkboxes oder Öffnen/Schließen des Erweiterungs-
     // filters aufgerufen wird)
     filter.volltextSuchePrep();
+
     // Kartendatum vorbereiten
     let kartendatumVon = null;
     let kartendatumBis = null;
@@ -1246,18 +1242,29 @@ const filter = {
         kartendatumFeld = "dm";
       }
     }
+
     // Karten filtern
+    const tags_aktiv = [];
+    for (const k of Object.keys(filter.aktiveFilter)) {
+      const m = k.match(/^verschiedenes-tag-(.+)/);
+      if (m) {
+        tags_aktiv.push(m[1]);
+      }
+    }
     let regAnnotierung = /farbe[1-9]/;
     if (optionen.data.einstellungen["filter-transparente"]) {
       regAnnotierung = /farbe[0-9]/;
     }
     const karten_gefiltert = [];
+
     forX: for (let i = 0, len = karten.length; i < len; i++) {
       const id = karten[i];
+
       // Volltext
       if (filter.aktiveFilter.volltext && !filter.kartenFilternVolltext(id)) {
         continue;
       }
+
       // Zeitraum
       if (filter.aktiveFilter.zeitraum) {
         const jahr = parseInt(liste.zeitschnittErmitteln(data.ka[id].da).jahr, 10);
@@ -1265,6 +1272,7 @@ const filter = {
           continue;
         }
       }
+
       // Kartendatum
       if (filter.aktiveFilter.kartendatum) {
         const datum = new Date(data.ka[id][kartendatumFeld]);
@@ -1272,6 +1280,7 @@ const filter = {
           continue;
         }
       }
+
       // Bedeutungen, Wortbildungen, Synonyme, Korpora und Textsorten
       for (const [ bf, arr ] of Object.entries(baumfilter)) {
         if (arr.length) {
@@ -1323,54 +1332,30 @@ const filter = {
           }
         }
       }
-      // vollständig oder unvollständig
-      if (filter.aktiveFilter["verschiedenes-unvollstaendig"] &&
-          (data.ka[id].un && !filter_inklusiv ||
-          !data.ka[id].un && filter_inklusiv)) {
-        continue;
+
+      // VERSCHIEDENES
+      // Tags
+      for (const tag of tags_aktiv) {
+        if (data.ka[id].tg.includes(tag) && !filter_inklusiv ||
+          !data.ka[id].tg.includes(tag) && filter_inklusiv) {
+          continue forX;
+        }
       }
-      // geprüft oder ungeprüft
-      if (filter.aktiveFilter["verschiedenes-ungeprueft"] &&
-          (data.ka[id].up && !filter_inklusiv ||
-          !data.ka[id].up && filter_inklusiv)) {
-        continue;
-      }
-      // Kontext
-      if (filter.aktiveFilter["verschiedenes-kontext"] &&
-          (data.ka[id].ko && !filter_inklusiv ||
-          !data.ka[id].ko && filter_inklusiv)) {
-        continue;
-      }
-      // Bücherdienst
-      if (filter.aktiveFilter["verschiedenes-buecherdienst"] &&
-          (data.ka[id].bu && !filter_inklusiv ||
-          !data.ka[id].bu && filter_inklusiv)) {
-        continue;
-      }
+
       // Notizen
       if (filter.aktiveFilter["verschiedenes-notizen"] &&
           (data.ka[id].no && !filter_inklusiv ||
           !data.ka[id].no && filter_inklusiv)) {
         continue;
       }
-      // Buchung
-      if (filter.aktiveFilter["verschiedenes-buchung"] &&
-          (data.ka[id].bc && !filter_inklusiv ||
-          !data.ka[id].bc && filter_inklusiv)) {
-        continue;
-      }
+
       // Annotierung
       if (filter.aktiveFilter["verschiedenes-annotierung"] &&
           (/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs) && !filter_inklusiv ||
           !(/annotierung-wort/.test(data.ka[id].bs) && regAnnotierung.test(data.ka[id].bs)) && filter_inklusiv)) {
         continue;
       }
-      // Metatext
-      if (filter.aktiveFilter["verschiedenes-metatext"] &&
-          (data.ka[id].mt && !filter_inklusiv ||
-          !data.ka[id].mt && filter_inklusiv)) {
-        continue;
-      }
+
       // Markierung
       if (filter.aktiveFilter["verschiedenes-markierung"] &&
           (data.ka[id].be && !filter_inklusiv ||
@@ -1378,9 +1363,11 @@ const filter = {
           data.ka[id].be && filter_inklusiv && be > data.ka[id].be)) {
         continue;
       }
+
       // Karte ist okay!
       karten_gefiltert.push(id);
     }
+
     return karten_gefiltert;
   },
 

@@ -797,14 +797,14 @@ span.liste-label {
   border-radius: 3px;
   padding: 5px 10px;
   width: fit-content;
-  height: 24px;
   background-color: var(--hintergrund);
+  font-size: 14px;
   user-select: none;
 }
 
 .liste-meta img {
-  margin-right: 5px;
   vertical-align: top;
+  margin-right: 5px;
 }
 
 .liste-meta img:last-child {
@@ -812,13 +812,27 @@ span.liste-label {
 }
 
 .liste-meta > span {
+  vertical-align: top;
   display: inline-block;
-  margin-left: 20px;
+  margin-right: 20px;
   overflow: hidden;
 }
 
-.liste-meta > span:first-child {
-  margin-left: 0;
+.liste-meta > span.tag {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.liste-meta > span:last-child {
+  margin-right: 0;
+}
+
+.liste-meta > span:not(.tag, :first-child) {
+  margin-left: 20px;
+}
+
+.liste-meta > span.tag img {
+  margin-right: 3px;
 }
 
 .liste-stern {

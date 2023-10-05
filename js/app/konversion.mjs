@@ -585,6 +585,28 @@ const konversionen = {
     delete data.wo;
     delete data.rd.nl;
 
+    // Datenfeld "tg" in allen Karteikarten ergänzen
+    // (die alten Taggingdatenfelder gehen in ihm auf)
+    const tags = {
+      un: "unvollständig",
+      up: "ungeprüft",
+      ko: "Kontext?",
+      bu: "Bücherdienst",
+      bc: "Buchung",
+      mt: "Metatext",
+    };
+    for (const karte of Object.values(data.ka)) {
+      karte.tg = [];
+      for (const [ k, v ] of Object.entries(tags)) {
+        if (karte[k]) {
+          karte.tg.push(v);
+        }
+      }
+      for (const k of Object.keys(tags)) {
+        delete karte[k];
+      }
+    }
+
     // Versionsnummer hochzählen
     data.ve++;
 

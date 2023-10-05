@@ -9,7 +9,7 @@
 #beleg header {
   position: sticky;
   top: 70px;
-  z-index: 2;
+  z-index: 3;
   padding: 0 0 10px;
   background-color: #fff;
 }
@@ -67,7 +67,7 @@
 #beleg h2 {
   position: sticky;
   top: 104px;
-  z-index: 2;
+  z-index: 3;
   margin: 0 auto;
   padding: 21px 0 10px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
   width: calc(100% - 104px);
@@ -127,21 +127,85 @@
   width: auto;
 }
 
-#beleg td.check div {
-  display: flex;
-  flex-wrap: wrap;
+#beleg td.check > div {
+  position: relative;
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 20px;
+}
+
+#beleg td.check > div:has([data-ansicht="neu"]) {
+  grid-template-columns: 160px auto;
 }
 
 #beleg td.check p {
-  flex: 1 0 130px;
-  margin: 0;
-  padding: 0;
-  line-height: 30px;
-  text-align: center;
+  margin-bottom: 0;
 }
 
-#beleg td.check p:last-child {
-  padding-right: 0;
+#beleg-tags[data-ansicht="alt"] span {
+  white-space: nowrap;
+}
+
+#beleg-tags[data-ansicht="alt"] span:not(:last-child) {
+  margin-right: 20px;
+}
+
+#beleg-tags[data-ansicht="neu"] {
+  font-size: 14px;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag:last-child {
+  margin-right: 0;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag img {
+  margin-right: 3px;
+  vertical-align: top;
+}
+
+#beleg #beleg-tags-neu {
+  width: calc(100% - 12px);
+}
+
+#beleg-tags-list {
+  display: none;
+  position: absolute;
+  top: 31px;
+  left: 0;
+  z-index: 2;
+  box-shadow: var(--boxShadow);
+  width: 160px;
+}
+
+#beleg-tags-add:focus-within #beleg-tags-list {
+  display: block;
+}
+
+#beleg-tags-list a {
+  display: block;
+  border-bottom: 1px solid var(--linie);
+  overflow: hidden;
+  padding: 2px 5px;
+  background-color: #fff;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#beleg-tags-list a:is(.markiert, :hover, :focus) {
+  background-color: var(--hover);
+}
+
+#beleg-tags-list a img {
+  vertical-align: top;
+  margin-right: 3px;
 }
 
 #beleg-form-dwds td {
@@ -155,6 +219,10 @@
   border: none;
   height: 1px;
   background-color: var(--linie);
+}
+
+#beleg hr.flach {
+  margin-top: 20px;
 }
 
 
@@ -253,6 +321,14 @@ textarea#beleg-bs {
 
 #beleg label {
   color: var(--textFarbe);
+}
+
+#beleg-bewertung {
+  width: max-content;
+}
+
+span#beleg-bewertung {
+  margin-right: 20px;
 }
 
 #beleg-bewertung a.aktiv {
@@ -551,13 +627,31 @@ textarea#beleg-bs {
 #beleg-lese-meta div {
   margin-bottom: 10px;
   padding-left: 6px;
-  height: 24px;
 }
 
 #beleg-lese-meta div > span {
+  vertical-align: top;
   display: inline-block;
-  margin-left: 20px;
+  margin-right: 10px;
   height: 24px;
+  font-size: 14px;
+}
+
+#beleg-lese-meta div > span:not(.tag):first-child {
+  margin-right: 20px;
+}
+
+#beleg-lese-meta div > span:last-child {
+  margin-right: 0;
+}
+
+#beleg-lese-meta div > span.tag {
+  white-space: nowrap;
+}
+
+#beleg-lese-meta div > span.tag img {
+  vertical-align: top;
+  margin-right: 3px;
 }
 
 #beleg-lese-meta div span span {

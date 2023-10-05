@@ -240,30 +240,18 @@
       ><table>
         <tr class="beleg-form">
           <td colspan="2" class="check"><div>
-            <p><input type="checkbox" id="beleg-un" tabindex="0"
-              ><label for="beleg-un">unvollständig</label></p>
-            <p><input type="checkbox" id="beleg-up" tabindex="0"
-              ><label for="beleg-up">ungeprüft</label></p>
-            <p><input type="checkbox" id="beleg-ko" tabindex="0"
-              ><label for="beleg-ko">Kontext?</label></p>
-            <p><input type="checkbox" id="beleg-bu" tabindex="0"
-              ><label for="beleg-bu">Bücherdienst</label></p>
-            <p><input type="checkbox" id="beleg-bc" tabindex="0"
-              ><label for="beleg-bc">Buchung</label></p>
-            <p><input type="checkbox" id="beleg-mt" tabindex="0"
-              ><label for="beleg-mt">Metatext</label></p>
-            <p id="beleg-bewertung"
-              ><a href="#" class="icon-link icon-stern navi-link" tabindex="0">&nbsp;</a
-              ><a href="#" class="icon-link icon-stern navi-link" tabindex="0">&nbsp;</a
-              ><a href="#" class="icon-link icon-stern navi-link" tabindex="0">&nbsp;</a
-              ><a href="#" class="icon-link icon-stern navi-link" tabindex="0">&nbsp;</a
-              ><a href="#" class="icon-link icon-stern navi-link" tabindex="0">&nbsp;</a
-            ></p>
+            <div>
+              <div id="beleg-tags-add"
+                ><input type="text" value="" placeholder="Tag ergänzen" id="beleg-tags-neu" tabindex="0"
+                ><div id="beleg-tags-list"></div
+              ></div>
+            </div>
+            <div id="beleg-tags"></div>
           </div></td>
         </tr><tr class="beleg-lese">
           <td colspan="2" id="beleg-lese-meta"></td>
         </tr><tr class="beleg-form">
-          <td colspan="2"><hr></td>
+          <td colspan="2"><hr class="flach"></td>
         </tr><tr class="beleg-form">
           <th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
             ><label for="beleg-import-dta">DTA</label
@@ -574,7 +562,7 @@
             ><a href="#" class="navi-link" id="liste-link-no"
               ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M 12.210938 1 C 11.998438 1 11.784141 1.0830469 11.619141 1.2480469 L 9.9902344 2.8886719 L 13.109375 6.0078125 L 14.75 4.3789062 C 15.08 4.0489063 15.08 3.5272656 14.75 3.1972656 L 12.800781 1.2480469 C 12.635781 1.0830469 12.423437 1 12.210938 1 z M 8.8691406 4.0078125 L 0.99023438 11.888672 L 0.99023438 15.007812 L 4.109375 15.007812 L 11.990234 7.1289062 L 8.8691406 4.0078125 z" transform="translate(4 4)"/></svg></a
             ><a href="#" class="navi-link" id="liste-link-meta"
-              ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m4 4v16h16v-16h-16zm2 2h12v12h-12v-12zm9.8633 1.5117c-0.0724-0.0156-0.14927-0.016447-0.22656 0.0019531-0.16472 0.0406-0.31508 0.14623-0.42188 0.29492l-4.7266 6.1699-1.6934-1.9316c-0.2832-0.32309-0.79877-0.32306-1.082 0-0.28322 0.32307-0.28324 0.91126 0 1.2344l2.2578 2.5742 0.58789 0.64453 0.51758-0.69727 5.2676-6.8672c0.37363-0.46399 0.02635-1.3152-0.48047-1.4238z"/></svg></a
+              ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m4 1s-2 0-2 2v5l7 7 7-7-7-7h-5zm1 2c0.55228 0 1 0.44772 1 1s-0.44772 1-1 1-1-0.44772-1-1 0.44772-1 1-1z"/></svg></a
           ></span><span class="liste-opt-block"
             ><a href="#" class="liste-link-zeitschnitte navi-link" id="liste-link-zeitschnitte-10" title="Zeitschnitte alle 10 Jahre">10</a
             ><a href="#" class="liste-link-zeitschnitte navi-link" id="liste-link-zeitschnitte-50" title="Zeitschnitte alle 50 Jahre">50</a
@@ -807,6 +795,8 @@
             <p><input type="checkbox" id="einstellung-karteikarte-keine-fehlermeldung"
               ><label for="einstellung-karteikarte-keine-fehlermeldung">keine Fehlermeldung beim Speichern einer unvollständigen Karteikarte</label></p>
             <h3>Formularansicht</h3>
+            <p><input type="checkbox" id="einstellung-karteikarte-tagging"
+              ><label for="einstellung-karteikarte-tagging">erweiterte Taggingfunktion aktivieren</label></p>
             <p><input type="checkbox" id="einstellung-unvollstaendig"
               ><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
             <p><input type="checkbox" id="einstellung-karteikarte-fokus-beleg"
@@ -1184,50 +1174,7 @@
         >Belege taggen<a href="#" class="icon-link icon-handbuch" title="Abschnitt im Handbuch öffnen" data-handbuch="menueBelege-taggen">&nbsp;</a><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)">&nbsp;</a></h2>
       <div id="belege-taggen-cont">
         <p id="belege-taggen-nr"></p>
-        <table>
-          <tr>
-            <th>○</th>
-            <th>＋</th>
-            <th>－</th>
-            <th>&nbsp;</th>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-unvollstaendig" checked></td>
-            <td><input type="radio" name="belege-taggen-unvollstaendig"></td>
-            <td><input type="radio" name="belege-taggen-unvollstaendig"></td>
-            <td>unvollständig</td>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-ungeprueft" checked></td>
-            <td><input type="radio" name="belege-taggen-ungeprueft"></td>
-            <td><input type="radio" name="belege-taggen-ungeprueft"></td>
-            <td>ungeprüft</td>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-kontext" checked></td>
-            <td><input type="radio" name="belege-taggen-kontext"></td>
-            <td><input type="radio" name="belege-taggen-kontext"></td>
-            <td>Kontext?</td>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-buecherdienst" checked></td>
-            <td><input type="radio" name="belege-taggen-buecherdienst"></td>
-            <td><input type="radio" name="belege-taggen-buecherdienst"></td>
-            <td>Bücherdienst</td>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-buchung" checked></td>
-            <td><input type="radio" name="belege-taggen-buchung"></td>
-            <td><input type="radio" name="belege-taggen-buchung"></td>
-            <td>Buchung</td>
-          </tr>
-          <tr>
-            <td><input type="radio" name="belege-taggen-metatext" checked></td>
-            <td><input type="radio" name="belege-taggen-metatext"></td>
-            <td><input type="radio" name="belege-taggen-metatext"></td>
-            <td>Metatext</td>
-          </tr>
-        </table>
+        <table id="belege-taggen-tab"></table>
         <p class="input-text" id="belege-taggen-button"><input type="button" value="Taggen" id="belege-taggen-input"></p>
       </div>
     </div></div>
@@ -1747,18 +1694,8 @@
             <p><input type="checkbox" id="kopieren-feld-an"
               ><label for="kopieren-feld-an">Anhänge</label></p>
           </div><div>
-            <p><input type="checkbox" id="kopieren-feld-un"
-              ><label for="kopieren-feld-un">unvollständig</label></p>
-            <p><input type="checkbox" id="kopieren-feld-up"
-              ><label for="kopieren-feld-up">ungeprüft</label></p>
-            <p><input type="checkbox" id="kopieren-feld-ko"
-              ><label for="kopieren-feld-ko">Kontext?</label></p>
-            <p><input type="checkbox" id="kopieren-feld-bu"
-              ><label for="kopieren-feld-bu">Bücherdienst</label></p>
-            <p><input type="checkbox" id="kopieren-feld-bc"
-              ><label for="kopieren-feld-bc">Buchung</label></p>
-            <p><input type="checkbox" id="kopieren-feld-mt"
-              ><label for="kopieren-feld-mt">Metatext</label></p>
+            <p><input type="checkbox" id="kopieren-feld-tg"
+              ><label for="kopieren-feld-tg">Tags</label></p>
             <p><input type="checkbox" id="kopieren-feld-be"
               ><label for="kopieren-feld-be">Markierung</label></p>
           </div>
