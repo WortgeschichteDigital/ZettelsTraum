@@ -51,9 +51,8 @@
   padding-right: 1px;
 }
 
-#red-lit .tag.loeschbar:hover {
-  color: var(--textWarnung);
-  text-decoration: line-through;
+#red-lit .tag.loeschbar:hover::before {
+  content: url(../../img/x-dick-rot-20.svg);
 }
 
 #red-lit p.tags {
