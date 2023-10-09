@@ -69,6 +69,10 @@
   width: 391px;
 }
 
+#lemmata-liste .keine-schreibungen td:nth-child(3) {
+  width: 42px;
+}
+
 #lemmata-liste td:last-child {
   padding-right: 0;
 }
@@ -115,6 +119,10 @@
 
 #lemmata-liste input.lemma {
   width: 350px;
+}
+
+#lemmata-liste input.homo {
+  width: 30px;
 }
 
 #lemmata-liste input.kommentar {

@@ -401,6 +401,7 @@ const karteisuche = {
     // Filterwerte sammeln
     karteisuche.filterWerteSammeln();
     // Karteien analysieren
+    const sup = [ "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹" ];
     const ztjAdd = [];
     const ztjMit = {};
     const nebenlemmata = new Set();
@@ -443,6 +444,9 @@ const karteisuche = {
             continue;
           }
           let wort = lemma.sc.join("/");
+          if (lemma.ho) {
+            wort = sup[lemma.ho - 1] + wort;
+          }
           if (lemma.ko) {
             wort += ` (${lemma.ko})`;
           }
@@ -486,6 +490,9 @@ const karteisuche = {
               continue;
             }
             let nl = lemma.sc.join("/");
+            if (lemma.ho) {
+              nl = sup[lemma.ho - 1] + nl;
+            }
             if (lemma.ko) {
               nl += ` (${lemma.ko})`;
             }

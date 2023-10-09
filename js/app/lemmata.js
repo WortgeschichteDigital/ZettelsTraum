@@ -333,7 +333,7 @@ const lemmata = {
       table.appendChild(tr);
       tr.dataset.idx = i;
 
-      // ICONS
+      // ICONS-SPALTE
       const icons = document.createElement("td");
       tr.appendChild(icons);
       if (i > 0) {
@@ -398,7 +398,20 @@ const lemmata = {
         nlI.checked = true;
       }
 
-      // KOMMENTAR
+      // HOMOGRAPHENINDEX-SPALTE
+      const homo = document.createElement("td");
+      tr.appendChild(homo);
+      const homoI = document.createElement("input");
+      homo.appendChild(homoI);
+      homoI.classList.add("homo");
+      homoI.type = "number";
+      homoI.setAttribute("min", "0");
+      homoI.setAttribute("max", "9");
+      homoI.title = "Homographenindex";
+      homoI.value = data.la.la[i].ho;
+      homoI.defaultValue = data.la.la[i].ho;
+
+      // KOMMENTAR-SPALTE
       const komm = document.createElement("td");
       tr.appendChild(komm);
       const kommI = document.createElement("input");
@@ -449,11 +462,24 @@ const lemmata = {
       });
     });
 
+    // Änderung des Homographenindex übernehmen
+    document.querySelectorAll("#lemmata-liste input[type='number']").forEach(i => {
+      i.addEventListener("input", function () {
+        // Auto-Korrektur fehlerhafter Eingaben
+        helfer.inputNumber(this);
+        // Eingabe übernehmen
+        const idxLemma = parseInt(this.closest("tr").dataset.idx, 10);
+        data.la.la[idxLemma].ho = parseInt(this.value, 10);
+        lemmata.geaendert = true;
+      });
+    });
+
     // Lemma hinzufügen
     document.querySelector("#lemmata-liste .lemma-hinzu").addEventListener("click", function (evt) {
       evt.preventDefault();
       // Datensatz auffrischen
       data.la.la.push({
+        ho: 0,
         ko: "",
         nl: false,
         sc: [ "" ],

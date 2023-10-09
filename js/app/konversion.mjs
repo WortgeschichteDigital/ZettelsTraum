@@ -560,6 +560,7 @@ const konversionen = {
         sc.push(s);
       }
       data.la.la.push({
+        ho: 0,
         ko,
         sc,
         nl: false,
@@ -575,6 +576,7 @@ const konversionen = {
         sc.push(s);
       }
       data.la.la.push({
+        ho: 0,
         ko: "",
         sc,
         nl: true,

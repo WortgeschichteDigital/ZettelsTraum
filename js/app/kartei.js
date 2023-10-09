@@ -43,6 +43,7 @@ const kartei = {
       la: { // Lemmaliste
         la: [ // Lemmata
           {
+            ho: 0, // Homographenindex
             ko: "", // Kommentar
             nl: false, // ist Nebenlemma
             sc: [ "" ], // Schreibungen
@@ -502,6 +503,7 @@ const kartei = {
   // Anzeige des Karteiworts auffrischen
   wortUpdate () {
     // Wortformen erzeugen
+    const sup = [ "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹" ];
     const wort = [];
     const titel = [];
     for (const lemma of data.la.la) {
@@ -509,6 +511,9 @@ const kartei = {
         continue;
       }
       let text = lemma.sc.join("/");
+      if (lemma.ho) {
+        text = sup[lemma.ho - 1] + text;
+      }
       titel.push(text);
       if (lemma.ko) {
         text += `<span>${lemma.ko}</span>`;
