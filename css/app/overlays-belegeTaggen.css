@@ -4,7 +4,7 @@
 
 #belege-taggen > div {
   margin-top: 40px;
-  max-width: 250px;
+  max-width: 350px;
 }
 
 .icon-h-belege-taggen {
@@ -35,6 +35,7 @@
 
 #belege-taggen-cont th,
 #belege-taggen-cont td {
+  vertical-align: top;
   padding: 2px 5px;
   text-align: center;
 }

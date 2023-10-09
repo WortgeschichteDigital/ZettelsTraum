@@ -178,6 +178,8 @@ const optionen = {
       "karteikarte-schliessen": false,
       // keine Fehlermeldung anzeigen, wenn die Karteikarte nicht gespeichert werden konnte
       "karteikarte-keine-fehlermeldung": false,
+      // erweiterte Taggingfunktion aktivieren
+      "karteikarte-tagging": true,
       // neue Karteikarten als unvollständig markieren
       unvollstaendig: false,
       // in neuer Karteikarte Belegfeld fokussieren
@@ -252,22 +254,17 @@ const optionen = {
     kopieren: {
       an: true, // Anhänge
       au: true, // Autor
-      bc: false, // Buchung
       bd: true, // Bedeutung
       be: false, // Markierung
       bl: true, // Wortbildung
       bs: true, // Beleg
-      bu: false, // Bücherdienst
       da: true, // Datum
-      ko: false, // Kontext?
       kr: true, // Korpus
-      mt: true, // Metatext
       no: true, // Notizen
       qu: true, // Quelle
       sy: true, // Synonym
+      tg: true, // Tags
       ts: true, // Textsorte
-      un: false, // unvollständig
-      up: false, // ungeprüft
     },
     // Taglisten, die aus XML-Dateien importiert wurden; Aufbau:
     //   TYP         Tag-Typ (String)

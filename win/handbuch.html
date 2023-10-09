@@ -515,29 +515,44 @@
             <p>Das Dropdown-Menü öffnet sich auch, wenn Sie in einem Textfeld zu tippen beginnen. Die App erkennt, was Sie tippen, und filtert die im Menü zur Verfügung stehenden Werte, sodass Sie nur noch Vorschläge sehen, die zu dem eingetippten Text passen. Wird das Dropdown-Menü beim Eingeben von Text nicht angezeigt, wurde kein passender Wert gefunden. Wählen Sie einen der Vorschläge aus dem gefilterten Menü aus (mit der Maus oder via <a href="#karteikarte-dropdownTastatur">Tastaturkürzel</a>), werden die bisher eingetippten Buchstaben überschrieben. Dies funktioniert auch in mehrzeiligen Textfeldern problemlos, ohne dass andere Zeilen überschrieben werden – selbst wenn es vor und hinter der Zeile, in der Sie angefangen haben zu tippen, bereits weitere Textzeilen gibt.</p>
           </div>
 
-          <p id="karteikarte-kopf">Die Checkboxes und Textfelder im Einzelnen:</p>
+          <p id="karteikarte-kopf">Sie können eine Karteikarte mit einer Markierung und Tags versehen:</p>
 
-          <p class="add-navi-details" id="karteikarte-unvollstaendig"><b>unvollständig:</b> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
-
-          <p class="add-navi-details" id="karteikarte-ungeprueft"><b>ungeprüft:</b> der Beleg muss noch Korrektur gelesen werden</p>
-
-          <p class="add-navi-details" id="karteikarte-kontext"><b>Kontext?:</b> der Belegkontext der Online-Quelle ist so dünn, dass er noch am Original geklärt werden muss</p>
-
-          <p class="add-navi-details" id="karteikarte-buecherdienst"><b>Bücherdienst:</b> die Originalquelle wurde in einer Bibliothek bestellt (von den dafür verantwortlichen Personen)</p>
-
-          <p class="add-navi-details" id="karteikarte-buchung"><b>Buchung:</b> der Beleg wird im fertigen Lexikonartikel zitiert</p>
-
-          <p class="add-navi-details" id="karteikarte-metatext"><b>Metatext:</b> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft</p>
-
-          <p class="info">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
-
-          <p class="erklaerung-icon" id="karteikarte-markierung"><img src="../img/stern.svg" width="24" height="24" alt="">Möglichkeit für eine nicht an eine bestimmte Semantik gebundene Markierung der Karteikarte</p>
+          <p class="erklaerung-icon add-navi-details" id="karteikarte-markierung"><img src="../img/stern.svg" width="24" height="24" alt=""><b>Markierung:</b> an keine bestimmte Semantik gebunden Markierung mit Sternen</p>
 
           <div class="info">
-            <p>Zur Markierung muss einfach auf einen der Sterne geklickt werden. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungsschritte ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Aufhebung einer Markierung genügt es, auf den letzten markierten Stern zu klicken.</p>
+            <p>Zum Markieren der Karte müssen Sie einfach nur auf einen der Sterne klicken. Markiert wird immer der angeklickte Stern und alle links von ihm stehenden Sterne, woraus sich fünf mögliche Markierungen ergeben: eins, zwei, drei, vier, fünf Sterne. Zur Entfernung der Markierung klicken Sie auf den letzten markierten Stern.</p>
 
             <p>Die Markierung wird standardmäßig in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> eingblendet. Dieses Verhalten lässt sich durch das <a href="#einstellungen-beleglisteMark">Deaktivieren einer Einstellung</a> unterbinden.</p>
           </div>
+
+          <p class="erklaerung-icon add-navi-details" id="karteikarte-tags"><img src="../img/etikett.svg" width="24" height="24" alt=""><b>Tags:</b> eine oder mehrere frei wählbare Textmarkierungen</p>
+
+          <div class="info">
+            <p>Den Namen eines Tags können Sie frei wählen. Geben Sie einfach ein Wort oder eine Wortverbindung im Textfeld <i>Tag ergänzen</i> ein und drücken Sie <kbd>Enter</kbd>.</p>
+
+            <p>Haben Sie eine Karteikarte um einen Tag ergänzt, wird ihnen dieser selbstdefinierte Tag auch in anderen Karteikarten zum Hinzufügen vorgeschlagen, sobald Sie das Textfeld <i>Tag ergänzen</i> fokussieren. Außerdem können Sie die <a href="#belegliste">Belegliste</a> nach den von Ihnen definierten <a href="#filter-verschiedenes">Tags filtern</a>. Die selbstdefinierten Tags stehen Ihnen darüber hinaus in der <a href="#menueBelege-taggen">Taggen-Funktion</a> zur Verfügung.</p>
+
+            <p>Sie müssen Tags nicht notwendigerweise selbst definieren. Es gibt einige <b>vordefinierte Tags</b>, die jeweils ein spezielles Icon haben:</p>
+
+            <p class="erklaerung-icon"><img src="../img/kreis-unvollstaendig.svg" width="20" height="20" alt=""><i>unvollständig:</i> markiert die Karteikarte als noch nicht vollständig bearbeitet</p>
+
+            <p class="erklaerung-icon"><img src="../img/verboten.svg" width="20" height="20" alt=""><i>ungeprüft:</i> der Beleg muss noch Korrektur gelesen werden</p>
+
+            <p class="erklaerung-icon"><img src="../img/kontext.svg" width="20" height="20" alt=""><i>Kontext?:</i> der Belegkontext der Online-Quelle ist so dünn, dass er noch am Original geklärt werden muss</p>
+
+            <p class="erklaerung-icon"><img src="../img/buch.svg" width="20" height="20" alt=""><i>Bücherdienst:</i> die Originalquelle wurde in einer Bibliothek bestellt (von den dafür verantwortlichen Personen)</p>
+
+            <p class="erklaerung-icon"><img src="../img/buch-check-gruen.svg" width="20" height="20" alt=""><i>Buchung:</i> der Beleg wird im fertigen Lexikonartikel zitiert</p>
+
+            <p class="erklaerung-icon"><img src="../img/augen.svg" width="20" height="20" alt=""><i>Metatext:</i> bei dem Beleg handelt es sich um einen Text, der einen analytischen Blick auf das Karteiwort wirft</p>
+
+            <p class="eingerueckt">Denkbare Texttypen für eine solche Markierung wären (historische) Wörterbücher, Artikel in einer Enzyklopädie, philosophische Abhandlungen <abbr title="und so weiter">usw.</abbr></p>
+
+            <p>In früheren Programmversionen konnten Tags nicht frei vergeben werden. Dafür befanden sich an dieser Stelle Checkboxes. Für dieses alte Layout gibt es eine <b>Kompatibilitätsansicht</b>, die Sie allerdings erst nach dem <a href="#einstellungen-karteikarteTagging">Deaktivieren einer Option</a> sehen können. In der Kompatibilitätsansicht stehen Ihnen nur die vordefinierten Tags zur Verfügung. Selbst können Sie in ihr keine Tags definieren.</p>
+          </div>
+
+
+          <p id="karteikarte-datenfelder">Die Datenfelder der Karteikarte im Einzelnen:</p>
 
           <p class="add-navi-details" id="karteikarte-datum"><b>Datum:</b> <i>Pflichtfeld</i>; Entstehungs- oder Publikationsdatum des Belegs</p>
 
@@ -957,7 +972,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
 
           <p>Wie es der Name schon sagt: Die Leseansicht ist primär für das bequeme Lesen von Karteikarten gedacht. Einige Daten können allerdings auch in ihr modifiziert werden: Einzelne Bedeutungen können Sie mithilfe des Icons <img src="../img/x-dick.svg" width="24" height="24" alt=""> entfernen. Über das <a href="#bedeutungsgeruest-fenster">Bedeutungsgerüst-Fenster</a> können Sie außerdem Bedeutungen ergänzen, selbst wenn sich die Karteikarte in der Leseansicht befindet. Ferner funktioniert die Bearbeitung der Dateianhänge ohne Einschränkungen, ebenso wie das <a href="#belegliste-annotierenBeleg">Annotieren des Belegtexts</a>.</p>
 
-          <p>In der Zeile über dem Datumsfeld können Icons auftauchen – wenn Checkboxes im Kopf der Formularansicht abgehakt wurden. Die Bedeutung der Icons erfährt man durch einen Tooltip beim Herüberfahren der Maus. Es handelt sich um dieselben Icons, die auch in der <a href="#belegliste-detailansicht">Detailansicht der Belegliste</a> auftauchen. Dort werden sie <a href="#belegliste-metainfos">aufgelistet und erklärt</a>. Allein Dateianhänge erscheinen hier nicht. Sie sind an der entsprechenden Stelle am unteren Ende der Karteikarte zu finden.</p>
+          <p>In der Zeile über dem Datumsfeld können Icons auftauchen, wenn Sie die Karteikarte <a href="#karteikarte-kopf">getaggt oder mit einer Markierung versehen</a> haben.</p>
 
           <p>Die Kopier-Icons <img src="../img/kopieren.svg" width="24" height="24" alt=""> stehen auch in der Leseansicht zur Verfügung. Sie verhalten sich genauso wie die <a href="#karteikarte-kopieren">Icons in der Formularansicht</a>. Haben Sie in dem zugehörigen Textfeld jedoch eine Textauswahl vorgenommen, wird durch Klick auf das Icon nur der markierte Text kopiert. Sie können also, wie in der Belegliste, nicht nur ganze Datenfelder, sondern auch <a href="#belegliste-kopierenAuswahl">Teile des Textes kopieren</a>, was auch via Rechtsklick geht. Bedenken Sie bitte: Kopieren Sie nur einen Teil des Belegtextes, wird er in genau der Form kopiert, die gerade angezeigt wird. Haben Sie <a href="#karteikarte-trennung">Trennzeichen und Seitenumbrüche ausgeblendet</a>, werden diese nicht mitkopiert.</p>
 
@@ -1382,21 +1397,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
           <p class="erklaerung-icon"><img src="../img/checkbox.svg" width="24" height="24" alt="">Detailansicht: Metainfos ein- oder ausblenden</p>
 
           <div class="info" id="belegliste-metainfos">
-            <p>Sind zu einem Beleg Metainformationen vorhanden, wird am Ende der Detailansicht eine Leiste mit Icons eingeblendet. Jedes der Icons steht für eine der Metainfos, die im <a href="#karteikarte-unvollstaendig">Kopf der Formularansicht der Karteikarte</a> angeklickt werden können:</p>
-
-            <p class="erklaerung-icon"><img src="../img/kreis-unvollstaendig.svg" width="20" height="20" alt="">Metainfo <i>unvollständig</i>: Karteikarte ist noch nicht vollständig bearbeitet</p>
-
-            <p class="erklaerung-icon"><img src="../img/verboten.svg" width="20" height="20" alt="">Metainfo <i>ungeprüft</i>: der Belegtext muss noch Korrektur gelesen werden</p>
-
-            <p class="erklaerung-icon"><img src="../img/kontext.svg" width="20" height="20" alt="">Metainfo <i>Kontext?</i>: der Belegkontext ist zu dünn</p>
-
-            <p class="erklaerung-icon"><img src="../img/buch.svg" width="20" height="20" alt="">Metainfo <i>Bücherdienst</i>: die Originalquelle wurde in einer Bibliothek bestellt</p>
-
-            <p class="erklaerung-icon"><img src="../img/buch-check-gruen.svg" width="20" height="20" alt="">Metainfo <i>Buchung</i>: der Beleg wird im fertigen Lexikonartikel zitiert</p>
-
-            <p class="erklaerung-icon"><img src="../img/augen.svg" width="20" height="20" alt="">Metainfo <i>Metatext</i>: der Belegtext wirft einen analytischen Blick auf das Karteiwort</p>
-
-            <p class="erklaerung-icon"><img src="../img/stern.svg" width="20" height="20" alt="">Metainfo <i>Markierung</i>: die Karteikarte wurde markiert (es erscheinen so viel Sterne, wie in der Karte ausgewählt wurden)</p>
+            <p>Sind zu einem Beleg Metainformationen vorhanden, wird am Ende der Detailansicht eine Leiste mit Icons eingeblendet. Neben einer <abbr title="gegebenenfalls">ggf.</abbr> vorhandenen Markierung (<img src="../img/stern-gelb.svg" width="20" height="20" alt="">) werden alle Tags angezeigt, die an der jeweiligen Karteikarte hängen. (Tags können im <a href="#karteikarte-kopf">Kopf der Formularansicht der Karteikarte</a> hinzugefügt werden.)</p>
 
             <p>Darüber hinaus werden in der Metainfo-Zeile auch Dateianhänge eingeblendet, die mit einer Karteikarte verknüpft wurden. Für jeden Dateianhang erscheint ein Icon, das ist <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <img src="../img/datei-pdf.svg" width="20" height="20" alt=""> für eine <abbr title="Portable Document Format" lang="en">PDF</abbr> oder <img src="../img/datei-doc.svg" width="20" height="20" alt=""> für eine <i>Microsoft Word-</i> oder <i>LibreOffice Writer-</i>Datei. Den Anhang, für den das Icon steht, kann man durch Klick auf das Bildchen öffnen.</p>
           </div>
@@ -1790,10 +1791,10 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
 
           <p class="info">Für diesen Filter gilt dasselbe wie für die <i>Korpora</i>.</p>
 
-          <p class="add-navi-details" id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach verschiedenen Markierungen und Eigenschaften filtern</p>
+          <p class="add-navi-details" id="filter-verschiedenes"><b>Verschiedenes:</b> Belege nach Tags, Markierungen und anderen Eigenschaften filtern</p>
 
           <div class="info">
-            <p>Dieser Filter versammelt alle Markierungsmöglichkeiten, die sich <a href="#karteikarte-unvollstaendig">ganz oben in der Karteikarte finden</a>: <i>unvollständig, ungeprüft, Kontext?, Bücherdienst, Buchung, Metatext</i> und die Markierung mit Sternen (<img src="../img/stern.svg" width="20" height="20" alt="">). Darüber hinaus können auch noch die Filter <i>Annotierung</i> (findet alle Belege, die Annotierungen enthalten) und <i>Notizen</i> (findet alle Belege, die Notizen enthalten) auftauchen.</p>
+            <p>In diesem Block finden Sie Filter für alle Tags, die an den Karteikarten hängen, und für die Markierungen (<img src="../img/stern-gelb.svg" width="20" height="20" alt="">), mit denen Sie Karteikarten ggf. versehen haben. Darüber hinaus können auch noch die Filter <i>Annotierung</i> (findet alle Belege, die Annotierungen enthalten) und <i>Notizen</i> (findet alle Belege, die Notizen enthalten) auftauchen.</p>
 
             <p>Dieser Filterblock hat zwei Besonderheiten:</p>
 
@@ -2330,12 +2331,24 @@ Mustermann, Erika
             <p>Diese Einstellung zu aktivieren, ist nur für erfahren NutzerInnen sinnvoll, die wissen, was in solchen Fällen zu tun ist!</p>
           </div>
 
+          <p class="erklaerung-option" id="einstellungen-karteikarteTagging">erweiterte Taggingfunktion aktivieren</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Ist diese Einstellung aktiviert, finden Sie im Kopf der Karteikartenformularansicht ein Taggingformular, das es Ihnen erlaubt, die Karte mit selbstgewählten Tags zu markieren. Die Karteikarten lassen sich dann spätert sowohl nach den Standardtags als auch nach den selbstgewählten Tags <a href="#filter-verschiedenes">filtern</a>.</p>
+
+            <p>Ist die Option deaktiviert erscheinen im Kopf der Karteikarte Checkboxes mit den Standardtags. Sie bekommen so eine Ansicht, die stark derjenigen ähnelt, die bis <abbr title="inklusive">inkl.</abbr> Programmversion&nbsp;0.80 zu sehen war. Selbstdefinierte Tags können in dieser Ansicht nicht erzeugt werden.</p>
+
+            <p>Nach dem Ändern dieser Einstellung müssten Sie die <a href="#karteikarte">Karteikarte</a> neu öffnen, um die gewählte Ansicht zu sehen.</p>
+          </div>
+
           <p class="erklaerung-option" id="einstellungen-karteikarteUnvollstaendig">neue Karteikarte als unvollständig markieren</p>
 
           <div class="info">
             <p><i>Standard:</i> nicht aktiviert</p>
 
-            <p>Erstellen Sie eine <a href="#karteikarte">neue Karteikarte</a>, öffnet sich ein leeres Formular, in dem keines der Textfelder ausgefüllt und keine der Checkboxen im <a href="#karteikarte-kopf">Kopf der Karte</a> abgehakt ist. Aktivieren Sie diese Einstellung wird jedoch die <a href="#karteikarte-unvollstaendig">Checkbox <i>unvollständig</i></a> automatisch abgehakt, wenn Sie eine neue Karteikarte erstellen.</p>
+            <p>Erstellen Sie eine <a href="#karteikarte">neue Karteikarte</a>, öffnet sich ein leeres Formular, in dem keines der Textfelder ausgefüllt ist. Aktivieren Sie diese Einstellung wird jedoch der <a href="#karteikarte-tags">Tag <i>unvollständig</i></a> automatisch an die neue Karteikarte gehängt.</p>
 
             <p>Die Einstellung eignet sich für eine Arbeitsweise, bei der Sie Ihren Karteikasten in rascher Folge mit neuen Karten füllen wollen, die einzelnen Karten dabei aber nicht sofort auf Vollständigkeit (und Richtigkeit) aller Angaben überprüfen möchten. Mithilfe eines Filters im <a href="#filter-verschiedenes">Filterblock <i>Verschiedenes</i></a> können Sie die als unvollständig markierten Karten dann schnell wiederfinden (und <abbr title="gegebenenfalls">ggf.</abbr> ergänzen, korrigieren <abbr title="und so weiter">usw.</abbr>).</p>
           </div>
@@ -4360,15 +4373,15 @@ Mustermann, Erika
 
             <p>Getaggt werden nur diejenigen Belege, die aktuell in der Belegliste <em>sichtbar</em> sind. Wurde die Liste zuvor <a href="#filter">gefiltert</a>, werden nur die Belege angepasst, die es durch den Filter geschafft haben.</p>
 
-            <p>Es können alle <a href="#belegliste-metainfos">Metainfos</a> geändert werden, die im Kopf der <a href="#karteikarte">Karteikarte</a> abgehakt werden können. (Die <i>Markierung</i> mit Sternen kann nicht stapleweise geändert werden.) Die Tags müssen nicht nacheinander, sondern können auch alle gleichzeitig angepasst werden. Es ist also problemlos möglich, alle Belege in einem Arbeitsschritt als <i>unvollständig</i> und <i>ungeprüft</i> zu taggen.</p>
-            
+            <p>Im Dialogfenster werden sowohl die vordefinierten als auch die im <a href="#karteikarte-tags">Kopf der Karteikarte selbstvergebenen Tags</a> gelistet. Die Tags, die Sie ändern möchten, müssen nicht nacheinander, sondern können auch alle gleichzeitig angepasst werden. Es ist also problemlos möglich, alle Belege in einem Arbeitsschritt als <i>unvollständig</i> und <i>ungeprüft</i> zu taggen.</p>
+
             <p><b><i>Bedeutung der Radio-Buttons</i></b></p>
 
             <p>○&nbsp;&nbsp;&nbsp;Tag nicht ändern</p>
 
-            <p>＋&nbsp;&nbsp;&nbsp;in allen Belegen einen Haken setzen</p>
+            <p>＋&nbsp;&nbsp;&nbsp;Tag in allen Belegen ergänzen</p>
 
-            <p>－&nbsp;&nbsp;&nbsp;aus allen Belegen den Haken entfernen</p>
+            <p>－&nbsp;&nbsp;&nbsp;Tag aus allen Belegen entfernen</p>
           </div>
 
           <p class="erklaerung-icon-menues" id="menueBelege-auflisten"><img src="../img/liste-bullets.svg" width="24" height="24" alt="">Auflisten</p>

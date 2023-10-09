@@ -730,7 +730,7 @@ const liste = {
       const a = document.createElement("a");
       div.appendChild(a);
       a.classList.add("icon-link", "icon-tools-buchen");
-      if (data.ka[id].bc) {
+      if (data.ka[id].tg.includes("Buchung")) {
         a.classList.add("icon-tools-gebucht");
       }
       a.dataset.id = id;
@@ -1481,96 +1481,50 @@ const liste = {
   },
 
   // Leiste mit Meta-Informationen zu der Karte erstellen
-  //   beleg = Object
+  //   karte = Object
   //     (Datenobjekt mit allen Werte der Karte, die dargestellt werden soll)
   //   cont = Element
   //     (an dieses Element soll der Container gehängt werden)
   //   klasse = String
-  //     (class des Elements, an das die Icons gehängt werden;
-  //     entweder "liste-meta" oder "")
-  metainfosErstellen (beleg, cont, klasse) {
-    // Gibt es überhaupt Meta-Infos, die angezeigt werden müssen
-    if (!beleg.un && !beleg.up && !beleg.ko && !beleg.bu && !beleg.bc && !beleg.mt && !beleg.be && !beleg.an.length) {
+  //     ("liste-meta" | ""; class des Elements, an das die Icons gehängt werden)
+  metainfosErstellen (karte, cont, klasse) {
+    // Gibt es überhaupt Meta-Infos, die angezeigt werden müssen?
+    if (!karte.an.length && !karte.be && !karte.tg.length) {
       return;
     }
-    // es gibt also Infos
+
+    // Container erzeugen
     const div = document.createElement("div");
     if (klasse) {
       div.classList.add(klasse);
     }
     cont.appendChild(div);
-    // Karte unvollständig?
-    if (beleg.un) {
-      const img = document.createElement("img");
-      img.src = "img/kreis-unvollstaendig.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "unvollständig";
-      div.appendChild(img);
-    }
-    // Beleg ungeprüft?
-    if (beleg.up) {
-      const img = document.createElement("img");
-      img.src = "img/verboten.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "ungeprüft";
-      div.appendChild(img);
-    }
-    // Kontext unklar?
-    if (beleg.ko) {
-      const img = document.createElement("img");
-      img.src = "img/kontext.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "Kontext?";
-      div.appendChild(img);
-    }
-    // Bücherdienstauftrag?
-    if (beleg.bu) {
-      const img = document.createElement("img");
-      img.src = "img/buch.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "Bücherdienst";
-      div.appendChild(img);
-    }
-    // Buchung?
-    if (beleg.bc) {
-      const img = document.createElement("img");
-      img.src = "img/buch-check-gruen.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "Buchung";
-      div.appendChild(img);
-    }
-    // Metatext?
-    if (beleg.mt) {
-      const img = document.createElement("img");
-      img.src = "img/augen.svg";
-      img.width = "24";
-      img.height = "24";
-      img.title = "Metatext";
-      div.appendChild(img);
-    }
-    // Markierung?
-    if (beleg.be) {
+
+    // Markierung
+    if (karte.be) {
       const cont_span = document.createElement("span");
-      cont_span.title = "Markierung";
       div.appendChild(cont_span);
-      for (let i = 0; i < beleg.be; i++) {
+      for (let i = 0; i < karte.be; i++) {
         const span = document.createElement("span");
         span.classList.add("liste-stern", "icon-stern");
         span.textContent = "\u00A0";
         cont_span.appendChild(span);
       }
     }
-    // Anhänge?
-    if (beleg.an.length && klasse) {
+
+    // Tags
+    for (const i of karte.tg) {
+      const tag = beleg.tagNeu(i, false);
+      div.appendChild(tag);
+    }
+
+    // Anhänge
+    if (karte.an.length && klasse) {
       const cont_span = document.createElement("span");
-      anhaenge.makeIconList(beleg.an, cont_span, true);
+      anhaenge.makeIconList(karte.an, cont_span, true);
       div.appendChild(cont_span);
     }
+
     // Tooltip initialisieren
     tooltip.init(div);
   },
@@ -2062,8 +2016,15 @@ const liste = {
     icon.addEventListener("click", function (evt) {
       evt.preventDefault();
       const id = this.dataset.id;
-      data.ka[id].bc = !data.ka[id].bc;
-      if (data.ka[id].bc) {
+      const karte = data.ka[id];
+      if (karte.tg.includes("Buchung")) {
+        const idx = karte.tg.indexOf("Buchung");
+        karte.tg.splice(idx, 1);
+      } else {
+        karte.tg.push("Buchung");
+        karte.tg.sort(beleg.tagsSort);
+      }
+      if (karte.tg.includes("Buchung")) {
         this.classList.add("icon-tools-gebucht");
       } else {
         this.classList.remove("icon-tools-gebucht");

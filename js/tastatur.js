@@ -80,6 +80,10 @@ const tastatur = {
       }
       // Karteikarte schließen
       if (helfer.hauptfunktion === "karte") {
+        if (document.activeElement.id === "beleg-tags-neu") {
+          document.getElementById("beleg-tags-neu").blur();
+          return;
+        }
         helfer.inputBlur();
         beleg.aktionAbbrechen();
         return;

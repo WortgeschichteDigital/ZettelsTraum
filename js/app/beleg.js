@@ -78,30 +78,29 @@ const beleg = {
 
   // erstellt ein leeres Daten-Objekt für eine neue Karteikarte
   karteErstellen () {
-    return {
+    const karte = {
       an: [], // Anhänge
       au: "", // Autor
-      bc: false, // Buchung
       bd: [], // Bedeutung
       be: 0, // Bewertung (Markierung)
       bi: "", // Importtyp (bezieht sich auf die Daten in bx)
       bl: "", // Wortbildung
       bs: "", // Beleg
-      bu: false, // Bücherdienstauftrag
       bx: "", // Beleg-XML
       da: "", // Belegdatum
       dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
       dm: "", // Datum Karteikarten-Änderung
-      ko: false, // Kontext
       kr: "", // Korpus
-      mt: false, // Metatext
       no: "", // Notizen
       qu: "", // Quelle
       sy: "", // Synonym
+      tg: [], // Tags
       ts: "", // Textsorte
-      un: optionen.data.einstellungen.unvollstaendig, // Bearbeitung unvollständig
-      up: false, // ungeprüft
     };
+    if (optionen.data.einstellungen.unvollstaendig) {
+      karte.tg.push("unvollständig");
+    }
+    return karte;
   },
 
   // bestehende Karteikarte öffnen
@@ -143,15 +142,21 @@ const beleg = {
     // regulären Ausdruck für Sprung zum Wort zurücksetzen
     beleg.ctrlSpringenFormReg.again = false;
     beleg.ctrlSpringenFormReset();
+
     // Beleg-Titel eintragen
     const beleg_titel = document.getElementById("beleg-titel");
     const titel_text = document.createTextNode(`Beleg #${beleg.id_karte}`);
     beleg_titel.replaceChild(titel_text, beleg_titel.firstChild);
+
+    // Tags eintragen
+    beleg.tagsFill();
+    beleg.tagsList();
+
     // Feld-Werte eintragen
     const felder = document.querySelectorAll("#beleg input, #beleg textarea");
     for (let i = 0, len = felder.length; i < len; i++) {
       const feld = felder[i].id.replace(/^beleg-/, "");
-      if (felder[i].type === "button") {
+      if (felder[i].type === "button" || /^tags?-/.test(feld)) {
         continue;
       } else if (feld === "dta") {
         felder[i].value = "";
@@ -167,28 +172,37 @@ const beleg = {
         felder[i].value = beleg.data[feld];
       }
     }
+
     // Feld-Wert für Bedeutung eintragen
     beleg.formularBedeutung();
     beleg.formularBedeutungLabel();
+
     // Bewertung eintragen
     beleg.bewertungAnzeigen();
+
     // Anhänge auflisten
     anhaenge.auflisten(document.getElementById("beleg-an"), "beleg|data|an");
+
     // Metadatenfelder füllen
     beleg.metadaten();
+
     // Änderungsmarkierung ausblenden
     beleg.belegGeaendert(false);
+
     // Formular einblenden
     helfer.sektionWechseln("beleg");
+
     // Textarea zurücksetzen
     document.querySelectorAll("#beleg textarea").forEach(function (textarea) {
       textarea.scrollTop = 0;
       helfer.textareaGrow(textarea);
     });
+
     // Belegtext nach Import ggf. automatisch kürzen
     if (imp && optionen.data.einstellungen["karteikarte-text-kuerzen-auto"]) {
       beleg.toolsKuerzen();
     }
+
     // Fokus setzen
     // (hier braucht es eine Verzögerung: Wird die Karte z.B. direkt nach dem
     // Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
@@ -377,6 +391,300 @@ const beleg = {
       name.textContent = "keine Datei geladen";
       name.classList.add("leer");
     }
+  },
+
+  // Tags: Liste der Standardtags und ihrer Icons
+  tags: {
+    unvollständig: "kreis-unvollstaendig.svg",
+    ungeprüft: "verboten.svg",
+    "Kontext?": "kontext.svg",
+    Bücherdienst: "buch.svg",
+    Buchung: "buch-check-gruen.svg",
+    Metatext: "augen.svg",
+  },
+
+  // Tags: Kopf der Karteikarte füllen
+  tagsFill () {
+    const add = document.getElementById("beleg-tags-add");
+    const cont = document.getElementById("beleg-tags");
+    const ansicht = optionen.data.einstellungen["karteikarte-tagging"] ? "neu" : "alt";
+    if (ansicht === "neu") {
+      // Tags-Input einschalten
+      add.classList.remove("aus");
+
+      // Bewertungssterne hinzufügen
+      cont.replaceChildren();
+      const bewertung = beleg.tagsBewertung("span");
+      cont.appendChild(bewertung);
+
+      // Tags hinzufügen
+      for (const i of beleg.data.tg) {
+        const tag = beleg.tagNeu(i, true);
+        cont.appendChild(tag);
+      }
+    } else {
+      // Tags-Input ausschalten
+      add.classList.add("aus");
+
+      // ggf. Checkboxes hinzufügen
+      if (cont.dataset.ansicht !== "alt") {
+        // Bewertungssterne hinzufügen
+        cont.replaceChildren();
+        const bewertung = beleg.tagsBewertung("p");
+        add.parentNode.insertBefore(bewertung, add);
+
+        // Checkboxes hinzufügen
+        for (const i of Object.keys(beleg.tags)) {
+          const tag = beleg.tagAlt(i);
+          cont.appendChild(tag);
+        }
+      }
+
+      // Checkboxes abhaken
+      document.querySelectorAll("#beleg-tags input").forEach(i => {
+        const tag = i.value;
+        if (beleg.data.tg.includes(tag)) {
+          i.checked = true;
+        } else {
+          i.checked = false;
+        }
+      });
+    }
+    cont.dataset.ansicht = ansicht;
+  },
+
+  // Tags: Container mit Bewertungssternen erzeugen
+  //   tagName = String
+  //     (p | span)
+  tagsBewertung (tagName) {
+    // alten Container entfernen
+    const contAlt = document.getElementById("beleg-bewertung");
+    if (contAlt) {
+      contAlt.parentNode.removeChild(contAlt);
+    }
+
+    // neuen Container erstellen und zurückgeben
+    const cont = document.createElement(tagName);
+    cont.id = "beleg-bewertung";
+    for (let i = 0; i < 5; i++) {
+      const a = document.createElement("a");
+      cont.appendChild(a);
+      a.classList.add("icon-link", "icon-stern", "navi-link");
+      a.href = "#";
+      a.setAttribute("tabindex", "0");
+      a.textContent = "\u00A0";
+      beleg.bewertungEvents(a);
+    }
+    return cont;
+  },
+
+  // Tags: neues Format (Icon + Text, selbstdefinierte Tags möglich)
+  //   tag = String
+  //   deletable = Boolean
+  tagNeu (tag, deletable) {
+    // Tag
+    const span = document.createElement("span");
+    span.classList.add("tag");
+    const img = document.createElement("img");
+    span.appendChild(img);
+    img.src = "img/" + (beleg.tags[tag] || "etikett.svg");
+    img.width = "24";
+    img.height = "24";
+    span.appendChild(document.createTextNode(tag));
+
+    // ggf. Events anhängen
+    if (deletable) {
+      span.addEventListener("mouseover", function () {
+        this.firstChild.src = "img/x-dick-rot.svg";
+      });
+      span.addEventListener("mouseout", function () {
+        const tag = this.textContent;
+        this.firstChild.src = "img/" + (beleg.tags[tag] || "etikett.svg");
+      });
+      span.addEventListener("click", function () {
+        const tag = this.textContent;
+        const idx = beleg.data.tg.indexOf(tag);
+        beleg.data.tg.splice(idx, 1);
+        this.parentNode.removeChild(this);
+        beleg.tagsList();
+        beleg.belegGeaendert(true);
+      });
+    }
+
+    // Element zurückgeben
+    return span;
+  },
+
+  // Tags: altes Format (Checkbox + Text, keine selbstdefinierten Tags)
+  //   tag = String
+  tagAlt (tag) {
+    // Tag
+    const span = document.createElement("span");
+    const input = document.createElement("input");
+    span.appendChild(input);
+    input.checked = false;
+    input.type = "checkbox";
+    input.value = tag;
+    input.id = `tag-${tag}`;
+    const label = document.createElement("label");
+    span.appendChild(label);
+    label.setAttribute("for", `tag-${tag}`);
+    label.textContent = tag;
+
+    // Event
+    input.addEventListener("change", function () {
+      const tag = this.value;
+      if (this.checked) {
+        beleg.data.tg.push(tag);
+        beleg.data.tg.sort(beleg.tagsSort);
+      } else {
+        const idx = beleg.data.tg.indexOf(tag);
+        beleg.data.tg.splice(idx, 1);
+      }
+      beleg.belegGeaendert(true);
+    });
+
+    // Container zurückgeben
+    return span;
+  },
+
+  // Tags: Liste mit vorhanden Tags füllen
+  tagsList () {
+    // alle Tags ermitteln
+    const alleTags = new Set();
+    Object.keys(beleg.tags).forEach(i => alleTags.add(i));
+    for (const karte of Object.values(data.ka)) {
+      for (const tag of karte.tg) {
+        alleTags.add(tag);
+      }
+    }
+
+    // Tagliste bereinigen
+    const tags = [ ...alleTags ].sort(beleg.tagsSort);
+    for (const tag of beleg.data.tg) {
+      const idx = tags.indexOf(tag);
+      if (idx === -1) {
+        continue;
+      }
+      tags.splice(idx, 1);
+    }
+
+    // Tags drucken
+    const list = document.getElementById("beleg-tags-list");
+    list.replaceChildren();
+    for (const tag of tags) {
+      const a = document.createElement("a");
+      list.appendChild(a);
+      const img = document.createElement("img");
+      a.appendChild(img);
+      img.src = "img/" + (beleg.tags[tag] || "etikett.svg");
+      img.width = "24";
+      img.height = "24";
+      a.href = "#";
+      a.appendChild(document.createTextNode(tag));
+      a.addEventListener("click", function (evt) {
+        evt.preventDefault();
+        const tag = this.textContent;
+        beleg.data.tg.push(tag);
+        beleg.data.tg.sort(beleg.tagsSort);
+        beleg.tagsFill();
+        this.parentNode.removeChild(this);
+        beleg.belegGeaendert(true);
+      });
+    }
+  },
+
+  // Tags: selbstdefinierten Tag hinzufügen
+  //   tag = String
+  tagsAdd (tag) {
+    // Tag im Dropdown-Menü markiert?
+    const markiert = document.querySelector("#beleg-tags-list .markiert");
+    if (markiert) {
+      markiert.click();
+      return;
+    }
+
+    // Tag aufbereiten
+    tag = helfer.textTrim(tag, true);
+    if (!tag) {
+      return;
+    }
+
+    // Tag schon angehängt?
+    if (beleg.data.tg.includes(tag)) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Der Tag <i>${tag}</i> hängt schon an der Karteikarte.`,
+        callback: () => {
+          document.getElementById("beleg-tags-neu").select();
+        },
+      });
+      return;
+    }
+
+    // Tag hinzufügen
+    document.getElementById("beleg-tags-neu").value = "";
+    beleg.data.tg.push(tag);
+    beleg.data.tg.sort(beleg.tagsSort);
+    beleg.tagsFill();
+    beleg.tagsList();
+    beleg.belegGeaendert(true);
+  },
+
+  // Tags: durch die Liste der Tags navigieren
+  //   up = Boolean
+  tagsNav (up) {
+    // Gibt es noch Tags zum Hinzufügen?
+    const tags = document.querySelectorAll("#beleg-tags-list a");
+    if (!tags.length) {
+      return;
+    }
+
+    // markiertes Element ermitteln
+    const markiert = document.querySelector("#beleg-tags-list .markiert");
+    let idx = -1;
+    if (markiert) {
+      for (let i = 0, len = tags.length; i < len; i++) {
+        if (tags[i].classList.contains("markiert")) {
+          idx = i;
+          break;
+        }
+      }
+      markiert.classList.remove("markiert");
+    }
+
+    // nächstes Element markieren
+    if (up) {
+      idx--;
+    } else {
+      idx++;
+    }
+    if (idx < 0) {
+      return;
+    } else if (idx === tags.length) {
+      idx--;
+    }
+    tags[idx].classList.add("markiert");
+  },
+
+  // Tags: Sortierung nach dem Hinzufügen
+  tagsSort (a, b) {
+    const arr = Object.keys(beleg.tags);
+    const x = arr.indexOf(a);
+    const y = arr.indexOf(b);
+    if (x === -1 && y === -1) {
+      const arr = [ a, b ];
+      arr.sort(helfer.sortAlpha);
+      if (arr[0] === a) {
+        return -1;
+      }
+      return 1;
+    } else if (x === -1 && y !== -1) {
+      return 1;
+    } else if (x !== -1 && y === -1) {
+      return -1;
+    }
+    return x - y;
   },
 
   // Aktionen beim Klick auf einen Formular-Button

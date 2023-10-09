@@ -270,6 +270,9 @@ window.addEventListener("load", async () => {
   document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
   // Karteikarte
   document.querySelectorAll("#beleg input, #beleg textarea").forEach(i => {
+    if (i.id === "beleg-tags-neu") {
+      return;
+    }
     if (i.type === "button") {
       beleg.aktionButton(i);
     } else if (i.type === "radio") {
@@ -279,11 +282,19 @@ window.addEventListener("load", async () => {
       beleg.belegSpeichern(i);
     }
   });
+  document.getElementById("beleg-tags-neu").addEventListener("keydown", function (evt) {
+    tastatur.detectModifiers(evt);
+    const m = tastatur.modifiers;
+    if (!m && evt.key === "Enter") {
+      beleg.tagsAdd(this.value);
+    } else if (!m && /^Arrow(Up|Down)$/.test(evt.key)) {
+      evt.preventDefault();
+      beleg.tagsNav(evt.key === "ArrowUp");
+    }
+  });
   document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
   document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
-    if (a.classList.contains("icon-stern")) { // Bewertung
-      beleg.bewertungEvents(a);
-    } else if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
+    if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
       beleg.toolsKlick(a);
     }
   });
