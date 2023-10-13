@@ -12,7 +12,15 @@ const annotieren = {
     const range = sel.getRangeAt(0);
     const mark = document.createElement("mark");
     mark.classList.add("user");
-    range.surroundContents(mark);
+    try {
+      range.surroundContents(mark);
+    } catch (err) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Die Annotierung kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung",
+      });
+      return;
+    }
     range.collapse();
     annotieren.mod(mark);
     annotieren.ausfuehren();
