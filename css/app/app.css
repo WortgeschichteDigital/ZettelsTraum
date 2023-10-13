@@ -469,7 +469,7 @@ textarea:focus {
   border: 1px solid var(--linie);
   border-radius: 5px;
   padding: 5px;
-  width: 175px;
+  width: 200px;
   background-color: #fff;
   /* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
   font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
@@ -500,12 +500,6 @@ textarea:focus {
   right: 0;
 }
 
-#annotierung-wort > img {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 #annotierung-wort .farbe {
   display: inline-block;
   margin-right: 10px;
@@ -516,6 +510,21 @@ textarea:focus {
 
 #annotierung-wort .farbe.aktiv {
   outline: 2px solid var(--farbe);
+}
+
+#annotierung-wort .farbe:first-child {
+  margin-left: 6px;
+}
+
+#annotierung-wort .icons {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+}
+
+#annotierung-wort .icons img {
+  vertical-align: top;
+  margin-left: 5px;
 }
 
 .farbe.farbe0,

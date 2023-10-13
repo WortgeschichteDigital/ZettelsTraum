@@ -106,8 +106,10 @@ const annotieren = {
       annotieren.unmoeglich();
       return;
     }
+
     // Marks ermitteln
     annotieren.getMarks(w);
+
     // Werte auslesen (falls vorhanden)
     const werte = {
       farbe: 1,
@@ -125,19 +127,15 @@ const annotieren = {
         werte.taggen = false;
       }
     }
+
     // UI ggf. entfernen
     annotieren.modSchliessen();
+
     // UI erstellen
     const span = document.createElement("span");
     span.id = "annotierung-wort";
     span.addEventListener("mouseover", evt => evt.stopPropagation());
-    // Schließen-Icon
-    const img = document.createElement("img");
-    span.appendChild(img);
-    img.src = "img/x.svg";
-    img.width = "24";
-    img.height = "24";
-    img.title = "Popup schließen (Esc)";
+
     // Farben
     for (let i = 0; i < 5; i++) {
       const farbe = document.createElement("span");
@@ -147,6 +145,33 @@ const annotieren = {
         farbe.classList.add("aktiv");
       }
     }
+
+    // Icons
+    const icons = document.createElement("span");
+    span.appendChild(icons);
+    icons.classList.add("icons");
+    const iconsList = [
+      {
+        cl: "loeschen",
+        svg: "muelleimer.svg",
+        title: "Annotierung löschen",
+      },
+      {
+        cl: "schliessen",
+        svg: "x-dick.svg",
+        title: "Popup schließen (Esc)",
+      },
+    ];
+    for (const i of iconsList) {
+      const img = document.createElement("img");
+      icons.appendChild(img);
+      img.classList.add(i.cl);
+      img.src = "img/" + i.svg;
+      img.width = "24";
+      img.height = "24";
+      img.title = i.title;
+    }
+
     // Checkbox "nicht taggen"
     const nichtTaggen = document.createElement("span");
     span.appendChild(nichtTaggen);
@@ -162,6 +187,7 @@ const annotieren = {
     nichtTaggen.appendChild(label);
     label.setAttribute("for", "annotierung-nicht-taggen");
     label.textContent = "nicht taggen";
+
     // Text
     const txt = document.createElement("span");
     span.appendChild(txt);
@@ -172,6 +198,7 @@ const annotieren = {
       txt.classList.add("leer");
       txt.textContent = "Notiz hinzufügen";
     }
+
     // Position der UI festlegen
     const pos = [];
     let knoten = null;
@@ -188,6 +215,7 @@ const annotieren = {
       pos.push("oben");
     }
     span.classList.add(pos.join("-"));
+
     // Popup einhängen und Events anhängen
     knoten.appendChild(span);
     tooltip.init(knoten);
@@ -197,13 +225,62 @@ const annotieren = {
   // Events an das Annotieren-Feld hängen
   modEvents () {
     const aw = document.getElementById("annotierung-wort");
-    aw.addEventListener("click", evt => evt.stopPropagation()); // sonst wird das Popup bei jedem Klick neu aufgebaut
-    aw.querySelector("img").addEventListener("click", () => annotieren.modSchliessen()); // Schließen-Icon
-    aw.querySelectorAll(".farbe").forEach(i => annotieren.modFarbe(i)); // Farbkästchen
-    aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", function () {
-      annotieren.ausfuehren();
-    }); // Checkbox
-    annotieren.modText(aw.querySelector(".text")); // Textfeld
+
+    // ohne stopPropagation() wird das Popup bei jedem Klick neu aufgebaut
+    aw.addEventListener("click", evt => evt.stopPropagation());
+
+    // Löschen-Icon
+    aw.querySelector(".loeschen").addEventListener("click", () => annotieren.modLoeschen());
+
+    // Schließen-Icon
+    aw.querySelector(".schliessen").addEventListener("click", () => annotieren.modSchliessen());
+
+    // Farbkästchen
+    aw.querySelectorAll(".farbe").forEach(i => annotieren.modFarbe(i));
+
+    // Checkbox
+    aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", () => annotieren.ausfuehren());
+
+    // Textfeld
+    annotieren.modText(aw.querySelector(".text"));
+  },
+
+  // Annotierung löschen
+  modLoeschen () {
+    // Notiz als leer markieren
+    const aw = document.getElementById("annotierung-wort");
+    const text = aw.querySelector(".text");
+    if (!text.classList.contains("leer")) {
+      text.classList.add("leer");
+    }
+
+    // Haken aus Checkbox nehmen
+    const nichtTaggen = document.getElementById("annotierung-nicht-taggen");
+    if (nichtTaggen.checked) {
+      nichtTaggen.checked = false;
+    }
+
+    // Standard-Farbe markieren
+    aw.querySelector(".aktiv").classList.remove("aktiv");
+    const typ = aw.closest("mark").classList.contains("wort") ? "wort" : "user";
+    switch (typ) {
+      case "wort":
+        aw.querySelector(".farbe1").classList.add("aktiv");
+        break;
+      case "user":
+        aw.querySelector(".farbe0").classList.add("aktiv");
+        break;
+    }
+
+    // Löschen ausführen
+    annotieren.ausfuehren();
+
+    // ggf. Popup schließen
+    if (!annotieren.data.data) {
+      // Das passiert, wenn das Popup für den Typ .wort geöffnet,
+      // aber noch keine Annotierung vorgenommen wurde.
+      annotieren.modSchliessen();
+    }
   },
 
   // Annotierungs-Popup schließen
