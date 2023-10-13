@@ -143,6 +143,30 @@ const punkte = {
     icon: "dokument-kartei.png",
     click: "popup.karteiLink.click()",
   },
+  klammern: {
+    label: "Klammern setzen",
+    icon: "klammern.png",
+  },
+  klammernAutorenzusatz: {
+    label: "Autorenzusatz",
+    icon: "klammern-autorenzusatz.png",
+    click: 'klammern.make("autorenzusatz")',
+  },
+  klammernEntfernen: {
+    label: "Klammern entfernen",
+    icon: "klammern-entfernen.png",
+    click: 'klammern.remove()',
+  },
+  klammernLoeschung: {
+    label: "Löschung",
+    icon: "klammern-loeschung.png",
+    click: 'klammern.make("loeschung")',
+  },
+  klammernStreichung: {
+    label: "Streichung",
+    icon: "klammern-streichung.png",
+    click: 'klammern.make("streichung")',
+  },
   kopfIconsConf: {
     label: "Icon-Einstellungen",
     icon: "zahnrad.png",

@@ -1265,27 +1265,22 @@ const beleg = {
     text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
     // technische Klammern entfernen
     text = text.replace(/\[¬\]|\[:.+?:\]/g, "");
-    // eckige Klammern
-    text = text.replace(/\[{1,2}.+?\]{1,2}/g, m => {
-      const typ = /^\[{2}/.test(m) ? "loeschung" : "streichung";
-      let r = "[…]";
-      if (/^\[Anmerkung:\s/.test(m) ||
-          typ === "loeschung" && optionen.data.einstellungen["textkopie-klammern-loeschung"] ||
-          typ === "streichung" && optionen.data.einstellungen["textkopie-klammern-streichung"]) {
-        r = m.replace(/^\[{2}/, "[").replace(/\]{2}$/, "]");
+    // Autorenzusatz, Löschung, Streichung
+    const farben = {
+      autorenzusatz: "#0a0",
+      loeschung: "#f00",
+      streichung: "#00f",
+    };
+    text = text.replace(/<span class="klammer-(autorenzusatz|loeschung|streichung)">(.+?)<\/span>/g, (m, typ, text) => {
+      let r = `[${text}]`;
+      if (typ === "loeschung" && !optionen.data.einstellungen["textkopie-klammern-loeschung"] ||
+          typ === "streichung" && !optionen.data.einstellungen["textkopie-klammern-streichung"]) {
+        r = "[…]";
       }
       if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
-        const farbe = typ === "loeschung" ? "#f00" : "#00f";
-        r = `<span style="color: ${farbe}">${r}</span>`;
+        r = `<span style="color: ${farben[typ]}">${r}</span>`;
       }
       return r;
-    });
-    // Autorenzusatz
-    text = text.replace(/\{(.+?)\}/g, (m, p1) => {
-      if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
-        return `<span style="color: #0a0">[${p1}]</span>`;
-      }
-      return `[${p1}]`;
     });
     // Ergebnis zurückgeben
     return helfer.textTrim(text, true);
@@ -1608,8 +1603,8 @@ const beleg = {
         ende: "</span>",
       },
       autorenzusatz: {
-        start: "{",
-        ende: "}",
+        start: '<span class="klammer-autorenzusatz">',
+        ende: "</span>",
       },
       bold: {
         start: "<b>",
@@ -1628,8 +1623,8 @@ const beleg = {
         ende: "</i>",
       },
       loeschung: {
-        start: "[[",
-        ende: "]]",
+        start: '<span class="klammer-loeschung">',
+        ende: "</span>",
       },
       mark: {
         start: '<mark class="user">',
@@ -1644,8 +1639,8 @@ const beleg = {
         ende: "</span>",
       },
       streichung: {
-        start: "[",
-        ende: "]",
+        start: '<span class="klammer-streichung">',
+        ende: "</span>",
       },
       strike: {
         start: "<s>",

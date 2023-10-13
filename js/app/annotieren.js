@@ -520,39 +520,8 @@ const annotieren = {
       // Events auffrischen
       events();
     }
-    // Belegtext ermitteln
-    const p = annotieren.data.p;
-    let bs = "";
-    if (!p.dataset.id) { // Karteikarte
-      bs = document.getElementById("beleg-bs").value;
-    } else { // Belegliste
-      bs = data.ka[p.dataset.id].bs;
-    }
-    // Absatz-Text ermitteln
-    const klon = p.cloneNode(true);
-    const awKlon = klon.querySelector("#annotierung-wort");
-    if (awKlon) {
-      awKlon.parentNode.removeChild(awKlon);
-    }
-    let text = klon.innerHTML;
-    while (/<mark class="(wort|such)/.test(text)) {
-      text = text.replace(/<mark class="(wort|such).*?">(.+?)<\/mark>/, function (m, p1, p2) {
-        return p2;
-      });
-    }
-    // Ergebnis in Datensatz eintragen
-    const absaetze = bs.replace(/\n\s*\n/g, "\n").split("\n");
-    absaetze[parseInt(p.dataset.pnumber, 10)] = text;
-    bs = absaetze.join("\n\n");
-    if (!p.dataset.id) { // Karteikarte
-      document.getElementById("beleg-bs").value = bs;
-      beleg.data.bs = bs;
-      beleg.belegGeaendert(true);
-    } else { // Belegliste
-      data.ka[p.dataset.id].bs = bs; // Belegtext
-      data.ka[p.dataset.id].dm = new Date().toISOString(); // Änderungsdatum
-      kartei.karteiGeaendert(true);
-    }
+    // Datensatz auffrischen
+    klammern.update(annotieren.data.p);
     // Filterleiste neu aufbauen
     // (es wäre performanter filter.aufbauen(belege) zu benutzen; dann gibt es aber
     // Probleme, wenn nach Annotierungen gefiltert wird und die letzte Annotierung entfernt wurde)

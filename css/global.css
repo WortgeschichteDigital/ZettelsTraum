@@ -28,21 +28,50 @@
 
 /* EINGEFÄRBTE KLAMMERUNGEN IM BELEGTEXT -------- */
 
-.klammer-anmerkung,
+.klammer-technisch {
+  font-weight: bold;
+}
+
 .klammer-autorenzusatz {
   color: var(--farbeGruenDunkel);
 }
 
-.klammer-technisch {
-  font-weight: bold;
+.klammer-loeschung {
+  color: var(--farbeRot);
 }
 
 .klammer-streichung {
   color: var(--farbeB);
 }
 
-.klammer-loeschung {
-  color: var(--farbeRot);
+:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::before {
+  content: "{";
+  margin-left: 2px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::after {
+  content: "}";
+  padding-left: 2px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.klammer-loeschung::before {
+  content: "[[";
+}
+
+.klammer-loeschung::after {
+  content: "]]";
+}
+
+.klammer-streichung::before {
+  content: "[";
+}
+
+.klammer-streichung::after {
+  content: "]";
 }
 
 
