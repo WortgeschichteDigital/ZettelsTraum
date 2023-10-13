@@ -65,11 +65,15 @@
   width: 415px;
 }
 
+#lemmata-liste td:nth-child(2) {
+  width: 415px;
+}
+
 #lemmata-liste .keine-schreibungen td:nth-child(2) {
   width: 391px;
 }
 
-#lemmata-liste .keine-schreibungen td:nth-child(3) {
+#lemmata-liste td:nth-child(3) {
   width: 42px;
 }
 
