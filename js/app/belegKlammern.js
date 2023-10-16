@@ -1,6 +1,6 @@
 "use strict";
 
-const klammern = {
+const belegKlammern = {
   // Klammerung ausführen
   //   type = String
   make (type) {
@@ -31,7 +31,7 @@ const klammern = {
     range.collapse();
 
     // Daten auffrischen
-    klammern.update(span.closest("p"));
+    belegKlammern.update(span.closest("p"));
   },
 
   // Klammerung entfernen
@@ -41,7 +41,7 @@ const klammern = {
     const template = document.createElement("template");
     template.innerHTML = k.innerHTML;
     k.parentNode.replaceChild(template.content, k);
-    klammern.update(p);
+    belegKlammern.update(p);
   },
 
   // Datensatz auffrischen

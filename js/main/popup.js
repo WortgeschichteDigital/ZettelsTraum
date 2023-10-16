@@ -150,22 +150,22 @@ const punkte = {
   klammernAutorenzusatz: {
     label: "Autorenzusatz",
     icon: "klammern-autorenzusatz.png",
-    click: 'klammern.make("autorenzusatz")',
+    click: 'belegKlammern.make("autorenzusatz")',
   },
   klammernEntfernen: {
     label: "Klammern entfernen",
     icon: "klammern-entfernen.png",
-    click: 'klammern.remove()',
+    click: 'belegKlammern.remove()',
   },
   klammernLoeschung: {
     label: "Löschung",
     icon: "klammern-loeschung.png",
-    click: 'klammern.make("loeschung")',
+    click: 'belegKlammern.make("loeschung")',
   },
   klammernStreichung: {
     label: "Streichung",
     icon: "klammern-streichung.png",
-    click: 'klammern.make("streichung")',
+    click: 'belegKlammern.make("streichung")',
   },
   kopfIconsConf: {
     label: "Icon-Einstellungen",

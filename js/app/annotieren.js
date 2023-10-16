@@ -521,7 +521,7 @@ const annotieren = {
       events();
     }
     // Datensatz auffrischen
-    klammern.update(annotieren.data.p);
+    belegKlammern.update(annotieren.data.p);
     // Filterleiste neu aufbauen
     // (es wäre performanter filter.aufbauen(belege) zu benutzen; dann gibt es aber
     // Probleme, wenn nach Annotierungen gefiltert wird und die letzte Annotierung entfernt wurde)
