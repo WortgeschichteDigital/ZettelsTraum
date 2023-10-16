@@ -65,13 +65,30 @@ const belegKlammern = {
       // Annotierungspopup könnte noch auf sein
       aw.parentNode.removeChild(aw);
     }
-    let text = klon.innerHTML;
-    text = text.replace(/<mark class="(?:wort|such).*?">(.+?)<\/mark>/g, (m, p1) => p1);
-    text = text.replace(/<span class="klammer-technisch">(.+?)<\/span>/g, (m, p1) => p1);
+
+    // <mark> und <span> ersetzen, die immer dynamisch ergänzt werden
+    (function repDyn (n) {
+      for (const ch of n.childNodes) {
+        if (ch.nodeType === Node.ELEMENT_NODE) {
+          if (ch.nodeName === "SPAN" && ch.classList.contains("klammer-technisch") ||
+              ch.nodeName === "MARK" && (ch.classList.contains("wort") || ch.classList.contains("such"))) {
+            const parent = ch.parentNode;
+            const template = document.createElement("template");
+            template.innerHTML = ch.innerHTML;
+            parent.replaceChild(template.content, ch);
+            // wegen möglicher Verschachtelungen muss der parent dieser Klammer
+            // noch einmal gescannt werden
+            repDyn(parent);
+          } else {
+            repDyn(ch);
+          }
+        }
+      }
+    }(klon));
 
     // Text im Datensatz eintragen
     const absaetze = bs.replace(/\n\s*\n/g, "\n").split("\n");
-    absaetze[parseInt(p.dataset.pnumber, 10)] = text;
+    absaetze[parseInt(p.dataset.pnumber, 10)] = klon.innerHTML;
     bs = absaetze.join("\n\n");
     if (!p.dataset.id) {
       // Karteikarte
