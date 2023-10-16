@@ -2202,6 +2202,7 @@ const redLit = {
     if (titel && !/\.$/.test(titel)) { // Titelaufnahmen enden immer mit einem Punkt
       titel += ".";
     }
+    titel = titel.normalize("NFC");
     return titel;
   },
 
@@ -2770,7 +2771,7 @@ const redLit = {
     // Titel
     const ti = document.getElementById("red-lit-eingabe-ti");
     const quelle = helfer.textTrim(titelSp[0], true);
-    ti.value = quelle;
+    ti.value = quelle.normalize("NFC");
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN
     if (!ppn) {

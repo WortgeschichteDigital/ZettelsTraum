@@ -478,7 +478,7 @@ const belegImport = {
     // ana() hierfür lieber nicht anpacken
     text = text.replace(/\n[ \t]+/g, "\n");
     // Fertig!
-    belegImport.DTAData.beleg = text;
+    belegImport.DTAData.beleg = text.normalize("NFC");
     // Analysefunktion
     function ana (ele) {
       if (ele.nodeType === 3) { // Text
@@ -669,7 +669,9 @@ const belegImport = {
     td.serie = dta.serie;
     td.serieBd = dta.serie_bd;
     td.url.push(dta.url);
-    return belegImport.makeTitle({ td, mitURL });
+    let title = belegImport.makeTitle({ td, mitURL });
+    title = title.normalize("NFC");
+    return title;
   },
 
   // DWDS-Import: Liste der Korpora des DWDS
@@ -850,6 +852,7 @@ const belegImport = {
     if (nBs && nBs.firstChild) {
       const bs = [];
       let bsContent = nBs.textContent.replace(/<Stichwort>(.+?)<\/Stichwort>/g, (m, p1) => p1);
+      bsContent = bsContent.normalize("NFC");
       bsContent = belegImport.DWDSKorrekturen({
         typ: "bs",
         txt: bsContent,
@@ -974,6 +977,7 @@ const belegImport = {
           }
         }
         satz = helfer.textTrim(satz, true);
+        satz = satz.normalize("NFC");
         satz = belegImport.DWDSKorrekturen({
           typ: "bs",
           txt: satz,
@@ -1137,7 +1141,7 @@ const belegImport = {
     } else if (typ === "bs") { // BELEG
       return txt.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     } else if (typ === "qu") { // QUELLE
-      data.qu = txt;
+      data.qu = txt.normalize("NFC");
       // eine Verrenkung wegen der häufig merkwürdigen Zitierweise
       data.qu = data.qu.replace(/ Zitiert nach:.+/, "");
       const jahrDatierung = data.da.match(/[0-9]{4}/);
@@ -1640,7 +1644,8 @@ const belegImport = {
       // Beleganriss
       td = document.createElement("td");
       tr.appendChild(td);
-      const bs = i.ds.bs.replace(/\n/g, " ");
+      let bs = i.ds.bs.replace(/\n/g, " ");
+      bs = bs.normalize("NFC");
       if (!bs) { // wird bei BibTeX und XML immer so sein
         td.classList.add("kein-wert");
         td.textContent = "kein Beleg";
@@ -1975,12 +1980,12 @@ const belegImport = {
       // Datensatz füllen
       const data = belegImport.DateiDatensatz();
       data.ds.au = "N.\u00A0N."; // Autor
-      data.ds.bs = beleg.join("\n\n"); // Beleg
+      data.ds.bs = beleg.join("\n\n").normalize("NFC"); // Beleg
       data.ds.bi = "dereko";
       data.ds.bx = `${id}${quelle}\n\n${beleg.join("\n")}`; // Original
       data.ds.kr = "IDS"; // Korpus
       data.ds.no = belegImport.Datei.meta; // Notizen
-      data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, ""); // Quellenangabe
+      data.ds.qu = quelle.replace(/\s\[Ausführliche Zitierung nicht verfügbar\]/, "").normalize("NFC"); // Quellenangabe
       const autor = quelle.split(":");
       const kommata = autor[0].match(/,/g);
       const illegal = /[0-9.;!?]/.test(autor[0]);
@@ -1990,7 +1995,7 @@ const belegImport = {
       data.ds.da = helferXml.datum(quelle, false, true);
       if (/\[Tageszeitung\]/.test(quelle)) {
         data.ds.ts = "Zeitung: Tageszeitung";
-        data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "");
+        data.ds.qu = quelle.replace(/,*\s*\[Tageszeitung\]/g, "").normalize("NFC");
       }
       if (!/\.$/.test(data.ds.qu)) {
         data.ds.qu += ".";
@@ -2227,6 +2232,7 @@ const belegImport = {
         td,
         mitURL: true,
       });
+      data.ds.qu = data.ds.qu.normalize("NFC");
       // Datensatz pushen
       titel.push(data);
     }
