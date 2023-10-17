@@ -1465,6 +1465,7 @@ const beleg = {
     // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
     let inline_keep = [
       "B",
+      "BR",
       "CITE",
       "DEL",
       "DFN",
@@ -1536,11 +1537,14 @@ const beleg = {
     });
     for (let i = 0, len = inline_keep.length; i < len; i++) {
       const tag = inline_keep[i];
-      const reg = new RegExp(`\\[#${tag}\\](.+?)\\[\\/${tag}\\]`, "g");
+      const reg = new RegExp(`\\[#${tag}\\](.*?)\\[\\/${tag}\\]`, "g");
       text = text.replace(reg, function (m, p1) {
         return `<${tag.toLowerCase()}>${p1}</${tag.toLowerCase()}>`;
       });
     }
+    text = text.replace(/<br><\/br>/g, "<br>");
+    text = text.replace(/\n\r?<br>/g, "<br>");
+    text = text.replace(/<br>(?!\n)/g, "<br>\n");
     // viele Absätze am Stück bereinigen
     text = text.replace(/\n{3,}/g, "\n\n");
     // gereinigtes HTML zurückgeben
@@ -1568,7 +1572,7 @@ const beleg = {
         }
         // Block-Level-Elemente (und andere), die eine Sonderbehandlung benötigen
         let preformatted = false;
-        if (/^(BR|DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
+        if (/^(DT|FIGCAPTION|HR|LI|TR)$/.test(ele.nodeName)) { // Zeilenumbruch
           text += "\n";
         } else if (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DIV|DL|FIELDSET|FIGURE|FOOTER|FORM|H([1-6]{1})|HEADER|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/.test(ele.nodeName)) { // Absätze
           text = helfer.textTrim(text, false);
