@@ -292,6 +292,11 @@ window.addEventListener("load", async () => {
       beleg.tagsNav(evt.key === "ArrowUp");
     }
   });
+  let tagsTimeout;
+  document.getElementById("beleg-tags-neu").addEventListener("input", () => {
+    clearTimeout(tagsTimeout);
+    tagsTimeout = setTimeout(() => beleg.tagsList(), 250);
+  });
   document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
   document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
     if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools

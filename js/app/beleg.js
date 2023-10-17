@@ -568,6 +568,15 @@ const beleg = {
       }
       tags.splice(idx, 1);
     }
+    const text = document.getElementById("beleg-tags-neu").value.trim();
+    if (text) {
+      const reg = new RegExp(helfer.escapeRegExp(text), "i");
+      for (let i = tags.length - 1; i >= 0; i--) {
+        if (!reg.test(tags[i])) {
+          tags.splice(i, 1);
+        }
+      }
+    }
 
     // Tags drucken
     const list = document.getElementById("beleg-tags-list");
