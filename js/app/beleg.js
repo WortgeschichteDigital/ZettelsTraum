@@ -1063,6 +1063,7 @@ const beleg = {
     if (beleg.pasteBsBlock) {
       return;
     }
+
     // Welche Daten gibt es in der Zwischenablage?
     const clipHtml = evt.clipboardData.getData("text/html");
     const clipText = evt.clipboardData.getData("text/plain");
@@ -1080,9 +1081,13 @@ const beleg = {
     text = beleg.toolsEinfuegenHtml(text);
     if (pasten) {
       modules.clipboard.writeText(text);
-      beleg.pasteBsBlock = true;
-      document.execCommand("paste");
-      beleg.pasteBsBlock = false;
+      setTimeout(() => {
+        // Der Timeout ist nötig, weil es ein wenig dauert,
+        // bis der Text wirklich ins Clipboard geschrieben wurde.
+        beleg.pasteBsBlock = true;
+        document.execCommand("paste");
+        beleg.pasteBsBlock = false;
+      }, 10);
     } else {
       return text;
     }
