@@ -87,9 +87,10 @@ const belegKlammern = {
     }(klon));
 
     // Text im Datensatz eintragen
-    const absaetze = bs.replace(/\n\s*\n/g, "\n").split("\n");
+    const absaetze = liste.belegErstellenPrepP(bs).split("\n");
     absaetze[parseInt(p.dataset.pnumber, 10)] = klon.innerHTML;
     bs = absaetze.join("\n\n");
+    bs = bs.replace(/<br>(?!\n)/g, "<br>\n");
     if (!p.dataset.id) {
       // Karteikarte
       document.getElementById("beleg-bs").value = bs;
