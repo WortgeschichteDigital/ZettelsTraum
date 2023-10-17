@@ -1075,10 +1075,13 @@ const beleg = {
     let text = "";
     if (clipHtml) {
       text = clipHtml;
+      text = beleg.toolsEinfuegenHtml(text);
     } else {
       text = clipText;
+      // Text bereinigen
+      text = text.replace(/\n{3,}/g, "\n\n");
+      text = helfer.textTrim(text, true);
     }
-    text = beleg.toolsEinfuegenHtml(text);
     if (pasten) {
       modules.clipboard.writeText(text);
       setTimeout(() => {
