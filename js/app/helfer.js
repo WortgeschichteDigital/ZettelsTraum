@@ -1016,13 +1016,15 @@ const helfer = {
     return wort.replace(/en|e|nn|n|s|ä|ö|ü/g, function (m) {
       switch (m) {
         case "en":
-          return "(?:ẽ|en)";
+          // erstes e mit Tilde = NFD, zweites = NFC
+          return "(?:ẽ|ẽ|en)";
         case "e":
-          return "(?:ẽ|e)";
+          return "(?:ẽ|ẽ|e)";
         case "nn":
-          return "(?:ñ|nn)";
+          // erstes n mit Tilde = NFD, zweites = NFC
+          return "(?:ñ|ñ|nn)";
         case "n":
-          return "(?:ñ|n)";
+          return "(?:ñ|ñ|n)";
         case "s":
           return "(?:ſ|s)";
         case "ä":
