@@ -609,6 +609,18 @@ const konversionen = {
       }
     }
 
+    // semantische Klammern im Belegtext durch Tags ersetzen
+    for (const karte of Object.values(data.ka)) {
+      karte.bs = karte.bs.replace(/\[{2}(.+?)\]{2}/g, (m, p1) => `<span class="klammer-loeschung">${p1}</span>`);
+      karte.bs = karte.bs.replace(/\[(.+?)\]/g, (m, p1) => {
+        if (/^\[Anmerkung:\s/.test(m) || /^\[(:.+:|¬)\]$/.test(m)) {
+          return m;
+        }
+        return `<span class="klammer-streichung">${p1}</span>`;
+      });
+      karte.bs = karte.bs.replace(/\{(.+?)\}/g, (m, p1) => `<span class="klammer-autorenzusatz">${p1}</span>`);
+    }
+
     // Versionsnummer hochzählen
     data.ve++;
 

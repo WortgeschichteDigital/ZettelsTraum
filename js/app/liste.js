@@ -815,8 +815,10 @@ const liste = {
   //   p = String
   //     (Text mit Absätzen)
   belegErstellenPrepP (p) {
-    // Zeilenumbruch am Ende von Autorenzusatz/Streichung/Löschung verschieben
-    p = p.replace(/<br>(\]\]?|\})/g, (m, p1) => p1 + "<br>");
+    // Zeilenumbruch ggf. verschieben
+    // (dies ist nötige, wenn mehrere durch <br> getrennte Zeilen in einen Tag
+    // eingeschlossen wurden; z.B. bei Autorenzusatz, Streichung, Löschung)
+    p = p.replace(/<br><\/span>/g, "</span><br>");
     // aufeinanderfolgende Verse alle im selben Absatz
     p = p.replace(/<br>\n/g, "<br>");
     // Leerzeilen löschen
@@ -1097,17 +1099,11 @@ const liste = {
     // DTA-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
     // in eckigen Klammern nachgestellt. Schließende Klammer nicht hervorheben!
     // Das macht Probleme, wenn innerhalb der Anmerkung andere Klammern sind.
-    text = text.replace(/\[Anmerkung:/g, '<span class="klammer-anmerkung">[Anmerkung:</span>');
+    text = text.replace(/\[Anmerkung:/g, '<span class="klammer-technisch">[Anmerkung:</span>');
     // DTA-Import: Trenn- oder Bindestrich am Ende einer Zeile
     text = text.replace(/\[¬\]/g, m => `<span class="klammer-technisch">${m}</span>`);
     // DTA-Import: Spalten- oder Seitenumbruch
     text = text.replace(/\[:(.+?):\]/g, (m, p1) => `<span class="klammer-technisch">[:${p1}:]</span>`);
-    // Autorenzusatz
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\{.*?\}/g, m => `<span class="klammer-autorenzusatz">${m}</span>`);
-    // Löschung
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">)\[{2}.+?\]{2}/g, m => `<span class="klammer-loeschung">${m}</span>`);
-    // Streichung
-    text = text.replace(/(?<!<span class="klammer-[a-z]+">\[?)\[.+?\](?!<\/span>)/g, m => `<span class="klammer-streichung">${m}</span>`);
     // Ergebnis zurückgeben
     return text;
   },

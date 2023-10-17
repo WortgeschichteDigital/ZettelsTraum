@@ -66,8 +66,29 @@ const xml = {
     // Belegschnitt typographisch aufbereiten
     // (sollte hier passieren, weil später automatisch XML-Ersetzungen reinkommen)
     cont.innerHTML = helfer.typographie(popup.textauswahl.xml);
-    // <span> für farbige Hervorhebung der Klammern ersetzen
-    helfer.clipboardHtmlErsetzen(cont, '[class^="klammer-"]');
+    // technische Klammern entfernen (Hervorhebung von Seitenumbrüchen, Trennstrichen usw.)
+    helfer.clipboardHtmlErsetzen(cont, ".klammer-technisch");
+    // .klammer-(autorenzusatz|loeschung|streichung) in Tags umwandeln
+    // (da Klammern verschachtelt sein könnten, braucht es eine rekursive Funktion)
+    (function klammern (n) {
+      for (const ch of n.childNodes) {
+        if (ch.nodeType === Node.ELEMENT_NODE) {
+          const cl = ch.getAttribute("class");
+          if (/^klammer-/.test(cl)) {
+            const parent = ch.parentNode;
+            const tag = cl.replace("klammer-", "");
+            const template = document.createElement("template");
+            template.innerHTML = `<${tag}>${ch.innerHTML}</${tag}>`;
+            parent.replaceChild(template.content, ch);
+            // wegen möglicher Verschachtelungen muss der parent dieser Klammer
+            // noch einmal gescannt werden
+            klammern(parent);
+          } else {
+            klammern(ch);
+          }
+        }
+      }
+    }(cont));
     // Belegschnitt parsen
     let text = "";
     let knoten = cont.childNodes;
@@ -92,7 +113,7 @@ const xml = {
       }
     }
     // Belegtext aufbereiten
-    //   - Klammerungen aufbereiten (löschen oder taggen)
+    //   - Klammerungen aufbereiten
     //   - Leerzeichen vor <Streichung> ergänzen (werden beim Auflösen wieder entfernt)
     //   - überflüssige Versauszeichnungen am Ende ersetzen (kann bei wilder Auswahl passieren)
     //   - leere Tags ersetzen (kann bei Stichwörtern mit Klammerung in der Mitte vorkommen
@@ -129,14 +150,14 @@ const xml = {
     //   n = Knoten
     //     (Knoten, der geparst werden soll)
     function getText (n) {
-      if (n.nodeType === 1) {
+      if (n.nodeType === Node.ELEMENT_NODE) {
         for (const c of n.childNodes) {
           let close = "";
-          if (c.nodeType === 1 &&
+          if (c.nodeType === Node.ELEMENT_NODE &&
               c.nodeName === "BR") {
             text += "</Vers><Vers>";
             continue;
-          } else if (c.nodeType === 1 &&
+          } else if (c.nodeType === Node.ELEMENT_NODE &&
               c.nodeName === "MARK") {
             // diese Markierung/dieses Stichwort soll evtl. nicht getaggt werden
             const nichtTaggen = c.parentNode?.dataset?.nichtTaggen ? true : false;
@@ -153,7 +174,12 @@ const xml = {
               text += "<Stichwort>";
               close = "</Stichwort>";
             }
-          } else if (c.nodeType === 1 &&
+          } else if (c.nodeType === Node.ELEMENT_NODE &&
+              /AUTORENZUSATZ|LOESCHUNG|STREICHUNG/.test(c.nodeName)) {
+            const tagName = c.nodeName.substring(0, 1) + c.nodeName.substring(1).toLowerCase();
+            text += `<${tagName}>`;
+            close = `</${tagName}>`;
+          } else if (c.nodeType === Node.ELEMENT_NODE &&
               !c.classList.contains("annotierung-wort")) {
             // visuelle Textauszeichnung
             // @Stil: hier können (fast) alle @rendition des DTA rein
@@ -170,7 +196,7 @@ const xml = {
             text += close;
           }
         }
-      } else if (n.nodeType === 3) {
+      } else if (n.nodeType === Node.TEXT_NODE) {
         const textEsc = helferXml.maskieren({ text: n.nodeValue });
         text += textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
       }
@@ -184,12 +210,6 @@ const xml = {
       // DTA-Import: technische Klammern entfernen
       // (Trennstriche, Seiten- und Spaltenwechsel)
       text = text.replace(/\[(¬|:.+?:)\]/g, "");
-      // Löschung: [[...]]
-      text = text.replace(/\[{2}(.+?)\]{2}/g, (m, p1) => `<Loeschung>${p1}</Loeschung>`);
-      // Streichung: [...]
-      text = text.replace(/\[(.+?)\]/g, (m, p1) => `<Streichung>${p1}</Streichung>`);
-      // Autorenzusatz: {...}
-      text = text.replace(/\{(.*?)\}/g, (m, p1) => `<Autorenzusatz>${p1}</Autorenzusatz>`);
       // Korrekturen Taggingfehler
       //   * wenn <Streichung> für Auslassung benutzt wird => <Loeschung>
       //   * <Autorenzusatz> innerhalb von <Streichung> nicht ersetzen)

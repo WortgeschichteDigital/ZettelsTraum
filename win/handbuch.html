@@ -633,9 +633,15 @@
 
             <p>Ein letztes noch zu diesem Punkt: Es ist vollkommen gleichgültig, mit welcher Methode Sie Text in das Beleg-Feld einfügen. Die automatische Bereinigung wird angestoßen, wenn Sie das Einfüge-Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> verwenden, wenn Sie via <kbd>Strg</kbd> + <kbd>V</kbd> Text einfügen, via <i>Rechtsklick &gt; Einfügen</i> oder über über den Menüpunkt <a href="#menueBearbeiten-einfuegen"><i>Bearbeiten &gt; Einfügen</i></a>.</p>
 
-            <p id="karteikarte-belegKlammern">Im Belegfeld steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie Belegschnitte für einen späteren Export vorbereiten können, ohne dass Sie Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswerfen kann, die Sie wünschen.</p>
+            <p id="karteikarte-belegKlammern">Für den Beleg steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie einen Belegschnitt für den späteren Export vorbereiten können, ohne dass Sie den Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswirft, die Sie wünschen.</p>
 
-            <p id="karteikarte-belegKlammernTools">Über dem <i>Beleg</i>-Feld, wo auch die übrigen Text-Tools zu finden sind, finden Sie drei Funktionen, die zum bequemen Hinzufügen von Klammerungen dienen: <b>[…]</b> (Streichung), <b>[[…]]</b> (Löschung) und <b>{…}</b> (Autorenzusatz). Sie funktionieren genauso wie die übrigens Text-Tools: Text markieren, gewünschte Klammerung anklicken und der markierte Text wird ein- <abbr title="beziehungsweise">bzw.</abbr> ausgeklammert. Zur Funktion und Bedeutung der Klammern <abbr title="siehe unten">s.&nbsp;u.</abbr>.</p>
+            <p>In der <a href="#belegliste">Belegliste</a> und der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> sieht es zwar so aus, als sei der Text eingklammert. Tatsächlich wird der Text aber in spezielle <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags eingefasst. Sie haben zwei Möglichkeiten, diese Tags in den Text einzufügen:</p>
+
+            <ol>
+              <li>Markieren Sie in der Belegliste oder der Leseansicht der Karteikarte den Text, der eingeklammert werden soll. Klicken Sie mit der rechten Maustaste auf der Auswahl und wählen Sie den gewünschten Klammertyp im Menüpunkt <i>Klammern setzen</i> aus.</li>
+
+              <li id="karteikarte-belegKlammernTools">Markieren Sie den Text im <i>Beleg</i>-Feld der Formularansicht der Karteikarte. Über dem Feld, wo auch die übrigen Text-Tools zu finden sind, finden Sie drei Icons, die zum Hinzufügen der Klammern dienen: <b>[…]</b> (Streichung), <b>[[…]]</b> (Löschung) und <b>{…}</b> (Autorenzusatz). Diese Icons funktionieren genauso wie die übrigen Text-Tools.</li>
+            </ol>
 
             <div class="bilder">
               <figure title="zum Vergrößern anklicken">
@@ -649,13 +655,15 @@
               </figure>
             </div>
 
-            <p>Im Folgenden wird beschrieben, wie die Klammerungen beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert werden. Die Klammerungen werden auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets aufgelöst. <abbr title="Vergleiche">Vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>.</p>
+            <p>Die Klammer-Tags werden beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert. Dabei werden die drei Klammertypen unterschiedslos in einfache eckige Klammern gesetzt. Auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets werden die Tags aufgelöst (<abbr title="vergleiche">vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>).</p>
 
-            <p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export somit erhalten, wird dabei aber in eckige Klammern gesetzt.</p>
+            <p>Dies geschieht im Einzelnen, wenn der Text kopiert wird:</p>
 
-            <p><b>[Text]</b> → <b>[…]</b> = Streichung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt.</p>
+            <p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export immer erhalten.</p>
 
-            <p><b>[[Text]]</b> → <b>[…]</b> = Löschung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. Diese Differenzierung ist nur für den <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> relevant, zumal das Ergebnis hier identisch mit dem einer Streichung ist.</p>
+            <p><b>[Text]</b> → <b>[…]</b> = Streichung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. (Es gibt eine <a href="#einstellungen-kopierenStreichung">Einstellung</a>, die Sie aktivieren können, damit der Text zwar eingeklammert, aber nicht durch eine Ellipse ersetzt wird.)</p>
+
+            <p><b>[[Text]]</b> → <b>[…]</b> = Löschung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. Diese Differenzierung ist nur für den <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> relevant, zumal das Ergebnis an der Oberfläche identisch mit dem einer Streichung ist. (Es gibt eine <a href="#einstellungen-kopierenLoeschung">Einstellung</a>, die Sie aktivieren können, damit der Text zwar eingeklammert, aber nicht durch eine Ellipse ersetzt wird.)</p>
 
             <p><b>[¬]</b> → <i>wird gelöscht/durch Bindestrich ersetzt</i>. Trennstriche am Zeilenende, die über den <a href="#karteikarte-dtaImport"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a> in den Belegtext kommen können. Es wird <a href="#karteikarte-bindestrich">der oben beschriebene Algorithmus</a> angewandt.</p>
 
@@ -1594,6 +1602,14 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
           <p class="erklaerung-icon" id="belegliste-textauswahl"><img src="../img/text-markiert.svg" width="24" height="24" alt="">Textauswahl markieren</p>
 
           <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. <a href="#belegliste-karteiwortHervorheben">Details zur Annotierungsfunktion</a> finden Sie weiter oben.</p>
+
+          <p class="erklaerung-icon" id="belegliste-klammern"><img src="../img/klammern.svg" width="24" height="24" alt="">Klammern setzen</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Mit dieser Funktion können Sie den markierten Text in Klammern einfassen, was zur Vorbereiten des Belegschnitts für das Kopieren des Belegs oder für den Export in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet dient. <a href="#karteikarte-belegKlammern">Details zu den Klammern</a> finden Sie weiter oben.</p>
+
+          <p class="erklaerung-icon" id="belegliste-klammernEntfernen"><img src="../img/klammern-entfernen.svg" width="24" height="24" alt="">Klammern entfernen</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf einem eingeklammerten (und darum farbig hervorgehobenen) Textteil. Mit dieser Funktion können Sie Klammern um den Text, auf den Sie geklickt haben, entfernen.</p>
 
           <p class="erklaerung-icon" id="belegliste-textZwischenablage"><img src="../img/kopieren.svg" width="24" height="24" alt="">Text in Zwischenablage</p>
 

@@ -101,7 +101,7 @@ const helfer = {
         queries: [],
       },
       "lemmata-over": {
-        queries: ["#lemmata h2"],
+        queries: [ "#lemmata h2" ],
       },
       "meta-cont-over": {
         queries: [],
@@ -466,7 +466,7 @@ const helfer = {
     const cont = document.createElement("div");
     cont.innerHTML = html;
     // Hervorhebungen, die standardmäßig gelöscht gehören
-    const marks = [ ".suche", ".suchleiste", '[class^="klammer-"]' ];
+    const marks = [ ".suche", ".suchleiste", ".klammer-technisch" ];
     if (!optionen.data.einstellungen["textkopie-wort"]) { // Hervorhebung Karteiwort ebenfalls löschen
       marks.push(".wort");
     } else {

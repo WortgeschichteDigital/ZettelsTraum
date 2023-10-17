@@ -38,6 +38,9 @@ const popup = {
   // das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
   anhangDateiListe: false,
 
+  // speichert die Klammerung, auf die ein Rechtsklick erfolgte
+  klammern: null,
+
   // speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
   startDatei: "",
 
@@ -65,6 +68,7 @@ const popup = {
       const selInBeleg = popup.selInBeleg();
       if (selInBeleg) {
         items.push("markieren");
+        items.push({ name: "klammern", sub: [ "klammernStreichung", "klammernLoeschung", "klammernAutorenzusatz" ] });
       }
       items.push({ name: "text", sub: [ "kopieren", "textReferenz" ] });
       if (selInBeleg) {
@@ -158,6 +162,9 @@ const popup = {
       popup.belegeAuflisten(items);
     } else if (target === "beleg-moddel") {
       items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen" ];
+      if (popup.klammern) {
+        items.unshift("klammernEntfernen", "sep");
+      }
       popup.belegeAuflisten(items);
     } else if (target === "anhang") {
       items = [ "anhang", "ordnerAnhang" ];
@@ -211,6 +218,9 @@ const popup = {
       popup.referenz.data = beleg.data;
       popup.referenz.id = "" + beleg.id_karte;
       items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "sep", "belegHinzufuegen" ];
+      if (popup.klammern) {
+        items.unshift("klammernEntfernen", "sep");
+      }
       popup.belegeAuflisten(items);
     } else if (target === "bedeutungen-conf") {
       items = [ "bedeutungenConf", "sep", "belegHinzufuegen" ];
@@ -346,6 +356,7 @@ const popup = {
           popup.belegID = pfad[i].previousSibling.dataset.id;
           popup.referenz.data = data.ka[popup.belegID];
           popup.referenz.id = popup.belegID;
+          klickAufKlammern(i);
           return "beleg-moddel";
         } else if (pfad[i].classList.contains("anhaenge-item")) {
           popup.anhangDatei = pfad[i].dataset.datei;
@@ -377,6 +388,7 @@ const popup = {
       // IDs untergeordnet
       // (müssen nach "Klassen" überprüft werden)
       if (id === "beleg") {
+        klickAufKlammern(i);
         return "beleg-conf";
       } else if (id === "bedeutungen") {
         return "bedeutungen-conf";
@@ -388,6 +400,17 @@ const popup = {
     }
     // keine Kartei offen
     return "kartei";
+    // Klick auf Klammer entdecken
+    function klickAufKlammern (i) {
+      popup.klammern = null;
+      while (i >= 0) {
+        i--;
+        if (/klammer-(autorenzusatz|loeschung|streichung)/.test(pfad[i]?.getAttribute("class"))) {
+          // Nicht abbrechen! Der Klick könnte auf einer verschachtelten Klammer sein.
+          popup.klammern = pfad[i];
+        }
+      }
+    }
   },
 
   // Text der Auswahl ermitteln und entscheiden, ob sie berücksichtigt wird
@@ -474,7 +497,10 @@ const popup = {
       // Text aufbereiten
       let text = container.innerHTML.replace(/<br>/g, "__br__");
       text = text.replace(/<\/p><p[^>]*>/g, "\n");
-      text = text.replace(/<.+?>/g, "");
+      if (!bs) {
+        // ansonsten werden an dieser Stelle die Markierungen für die Klammern entfernt
+        text = text.replace(/<.+?>/g, "");
+      }
       text = text.replace(/\n/g, "\n\n");
       text = text.replace(/__br__/g, "\n");
       // HTML aufbereiten
@@ -498,6 +524,7 @@ const popup = {
       xml = helfer.clipboardXml(xml);
       if (bs) {
         text = beleg.toolsKopierenKlammern({ text });
+        text = text.replace(/<.+?>/g, "");
         text = helfer.typographie(text);
         text = beleg.toolsKopierenAddQuelle(text, false, obj);
         text = beleg.toolsKopierenAddJahr(text, false);

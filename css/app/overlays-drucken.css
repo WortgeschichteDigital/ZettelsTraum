@@ -67,6 +67,19 @@
   font-weight: bold;
 }
 
+#drucken-cont span[class^="klammer-"] {
+  font-weight: normal;
+  color: inherit;
+}
+
+#drucken-cont span[class^="klammer-"]::before,
+#drucken-cont span[class^="klammer-"]::after {
+  margin-left: 0;
+  padding-left: 0;
+  font-weight: normal;
+  letter-spacing: 0;
+}
+
 #drucken-cont table {
   border-collapse: collapse;
   border-spacing: 0;
