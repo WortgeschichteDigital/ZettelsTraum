@@ -859,9 +859,9 @@ const liste = {
       let absaetze = [];
       let text = "";
       if (id) {
-        absaetze = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
+        absaetze = liste.belegErstellenPrepP(data.ka[id].bs).split("\n");
       } else {
-        absaetze = beleg.data.bs.replace(/\n\s*\n/g, "\n").split("\n");
+        absaetze = liste.belegErstellenPrepP(beleg.data.bs).split("\n");
       }
       if (n === -1) {
         n = absaetze.length - 1;
