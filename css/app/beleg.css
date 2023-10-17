@@ -311,6 +311,7 @@
 }
 
 textarea#beleg-bs {
+  overscroll-behavior: contain;
   min-height: 24px;
   max-height: 288px;
 }
