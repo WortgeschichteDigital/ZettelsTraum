@@ -54,6 +54,7 @@
     <link rel="stylesheet" href="css/app/overlays-updatesWin.css">
     <link rel="stylesheet" href="css/app/overlays-zeitraumgrafik.css">
     <link rel="stylesheet" href="css/app/dropdown.css">
+    <link rel="stylesheet" href="css/app/dropdown2.css">
     <link rel="stylesheet" href="css/app/start.css">
     <link rel="stylesheet" href="css/app/drucken.css" media="print">
 
@@ -103,6 +104,7 @@
     <script src="js/app/quick.js"></script>
     <script src="js/app/quickEin.js"></script>
     <script src="js/app/dropdown.js"></script>
+    <script src="js/app/dropdown2.js"></script>
     <script src="js/app/popup.js"></script>
     <script src="js/app/redaktion.js"></script>
     <script src="js/app/redLit.js"></script>
@@ -242,9 +244,8 @@
         <tr class="beleg-form">
           <td colspan="2" class="check"><div>
             <div>
-              <div id="beleg-tags-add"
-                ><input type="text" value="" placeholder="Tag ergänzen" id="beleg-tags-neu" tabindex="0"
-                ><div id="beleg-tags-list"></div
+              <div class="dropdown2-cont" id="beleg-tags-add"
+                ><input type="text" value="" placeholder="Tag ergänzen" class="dropdown2-input" data-dropdown2="belegTags" id="beleg-tags-neu" tabindex="0"
               ></div>
             </div>
             <div id="beleg-tags"></div>

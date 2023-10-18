@@ -168,46 +168,6 @@
   vertical-align: top;
 }
 
-#beleg #beleg-tags-neu {
-  width: calc(100% - 12px);
-}
-
-#beleg-tags-list {
-  display: none;
-  position: absolute;
-  top: 31px;
-  left: 0;
-  z-index: 2;
-  box-shadow: var(--boxShadow);
-  width: 160px;
-}
-
-#beleg-tags-add:focus-within #beleg-tags-list {
-  display: block;
-}
-
-#beleg-tags-list a {
-  display: block;
-  border-bottom: 1px solid var(--linie);
-  overflow: hidden;
-  padding: 2px 5px;
-  background-color: #fff;
-  color: var(--text);
-  font-size: 14px;
-  line-height: 24px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#beleg-tags-list a:is(.markiert, :hover, :focus) {
-  background-color: var(--hover);
-}
-
-#beleg-tags-list a img {
-  vertical-align: top;
-  margin-right: 3px;
-}
-
 #beleg-form-dwds td {
   padding-top: 3px;
   padding-bottom: 3px;

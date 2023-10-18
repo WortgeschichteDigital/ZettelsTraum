@@ -150,7 +150,6 @@ const beleg = {
 
     // Tags eintragen
     beleg.tagsFill();
-    beleg.tagsList();
 
     // Feld-Werte eintragen bzw. zurücksetzen
     const felder = document.querySelectorAll("#beleg input, #beleg textarea");
@@ -555,7 +554,7 @@ const beleg = {
         const idx = beleg.data.tg.indexOf(tag);
         beleg.data.tg.splice(idx, 1);
         this.parentNode.removeChild(this);
-        beleg.tagsList();
+        document.getElementById("beleg-tags-neu").dispatchEvent(new Event("focus"));
         beleg.belegGeaendert(true);
       });
     }
@@ -617,22 +616,12 @@ const beleg = {
       }
       tags.splice(idx, 1);
     }
-    const text = document.getElementById("beleg-tags-neu").value.trim();
-    if (text) {
-      const reg = new RegExp(helfer.escapeRegExp(text), "i");
-      for (let i = tags.length - 1; i >= 0; i--) {
-        if (!reg.test(tags[i])) {
-          tags.splice(i, 1);
-        }
-      }
-    }
 
-    // Tags drucken
-    const list = document.getElementById("beleg-tags-list");
-    list.replaceChildren();
+    // Fragment erstellen und zurückgeben
+    const frag = document.createDocumentFragment();
     for (const tag of tags) {
       const a = document.createElement("a");
-      list.appendChild(a);
+      frag.appendChild(a);
       const img = document.createElement("img");
       a.appendChild(img);
       img.src = "img/" + (beleg.tags[tag] || "etikett.svg");
@@ -650,24 +639,12 @@ const beleg = {
         beleg.belegGeaendert(true);
       });
     }
+    return frag;
   },
 
   // Tags: selbstdefinierten Tag hinzufügen
   //   tag = String
   tagsAdd (tag) {
-    // Tag im Dropdown-Menü markiert?
-    const markiert = document.querySelector("#beleg-tags-list .markiert");
-    if (markiert) {
-      markiert.click();
-      return;
-    }
-
-    // Tag aufbereiten
-    tag = helfer.textTrim(tag, true);
-    if (!tag) {
-      return;
-    }
-
     // Tag schon angehängt?
     if (beleg.data.tg.includes(tag)) {
       dialog.oeffnen({
@@ -677,52 +654,15 @@ const beleg = {
           document.getElementById("beleg-tags-neu").select();
         },
       });
-      return;
+      return false;
     }
 
     // Tag hinzufügen
-    document.getElementById("beleg-tags-neu").value = "";
     beleg.data.tg.push(tag);
     beleg.data.tg.sort(beleg.tagsSort);
     beleg.tagsFill();
-    beleg.tagsList();
     beleg.belegGeaendert(true);
-  },
-
-  // Tags: durch die Liste der Tags navigieren
-  //   up = Boolean
-  tagsNav (up) {
-    // Gibt es noch Tags zum Hinzufügen?
-    const tags = document.querySelectorAll("#beleg-tags-list a");
-    if (!tags.length) {
-      return;
-    }
-
-    // markiertes Element ermitteln
-    const markiert = document.querySelector("#beleg-tags-list .markiert");
-    let idx = -1;
-    if (markiert) {
-      for (let i = 0, len = tags.length; i < len; i++) {
-        if (tags[i].classList.contains("markiert")) {
-          idx = i;
-          break;
-        }
-      }
-      markiert.classList.remove("markiert");
-    }
-
-    // nächstes Element markieren
-    if (up) {
-      idx--;
-    } else {
-      idx++;
-    }
-    if (idx < 0) {
-      return;
-    } else if (idx === tags.length) {
-      idx--;
-    }
-    tags[idx].classList.add("markiert");
+    return true;
   },
 
   // Tags: Sortierung nach dem Hinzufügen

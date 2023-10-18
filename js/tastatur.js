@@ -38,6 +38,10 @@ const tastatur = {
         dropdown.schliessen();
         return;
       }
+      if (document.activeElement.classList.contains("dropdown2-input")) {
+        document.activeElement.blur();
+        return;
+      }
       // Konfigurationsdialog in Formvarianten schließen
       if (overlayId === "stamm" &&
           document.getElementById("stamm-popup")) {
@@ -80,10 +84,6 @@ const tastatur = {
       }
       // Karteikarte schließen
       if (helfer.hauptfunktion === "karte") {
-        if (document.activeElement.id === "beleg-tags-neu") {
-          document.getElementById("beleg-tags-neu").blur();
-          return;
-        }
         helfer.inputBlur();
         beleg.aktionAbbrechen();
         return;
