@@ -270,18 +270,16 @@ window.addEventListener("load", async () => {
   document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
   // Karteikarte
   document.querySelectorAll("#beleg input, #beleg textarea").forEach(i => {
-    if (i.id === "beleg-tags-neu") {
-      return;
-    }
     if (i.type === "button") {
       beleg.aktionButton(i);
     } else if (i.type === "radio") {
       beleg.formularImportListener(i);
-    } else {
+    } else if (i.classList.contains("beleg-form-data")) {
       beleg.formularGeaendert(i);
-      beleg.belegSpeichern(i);
+      beleg.formularEvtFormData(i);
     }
   });
+  beleg.formularEvtDTA();
   document.getElementById("beleg-tags-neu").addEventListener("keydown", function (evt) {
     tastatur.detectModifiers(evt);
     const m = tastatur.modifiers;

@@ -152,24 +152,18 @@ const beleg = {
     beleg.tagsFill();
     beleg.tagsList();
 
-    // Feld-Werte eintragen
+    // Feld-Werte eintragen bzw. zurücksetzen
     const felder = document.querySelectorAll("#beleg input, #beleg textarea");
     for (let i = 0, len = felder.length; i < len; i++) {
-      const feld = felder[i].id.replace(/^beleg-/, "");
-      if (felder[i].type === "button" || /^tags?-/.test(feld)) {
-        continue;
-      } else if (feld === "dta") {
-        felder[i].value = "";
-        continue;
-      } else if (feld === "dta-bis") {
-        felder[i].value = "0";
-        continue;
-      } else if (/^(bd|datei-latin1)$/.test(feld)) {
-        continue;
-      } else if (felder[i].type === "checkbox") {
-        felder[i].checked = beleg.data[feld];
-      } else { // Text-Input und Textarea
-        felder[i].value = beleg.data[feld];
+      const feld = felder[i];
+      const name = feld.id.replace(/^beleg-/, "");
+      if (name === "dta") {
+        feld.value = "";
+      } else if (name === "dta-bis") {
+        feld.value = "0";
+      } else if (name !== "bd" &&
+          feld.classList.contains("beleg-form-data")) {
+        feld.value = beleg.data[name];
       }
     }
 
@@ -271,38 +265,27 @@ const beleg = {
     label.textContent = text;
   },
 
-  // Änderungen in einem Formular-Feld automatisch übernehmen
+  // Änderungen in einem der Datenfelder des Formulars
+  // (input | textarea + .beleg-form-data)
   //   feld = Element
   //     (das Formularfeld, das geändert wurde)
   formularGeaendert (feld) {
-    feld.addEventListener("input", function () {
-      const feld = this.id.replace(/^beleg-/, "");
-      if (/^dta(-bis)*$/.test(feld)) { // #beleg-dta + #beleg-dta-bis gehören nicht zur Kartei, dienen nur zum DTA-Import
-        if (feld === "dta" &&
-            /^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) { // Bis-Seite ermitteln und eintragen
-          const fak = belegImport.DTAGetFak(this.value, "");
-          if (fak) {
-            this.nextSibling.value = parseInt(fak, 10) + 1;
-          }
-        }
-        return;
-      }
-      if (this.type === "checkbox") {
-        beleg.data[feld] = this.checked;
-      } else if (feld === "bd") {
+    feld.addEventListener("change", function () {
+      const name = this.id.replace(/^beleg-/, "");
+      if (name === "bd") {
         // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt;
         // vgl. beleg.aktionSpeichern().
-        // Wurden die Daten hier geändert, darf das Gerüst aber erst
+        // Wurden die Daten hier geändert, darf das Gerüst erst
         // nach dem Speichern gewechselt werden, sonst gehen die Änderungen verloren.
         beleg.geaendertBd = true;
       } else {
-        let noLeer = "";
-        if (feld === "no" && /^\n/.test(this.value)) {
+        let noLeerzeilen = "";
+        if (name === "no" && /^\n/.test(this.value)) {
           // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
           // weil die erste Zeile in der Belegliste angezeigt werden kann
-          noLeer = this.value.match(/^\n+/)[0];
+          noLeerzeilen = this.value.match(/^\n+/)[0];
         }
-        beleg.data[feld] = noLeer + helfer.textTrim(this.value, true);
+        beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
       }
       beleg.belegGeaendert(true);
     });
@@ -391,6 +374,72 @@ const beleg = {
       name.textContent = "keine Datei geladen";
       name.classList.add("leer");
     }
+  },
+
+  // Events in Datenfeldern des Formulars
+  // (input | textarea + .beleg-form-data)
+  //   input = Node
+  formularEvtFormData (input) {
+    input.addEventListener("keydown", function (evt) {
+      tastatur.detectModifiers(evt);
+      if ((!tastatur.modifiers || tastatur.modifiers === "Ctrl") && evt.key === "Enter") {
+        if (tastatur.modifiers === "Ctrl") {
+          evt.preventDefault();
+          this.blur();
+          const result = beleg.aktionSpeichern();
+          if (result) {
+            this.focus();
+          }
+        } else if (document.getElementById("dropdown") &&
+            this.classList.contains("dropdown-feld")) {
+          evt.preventDefault();
+        }
+      }
+    });
+  },
+
+  // Events in DTA-Feldern
+  formularEvtDTA () {
+    // Import anstoßen
+    document.querySelectorAll("#beleg-dta, #beleg-dta-bis").forEach(input => {
+      input.addEventListener("keydown", evt => {
+        if (evt.key === "Enter") {
+          belegImport.DTA();
+        }
+      });
+    });
+
+    // Wert von Bis-Feld automatisch ermitteln
+    const dta = document.getElementById("beleg-dta");
+    dta.addEventListener("input", function () {
+      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) {
+        const fak = belegImport.DTAGetFak(this.value, "");
+        if (fak) {
+          this.nextSibling.value = parseInt(fak, 10) + 1;
+        }
+      }
+    });
+
+    // URL automatisch pasten
+    dta.addEventListener("focus", function () {
+      if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
+        return;
+      }
+      const cb = modules.clipboard.readText();
+      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
+        setTimeout(function () {
+          // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
+          // man muss dem Fokus-Wechsel ein bisschen Zeit geben
+          if (document.activeElement.id !== "beleg-dta") {
+            // ist eine URL in der Zwischenablage, fokussiert man das DTA-Feld und löscht den Inhalt,
+            // defokussiert man das Programm und fokussiert es dann wieder, indem man direkt
+            // auf ein anderes Textfeld klickt, würde dieses Textfeld gefüllt werden
+            return;
+          }
+          document.execCommand("paste");
+        }, 5);
+      }
+    });
   },
 
   // Tags: Liste der Standardtags und ihrer Icons
@@ -1009,54 +1058,6 @@ const beleg = {
     }
     const cont = document.querySelector("#beleg-referenz");
     cont.textContent = ref;
-  },
-
-  // Speichern oder DTAImport starten (wenn Fokus auf einem Input-Element)
-  //   input = Element
-  //     (Element, auf dem das Event ausgeführt wird:
-  //     <input type="checkbox">, <input type="number">, <input type="text">, <textarea>)
-  belegSpeichern (input) {
-    input.addEventListener("keydown", function (evt) {
-      tastatur.detectModifiers(evt);
-      if ((!tastatur.modifiers || tastatur.modifiers === "Ctrl") && evt.key === "Enter") {
-        if (tastatur.modifiers === "Ctrl") {
-          evt.preventDefault();
-          beleg.aktionSpeichern();
-          return;
-        }
-        if (/^beleg-dta(-bis)*$/.test(this.id)) {
-          evt.preventDefault();
-          belegImport.DTA();
-          return;
-        }
-        if (document.getElementById("dropdown") &&
-            /^beleg-(bd|bl|kr|sy|ts)/.test(this.id)) {
-          evt.preventDefault();
-        }
-      }
-    });
-    // DTA-Feld ggf. direkt aus dem Clipboard füttern
-    if (input.id === "beleg-dta") {
-      input.addEventListener("focus", function () {
-        if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
-          return;
-        }
-        const cb = modules.clipboard.readText();
-        if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
-          setTimeout(function () {
-            // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
-            // man muss dem Fokus-Wechsel ein bisschen Zeit geben
-            if (document.activeElement.id !== "beleg-dta") {
-              // ist eine URL in der Zwischenablage, fokussiert man das DTA-Feld und löscht den Inhalt,
-              // defokussiert man das Programm und fokussiert es dann wieder, indem man direkt
-              // auf ein anderes Textfeld klickt, würde dieses Textfeld gefüllt werden
-              return;
-            }
-            document.execCommand("paste");
-          }, 5);
-        }
-      });
-    }
   },
 
   // blockiert die Verarbeitung von beleg.pasteBs() kurzzeitig
@@ -2285,12 +2286,23 @@ const beleg = {
   //   user = Boolean
   //     (Leseansicht wurde durch User aktiv gewechselt)
   leseToggle (user) {
+    // ggf. Update von beleg.data anstoßen
+    // (das kann nötig sein, wenn in einem Datenfeld eine Eingabe erfolgt
+    // und dann via Tastaturkürzel in die Leseansicht gewechselt wird)
+    const active = document.activeElement;
+    if (active.classList.contains("beleg-form-data")) {
+      // blur() triggert das Change-Event
+      active.blur();
+    }
+
     // ggf. Annotierungs-Popup schließen
     annotieren.modSchliessen();
+
     // Suchleiste ggf. ausblenden
     if (document.getElementById("suchleiste")) {
       suchleiste.ausblenden();
     }
+
     // Ansicht umstellen
     const button = document.getElementById("beleg-link-leseansicht");
     const tab = document.querySelector("#beleg table");
@@ -2307,6 +2319,7 @@ const beleg = {
     }
     button.classList.toggle("aktiv");
     tooltip.init(button.parentNode);
+
     // Header-Icons ein- oder ausblenden
     document.querySelectorAll("#beleg .icon-leseansicht").forEach(function (i) {
       if (beleg.leseansicht) {
@@ -2315,6 +2328,7 @@ const beleg = {
         i.classList.add("aus");
       }
     });
+
     // Title des Sprung-Icons anpassen
     const springen = document.getElementById("beleg-link-springen");
     if (beleg.leseansicht) {
@@ -2323,6 +2337,7 @@ const beleg = {
       springen.title = `zum Wort im Belegtext springen (${tastatur.shortcutsTextAktuell("Strg")} + ↓)`;
     }
     tooltip.init(springen.parentNode);
+
     // Einfüge-Icons ein- oder ausblenden
     document.querySelectorAll("#beleg .icon-tools-einfuegen").forEach(function (i) {
       if (beleg.leseansicht) {
@@ -2331,6 +2346,7 @@ const beleg = {
         i.classList.remove("aus");
       }
     });
+
     // Text-Tools für Beleg und Bedeutung ein- oder ausblenden
     const tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
     for (const tools of tools_beleg) {
@@ -2340,6 +2356,7 @@ const beleg = {
         tools.classList.remove("aus");
       }
     }
+
     // Textwerte eintragen
     if (beleg.leseansicht) {
       beleg.leseFill();
