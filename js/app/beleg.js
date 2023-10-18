@@ -2348,7 +2348,7 @@ const beleg = {
     });
 
     // Text-Tools für Beleg und Bedeutung ein- oder ausblenden
-    const tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung");
+    const tools_beleg = document.querySelectorAll(".text-tools-beleg, .text-tools-bedeutung, .text-tools-quelle");
     for (const tools of tools_beleg) {
       if (beleg.leseansicht) {
         tools.classList.add("aus");
