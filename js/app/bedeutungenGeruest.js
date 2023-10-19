@@ -25,15 +25,6 @@ const bedeutungenGeruest = {
         },
       });
       return;
-    } else if (beleg.geaendertBd) {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Sie haben das Bedeutungsfeld geändert, aber noch nicht gespeichert.\nBeim Wechsel des Bedeutungsgerüsts vor dem Speichern gingen die Änderungen verloren.",
-        callback: () => {
-          bedeutungenGeruest.bedeutungsfeldFokus();
-        },
-      });
-      return;
     }
     // Fenster öffnen
     const fenster = document.getElementById("geruestwechseln");
@@ -90,12 +81,11 @@ const bedeutungenGeruest = {
     // Konsequenzen des Wechsels
     if (helfer.hauptfunktion === "karte") {
       beleg.formularBedeutungLabel();
-      beleg.formularBedeutung();
-      if (beleg.leseansicht) {
-        beleg.leseFillBedeutung();
-      }
+      beleg.formularBedeutungFill();
       beleg.listeGeaendert = true; // damit nach dem Schließen die Liste in jedem Fall aufgefrischt wird – auch wenn das Formular nicht gespeichert wird
-      document.getElementById("beleg-bd").focus();
+      if (!beleg.leseansicht) {
+        document.getElementById("beleg-bd").focus();
+      }
     } else if (helfer.hauptfunktion === "liste") {
       liste.status(true);
     }

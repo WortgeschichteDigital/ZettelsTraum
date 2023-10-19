@@ -114,7 +114,7 @@ window.addEventListener("load", async () => {
     modules.ipc.invoke("fenster-fokus");
   });
   modules.ipc.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
-    beleg.bedeutungEinAustragen(bd, eintragen);
+    beleg.bedeutungenWin(bd, eintragen);
     modules.ipc.invoke("fenster-fokus");
   });
   // XML-Fenster
@@ -314,7 +314,6 @@ window.addEventListener("load", async () => {
   document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
   document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
   bedeutungen.xml({ icon: document.getElementById("bedeutungen-link-xml") });
-  document.querySelector('[for="beleg-bd"]').addEventListener("click", () => bedeutungenGeruest.oeffnen());
   // Tagger
   document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
   document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());

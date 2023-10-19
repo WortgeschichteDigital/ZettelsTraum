@@ -3,6 +3,11 @@
 const dropdown2 = {
   // Map für Funktionen
   funMap: {
+    belegBedeutung: {
+      obj: beleg,
+      add: "formularBedeutungAdd",
+      list: "formularBedeutungList",
+    },
     belegTags: {
       obj: beleg,
       add: "tagsAdd",

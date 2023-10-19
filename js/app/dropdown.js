@@ -23,20 +23,6 @@ const dropdown = {
     dropdown.data.sort(helfer.sortAlpha);
   },
 
-  // sammelt die Bedeutungen für das Dropdown-Menü im Formular
-  dataBedeutungen () {
-    const bd = data.bd.gr[data.bd.gn].bd;
-    for (let i = 0, len = bd.length; i < len; i++) {
-      dropdown.data.push(bedeutungen.bedeutungenTief({
-        gr: data.bd.gn,
-        id: bd[i].id,
-        za: false,
-        al: true,
-        strip: true,
-      }));
-    }
-  },
-
   // ergänzt die vordefinierte Liste der Korpora um manuell ergänzte
   dataKorpora () {
     const korpora = [ ...beleg.korpora ];
@@ -242,8 +228,6 @@ const dropdown = {
       if (/^redaktion-ereignis-/.test(feld_id)) {
         dropdown.data.shift();
       }
-    } else if (feld_id === "beleg-bd") {
-      dropdown.dataBedeutungen();
     } else if (feld_id === "beleg-bl") {
       dropdown.dataFormular("bl");
     } else if (feld_id === "beleg-kr") {
@@ -541,7 +525,7 @@ const dropdown = {
   auswahl (feld, text) {
     const caller = dropdown.caller; // muss zwischengespeichert werden, weil das Dropdown sich schließt, wenn sich das Dialog-Fenster öffnet
     const wert = dropdown.feldWert(feld);
-    if (wert && /^beleg-(bd|bl|sy|ts)/.test(caller)) {
+    if (wert && /^beleg-(bl|sy|ts)/.test(caller)) {
       // Steht der Wert schon im Feld?
       const feld_val = wert.split("\n");
       if (feld_val.includes(text)) {
@@ -626,20 +610,10 @@ const dropdown = {
       }
       feld.focus();
       // Haben die Änderungen weitere Konsequenzen?
-      if (/^beleg-(bd|bl|sy|ts)/.test(caller)) {
+      if (/^beleg-(bl|sy|ts)/.test(caller)) {
         helfer.textareaGrow(feld);
-        if (caller === "beleg-bd") { // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt; vgl. beleg.aktionSpeichern()
-          const bd = document.getElementById("beleg-bd");
-          bd.value = helfer.textTrim(bd.value, true);
-          // es ist möglich, dass die Leseansicht aktiv ist
-          // (beim Einfügen aus dem Bedeutungsgerüst-Fenster)
-          if (beleg.leseansicht) {
-            beleg.leseFill();
-          }
-        } else {
-          const id = caller.replace(/^beleg-/, "");
-          beleg.data[id] = helfer.textTrim(text, true);
-        }
+        const id = caller.replace(/^beleg-/, "");
+        beleg.data[id] = helfer.textTrim(text, true);
         beleg.belegGeaendert(true);
       } else if (caller === "beleg-kr") {
         beleg.data.kr = helfer.textTrim(text, true);

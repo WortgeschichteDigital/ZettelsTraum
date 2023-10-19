@@ -540,8 +540,9 @@ const kopieren = {
         bdMap[i] = i;
       });
     } else {
-      document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(function (i) {
+      document.querySelectorAll("#kopieren-einfuegen-bedeutungen input").forEach(i => {
         const idQuelle = i.id.replace(/.+-/, "");
+        // idZiel bleibt leer, wenn das Gerüst nicht importiert werden soll
         let idZiel = "";
         const wert = i.value.match(/^Gerüst ([0-9]+)/);
         if (wert) {
@@ -550,6 +551,7 @@ const kopieren = {
         bdMap[idQuelle] = idZiel;
       });
     }
+
     // Datenfelder ermitteln, die importiert werden sollen
     const ds = [ "bx" ]; // "bs" (Beleg) wird immer importiert => Beleg-XML auch immer importieren
     document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function (i) {
@@ -558,8 +560,8 @@ const kopieren = {
       }
       ds.push(i.id.replace(/.+-/, ""));
     });
+
     // neue Karten anlegen
-    const fehler_bedeutungen = new Set();
     let id_karte_duplikat = 0;
     for (let i = 0, len = daten.length; i < len; i++) {
       // eine neue Karte erzeugen
@@ -578,34 +580,41 @@ const kopieren = {
           continue;
         }
         if (ds[j] === "bd") { // Bedeutungen
-          for (const k of daten[i].bd) { // sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt
+          for (const k of daten[i].bd) {
+            // Sind keine Bedeutungen eingetragen, wird diese Schleife einfach nicht ausgeführt.
             // Sollen Bedeutungen aus diesem Gerüst überhaupt importiert werden?
             //   k.gr = String (die ID des Bedeutungsgerüsts in der Quell-Kartei)
-            //   k.bd = String (die Bedeutung, ausgeschrieben mit Hierarchien ": ")
+            //   k.bd = Array (identisch mit data.bd.gr[ID].bd[n].bd)
             if (!bdMap[k.gr]) {
               continue;
             }
-            // Bedeutung importieren und ggf. im Gerüst ergänzen
-            let bd = beleg.bedeutungSuchen(k.bd, bdMap[k.gr]);
-            if (!bd.id) {
-              bd = beleg.bedeutungErgaenzen(k.bd, bdMap[k.gr]);
-              if (!bd.id) { // zur Sicherheit, falls beim Ergänzen etwas schief gegangen ist
-                fehler_bedeutungen.add(id_karte);
-                continue;
+
+            // Bedeutung im Gerüst suchen
+            const gr = data.bd.gr[bdMap[k.gr]];
+            const kBd = k.bd.join("|");
+            let id = 0;
+            for (const b of gr.bd) {
+              if (b.bd.join("|") === kBd) {
+                id = b.id;
+                break;
               }
             }
-            // Ist die Bedeutung schon vorhanden?
-            const schon_vorhanden = bedeutungen.schonVorhanden({
-              bd: data.ka[id_karte].bd,
-              gr: bdMap[k.gr],
-              id: bd.id,
-            });
-            if (schon_vorhanden[0]) {
-              continue;
+
+            // Bedeutung noch nicht vorhanden
+            if (!id) {
+              // ggf. ID-Generator initialisieren
+              if (!bedeutungen.makeId) {
+                bedeutungen.idInit(gr);
+              }
+
+              // Bedeutung einhängen
+              id = addBd(gr, k.bd);
             }
+
+            // Bedeutung in Karte ergänzen
             data.ka[id_karte].bd.push({
               gr: bdMap[k.gr],
-              id: bd.id,
+              id,
             });
           }
         } else if (Array.isArray(daten[i][ds[j]])) { // eindimensionale Arrays
@@ -617,35 +626,98 @@ const kopieren = {
       // Speicherdatum ergänzen
       data.ka[id_karte].dm = new Date().toISOString();
     }
+
     // Änderungsmarkierung
     kartei.karteiGeaendert(true);
+
     // die folgenden Operationen sind fast alle unnötig, wenn ein Beleg dupliziert wurde
     if (duplikat) {
       liste.status(true); // Liste und Filter neu aufbauen
       helfer.animation("duplikat");
       return id_karte_duplikat;
     }
+
     // BedeutungsgerüstFenster auffrischen
     bedeutungenWin.daten();
+
     // Liste und Filter neu aufbauen, Liste anzeigen
     liste.status(true);
     await liste.wechseln();
+
     // Einfüge-Fenster ggf. schließen
     if (optionen.data.einstellungen["einfuegen-schliessen"]) {
       overlay.schliessen(document.getElementById("kopieren-einfuegen"));
     }
+
     // Feedback anzeigen
     helfer.animation("einfuegen");
-    // Gab es Fehler beim Importieren der Bedeutungen?
-    if (fehler_bedeutungen.size) {
-      const fehler_belege = [];
-      for (const id of fehler_bedeutungen) {
-        fehler_belege.push(liste.detailAnzeigenH3(id.toString()));
+
+    // neue Bedeutung im Bedeutungsgerüst einfügen
+    //   gr = Object
+    //     (Bedeutungsgerüst)
+    //   kBd = Array
+    //     (neue Bedeutung)
+    function addBd (gr, kBd) {
+      let slice = 1;
+      let arr = kBd.slice(0, slice);
+      let arrVor = [];
+      let arrTmpVor = [];
+      let pos = -1;
+
+      // 1) Position (initial) und Slice finden
+      for (let i = 0, len = gr.bd.length; i < len; i++) {
+        const arrTmp = gr.bd[i].bd.slice(0, slice);
+        if (arrTmp.join("|") === arr.join("|")) {
+          pos = i;
+          // passender Zweig gefunden
+          if (slice === kBd.length) {
+            // hier geht es nicht weiter
+            break;
+          } else {
+            // weiter in die Tiefe wandern
+            arrVor = [ ...arr ];
+            arrTmpVor = [ ...arrTmp ];
+            slice++;
+            arr = kBd.slice(0, slice);
+          }
+        } else if (arrVor.join("|") !== arrTmpVor.join("|")) {
+          // jetzt bin ich zu weit: ein neuer Zweig beginnt
+          break;
+        }
       }
-      dialog.oeffnen({
-        typ: "alert",
-        text: `Beim Importieren der Bedeutungen ist es in den folgenden Belegen zu einem Fehler gekommen:\n${fehler_belege.join("<br>")}`,
-      });
+
+      // 2) Position korrigieren
+      //    (hoch zum Slot, an dessen Stelle eingefügt wird)
+      if (pos === -1 || pos === gr.bd.length - 1) {
+        // Sonderregel: die Bedeutung muss am Ende eingefügt werden
+        pos = gr.bd.length;
+      } else {
+        let i = pos;
+        const len = gr.bd.length;
+        do {
+          // diese Schleife muss mindestens einmal durchlaufen;
+          // darum keine gewöhnliche for-Schleife
+          i++;
+          if (!gr.bd[i] || gr.bd[i].bd.length <= arrVor.length) {
+            pos = i;
+            break;
+          }
+        } while (i < len);
+      }
+
+      // 3) jetzt kann eingehängt werden
+      //    (die nachfolgenden Slots rutschen allen um einen hoch)
+      const bdAdd = kBd.slice(slice - 1);
+      for (let i = 0, len = bdAdd.length; i < len; i++) {
+        const bd = arrVor.concat(bdAdd.slice(0, i + 1));
+        gr.bd.splice(pos + i, 0, bedeutungen.konstitBedeutung(bd));
+      }
+
+      // Zählung auffrischen
+      bedeutungen.konstitZaehlung(gr.bd, gr.sl);
+
+      // ID zurückgeben
+      return gr.bd.at(-1).id;
     }
   },
 
@@ -673,35 +745,18 @@ const kopieren = {
   //   quelle = Object
   //     (Datenquelle des Belegs)
   datenBeleg (quelle) {
-    const kopie = {};
-    for (const key of Object.keys(quelle)) {
-      // Zeitpunkt Erstellung/Speicherung nicht kopieren
-      if (key === "dc" || key === "dm") {
-        continue;
-      }
-      // Sonderbehandlung Bedeutung
-      if (key === "bd") {
-        kopie.bd = [];
-        for (let i = 0, len = quelle.bd.length; i < len; i++) {
-          kopie.bd.push({
-            gr: quelle.bd[i].gr,
-            bd: bedeutungen.bedeutungenTief({
-              gr: quelle.bd[i].gr,
-              id: quelle.bd[i].id,
-              za: false,
-              strip: true,
-            }),
-          });
-        }
-        continue;
-      }
-      // Wert kopieren
-      if (Array.isArray(quelle[key])) {
-        kopie[key] = [ ...quelle[key] ];
-      } else {
-        kopie[key] = quelle[key];
-      }
+    const kopie = structuredClone(quelle);
+    delete kopie.dc;
+    delete kopie.dm;
+    const bd = [];
+    for (const b of quelle.bd) {
+      const bed = data.bd.gr[b.gr].bd.find(i => i.id === b.id);
+      bd.push({
+        bd: [ ...bed.bd ],
+        gr: b.gr,
+      });
     }
+    kopie.bd = bd;
     return kopie;
   },
 
@@ -719,7 +774,7 @@ const kopieren = {
     const daten = {
       bl: [],
       ty: "ztb",
-      ve: 2,
+      ve: 3,
     };
     for (const id of kopieren.belege) {
       daten.bl.push(kopieren.datenBeleg(data.ka[id]));
