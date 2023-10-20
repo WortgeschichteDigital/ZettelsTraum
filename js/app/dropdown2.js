@@ -67,7 +67,7 @@ const dropdown2 = {
       const a = frag.querySelectorAll("a");
       for (let i = a.length - 1; i >= 0; i--) {
         const item = a[i];
-        if (!reg.test(item.textContent)) {
+        if (!reg.test(item.dataset.suchtext)) {
           item.parentNode.removeChild(item);
         }
       }

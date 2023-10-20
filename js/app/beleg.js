@@ -319,8 +319,10 @@ const beleg = {
       const zaehlung = bedeutungen.zaehlungTief(idx, gr.bd);
       bd.push({
         id: b.id,
+        idx,
         level: b.bd.length,
         text: `<b class="bed-zaehlung">${zaehlung.join(" ")}</b>${b.bd.at(-1)}`,
+        zaehlung: zaehlung.join(" "),
       });
     }
 
@@ -332,6 +334,7 @@ const beleg = {
       const level = b.level > 8 ? 8 : b.level;
       a.classList.add(`bed-level${level}`);
       a.dataset.id = b.id;
+      a.dataset.suchtext = b.zaehlung + "|" + gr.bd[b.idx].bd.join("|").replace(/<.+?>/g, "");
       a.href = "#";
       a.innerHTML = b.text;
       a.addEventListener("click", function (evt) {
@@ -772,6 +775,7 @@ const beleg = {
       img.src = "img/" + (beleg.tags[tag] || "etikett.svg");
       img.width = "24";
       img.height = "24";
+      a.dataset.suchtext = tag;
       a.href = "#";
       a.appendChild(document.createTextNode(tag));
       a.addEventListener("click", function (evt) {
