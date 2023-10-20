@@ -125,85 +125,85 @@ const karteisucheExport = {
       // HTML
       // Content vorbereiten
       const stylesheet = `<style>
-        body {
-          margin: 20px;
-          font-family: Arial, Helvetica, sans-serif;
-          font-size: 16px;
-          line-height: 24px;
-        }
-        h1 {
-          margin: 0 0 20px 0;
-          font-size: 28px;
-          line-height: 40px;
-          font-weight: bold;
-        }
-        h1 span {
-          margin-left: 20px;
-          font-size: 16px;
-          font-weight: normal;
-        }
-        h2 {
-          margin: 40px 0 10px 0;
-          font-size: 22px;
-          line-height: 32px;
-          font-weight: bold;
-        }
-        table {
-          border-collapse: collapse;
-          border-spacing: 0;
-        }
-        th,
-        td {
-          padding: 5px 10px;
-          white-space: nowrap;
-        }
-        th {
-          vertical-align: bottom;
-          text-align: left;
-        }
-        td {
-          vertical-align: top;
-        }
-        th.center,
-        td.center {
-          text-align: center;
-        }
-        td.umbruch {
-          white-space: normal;
-        }
-        tr:nth-child(even of :not(.off)) td {
-          background-color: #f6f6f6;
-        }
-        tr:hover td {
-          background-color: #ffffcd;
-        }
-        .nebenlemmata {
-          font-size: 14px;
-          line-height: 20px;
-        }
-        .redaktion-status {
-          position: relative;
-          top: 4px;
-          display: inline-block;
-          border-radius: 8px;
-          width: 16px;
-          height: 16px;
-          cursor: help;
-          user-select: none;
-        }
-        .redaktion-status-1 {
-          background-color: #c00;
-        }
-        .redaktion-status-2 {
-          background-color: #ecec00;
-        }
-        .redaktion-status-3 {
-          background-color: #080;
-        }
-        .redaktion-status-4 {
-          background-color: #0c0;
-        }
-        </style>\n`;
+body {
+  margin: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+h1 {
+  margin: 0 0 20px 0;
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: bold;
+}
+h1 span {
+  margin-left: 20px;
+  font-size: 16px;
+  font-weight: normal;
+}
+h2 {
+  margin: 40px 0 10px 0;
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+th,
+td {
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+th {
+  vertical-align: bottom;
+  text-align: left;
+}
+td {
+  vertical-align: top;
+}
+th.center,
+td.center {
+  text-align: center;
+}
+td.umbruch {
+  white-space: normal;
+}
+tr:nth-child(even of :not(.off)) td {
+  background-color: #f6f6f6;
+}
+tr:hover td {
+  background-color: #ffffcd;
+}
+.nebenlemmata {
+  font-size: 14px;
+  line-height: 20px;
+}
+.redaktion-status {
+  position: relative;
+  top: 4px;
+  display: inline-block;
+  border-radius: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: help;
+  user-select: none;
+}
+.redaktion-status-1 {
+  background-color: #c00;
+}
+.redaktion-status-2 {
+  background-color: #ecec00;
+}
+.redaktion-status-3 {
+  background-color: #080;
+}
+.redaktion-status-4 {
+  background-color: #0c0;
+}
+</style>\n`;
       content = `<!doctype html>\n<html lang="de">\n<head>\n<meta charset="utf-8">\n<title>${titel}</title>\n${opt.optStylesheet ? stylesheet.replace(/\n\t{4}/g, "\n") : ""}</head>\n<body>\n<h1>${titel + datum}</h1>\n`;
       // Spalten ermitteln, in denen umgebrochen werden darf
       const spaltenUmbruch = [];
