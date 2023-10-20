@@ -278,8 +278,9 @@ nav p {
 }
 
 nav p.suchform {
-  line-height: 32px;
   overflow: hidden;
+  padding-top: 1px; /* ansonsten wird der Outline-Rahmen an der oberen Kante abgeschnitten */
+  line-height: 32px;
 }
 
 nav p.suchform a {
