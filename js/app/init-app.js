@@ -114,7 +114,7 @@ window.addEventListener("load", async () => {
     modules.ipc.invoke("fenster-fokus");
   });
   modules.ipc.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
-    beleg.bedeutungEinAustragen(bd, eintragen);
+    beleg.bedeutungenWin(bd, eintragen);
     modules.ipc.invoke("fenster-fokus");
   });
   // XML-Fenster
@@ -235,6 +235,7 @@ window.addEventListener("load", async () => {
   // alle Dropdown-Listen
   document.querySelectorAll(".dropdown-feld").forEach(i => dropdown.feld(i));
   document.querySelectorAll(".dropdown-link-td, .dropdown-link-element").forEach(i => dropdown.link(i));
+  dropdown2.init();
   // aktives Element für Quick-Access-Bar zwischenspeichern
   document.addEventListener("mousedown", function () {
     quick.accessRolesActive = document.activeElement;
@@ -280,21 +281,6 @@ window.addEventListener("load", async () => {
     }
   });
   beleg.formularEvtDTA();
-  document.getElementById("beleg-tags-neu").addEventListener("keydown", function (evt) {
-    tastatur.detectModifiers(evt);
-    const m = tastatur.modifiers;
-    if (!m && evt.key === "Enter") {
-      beleg.tagsAdd(this.value);
-    } else if (!m && /^Arrow(Up|Down)$/.test(evt.key)) {
-      evt.preventDefault();
-      beleg.tagsNav(evt.key === "ArrowUp");
-    }
-  });
-  let tagsTimeout;
-  document.getElementById("beleg-tags-neu").addEventListener("input", () => {
-    clearTimeout(tagsTimeout);
-    tagsTimeout = setTimeout(() => beleg.tagsList(), 250);
-  });
   document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
   document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
     if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
@@ -328,7 +314,6 @@ window.addEventListener("load", async () => {
   document.getElementById("bedeutungen-schliessen").addEventListener("click", () => bedeutungen.schliessen());
   document.getElementById("bedeutungen-gerueste-config").addEventListener("click", evt => bedeutungenGerueste.oeffnen(evt));
   bedeutungen.xml({ icon: document.getElementById("bedeutungen-link-xml") });
-  document.querySelector('[for="beleg-bd"]').addEventListener("click", () => bedeutungenGeruest.oeffnen());
   // Tagger
   document.getElementById("tagger-speichern").addEventListener("click", () => tagger.speichern());
   document.getElementById("tagger-schliessen").addEventListener("click", () => tagger.schliessen());

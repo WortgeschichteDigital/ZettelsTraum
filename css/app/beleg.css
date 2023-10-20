@@ -168,46 +168,6 @@
   vertical-align: top;
 }
 
-#beleg #beleg-tags-neu {
-  width: calc(100% - 12px);
-}
-
-#beleg-tags-list {
-  display: none;
-  position: absolute;
-  top: 31px;
-  left: 0;
-  z-index: 2;
-  box-shadow: var(--boxShadow);
-  width: 160px;
-}
-
-#beleg-tags-add:focus-within #beleg-tags-list {
-  display: block;
-}
-
-#beleg-tags-list a {
-  display: block;
-  border-bottom: 1px solid var(--linie);
-  overflow: hidden;
-  padding: 2px 5px;
-  background-color: #fff;
-  color: var(--text);
-  font-size: 14px;
-  line-height: 24px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#beleg-tags-list a:is(.markiert, :hover, :focus) {
-  background-color: var(--hover);
-}
-
-#beleg-tags-list a img {
-  vertical-align: top;
-  margin-right: 3px;
-}
-
 #beleg-form-dwds td {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -659,28 +619,37 @@ span#beleg-bewertung {
   overflow: hidden;
 }
 
-#beleg-lese-bd p {
+#beleg-form-bd {
+  padding-top: 10px;
+  user-select: text;
+}
+
+#beleg-form-bd:empty {
+  padding-top: 0;
+}
+
+:is(#beleg-lese-bd, #beleg-form-bd) p {
   padding-left: 39px;
   text-indent: -39px;
 }
 
-#beleg-lese-bd b {
+:is(#beleg-lese-bd, #beleg-form-bd) b.zaehlung {
   display: inline-block;
   padding: 0 5px 0 15px;
   text-align: center;
   text-indent: 0;
 }
 
-#beleg-lese-bd a {
+:is(#beleg-lese-bd, #beleg-form-bd) a {
   vertical-align: bottom;
   background-color: var(--iconHell);
   cursor: default;
 }
 
-#beleg-lese-bd a:hover {
-  background-color: var(--text);
+:is(#beleg-lese-bd, #beleg-form-bd) a:hover {
+  background-color: var(--farbeRot);
 }
 
-#beleg-lese-bd a:focus {
+:is(#beleg-lese-bd, #beleg-form-bd) a:focus {
   background-color: var(--farbe);
 }

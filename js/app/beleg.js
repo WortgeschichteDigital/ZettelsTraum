@@ -150,7 +150,6 @@ const beleg = {
 
     // Tags eintragen
     beleg.tagsFill();
-    beleg.tagsList();
 
     // Feld-Werte eintragen bzw. zurücksetzen
     const felder = document.querySelectorAll("#beleg input, #beleg textarea");
@@ -161,15 +160,16 @@ const beleg = {
         feld.value = "";
       } else if (name === "dta-bis") {
         feld.value = "0";
-      } else if (name !== "bd" &&
-          feld.classList.contains("beleg-form-data")) {
+      } else if (feld.classList.contains("beleg-form-data")) {
         feld.value = beleg.data[name];
       }
     }
 
-    // Feld-Wert für Bedeutung eintragen
-    beleg.formularBedeutung();
+    // Bedeutung: Label anpassen
     beleg.formularBedeutungLabel();
+
+    // Bedeutung: angehängte Bedeutungen eingtragen
+    beleg.formularBedeutungFill();
 
     // Bewertung eintragen
     beleg.bewertungAnzeigen();
@@ -234,35 +234,187 @@ const beleg = {
     }
   },
 
-  // Bedeutung in das Formular eintragen
-  formularBedeutung () {
-    // Wert ermitteln
-    const bd = [];
-    for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
-      if (beleg.data.bd[i].gr !== data.bd.gn) { // Bedeutungen aus anderen Gerüsten nicht drucken
-        continue;
-      }
-      bd.push(bedeutungen.bedeutungenTief({
-        gr: beleg.data.bd[i].gr,
-        id: beleg.data.bd[i].id,
-        za: false,
-        al: true,
-        strip: true,
-      }));
-    }
-    // Wert ins Feld eintragen
-    const feld = document.getElementById("beleg-bd");
-    feld.value = bd.join("\n");
-    // Feld anpassen
-    feld.scrollTop = 0;
-    helfer.textareaGrow(feld);
-  },
-
   // Label der Bedeutung auffrischen
   formularBedeutungLabel () {
     const text = `Bedeutung${bedeutungen.aufbauenH2Details(data.bd, true)}`;
     const label = document.querySelector('[for="beleg-bd"]');
     label.textContent = text;
+  },
+
+  // Bedeutung: hinzugefügte Bedeutungen auflisten
+  // (sowohl in der Formular- als auch in der Leseansicht)
+  formularBedeutungFill () {
+    const fields = [ "beleg-lese-bd", "beleg-form-bd" ];
+    for (const field of fields) {
+      // Container vorbereiten
+      const cont = document.getElementById(field);
+      cont.replaceChildren();
+
+      // Bedeutungen eintragen
+      for (const i of beleg.data.bd) {
+        if (i.gr !== data.bd.gn) {
+          // Bedeutungen aus anderen als dem aktuellen Gerüst nicht drucken
+          continue;
+        }
+        // Bedeutung
+        const p = document.createElement("p");
+        cont.appendChild(p);
+        p.innerHTML = bedeutungen.bedeutungenTief({
+          gr: data.bd.gn,
+          id: i.id,
+          zaCl: true,
+        });
+        // Entfernen-Icon
+        const a = document.createElement("a");
+        p.insertBefore(a, p.firstChild);
+        a.classList.add("icon-link", "icon-entfernen");
+        a.dataset.id = i.id;
+        a.href = "#";
+        beleg.formularBedeutungEx(a);
+      }
+
+      // ggf. leeren Absatz für die Leseansicht erzeugen
+      if (field === "beleg-lese-bd" && !cont.hasChildNodes()) {
+        const p = document.createElement("p");
+        cont.appendChild(p);
+        p.textContent = "\u00A0";
+      }
+    }
+  },
+
+  // Bedeutung: hinzugefügte Bedeutung entfernen
+  //   icon = Element-Node
+  formularBedeutungEx (icon) {
+    icon.addEventListener("click", function (evt) {
+      evt.preventDefault();
+
+      // Wert entfernen
+      const id = parseInt(this.dataset.id, 10);
+      const idx = beleg.data.bd.findIndex(i => i.gr === data.bd.gn && i.id === id);
+      beleg.data.bd.splice(idx, 1);
+
+      // Ansicht auffrischen
+      beleg.formularBedeutungFill();
+
+      // Änderungsmarkierung setzen
+      beleg.belegGeaendert(true);
+
+      // ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+      if (document.getElementById("suchleiste")) {
+        suchleiste.suchen(true);
+      }
+    });
+  },
+
+  // Bedeutung: Liste noch nicht hinzugefügten Bedeutungen erstellen
+  formularBedeutungList () {
+    // Bedeutungen sammeln, die noch nicht an der Karteikarte hängen
+    const gr = data.bd.gr[data.bd.gn];
+    const bd = [];
+    for (let idx = 0, len = gr.bd.length; idx < len; idx++) {
+      const b = gr.bd[idx];
+      if (beleg.data.bd.some(i => i.gr === data.bd.gn && i.id === b.id)) {
+        continue;
+      }
+      const zaehlung = bedeutungen.zaehlungTief(idx, gr.bd);
+      bd.push({
+        id: b.id,
+        level: b.bd.length,
+        text: `<b class="bed-zaehlung">${zaehlung.join(" ")}</b>${b.bd.at(-1)}`,
+      });
+    }
+
+    // Fragment erstellen und zurückgeben
+    const frag = document.createDocumentFragment();
+    for (const b of bd) {
+      const a = document.createElement("a");
+      frag.appendChild(a);
+      const level = b.level > 8 ? 8 : b.level;
+      a.classList.add(`bed-level${level}`);
+      a.dataset.id = b.id;
+      a.href = "#";
+      a.innerHTML = b.text;
+      a.addEventListener("click", function (evt) {
+        evt.preventDefault();
+        const id = parseInt(this.dataset.id, 10);
+        beleg.formularBedeutungPush(id);
+        this.parentNode.removeChild(this);
+      });
+    }
+    return frag;
+  },
+
+  // Bedeutung: neue Bedeutungen hinzufügen
+  //   val = String
+  //     (im Bedeutung-Feld eingetippte Bedeutung)
+  formularBedeutungAdd (val) {
+    // Bedeutung schon vorhanden?
+    const valNorm = val.replace(/<.+?>/g, "").toLowerCase();
+    const gr = data.bd.gr[data.bd.gn];
+    const bd = gr.bd;
+    for (let idx = 0, len = bd.length; idx < len; idx++) {
+      const bdAkt = [ ...bd[idx].bd ];
+      for (let i = 0, len = bdAkt.length; i < len; i++) {
+        bdAkt[i] = bdAkt[i].replace(/<.+?>/g, "").toLowerCase();
+      }
+      // Bedeutung vorhanden
+      if (bdAkt.includes(valNorm)) {
+        const id = bd[idx].id;
+        // Bedeutung hängt schon an der Karte => Abbruch
+        if (beleg.data.bd.some(i => i.gr === data.bd.gn && i.id === id)) {
+          const index = bdAkt.indexOf(valNorm);
+          const bedeutung = bd[idx].bd[index].replace(/<.+?>/g, "");
+          const zaehlung = bedeutungen.zaehlungTief(idx, bd);
+          dialog.oeffnen({
+            typ: "alert",
+            text: `Die Bedeutung\n<p class="bedeutungen-dialog"><b>${zaehlung.join(" ")}</b> ${bedeutung}</p>\nist schon vorhanden und hängt bereits an der Karteikarte.`,
+            callback: () => document.getElementById("beleg-bd").select(),
+          });
+          return false;
+        }
+        // Bedeutung hängt noch nicht an der Karte => hinzufügen
+        beleg.formularBedeutungPush(bd[idx].id);
+        return true;
+      }
+    }
+
+    // neue Bedeutung zum Gerüst hinzufügen
+    if (!bedeutungen.makeId) {
+      bedeutungen.idInit(gr);
+    }
+    const bed = bedeutungen.konstitBedeutung([ val ]);
+    gr.bd.push(bed);
+    bedeutungen.konstitZaehlung(gr.bd, gr.sl);
+    kartei.karteiGeaendert(true);
+
+    // Bedeutungsgerüst-Fenster mit neuen Daten versorgen
+    bedeutungenWin.daten();
+
+    // neue Bedeutung an die Karte hängen
+    beleg.formularBedeutungPush(gr.bd.at(-1).id);
+    return true;
+  },
+
+  // Bedeutung: übergebene ID pushen
+  //   id = Number
+  //     (ID der Bedeutung)
+  //   gr = String | undefined
+  //     (ID des Bedeutungsgerüsts)
+  formularBedeutungPush (id, gr = data.bd.gn) {
+    beleg.data.bd.push({
+      gr,
+      id,
+    });
+    beleg.data.bd.sort(beleg.formularBedeutungSort);
+    beleg.formularBedeutungFill();
+    beleg.belegGeaendert(true);
+  },
+
+  // Bedeutung: Bedeutungen sortieren
+  formularBedeutungSort (a, b) {
+    const x = data.bd.gr[a.gr].bd.findIndex(i => i.id === a.id);
+    const y = data.bd.gr[b.gr].bd.findIndex(i => i.id === b.id);
+    return x - y;
   },
 
   // Änderungen in einem der Datenfelder des Formulars
@@ -272,21 +424,13 @@ const beleg = {
   formularGeaendert (feld) {
     feld.addEventListener("change", function () {
       const name = this.id.replace(/^beleg-/, "");
-      if (name === "bd") {
-        // Daten des Bedeutungsfelds werden erst beim Speichern aufgefrischt;
-        // vgl. beleg.aktionSpeichern().
-        // Wurden die Daten hier geändert, darf das Gerüst erst
-        // nach dem Speichern gewechselt werden, sonst gehen die Änderungen verloren.
-        beleg.geaendertBd = true;
-      } else {
-        let noLeerzeilen = "";
-        if (name === "no" && /^\n/.test(this.value)) {
-          // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
-          // weil die erste Zeile in der Belegliste angezeigt werden kann
-          noLeerzeilen = this.value.match(/^\n+/)[0];
-        }
-        beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
+      let noLeerzeilen = "";
+      if (name === "no" && /^\n/.test(this.value)) {
+        // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
+        // weil die erste Zeile in der Belegliste angezeigt werden kann
+        noLeerzeilen = this.value.match(/^\n+/)[0];
       }
+      beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
       beleg.belegGeaendert(true);
     });
   },
@@ -555,7 +699,7 @@ const beleg = {
         const idx = beleg.data.tg.indexOf(tag);
         beleg.data.tg.splice(idx, 1);
         this.parentNode.removeChild(this);
-        beleg.tagsList();
+        document.getElementById("beleg-tags-neu").dispatchEvent(new Event("focus"));
         beleg.belegGeaendert(true);
       });
     }
@@ -617,22 +761,12 @@ const beleg = {
       }
       tags.splice(idx, 1);
     }
-    const text = document.getElementById("beleg-tags-neu").value.trim();
-    if (text) {
-      const reg = new RegExp(helfer.escapeRegExp(text), "i");
-      for (let i = tags.length - 1; i >= 0; i--) {
-        if (!reg.test(tags[i])) {
-          tags.splice(i, 1);
-        }
-      }
-    }
 
-    // Tags drucken
-    const list = document.getElementById("beleg-tags-list");
-    list.replaceChildren();
+    // Fragment erstellen und zurückgeben
+    const frag = document.createDocumentFragment();
     for (const tag of tags) {
       const a = document.createElement("a");
-      list.appendChild(a);
+      frag.appendChild(a);
       const img = document.createElement("img");
       a.appendChild(img);
       img.src = "img/" + (beleg.tags[tag] || "etikett.svg");
@@ -650,79 +784,28 @@ const beleg = {
         beleg.belegGeaendert(true);
       });
     }
+    return frag;
   },
 
   // Tags: selbstdefinierten Tag hinzufügen
   //   tag = String
   tagsAdd (tag) {
-    // Tag im Dropdown-Menü markiert?
-    const markiert = document.querySelector("#beleg-tags-list .markiert");
-    if (markiert) {
-      markiert.click();
-      return;
-    }
-
-    // Tag aufbereiten
-    tag = helfer.textTrim(tag, true);
-    if (!tag) {
-      return;
-    }
-
     // Tag schon angehängt?
     if (beleg.data.tg.includes(tag)) {
       dialog.oeffnen({
         typ: "alert",
         text: `Der Tag <i>${tag}</i> hängt schon an der Karteikarte.`,
-        callback: () => {
-          document.getElementById("beleg-tags-neu").select();
-        },
+        callback: () => document.getElementById("beleg-tags-neu").select(),
       });
-      return;
+      return false;
     }
 
     // Tag hinzufügen
-    document.getElementById("beleg-tags-neu").value = "";
     beleg.data.tg.push(tag);
     beleg.data.tg.sort(beleg.tagsSort);
     beleg.tagsFill();
-    beleg.tagsList();
     beleg.belegGeaendert(true);
-  },
-
-  // Tags: durch die Liste der Tags navigieren
-  //   up = Boolean
-  tagsNav (up) {
-    // Gibt es noch Tags zum Hinzufügen?
-    const tags = document.querySelectorAll("#beleg-tags-list a");
-    if (!tags.length) {
-      return;
-    }
-
-    // markiertes Element ermitteln
-    const markiert = document.querySelector("#beleg-tags-list .markiert");
-    let idx = -1;
-    if (markiert) {
-      for (let i = 0, len = tags.length; i < len; i++) {
-        if (tags[i].classList.contains("markiert")) {
-          idx = i;
-          break;
-        }
-      }
-      markiert.classList.remove("markiert");
-    }
-
-    // nächstes Element markieren
-    if (up) {
-      idx--;
-    } else {
-      idx++;
-    }
-    if (idx < 0) {
-      return;
-    } else if (idx === tags.length) {
-      idx--;
-    }
-    tags[idx].classList.add("markiert");
+    return true;
   },
 
   // Tags: Sortierung nach dem Hinzufügen
@@ -782,9 +865,7 @@ const beleg = {
         dialog.oeffnen({
           typ: "alert",
           text: "Sie müssen ein Datum angeben.",
-          callback: () => {
-            beleg.selectFormEle(da);
-          },
+          callback: () => beleg.selectFormEle(da),
         });
       } else {
         beleg.selectFormEle(da);
@@ -798,9 +879,7 @@ const beleg = {
         dialog.oeffnen({
           typ: "alert",
           text: "Das Datum muss eine vierstellige Jahreszahl (z.\u00A0B. „1813“) oder eine Jahrhundertangabe (z.\u00A0B. „17.\u00A0Jh.“) enthalten.\nZusätzlich können auch andere Angaben gemacht werden (z.\u00A0B. „ca. 1815“, „1610, vielleicht 1611“).",
-          callback: () => {
-            beleg.selectFormEle(da);
-          },
+          callback: () => beleg.selectFormEle(da),
         });
       } else {
         beleg.selectFormEle(da);
@@ -815,9 +894,7 @@ const beleg = {
         dialog.oeffnen({
           typ: "alert",
           text: "Sie müssen einen Beleg eingeben.",
-          callback: () => {
-            beleg.selectFormEle(bs);
-          },
+          callback: () => beleg.selectFormEle(bs),
         });
       } else {
         beleg.selectFormEle(bs);
@@ -832,9 +909,7 @@ const beleg = {
         dialog.oeffnen({
           typ: "alert",
           text: "Sie müssen eine Quelle angeben.",
-          callback: () => {
-            beleg.selectFormEle(qu);
-          },
+          callback: () => beleg.selectFormEle(qu),
         });
       } else {
         beleg.selectFormEle(qu);
@@ -847,53 +922,11 @@ const beleg = {
       direktSchliessen();
       return false;
     }
-    // ggf. Format von Bedeutung, Wortbildung, Synonym und Textsorte anpassen
-    const bdFeld = document.getElementById("beleg-bd");
-    const ds = [ "bd", "bl", "sy", "ts" ];
+    // ggf. Format von Wortbildung, Synonym und Textsorte anpassen
+    const ds = [ "bl", "sy", "ts" ];
     for (let i = 0, len = ds.length; i < len; i++) {
       const ds_akt = ds[i];
-      if (ds_akt === "bd") {
-        bdFeld.value = beleg.bedeutungAufbereiten();
-      } else {
-        beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
-      }
-    }
-    // Bedeutungen des aktuellen Gerüsts entfernen
-    for (let i = 0, len = beleg.data.bd.length; i < len; i++) {
-      if (beleg.data.bd[i].gr === data.bd.gn) {
-        beleg.data.bd.splice(i, 1);
-        i--;
-        len = beleg.data.bd.length;
-      }
-    }
-    // Bedeutung im Bedeutungsfeld hinzufügen
-    const bdFeldSp = bdFeld.value.split("\n");
-    for (let i = 0, len = bdFeldSp.length; i < len; i++) {
-      let zeile = bdFeldSp[i];
-      // Bedeutungsfeld könnte leer sein
-      if (!zeile) {
-        continue;
-      }
-      // Tags entfernen
-      // (User könnten auf die Idee kommen, gleich <i>, <b>, <u> oder Text in Spitzklammern einzugeben;
-      // das macht die Sache nur kompliziert, weil z.B. das HTML auf Korrektheit getestet werden müsste)
-      zeile = helfer.textTrim(zeile.replace(/<.+?>|[<>]+/g, ""), true);
-      // ggf. neue Bedeutung in das Gerüst eintragen
-      let bd = beleg.bedeutungSuchen(zeile);
-      if (!bd.id) {
-        bd = beleg.bedeutungErgaenzen(zeile);
-        if (!bd.id) { // die Funktion ist kompliziert und fehleranfällig, lieber noch mal kontrollieren
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Beim Speichern der Karteikarte ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\nEinhängen der neuen Bedeutung in das Bedeutungsgerüst fehlgeschalgen",
-          });
-          return false;
-        }
-      }
-      beleg.data.bd.push({
-        gr: data.bd.gn,
-        id: bd.id,
-      });
+      beleg.data[ds_akt] = beleg.data[ds_akt].replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
     }
     // ggf. Objekt anlegen
     if (!data.ka[beleg.id_karte]) {
@@ -915,8 +948,6 @@ const beleg = {
     beleg.belegGeaendert(false);
     beleg.listeGeaendert = true;
     kartei.karteiGeaendert(true);
-    // Bedeutungsgerüst-Fenster mit neuen Daten versorgen
-    bedeutungenWin.daten();
     // Schließen?
     direktSchliessen();
     // Speichern war erfolgreich
@@ -1025,9 +1056,6 @@ const beleg = {
   // Beleg wurde geändert und noch nicht gespeichert
   geaendert: false,
 
-  // Bedeutung wurde geändert und nocht nicht gespeichert
-  geaendertBd: false,
-
   // Anzeigen, dass der Beleg geändert wurde
   //   geaendert = Boolean
   belegGeaendert (geaendert) {
@@ -1037,7 +1065,6 @@ const beleg = {
     if (geaendert) {
       asterisk.classList.remove("aus");
     } else {
-      beleg.geaendertBd = false;
       asterisk.classList.add("aus");
     }
     if (beleg.id_karte > -1) {
@@ -1233,33 +1260,25 @@ const beleg = {
         };
       }
     } else if (ds === "bd") { // Bedeutung
-      const bd = beleg.bedeutungAufbereiten();
-      const bds = [];
-      bd.split("\n").forEach(function (i) {
-        const bd = beleg.bedeutungSuchen(i);
-        if (!bd.id) {
-          const bdsTmp = [];
-          i.split(": ").forEach(function (j, n) {
-            let vor = "\u00A0".repeat(3);
-            if (!n) {
-              vor = "";
-            }
-            bdsTmp.push(`${vor}<b>?</b> ${j}`);
-          });
-          bds.push(bdsTmp.join(""));
-        } else {
-          bds.push(bedeutungen.bedeutungenTief({
-            gr: data.bd.gn,
-            id: bd.id,
-            leer: true,
-          }));
+      const bd = [];
+      for (const i of beleg.data.bd) {
+        if (i.gr !== data.bd.gn) {
+          // Bedeutungen aus anderen als dem aktuellen Gerüst ignorieren
+          continue;
         }
-      });
+        let bedeutung = bedeutungen.bedeutungenTief({
+          gr: data.bd.gn,
+          id: i.id,
+          leer: true,
+        });
+        bedeutung = bedeutung.replace(/<mark class="paraphrase">(.+?)<\/mark>/g, (...args) => `‚${args[1]}‘`);
+        bd.push(bedeutung);
+      }
       let html = "";
-      bds.forEach(function (i) {
+      for (const i of bd) {
         html += `<p>${i}</p>`;
-      });
-      const text = bds.join("\n").replace(/<.+?>/g, "");
+      }
+      const text = bd.join("\n").replace(/<.+?>/g, "");
       modules.clipboard.write({
         text,
         html,
@@ -1698,9 +1717,7 @@ const beleg = {
       dialog.oeffnen({
         typ: "alert",
         text: "Die Formatierung kann an dieser Position nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung",
-        callback: () => {
-          ta.focus();
-        },
+        callback: () => ta.focus(),
       });
       return;
     }
@@ -2440,82 +2457,10 @@ const beleg = {
         annotieren.init(nP);
       }
     }
-    // Bedeutungen
-    beleg.leseFillBedeutung();
     // Klick-Events an alles Links hängen
     document.querySelectorAll("#beleg .link").forEach(function (i) {
       helfer.externeLinks(i);
     });
-  },
-
-  // Bedeutungsfeld der Leseansicht füllen
-  leseFillBedeutung () {
-    const feldBd = beleg.bedeutungAufbereiten();
-    const contBd = document.getElementById("beleg-lese-bd");
-    contBd.replaceChildren();
-    if (feldBd) {
-      feldBd.split("\n").forEach(function (i) {
-        const bd = beleg.bedeutungSuchen(i);
-        const p = document.createElement("p");
-        if (!bd.id) {
-          i.split(": ").forEach(function (j) {
-            const b = document.createElement("b");
-            p.appendChild(b);
-            b.textContent = "?";
-            p.appendChild(document.createTextNode(j));
-          });
-        } else {
-          p.innerHTML = bedeutungen.bedeutungenTief({
-            gr: data.bd.gn,
-            id: bd.id,
-          });
-        }
-        const a = document.createElement("a");
-        a.classList.add("icon-link", "icon-entfernen");
-        a.dataset.bd = i;
-        a.href = "#";
-        beleg.leseBedeutungEx(a);
-        p.insertBefore(a, p.firstChild);
-        contBd.appendChild(p);
-      });
-    } else {
-      const p = document.createElement("p");
-      p.textContent = "\u00A0";
-      contBd.appendChild(p);
-    }
-  },
-
-  // Bedeutung in der Leseansicht aus dem Formular entfernen
-  leseBedeutungEx (a) {
-    a.addEventListener("click", function (evt) {
-      evt.preventDefault();
-      // Wert entfernen
-      beleg.leseBedeutungExFeld(this.dataset.bd);
-      // Ansicht auffrischen
-      beleg.leseFillBedeutung();
-      // Änderungsmarkierung setzen
-      beleg.belegGeaendert(true);
-      // ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
-      if (document.getElementById("suchleiste")) {
-        suchleiste.suchen(true);
-      }
-    });
-  },
-
-  // Bedeutung aus dem Bedeutungsfeld entfernen
-  // (wird auch anderweitig verwendet => darum ausgelagert)
-  //   bd = String
-  //     (die Bedeutung, in der Form, in der sie im Formularfeld stehen könnte)
-  leseBedeutungExFeld (bd) {
-    const reg = new RegExp(`${helfer.escapeRegExp(bd)}(\n|$)`);
-    const feld = document.getElementById("beleg-bd");
-    if (!reg.test(feld.value)) {
-      return false; // den Rückgabewert braucht man für das Austragen aus dem Bedeutungsgerüst-Fenster heraus
-    }
-    feld.value = feld.value.replace(reg, "");
-    feld.value = beleg.bedeutungAufbereiten();
-    helfer.textareaGrow(feld);
-    return true;
   },
 
   // Verteilerfunktion für die Links im <caption>-Block
@@ -2745,7 +2690,7 @@ const beleg = {
   ctrlZwischenablage (dt) {
     const daten = kopieren.datenBeleg(dt);
     daten.typ = "ztb";
-    daten.version = 2;
+    daten.version = 3;
     daten.winId = winInfo.winId;
     daten.wort = kartei.wort;
     modules.clipboard.writeText(JSON.stringify(daten));
@@ -2801,9 +2746,7 @@ const beleg = {
       dialog.oeffnen({
         typ: "alert",
         text: `Der aktuelle Beleg ist ${next ? "der letzte" : "der erste"} in der Belegliste.`,
-        callback: () => {
-          fokus();
-        },
+        callback: () => fokus(),
       });
       return;
     }
@@ -2839,363 +2782,165 @@ const beleg = {
     }
   },
 
-  // typographische Aufbereitung des aktuellen Inhalts des Bedeutungsfeldes
-  bedeutungAufbereiten () {
-    return helfer.textTrim(document.getElementById("beleg-bd").value, true).replace(/::/g, ": ").replace(/\n\s*\n/g, "\n");
-  },
+  bedeutungAnderesGeruest: "\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
 
-  // sucht eine Bedeutung im Bedeutungsgerüst
-  //   bd = String
-  //     (die Bedeutung)
-  //   gn = String | undefined
-  //     (ID des Gerüsts, in dem gesucht werden soll)
-  bedeutungSuchen (bd, gn = data.bd.gn) {
-    let bdS = bd.split(": ");
-    const bdA = data.bd.gr[gn].bd;
-    // Alias ggf. durch vollen Bedeutungsstring ersetzen
-    bdS = beleg.bedeutungAliasAufloesen(bdS, bdA);
-    // Bedeutung suchen => ID zurückgeben
-    const bdSJ = bdS.join(": ");
-    for (let i = 0, len = bdA.length; i < len; i++) {
-      if (bdA[i].bd.join(": ").replace(/<.+?>/g, "") === bdSJ) {
-        return {
-          idx: i,
-          id: bdA[i].id,
-        };
-      }
-    }
-    // Bedeutung nicht gefunden (IDs beginnen mit 1)
-    return {
-      idx: -1,
-      id: 0,
-    };
-  },
-
-  // manuell eingetragene Bedeutung in den Bedeutungsbaum einhängen
-  // (wird nur aufgerufen, wenn die Bedeutung noch nicht vorhanden ist)
-  //   bd = String
-  //     (die Bedeutung; Hierarchien getrennt durch ": ")
-  //   gn = String | undefined
-  //     (ID des Gerüsts, in dem gesucht werden soll)
-  bedeutungErgaenzen (bd, gn = data.bd.gn) {
-    // Zeiger auf das betreffende Gerüst ermitteln
-    const gr = data.bd.gr[gn];
-    // ggf. höchste ID ermitteln
-    if (!bedeutungen.makeId) {
-      let lastId = 0;
-      gr.bd.forEach(function (i) {
-        if (i.id > lastId) {
-          lastId = i.id;
-        }
-      });
-      bedeutungen.makeId = bedeutungen.idGenerator(lastId + 1);
-    }
-    // Alias ggf. durch vollen Bedeutungsstring ersetzen
-    let bdS = bd.split(": ");
-    bdS = beleg.bedeutungAliasAufloesen(bdS, gr.bd);
-    // jetzt wird's kompliziert: korrekte Position der Bedeutung im Gerüst suchen
-    let slice = 1;
-    let arr = bdS.slice(0, slice);
-    let arrVor = [];
-    let arrTmpVor = [];
-    let pos = -1; // der Index, an dessen Stelle das Einfügen beginnt
-    // 1) Position (initial) und Slice finden
-    for (let i = 0, len = gr.bd.length; i < len; i++) {
-      const arrTmp = gr.bd[i].bd.slice(0, slice);
-      if (arrTmp.join(": ") === arr.join(": ")) {
-        pos = i;
-        // passender Zweig gefunden
-        if (slice === bdS.length) {
-          // hier geht es nicht weiter
-          break;
-        } else {
-          // weiter in die Tiefe wandern
-          arrVor = [ ...arr ];
-          arrTmpVor = [ ...arrTmp ];
-          slice++;
-          arr = bdS.slice(0, slice);
-        }
-      } else if (arrVor.join(": ") !== arrTmpVor.join(": ")) {
-        // jetzt bin ich zu weit: ein neuer Zweig beginnt
-        break;
-      }
-    }
-    const bdAdd = bdS.slice(slice - 1);
-    // 2) Position korrigieren (hoch zum Slot, an dessen Stelle eingefügt wird)
-    if (pos === -1 || pos === gr.bd.length - 1) { // Sonderregel: die Bedeutung muss am Ende eingefügt werden
-      pos = gr.bd.length;
-    } else {
-      let i = pos;
-      const len = gr.bd.length;
-      do { // diese Schleife muss mindestens einmal durchlaufen; darum keine gewöhnliche for-Schleife
-        i++;
-        if (!gr.bd[i] || gr.bd[i].bd.length <= arrVor.length) {
-          pos = i;
-          break;
-        }
-      } while (i < len);
-    }
-    // 3) jetzt kann eingehängt werden (die nachfolgenden Slots rutschen alle um einen hoch)
-    for (let i = 0, len = bdAdd.length; i < len; i++) {
-      const bd = arrVor.concat(bdAdd.slice(0, i + 1));
-      gr.bd.splice(pos + i, 0, bedeutungen.konstitBedeutung(bd));
-    }
-    // Zählung auffrischen
-    bedeutungen.konstitZaehlung(gr.bd, gr.sl);
-    // ID zurückgeben
-    return beleg.bedeutungSuchen(bd, gn);
-  },
-
-  // Alias durch vollen Bedeutungsstring ersetzen
-  //   bdS = Array
-  //     (in diesen Bedeutungen sollen die Aliasses aufgelöst werden)
-  //   bdA = Array
-  //     (in diesen Bedeutungen soll nach den Aliases gesucht werden)
-  bedeutungAliasAufloesen (bdS, bdA) {
-    for (let i = 0, len = bdS.length; i < len; i++) {
-      for (let j = 0, len = bdA.length; j < len; j++) {
-        if (bdS[i] === bdA[j].al) {
-          bdS[i] = bdA[j].bd[bdA[j].bd.length - 1].replace(/<.+?>/g, "");
-          break;
-        }
-      }
-    }
-    return bdS;
-  },
-
-  // trägt eine Bedeutung, die aus dem Bedeutungen-Fenster an das Hauptfenster geschickt wurde,
-  // in einer oder mehreren Karten ein oder aus (Verteilerfunktion)
+  // Bedeutungen-Fenster: Bedeutung aus dem Bedeutungen-Fenster in eine oder alle Karteikarten
+  // eintragen oder aus einer oder allen Karteikarten entfernen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
   //   eintragen = Boolean
-  //     (eintragen oder austragen)
-  bedeutungEinAustragen (bd, eintragen) {
-    // Overlay-Fenster ist offen => Abbruch
+  //     (eintragen oder entfernen)
+  bedeutungenWin (bd, eintragen) {
+    // Overlay-Fenster ist offen
     if (overlay.oben()) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Bedeutungen können nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn Karteikarte oder Belegliste nicht durch andere Fenster verdeckt werden.`,
+        text: `Bedeutungen können nur ${eintragen ? "eingetragen" : "entfernt"} werden, wenn Karteikarte oder Belegliste nicht durch andere Fenster verdeckt werden.`,
       });
       return;
     }
+
     // Ziel ermitteln
     if (helfer.hauptfunktion === "karte") {
-      if (eintragen) {
-        beleg.bedeutungEintragenKarte(bd);
-      } else {
-        beleg.bedeutungAustragenKarte(bd);
-      }
+      beleg.bedeutungenWinKarte(bd, eintragen);
       return;
     } else if (helfer.hauptfunktion === "liste") {
-      if (eintragen) {
-        beleg.bedeutungEintragenListe(bd);
-      } else {
-        beleg.bedeutungAustragenListe(bd);
-      }
+      beleg.bedeutungenWinListe(bd, eintragen);
       return;
     }
+
     // unklar, wo eingetragen werden soll => Fehlermeldung
     dialog.oeffnen({
       typ: "alert",
-      text: `Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "ausgetragen"} werden, wenn eine der beiden Ansichten aktiv ist.`,
+      text: `Weder eine Karteikarte noch die Belegliste ist geöffnet.\nDie Bedeutung kann nur ${eintragen ? "eingetragen" : "entfernt"} werden, wenn eine der beiden Ansichten aktiv ist.`,
     });
   },
 
-  // Bedeutung in eine einzelne Karteikarte eintragen
+  // Bedeutungen-Fenster: Bedeutung in eine einzelne Karteikarte eintragen
   //   bd = Object
   //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-  bedeutungEintragenKarte (bd) {
-    // nicht aktives Gerüst => einfach eintragen, wenn nicht vorhanden
-    if (data.bd.gn !== bd.gr) {
-      if (bedeutungen.schonVorhanden({
-        bd: beleg.data.bd,
-        gr: bd.gr,
-        id: bd.id,
-      })[0]) {
-        dialog.oeffnen({
-          typ: "alert",
-          text: "Die Bedeutung wurde <strong>nicht</strong> eingetragen. Grund: Sie ist schon vorhanden.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
-        });
-        return;
+  //   eintragen = Boolean
+  //     (eintragen oder entfernen)
+  bedeutungenWinKarte (bd, eintragen) {
+    // Bedeutung schon vorhanden?
+    const hatBd = beleg.data.bd.some(i => i.gr === bd.gr && i.id === bd.id);
+    if (eintragen && hatBd || !eintragen && !hatBd) {
+      let text = `Die Bedeutung wurde <strong>nicht</strong> ${eintragen ? "eingetragen" : "entfernt"}. Grund: Sie ist ${eintragen ? "schon" : "nicht"} vorhanden.`;
+      if (data.bd.gn !== bd.gr) {
+        text += beleg.bedeutungAnderesGeruest;
       }
-      beleg.data.bd.push({ ...bd });
+      dialog.oeffnen({
+        typ: "alert",
+        text,
+      });
+      return;
+    }
+
+    // Bedeutung eintragen
+    if (eintragen) {
+      beleg.formularBedeutungPush(bd.id, bd.gr);
+    } else {
+      const idx = beleg.data.bd.findIndex(i => i.gr === bd.gr && i.id === bd.id);
+      beleg.data.bd.splice(idx, 1);
+      if (data.bd.gn === bd.gr) {
+        beleg.formularBedeutungFill();
+      }
       beleg.belegGeaendert(true);
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Die Bedeutung wurde eingetragen.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
-      });
-      return;
     }
-    // aktives Gerüst => Text ermitteln und an die Dropdown-Funktion übergeben
-    const text = bedeutungen.bedeutungenTief({
-      gr: bd.gr,
-      id: bd.id,
-      za: false,
-      strip: true,
-    });
-    dropdown.caller = "beleg-bd";
-    dropdown.cursor = -1;
-    dropdown.auswahl(document.getElementById("beleg-bd"), text);
-  },
 
-  // Bedeutung aus einer einzelneb Karteikarte entfernen
-  //   bd = Object
-  //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-  bedeutungAustragenKarte (bd) {
-    // nicht aktives Gerüst => einfach austragen, wenn vorhanden
+    // Meldung, dass Aktion in einem anderen Gerüst
     if (data.bd.gn !== bd.gr) {
-      const vorhanden = bedeutungen.schonVorhanden({
-        bd: beleg.data.bd,
-        gr: bd.gr,
-        id: bd.id,
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Die Bedeutung wurde ${eintragen ? "eingetragen" : "entfernt"}.` + beleg.bedeutungAnderesGeruest,
       });
-      if (vorhanden[0]) {
-        beleg.data.bd.splice(vorhanden[1], 1);
-        beleg.belegGeaendert(true);
-        dialog.oeffnen({
-          typ: "alert",
-          text: "Die Bedeutung wurde entfernt.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
-        });
-        return;
+    }
+
+    // ggf. Suche der Suchleiste erneut anstoßen (nur Neuaufbau)
+    if (document.getElementById("suchleiste")) {
+      suchleiste.suchen(true);
+    }
+  },
+
+  // Bedeutungen-Fenster: Bedeutung in jede sichtbare Karte der Belegliste eintragen
+  //   bd = Object
+  //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
+  //   eintragen = Boolean
+  //     (eintragen oder entfernen)
+  async bedeutungenWinListe (bd, eintragen) {
+    // Bedeutungstext ermitteln
+    const gr = data.bd.gr[bd.gr];
+    const index = gr.bd.findIndex(i => i.id === bd.id);
+    const bedeutung = gr.bd[index].bd.at(-1).replace(/<.+?>/g, "");
+    const zaehlung = bedeutungen.zaehlungTief(index, gr.bd);
+    const bdText = `<b class="zaehlung">${zaehlung.join(" ")}</b>${bedeutung}`;
+
+    // keine Belege in der Liste
+    if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum ${eintragen ? "in keine" : "aus keiner"} Karteikarte ${eintragen ? "eingetragen" : "entfernt"} werden.`,
+      });
+      return;
+    }
+
+    // Sicherheitsfrage
+    const response = await new Promise(resolve => {
+      dialog.oeffnen({
+        typ: "confirm",
+        text: `Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich ${eintragen ? "in alle" : "aus allen"} Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>${eintragen ? "eingetragen" : "entfernt"}</strong> werden?`,
+        callback: () => resolve(dialog.antwort),
+      });
+    });
+    if (!response) {
+      return;
+    }
+
+    // Bedeutung eintragen
+    let geaendert = false;
+    document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(kopf => {
+      const id = kopf.dataset.id;
+      const idx = data.ka[id].bd.findIndex(i => i.gr === bd.gr && i.id === bd.id);
+      if (eintragen) {
+        if (idx >= 0) {
+          return;
+        }
+        data.ka[id].bd.push({ ...bd });
+        data.ka[id].bd.sort(beleg.formularBedeutungSort);
+      } else {
+        if (idx === -1) {
+          return;
+        }
+        data.ka[id].bd.splice(idx, 1);
       }
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.\n(In der Karteikarte wird ein anderes Gerüst angezeigt als im Bedeutungsgerüst-Fenster.)",
-      });
-      return;
-    }
-    // aktives Gerüst => Text ermitteln und entfernen
-    const text = bedeutungen.bedeutungenTief({
-      gr: bd.gr,
-      id: bd.id,
-      za: false,
-      strip: true,
+      data.ka[id].dm = new Date().toISOString();
+      geaendert = true;
     });
-    const ex = beleg.leseBedeutungExFeld(text);
-    if (!ex) {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Die Bedeutung wurde <strong>nicht</strong> entfernt. Grund: Sie ist der aktuellen Karteikarte überhaupt nicht zugeordnet.",
-      });
-      return;
-    }
-    beleg.belegGeaendert(true);
-    if (beleg.leseansicht) {
-      beleg.leseFillBedeutung();
-    }
-  },
 
-  // Bedeutung in jede Karte der Belegliste eintragen
-  //   bd = Object
-  //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-  bedeutungEintragenListe (bd) {
-    const bdText = bedeutungen.bedeutungenTief({ gr: bd.gr, id: bd.id, zaCl: true });
-    // keine Belege in der Liste
-    if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
+    // Änderungen vorgenommen?
+    if (!geaendert) {
       dialog.oeffnen({
         typ: "alert",
-        text: `Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum in keine Karteikarte eingetragen werden.`,
+        text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwar ${eintragen ? "schon in allen Karteikarten" : "noch in keiner Karteikarte"} vorhanden.`,
       });
       return;
     }
-    // Sicherheitsfrage
-    dialog.oeffnen({
-      typ: "confirm",
-      text: `Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich in alle Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>eingetragen</strong> werden?`,
-      callback: () => {
-        if (!dialog.antwort) {
-          return;
-        }
-        // Bedeutung eintragen
-        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function (i) {
-          const id = i.dataset.id;
-          if (!bedeutungen.schonVorhanden({
-            bd: data.ka[id].bd,
-            gr: bd.gr,
-            id: bd.id,
-          })[0]) {
-            data.ka[id].bd.push({ ...bd });
-            data.ka[id].dm = new Date().toISOString();
-          }
-        });
-        kartei.karteiGeaendert(true);
-        // Rückmeldung
-        let geruest_inaktiv = "\n(Im Hauptfenster ist ein anderes Gerüst als im Bedeutungsgerüst-Fenster eingestellt.)";
-        if (data.bd.gn === bd.gr) {
-          geruest_inaktiv = "";
-        }
-        dialog.oeffnen({
-          typ: "alert",
-          text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in allen Karteikarten der Belegliste ergänzt.${geruest_inaktiv}`,
-        });
-        // Liste auffrischen
-        if (!geruest_inaktiv) {
-          liste.status(true);
-        }
-      },
-    });
-  },
+    kartei.karteiGeaendert(true);
 
-  // Bedeutung aus jeder Karte der Belegliste entfernen
-  //   bd = Object
-  //     (die Bedeutung mit Gerüstnummer [bd.gr] und ID [bd.id])
-  bedeutungAustragenListe (bd) {
-    const bdText = bedeutungen.bedeutungenTief({ gr: bd.gr, id: bd.id, zaCl: true });
-    // keine Belege in der Liste
-    if (!document.querySelector("#liste-belege-cont .liste-kopf")) {
-      dialog.oeffnen({
-        typ: "alert",
-        text: `Die Belegliste zeigt derzeit keine Belege an. Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nkann darum aus keiner Karteikarte entfernt werden.`,
-      });
-      return;
+    // Feedback
+    let text = `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde ${eintragen ? "in alle" : "aus allen"} Karteikarten der Belegliste ${eintragen ? "eingetragen" : "entfernt"}.`;
+    if (data.bd.gn !== bd.gr) {
+      text += beleg.bedeutungAnderesGeruest;
     }
-    // Sicherheitsfrage
     dialog.oeffnen({
-      typ: "confirm",
-      text: `Soll die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwirklich aus allen Karteikarten, die derzeit in der Belegliste sichtbar sind, <strong>entfernt</strong> werden?`,
-      callback: () => {
-        if (!dialog.antwort) {
-          return;
-        }
-        // Bedeutung eintragen
-        let treffer = false;
-        document.querySelectorAll("#liste-belege-cont .liste-kopf").forEach(function (i) {
-          const id = i.dataset.id;
-          const vorhanden = bedeutungen.schonVorhanden({
-            bd: data.ka[id].bd,
-            gr: bd.gr,
-            id: bd.id,
-          });
-          if (vorhanden[0]) {
-            data.ka[id].bd.splice(vorhanden[1], 1);
-            data.ka[id].dm = new Date().toISOString();
-            treffer = true;
-          }
-        });
-        // Rückmeldung
-        let geruest_inaktiv = "\n(Im Hauptfenster ist ein anderes Gerüst als im Bedeutungsgerüst-Fenster eingestellt.)";
-        if (data.bd.gn === bd.gr) {
-          geruest_inaktiv = "";
-        }
-        if (!treffer) {
-          dialog.oeffnen({
-            typ: "alert",
-            text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde in keiner der Karteikarten in der aktuellen Belegliste gefunden.${geruest_inaktiv}`,
-          });
-          return;
-        }
-        dialog.oeffnen({
-          typ: "alert",
-          text: `Die Bedeutung\n<p class="bedeutungen-dialog">${bdText}</p>\nwurde aus allen Karteikarten der Belegliste entfernt.${geruest_inaktiv}`,
-        });
-        // Änderungsmarkierung
-        kartei.karteiGeaendert(true);
-        // Liste auffrischen
-        if (!geruest_inaktiv) {
-          liste.status(true);
-        }
-      },
+      typ: "alert",
+      text,
     });
+
+    // Liste auffrischen
+    if (data.bd.gn === bd.gr) {
+      liste.status(true);
+    }
   },
 
   // Metadaten: füllen oder auffrischen

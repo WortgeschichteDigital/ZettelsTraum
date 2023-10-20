@@ -54,6 +54,7 @@
     <link rel="stylesheet" href="css/app/overlays-updatesWin.css">
     <link rel="stylesheet" href="css/app/overlays-zeitraumgrafik.css">
     <link rel="stylesheet" href="css/app/dropdown.css">
+    <link rel="stylesheet" href="css/app/dropdown2.css">
     <link rel="stylesheet" href="css/app/start.css">
     <link rel="stylesheet" href="css/app/drucken.css" media="print">
 
@@ -103,6 +104,7 @@
     <script src="js/app/quick.js"></script>
     <script src="js/app/quickEin.js"></script>
     <script src="js/app/dropdown.js"></script>
+    <script src="js/app/dropdown2.js"></script>
     <script src="js/app/popup.js"></script>
     <script src="js/app/redaktion.js"></script>
     <script src="js/app/redLit.js"></script>
@@ -242,9 +244,8 @@
         <tr class="beleg-form">
           <td colspan="2" class="check"><div>
             <div>
-              <div id="beleg-tags-add"
-                ><input type="text" value="" placeholder="Tag ergänzen" id="beleg-tags-neu" tabindex="0"
-                ><div id="beleg-tags-list"></div
+              <div class="dropdown2-cont" id="beleg-tags-add"
+                ><input type="text" value="" placeholder="Tag ergänzen" class="dropdown2-input" data-dropdown2="belegTags" id="beleg-tags-neu" tabindex="0"
               ></div>
             </div>
             <div id="beleg-tags"></div>
@@ -332,9 +333,12 @@
               ><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1">&nbsp;</a
               ><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1">&nbsp;</a></span></th>
         </tr><tr class="beleg-form">
-          <td colspan="2" class="dropdown-cont"><textarea rows="1" class="beleg-form-data dropdown-feld" id="beleg-bd" tabindex="0" required></textarea
-            ><a href="#" class="dropdown-link-td" title="Bedeutungen auflisten" tabindex="-1"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path transform="translate(4 4)" d="m7 2v8l-3.5-3.5-1.5 1.5 6 6 6-6-1.5-1.5-3.5 3.5v-8z"/></svg></a
-          ></td>
+          <td colspan="2">
+            <div id="beleg-form-bd"></div>
+            <div class="dropdown2-cont"
+              ><input type="text" value="" class="dropdown2-input" data-dropdown2="belegBedeutung" id="beleg-bd" tabindex="0"
+            ></div>
+          </td>
         </tr><tr class="beleg-lese">
           <td colspan="2" id="beleg-lese-bd"></td>
         </tr><tr>

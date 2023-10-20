@@ -1568,7 +1568,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
           <!-- ZTB-Format -->
           <h2 id="ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr>-Format</h2>
 
-          <p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege&nbsp;&gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege&nbsp;&gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version&nbsp;2</span>):</p>
+          <p>Für die Kopierfunktionen (<a href="#menueBelege-kopieren" class="link-handbuch"><i>Belege&nbsp;&gt; Kopieren</i></a> und <a href="#menueBelege-einfuegen" class="link-handbuch"><i>Belege&nbsp;&gt; Einfügen</i></a>) gibt es für den Import <abbr title="beziehungsweise">bzw.</abbr> Export von Beleglisten ein eigenes Austauschformat. Der Inhalt dieser <abbr title="Zettel’s Traum Belege">ZTB</abbr>-Dateien ist ebenfalls <abbr title="GNU zip">gzip</abbr>-komprimierter Plain-Text im <abbr title="JavaScript Object Notation">JSON</abbr>-Format. Der Aufbau (<span class="obacht">Datenformat Version&nbsp;3</span>):</p>
 
           <table class="ztj">
             <tr>
@@ -1597,9 +1597,9 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bd</code></p></td>
-              <td class="datentyp">String</td>
-              <td><code class="quelltext">\n</code> möglich</td>
-              <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code>;<br><span class="obacht">der String enthält keine <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>-Tags</span></td>
+              <td class="datentyp">Array</td>
+              <td>&nbsp;</td>
+              <td>jeder Slot enthält ein <span class="datentyp">Array</span>, das identisch ist mit <code class="quelltext">data.bd.gr[ID].bd[n].bd</code><br><span class="obacht">ab Version&nbsp;3, davor ein <span class="datentyp">String</span> mit <code class="quelltext">\n</code> und <code class="quelltext">:&nbsp;</code> als Trennzeichen</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">gr</code></p></td>

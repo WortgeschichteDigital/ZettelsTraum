@@ -331,12 +331,8 @@ const suchleiste = {
     if (winInfo.typ === "index" && helfer.hauptfunktion === "karte" && ele.nodeName === "TH") {
       ele.querySelectorAll('[class*="icon-tools-"]').forEach(a => beleg.toolsKlick(a));
     }
-    // Bedeutungsgerüst wechseln aus der Karteikarte (Hauptfenster)
-    ele.querySelectorAll('[for="beleg-bd"]').forEach(label => {
-      label.addEventListener("click", () => bedeutungenGeruest.oeffnen());
-    });
     // Bedeutung-entfernen-Icon in der Karteikarte (Hauptfenster)
-    ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.leseBedeutungEx(a));
+    ele.querySelectorAll(".icon-entfernen").forEach(a => beleg.formularBedeutungEx(a));
     // Annotierung (Hauptfenster)
     ele.querySelectorAll("mark.wort, mark.user").forEach(function (i) {
       i.addEventListener("click", function () {
