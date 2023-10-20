@@ -1503,12 +1503,6 @@ const bedeutungen = {
           return;
         }
       } else if (feld === "al") {
-        // Doppelpunkt + Leerzeichen ist verboten
-        // (das gibt nur Probleme bei der Eingabe in der Karteikarte)
-        if (/: /.test(wert)) {
-          alias_schon_vergeben(this, "trennzeichen");
-          return;
-        }
         for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
           if (!wert) {
             break;
@@ -1562,9 +1556,7 @@ const bedeutungen = {
       // Alias schon vergeben
       function alias_schon_vergeben (edit, typ) {
         let text = "";
-        if (typ === "trennzeichen") {
-          text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nist ungültig, weil es das reservierte Trennzeichen „: “ (Doppelpunkt + Leerzeichen) enthält.`;
-        } else if (typ === "alias") {
+        if (typ === "alias") {
           text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwurde schon vergeben.`;
         } else if (typ === "alias_identisch") {
           text = `Das Alias\n<p class="bedeutungen-dialog">${wert}</p>\nwäre identisch mit der Bedeutung, für die es stehen soll.`;
