@@ -171,7 +171,7 @@ const karteisucheExport = {
         td.umbruch {
           white-space: normal;
         }
-        tr:nth-child(even) td {
+        tr:nth-child(even of :not(.off)) td {
           background-color: #f6f6f6;
         }
         tr:hover td {
