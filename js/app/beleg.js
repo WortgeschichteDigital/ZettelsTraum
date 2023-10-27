@@ -915,12 +915,11 @@ const beleg = {
     // Check: Quelle angegeben?
     const qu = document.getElementById("beleg-qu");
     const quVal = helfer.textTrim(qu.value, true);
-    const quUrl = /https?:\/\/[^\s]+\.[a-z]+/.test(quVal);
-    if (!quVal || quUrl) {
-      if (quUrl || !optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
+    if (!quVal) {
+      if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
           typ: "alert",
-          text: !quVal ? "Sie müssen eine Quelle angeben." : "URLs sind im Quelle-Feld verboten.",
+          text: "Sie müssen eine Quelle angeben.",
           callback: () => beleg.selectFormEle(qu),
         });
       } else {
@@ -928,6 +927,24 @@ const beleg = {
         beleg.fehlerFormEle(qu);
       }
       return false;
+    }
+    // Check: verbotene Formate im Quelle-Feld?
+    if (optionen.data.einstellungen["karteikarte-quelle-strikt"]) {
+      const fehler = [];
+      if (/https?:\/\/[^\s]+\.[a-z]+/.test(quVal)) {
+        fehler.push("• URLs sind verboten");
+      }
+      if (/\n/.test(quVal)) {
+        fehler.push("• Zeilenumbrüche sind verboten");
+      }
+      if (fehler.length) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `Das Quelle-Feld ist formal fehlerhaft:\n${fehler.join("<br>")}`,
+          callback: () => beleg.selectFormEle(qu),
+        });
+        return false;
+      }
     }
     // Check: Aufrufdatum valide?
     const ud = document.getElementById("beleg-ud");
