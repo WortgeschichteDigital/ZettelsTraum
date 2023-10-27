@@ -993,7 +993,7 @@ const belegImport = {
         });
         bs.push(satz);
       }
-      data.ds.bs = bs.join("\n\n");
+      data.ds.bs = bs.join("\n\n").trim();
       // Datensatz: Quelle
       if (i.meta_.bibl) {
         const titeldaten = {
