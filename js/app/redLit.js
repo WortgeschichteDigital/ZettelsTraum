@@ -2239,7 +2239,7 @@ const redLit = {
     }
     // Titel-Feld ausfüllen
     const ti = document.getElementById("red-lit-eingabe-ti");
-    ti.value = belegImport.DTAQuelle(false);
+    ti.value = belegImport.DTAQuelle();
     ti.dispatchEvent(new KeyboardEvent("input"));
     // URL-Feld ausfüllen
     const ul = document.getElementById("red-lit-eingabe-ul");
@@ -2497,10 +2497,8 @@ const redLit = {
     }
     data.ds.qu = data.td.ti;
     if (data.td.ul) {
-      data.ds.qu += `\n\n${data.td.ul}`;
-      if (data.td.ad) {
-        data.ds.qu += ` (Aufrufdatum: ${ad.textContent})`;
-      }
+      data.ds.ul = data.td.ul;
+      data.ds.ud = data.td.ad || new Date().toISOString().split("T")[0];
       if (/books\.google/.test(data.td.ul)) {
         data.td.kr = "GoogleBooks";
       } else if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(data.td.ul)) {
@@ -2534,12 +2532,12 @@ const redLit = {
     } else if (td.url.some(i => /books\.google/.test(i))) {
       data.ds.kr = "GoogleBooks";
     }
-    data.ds.qu = belegImport.makeTitle({ td, mitURL: true });
+    data.ds.qu = belegImport.makeTitle(td);
+    data.ds.ul = td.url[0] || "";
+    data.ds.ud = data.ds.ul ? new Date().toISOString().split("T")[0] : "";
     // Datensatz für Literaturdatenbank ausfüllen
-    data.td.ti = belegImport.makeTitle({ td, mitURL: false });
-    if (td.url.length) {
-      data.td.ul = td.url[0];
-    }
+    data.td.ti = belegImport.makeTitle(td);
+    data.td.ul = td.url[0] || "";
     data.td.pn = td.ppn.join(", ");
     // Datensatz zurückgeben
     return data;
@@ -2751,26 +2749,16 @@ const redLit = {
       return;
     }
     // Datensatz übernehmen
-    const titelSp = titel[0].ds.qu.split(/https?:\/\//);
-    if (titelSp[1]) {
+    if (titel[0].ds.ul) {
       // URL + Aufrufdatum
-      const protokoll = titel[0].ds.qu.match(/https?:\/\//)[0];
-      const url = titelSp[1].match(/(.+?) /)[1];
-      const ad = titelSp[1].match(/([0-9]{1,2})\.\s([0-9]{1,2})\.\s([0-9]{4})/);
-      if (ad[1].length < 2) {
-        ad[1] = "0" + ad[1];
-      }
-      if (ad[2].length < 2) {
-        ad[2] = "0" + ad[2];
-      }
-      document.getElementById("red-lit-eingabe-ad").value = `${ad[3]}-${ad[2]}-${ad[1]}`;
+      document.getElementById("red-lit-eingabe-ad").value = titel[0].ds.ud;
       const ul = document.getElementById("red-lit-eingabe-ul");
-      ul.value = protokoll + url;
+      ul.value = titel[0].ds.ul;
       ul.dispatchEvent(new KeyboardEvent("input"));
     }
     // Titel
     const ti = document.getElementById("red-lit-eingabe-ti");
-    const quelle = helfer.textTrim(titelSp[0], true);
+    const quelle = helfer.textTrim(titel[0].ds.qu, true);
     ti.value = quelle.normalize("NFC");
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN

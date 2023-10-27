@@ -213,6 +213,9 @@ const drucken = {
           }
         } else {
           wert = obj[f[x].val];
+          if (f[x].val === "qu" && obj.ul) {
+            wert += `\n${obj.ul} (Aufrufdatum: ${helfer.datumFormat(obj.ud, "einfach")})`;
+          }
         }
         if (!wert) {
           wert = "\u00A0";

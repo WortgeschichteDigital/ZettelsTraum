@@ -38,36 +38,43 @@ const xml = {
   schnitt () {
     const data = popup.referenz.data;
     const ns = "http://www.w3.org/1999/xhtml";
+
     // <Beleg>
     const parser = new DOMParser();
     let schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
+
     // @xml:id
     schnitt.firstChild.setAttribute("xml:id", xml.belegId({}));
+
     // @Fundort
     // (wird schon hier benötigt, um die Absätze in DWDS-Belgen in Leerzeichen zu verwandeln)
     let fundort = "";
     if (/^DTA/i.test(data.kr) ||
-        /deutschestextarchiv\.de\//.test(data.qu)) {
+        /deutschestextarchiv\.de\//.test(data.ul)) {
       fundort = "DTA";
     } else if (/^DWDS/i.test(data.kr)) {
       fundort = "DWDS";
     } else if (/^Google\s?Books$/i.test(data.kr) ||
-        /books\.google\.[a-z]+\//.test(data.qu)) {
+        /books\.google\.[a-z]+\//.test(data.ul)) {
       fundort = "GoogleBooks";
     } else if (/^(DeReKo|IDS)/i.test(data.kr)) {
       fundort = "IDS";
-    } else if (/https?:\/\/|www\.[a-z-]+\.[a-z]+/.test(data.qu)) {
+    } else if (data.ul) {
       fundort = "online";
     } else {
       fundort = "Bibliothek";
     }
+
     // <Belegtext>
     const cont = document.createElement("div");
+
     // Belegschnitt typographisch aufbereiten
     // (sollte hier passieren, weil später automatisch XML-Ersetzungen reinkommen)
     cont.innerHTML = helfer.typographie(popup.textauswahl.xml);
+
     // technische Klammern entfernen (Hervorhebung von Seitenumbrüchen, Trennstrichen usw.)
     helfer.clipboardHtmlErsetzen(cont, ".klammer-technisch");
+
     // .klammer-(autorenzusatz|loeschung|streichung) in Tags umwandeln
     // (da Klammern verschachtelt sein könnten, braucht es eine rekursive Funktion)
     (function klammern (n) {
@@ -89,6 +96,7 @@ const xml = {
         }
       }
     }(cont));
+
     // Belegschnitt parsen
     let text = "";
     let knoten = cont.childNodes;
@@ -112,6 +120,7 @@ const xml = {
         text += "</Absatz>";
       }
     }
+
     // Belegtext aufbereiten
     //   - Klammerungen aufbereiten
     //   - Leerzeichen vor <Streichung> ergänzen (werden beim Auflösen wieder entfernt)
@@ -143,9 +152,11 @@ const xml = {
       }
       return `<Absatz>${p1}</Absatz>`;
     });
+
     // Belegtext einhängen
     const belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
     schnitt.firstChild.appendChild(belegtext.firstChild);
+
     // Elemente und Text extrahieren
     //   n = Knoten
     //     (Knoten, der geparst werden soll)
@@ -201,6 +212,7 @@ const xml = {
         text += textEsc.replace(/&/g, "&amp;"); // sonst macht der Parser die &quot; usw. wieder weg
       }
     }
+
     // geklammerte Texttexteile automatisch taggen
     //   text = String
     //     (Belegtext, der getaggt werden soll)
@@ -236,13 +248,16 @@ const xml = {
       // Ergebnis zurückgeben
       return text;
     }
+
     // <Fundstelle>
     const fundstelle = document.createElementNS(ns, "Fundstelle");
     schnitt.firstChild.appendChild(fundstelle);
+
     // <Fundort>
     const fo = document.createElementNS(ns, "Fundort");
     fundstelle.appendChild(fo);
     fo.appendChild(document.createTextNode(fundort));
+
     // <Datum>
     let da = helferXml.datum(data.da, false, true);
     if (da) {
@@ -252,14 +267,16 @@ const xml = {
       da = da.replace(/\.\s?Jh\./, ""); // Jahrhundertangabe auf Ziffern reduzieren
       datum.appendChild(document.createTextNode(da));
     }
+
     // <URL>
-    const href = data.qu.match(/https?:[^\s]+|www\.[^\s]+/);
-    if (href) {
-      let url = href[0].replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
-      // ggf. Protokoll ergänzen
-      if (!/^https?:/.test(href[0])) {
-        url = `https://${href[0]}`;
+    if (data.ul) {
+      // Korrekturen
+      // (wird nur für ältere Belge benötigt, die vor v0.81.0 erstellt wurden)
+      let url = data.ul.replace(/(&gt;|[.:,;!?)\]}>]+)$/, "");
+      if (!/^https?:/.test(url)) {
+        url = "https://" + url;
       }
+
       // DTA-Links aufbereiten
       if (/www\.deutschestextarchiv\.de\//.test(url)) {
         // immer https
@@ -270,45 +287,26 @@ const xml = {
           url = `https://www.deutschestextarchiv.de/${webform[1]}/${webform[2]}`;
         }
       }
+
       // Tag erzeugen
       const urlTag = document.createElementNS(ns, "URL");
       fundstelle.appendChild(urlTag);
       urlTag.appendChild(document.createTextNode(helferXml.maskieren({ text: url })));
+    }
+
+    // <Aufrufdatum>
+    if (data.ud) {
       // <Aufrufdatum>
-      const reg = new RegExp(helfer.escapeRegExp(href[0]));
-      let zugriff = helferXml.datum(data.qu.split(reg)[1]);
-      if (!zugriff) {
-        // alternativ Erstellungsdatum Karteikarte nutzen
-        // (ist immer vorhanden, auch wenn Kartei noch nicht gespeichert)
-        const datum = data.dc.match(/^(?<jahr>[0-9]{4})-(?<monat>[0-9]{2})-(?<tag>[0-9]{2})/);
-        zugriff = `${datum.groups.tag}.${datum.groups.monat}.${datum.groups.jahr}`;
-      }
+      // (Datum auch taggen, wenn keine URL da ist;
+      // dann steht das Datum für den Tag, an dem z.B. der DWDS-Beleg importiert wurde)
       const aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
       fundstelle.appendChild(aufrufdatum);
-      aufrufdatum.appendChild(document.createTextNode(zugriff));
-    } else {
-      // <Aufrufdatum>
-      // (auch wenn keine URL da ist, z.B. nach Import eines DWDS-Belegs manuell eingefügt)
-      const quZeilen = data.qu.split("\n");
-      if (quZeilen.length > 1) {
-        data.qu = quZeilen[0];
-        for (let i = 1, len = quZeilen.length; i < len; i++) {
-          const zugriff = helferXml.datum(quZeilen[i]);
-          if (zugriff) {
-            const aufrufdatum = document.createElementNS(ns, "Aufrufdatum");
-            fundstelle.appendChild(aufrufdatum);
-            aufrufdatum.appendChild(document.createTextNode(zugriff));
-            break;
-          }
-        }
-      }
+      const ud = data.ud.match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/);
+      aufrufdatum.appendChild(document.createTextNode(`${ud.groups.day}.${ud.groups.month}.${ud.groups.year}`));
     }
+
     // <unstrukturiert>
-    let qu = data.qu;
-    if (href) {
-      const reg = new RegExp(helfer.escapeRegExp(href[0]));
-      qu = qu.split(reg)[0];
-    }
+    let qu = data.qu.split("\n")[0];
     qu = helfer.textTrim(qu, true);
     qu = qu.replace(/N\. ?N\./g, "N.\u00A0N.");
     const unstrukturiert = document.createElementNS(ns, "unstrukturiert");
@@ -321,8 +319,10 @@ const xml = {
       }
     }
     unstrukturiert.appendChild(document.createTextNode(unstrukturiertTxt));
+
     // Einzüge hinzufügen
     schnitt = helferXml.indent(schnitt);
+
     // Text in String umwandeln und aufbereiten
     let xmlStr = new XMLSerializer().serializeToString(schnitt);
     xmlStr = xmlStr.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
@@ -337,6 +337,7 @@ const xml = {
       const reg = new RegExp(k, "g");
       xmlStr = xmlStr.replace(reg, v);
     }
+
     // String zurückgeben
     return xmlStr;
   },

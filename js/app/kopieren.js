@@ -553,7 +553,17 @@ const kopieren = {
     }
 
     // Datenfelder ermitteln, die importiert werden sollen
-    const ds = [ "bx" ]; // "bs" (Beleg) wird immer importiert => Beleg-XML auch immer importieren
+    // Standardfelder aus der Auswahllist (können nicht abgewählt werden):
+    //   - "bs" (Beleg)
+    //   - "da" (Datum)
+    //   - "qu" (Quelle)
+    // wegen "qu" müssen außerdem immer importiert werden:
+    //   - "ud" (Aufrufdatum)
+    //   - "ul" (URL)
+    // außerdem müssen die Metadatenfelder übernommen werden
+    //   - "bi" (Importtyp)
+    //   - "bx" (Importdaten)
+    const ds = [ "ud", "ul", "bi", "bx" ];
     document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(function (i) {
       if (!i.checked && !duplikat) {
         return;
