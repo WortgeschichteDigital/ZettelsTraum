@@ -377,6 +377,7 @@ window.addEventListener("load", async () => {
     lemmata.geaendert = true;
     lemmata.liste();
   });
+  document.getElementById("lemmata-er").addEventListener("change", () => lemmata.ergaenzend());
   // Formvarianten-Fenster
   document.querySelectorAll("#stamm input").forEach(i => {
     if (i.type === "button") {

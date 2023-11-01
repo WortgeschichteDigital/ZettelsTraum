@@ -532,19 +532,24 @@ const karteisuche = {
         }
         // Behandelt-Datensätze
         if (woerter.length > 1 &&
-            !datei.rd.bh) {
+            !datei?.la?.er?.length) {
           const mit = [ ...woerter ];
           mit.splice(i, 1);
           ziel.behandeltMit = [ ...mit ];
         }
-        if (datei.rd.bh) {
+        if (datei?.la?.er?.length) {
           nebenlemmata.add(woerter[i]);
-          ziel.behandeltIn = datei.rd.bh;
-          if (!ztjMit[datei.rd.bh]) {
-            ztjMit[datei.rd.bh] = [];
+          let lemma = "";
+          if (datei.la.er[0].ho) {
+            lemma += sup[datei.la.er[0].ho - 1];
           }
-          if (!ztjMit[datei.rd.bh].includes(woerter[i])) {
-            ztjMit[datei.rd.bh].push(woerter[i]);
+          lemma += datei.la.er[0].hl;
+          ziel.behandeltIn = lemma;
+          if (!ztjMit[lemma]) {
+            ztjMit[lemma] = [];
+          }
+          if (!ztjMit[lemma].includes(woerter[i])) {
+            ztjMit[lemma].push(woerter[i]);
           }
         }
         // Redaktionsereignisse klonen
@@ -1598,7 +1603,7 @@ const karteisuche = {
   filterVolltext: {
     // data.wo wurde mit v26 entfernt
     datei: [ "no", "wo" ],
-    // data.rd.nl wurde mit v26 entfernt
+    // data.rd.bh und data.rd.nl wurden mit v26 entfernt
     redaktion: [ "bh", "nl", "no" ],
     karten: [ "au", "bl", "bs", "da", "kr", "no", "qu", "sy", "ts" ],
   },

@@ -41,6 +41,7 @@ const kartei = {
       fv: {}, // Formvarianten
       ka: {}, // Karteikarten
       la: { // Lemmaliste
+        er: [], // ergänzende Kartei für die angegebenen Hauptlemmata
         la: [ // Lemmata
           {
             ho: 0, // Homographenindex
@@ -55,7 +56,6 @@ const kartei = {
       no: "", // Notizen
       rd: { // Redaktion
         be: [], // BearbeiterInnen
-        bh: "", // behandelt in
         er: [
           { // Ereignisse
             da: new Date().toISOString().split("T")[0],

@@ -51,7 +51,7 @@ const erinnerungen = {
     // Artikel erstellt, aber nicht verknüpft?
     for (const i of data.rd.er) {
       if (i.er === "Artikel erstellt") {
-        if (data.rd.bh) {
+        if (data?.la?.er?.length) {
           // Wort wird in einer anderen Datei mit behandelt;
           // dort ist die Artikeldatei
           erinnerungen.data.artikelDatei.okay = true;

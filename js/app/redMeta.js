@@ -17,8 +17,6 @@ const redMeta = {
       return;
     }
     fenster.querySelector("input").focus();
-    // Behandelt-mit-Feld füllen
-    document.getElementById("red-meta-behandelt-mit").value = data.rd.bh;
     // Notizen-Feld füllen
     document.getElementById("red-meta-notizen").value = data.rd.no;
     // Sachgebiete, Themenfelder, Stichwortplanung aufbauen
@@ -89,7 +87,7 @@ const redMeta = {
       dialog.oeffnen({
         typ: "alert",
         text: `Das Programm muss zunächst mit einer ${typ.substring(0, 1).toUpperCase()}${typ.substring(1)}-Datei verknüpft werden.\nTag-Dateien können via <i>${appInfo.name} &gt; Einstellungen &gt; Bedeutungsgerüst</i> geladen werden.`,
-        callback: () => document.getElementById("red-meta-behandelt-mit").focus(),
+        callback: () => document.getElementById("red-meta-notizen").focus(),
       });
       return;
     }
@@ -197,25 +195,20 @@ const redMeta = {
     });
   },
 
-  // Timeout, damit bei Tastureingabe im Behandelt-mit-Feld
+  // Timeout, damit bei Tastureingabe im Notizen-Feld
   // gewisse Funktionen nicht zu häufig getriggert werden
-  behandeltInTimeout: null,
+  timeout: null,
 
   // Tastatureingaben in einem der Textfelder
   //   input = Element
   //     (das Textfeld)
   aktionText (input) {
-    if (/red-meta-(behandelt-mit|notizen)/.test(input.id)) {
+    if (input.id === "red-meta-notizen") {
       input.addEventListener("input", function () {
-        const map = {
-          "red-meta-behandelt-mit": "bh",
-          "red-meta-notizen": "no",
-        };
-        const key = map[this.id];
-        data.rd[key] = this.value;
+        data.rd.no = this.value;
         // die folgenden Funktionen nicht zu häufig aufrufen
-        clearTimeout(redMeta.behandeltInTimeout);
-        redMeta.behandeltInTimeout = setTimeout(() => {
+        clearTimeout(redMeta.timeout);
+        redMeta.timeout = setTimeout(() => {
           // Änderungsmarkierung setzen
           kartei.karteiGeaendert(true);
           // Erinnerungen-Icon auffrischen

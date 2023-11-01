@@ -541,8 +541,9 @@ const konversionen = {
 
     // Datenfeld "la" (Lemmaliste) ergänzt
     data.la = {
-      wf: false,
+      er: [],
       la: [],
+      wf: false,
     };
     for (let i of data.wo.split(",")) {
       i = i.trim();
@@ -566,6 +567,13 @@ const konversionen = {
         nl: false,
       });
     }
+    if (data.rd.bh) {
+      data.la.er.push({
+        hl: data.rd.bh.trim(),
+        ho: 0,
+      });
+    }
+    delete data.rd.bh;
     for (let la of data.rd.nl.split(",")) {
       la = la.trim();
       if (!la) {
