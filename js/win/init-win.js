@@ -155,6 +155,17 @@ const initWin = {
 
   // Events initialisieren: Elemente im XML-Fenster
   eventsXml () {
+    // mit Strg + C kopierten Text nachbearbeiten
+    document.addEventListener("copy", evt => {
+      setTimeout(() => {
+        // es muss ein wenig gewartet werden,
+        // sonst funktioniert die Ersetzung des Clipboard-Inhalts nicht
+        let text = modules.clipboard.readText();
+        text = text.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…")
+        modules.clipboard.clear();
+        modules.clipboard.writeText(text);
+      }, 100);
+    });
     // Kopf-Icons
     document.querySelectorAll("#kopf-icons a").forEach(a => {
       a.addEventListener("click", function (evt) {
