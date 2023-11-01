@@ -794,6 +794,11 @@ const helfer = {
       }
       return `${tag}.\u00A0${monat}. ${d.getFullYear()}, ${stunde}:${m}:${s}\u00A0Uhr`;
     }
+    // Format "einfach"
+    if (format === "einfach") {
+      const date = datum.match(/^(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})$/);
+      return `${date.groups.day.replace(/^0/, "")}.\u00A0${date.groups.month.replace(/^0/, "")}. ${date.groups.year}`;
+    }
     // Standardformat
     const wochentage = [ "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" ];
     const monate = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];

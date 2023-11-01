@@ -95,10 +95,10 @@ const belegImport = {
       return;
     }
     // Ist die Kartei schon ausgefüllt?
-    if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.kr || beleg.data.ts) {
+    if (beleg.data.da || beleg.data.au || beleg.data.bs || beleg.data.qu || beleg.data.ul || beleg.data.ud || beleg.data.kr || beleg.data.ts) {
       dialog.oeffnen({
         typ: "confirm",
-        text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?",
+        text: "Die Karteikarte ist teilweise schon gefüllt.\nDie Felder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus</i> und <i>Textsorte</i> werden beim Importieren der Textdaten aus dem DTA überschrieben.\nMöchten Sie den DTA-Import wirklich starten?",
         callback: () => {
           if (dialog.antwort) {
             startImport();
@@ -616,7 +616,9 @@ const belegImport = {
       beleg.data.ts = Array.from(textsorteUnique).join("\n");
     }
     beleg.data.kr = "DTA";
-    beleg.data.qu = belegImport.DTAQuelle(true);
+    beleg.data.qu = belegImport.DTAQuelle();
+    beleg.data.ul = dta.url;
+    beleg.data.ud = new Date().toISOString().split("T")[0];
     // Formular füllen
     beleg.formular(false, true);
     beleg.belegGeaendert(true);
@@ -625,9 +627,7 @@ const belegImport = {
   },
 
   // DTA-Import: Quelle zusammensetzen
-  //   mitURL = Boolean
-  //     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
-  DTAQuelle (mitURL) {
+  DTAQuelle () {
     const dta = belegImport.DTAData;
     const td = belegImport.makeTitleDataObject();
     td.autor = [ ...dta.autor ];
@@ -669,7 +669,7 @@ const belegImport = {
     td.serie = dta.serie;
     td.serieBd = dta.serie_bd;
     td.url.push(dta.url);
-    let title = belegImport.makeTitle({ td, mitURL });
+    let title = belegImport.makeTitle(td);
     title = title.normalize("NFC");
     return title;
   },
@@ -872,15 +872,12 @@ const belegImport = {
     // Datensatz: Quelle
     const nQu = xml.querySelector("Fundstelle Bibl");
     if (nQu && nQu.firstChild) {
+      // Titel
       const nTitel = xml.querySelector("Fundstelle Titel");
       const nSeite = xml.querySelector("Fundstelle Seite");
-      const nURL = xml.querySelector("Fundstelle URL");
-      const nAuf = xml.querySelector("Fundstelle Aufrufdatum");
       const titeldaten = {
         titel: nTitel && nTitel.firstChild ? nTitel.firstChild.nodeValue : "",
         seite: nSeite && nSeite.firstChild ? nSeite.firstChild.nodeValue : "",
-        url: nURL && nURL.firstChild ? nURL.firstChild.nodeValue : "",
-        auf: nAuf && nAuf.firstChild ? nAuf.firstChild.nodeValue : "",
       };
       belegImport.DWDSKorrekturen({
         typ: "qu",
@@ -888,6 +885,18 @@ const belegImport = {
         data,
         titeldaten,
       });
+      // URL und Aufrufdatum
+      const nURL = xml.querySelector("Fundstelle URL");
+      data.ul = nURL?.firstChild?.nodeValue || "";
+      if (data.ul) {
+        const nAuf = xml.querySelector("Fundstelle Aufrufdatum");
+        let auf = "";
+        if (nAuf?.firstChild?.nodeValue) {
+          const aufSp = nAuf?.firstChild?.nodeValue.split(".");
+          auf = `${aufSp[2]}-${aufSp[1]}-${aufSp[0]}`;
+        }
+        data.ud = auf || new Date().toISOString().split("T")[0];
+      }
     }
     // Datensatz: Korpus
     let korpus = "";
@@ -984,28 +993,30 @@ const belegImport = {
         });
         bs.push(satz);
       }
-      data.ds.bs = bs.join("\n\n");
+      data.ds.bs = bs.join("\n\n").trim();
       // Datensatz: Quelle
       if (i.meta_.bibl) {
         const titeldaten = {
           titel: i.meta_.title ? i.meta_.title : "",
           seite: i.meta_.page_ ? i.meta_.page_ : "",
-          url: i.meta_.url ? i.meta_.url : "",
-          auf: i.meta_.urlDate ? i.meta_.urlDate : "",
         };
-        if (/^dta/.test(i.collection) &&
-            !titeldaten.url &&
-            i.meta_.basename &&
-            i.matches[0] &&
-            i.matches[0].page) {
-          titeldaten.url = `https://www.deutschestextarchiv.de/${i.meta_.basename}/${i.matches[0].page}`;
-        }
         belegImport.DWDSKorrekturen({
           typ: "qu",
           txt: i.meta_.bibl,
           data: data.ds,
           titeldaten,
         });
+        let url = i.meta_.url || "";
+        if (!url &&
+            /^dta/.test(i.collection) &&
+            i.meta_.basename &&
+            i.matches?.[0]?.page) {
+          url = `https://www.deutschestextarchiv.de/${i.meta_.basename}/${i.matches[0].page}`;
+        }
+        data.ds.ul = url;
+        if (url) {
+          data.ds.ud = i.meta_.urlDate || new Date().toISOString().split("T")[0];
+        }
       }
       // Datensatz: Korpus
       let korpus = "";
@@ -1041,6 +1052,7 @@ const belegImport = {
         data.ds.no = belegImport.DWDSKorrekturen({
           typ: "no",
           txt: i.meta_.basename,
+          data: data.ds,
           korpus,
         });
       }
@@ -1202,17 +1214,6 @@ const belegImport = {
       }
       // typographische Verbesserungen
       data.qu = helfer.typographie(data.qu);
-      // ggf. URL ergänzen
-      if (titeldaten.url) {
-        data.qu += `\n\n${titeldaten.url}`;
-        // Aufrufdatum ergänzen
-        if (titeldaten.auf) {
-          data.qu += ` (Aufrufdatum: ${titeldaten.auf})`;
-        } else {
-          const heute = new Date();
-          data.qu += ` (Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})`;
-        }
-      }
       // Steht in der Quellenangabe der Autor in der Form "Nachname, Vorname",
       // im Autor-Feld aber nicht?
       const auQu = data.qu.split(": ");
@@ -1383,6 +1384,8 @@ const belegImport = {
         no: "", // Notizen
         qu: "", // Quellenangabe
         ts: "", // Textsorte
+        ud: "", // Aufrufdatum
+        ul: "", // URL
       },
     };
   },
@@ -1725,6 +1728,8 @@ const belegImport = {
       au: "Autor",
       bs: "Beleg",
       qu: "Quelle",
+      ul: "URL",
+      ud: "Aufrufdatum",
       kr: "Korpus",
       ts: "Textsorte",
       no: "Notizen",
@@ -1732,7 +1737,7 @@ const belegImport = {
     let karteGefuellt = false;
     const felderGefuellt = new Set();
     for (const [ k, v ] of Object.entries(belegImport.Datei.data[idx].ds)) {
-      if (k === "bx") {
+      if (!feldnamen[k]) {
         continue;
       }
       if (v && beleg.data[k]) {
@@ -1813,7 +1818,7 @@ const belegImport = {
     return new Promise(resolve => {
       const ds = belegImport.Datei.data[idx].ds;
       // Beleg wohl nicht aus DTA
-      if (!/https?:\/\/www\.deutschestextarchiv\.de\//.test(ds.qu)) {
+      if (!/https?:\/\/www\.deutschestextarchiv\.de\//.test(ds.ul)) {
         resolve(false);
         return;
       }
@@ -1840,10 +1845,9 @@ const belegImport = {
       document.getElementById("dialog-text").appendChild(optionen.shortcut("DTA-Import künftig ohne Nachfrage anstoßen", "dta-bevorzugen"));
       // DTA-Import anstoßen
       function dtaImport () {
-        const url = liste.linksErkennen(ds.qu).match(/href="([^"]+\.deutschestextarchiv\.de\/.+?)"/)[1];
         const dtaFeld = document.getElementById("beleg-dta");
-        dtaFeld.value = url;
-        const fak = belegImport.DTAGetFak(url, "");
+        dtaFeld.value = ds.ul;
+        const fak = belegImport.DTAGetFak(ds.ul, "");
         if (fak) {
           dtaFeld.nextSibling.value = parseInt(fak, 10) + 1;
         }
@@ -2228,11 +2232,10 @@ const belegImport = {
         td.url = [ ...item.url ];
         td.url.sort(helfer.sortURL);
       }
-      data.ds.qu = belegImport.makeTitle({
-        td,
-        mitURL: true,
-      });
+      data.ds.qu = belegImport.makeTitle(td);
       data.ds.qu = data.ds.qu.normalize("NFC");
+      data.ds.ul = td.url[0] || "";
+      data.ds.ud = data.ds.ul ? new Date().toISOString().split("T")[0] : "";
       // Datensatz pushen
       titel.push(data);
     }
@@ -2558,9 +2561,7 @@ const belegImport = {
   // eine Titelaufnahme aus den übergebenen Daten zusammensetzen
   //   td = Object
   //     (Datensatz mit den Titeldaten)
-  //   mitURL = Boolean
-  //     (URL + Aufrufdatum sollen der Titelaufnahme angehängt werden)
-  makeTitle ({ td, mitURL }) {
+  makeTitle (td) {
     let titel = "";
     // Autor
     if (td.autor.length) {
@@ -2682,14 +2683,6 @@ const belegImport = {
       titel += ` (${td.serie}${td.serieBd ? " " + td.serieBd : ""})`;
     }
     punkt();
-    // URL und Aufrufdatum
-    if (mitURL && td.url.length) {
-      const heute = helfer.datumFormat(new Date().toISOString(), "minuten").split(",")[0];
-      titel += "\n";
-      for (const url of td.url) {
-        titel += `\n${url} (Aufrufdatum: ${heute})`;
-      }
-    }
     // Titel typographisch verbessern und zurückgeben
     titel = helfer.textTrim(titel, true);
     titel = helfer.typographie(titel);

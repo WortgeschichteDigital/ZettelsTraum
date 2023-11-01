@@ -1115,6 +1115,9 @@ const filter = {
           !erweiterte) {
         const id = i.id.replace(/^filter-feld-/, "");
         filter.volltextSuche.ds.push(id);
+        if (id === "qu") {
+          filter.volltextSuche.ds.push("ul", "ud");
+        }
       }
     });
     // reguläre Suchausdrücke
@@ -1415,7 +1418,7 @@ const filter = {
     const treffer = Array(filter.volltextSuche.reg.length).fill(false);
     const trefferDs = [];
     for (let i = 0, len = filter.volltextSuche.ds.length; i < len; i++) {
-      const ds = filter.volltextSuche.ds[i];
+      let ds = filter.volltextSuche.ds[i];
       let text_rein = "";
       if (ds === "bd") {
         text_rein = liste.textBd(data.ka[id][ds]).join(" ").replace(/<.+?>/g, "");
@@ -1429,6 +1432,12 @@ const filter = {
         const reg = filter.volltextSuche.reg[j];
         if (text_rein.match(reg)) {
           treffer[j] = true;
+          if (/^(ul|ud)$/.test(ds)) {
+            ds = "qu";
+            if (trefferDs.includes("qu")) {
+              continue;
+            }
+          }
           trefferDs.push(ds);
         }
       }

@@ -184,6 +184,8 @@ const optionen = {
       unvollstaendig: false,
       // in neuer Karteikarte Belegfeld fokussieren
       "karteikarte-fokus-beleg": false,
+      // strikter Modus im Quelle-Feld
+      "karteikarte-quelle-strikt": true,
       // Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
       // ausgewählt wurde (betrifft Bedeutung und Textsorte)
       "immer-ergaenzen": false,

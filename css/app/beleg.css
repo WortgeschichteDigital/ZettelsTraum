@@ -192,6 +192,15 @@
   width: calc(100% - 12px);
 }
 
+#beleg #beleg-ul {
+  width: calc(100% - 12px - 165px);
+}
+
+#beleg #beleg-ud {
+  margin-left: 10px;
+  width: 143px;
+}
+
 #beleg input[type="text"].dropdown-feld {
   width: calc(100% - 31px);
 }
@@ -313,6 +322,57 @@ span#beleg-bewertung {
   background-color: var(--hintergrund);
 }
 
+#beleg th:has(.beleg-ul-ud) {
+  padding-right: 0;
+}
+
+.beleg-ul-ud {
+  position: relative;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.beleg-ul-ud:first-child {
+  width: calc(100% - 165px - 5px);
+}
+
+.beleg-ul-ud:last-child {
+  margin-left: 10px;
+  padding-left: 6px;
+  width: calc(155px - 6px);
+}
+
+.beleg-ul-ud .text-tools {
+  right: 1px;
+}
+
+.beleg-ul-ud .text-tools-quelle {
+  right: 73px;
+}
+
+.beleg-ul-ud:last-child .text-tools-quelle {
+  right: 1px;
+}
+
+.beleg-lese .beleg-ul-ud {
+  padding-left: 0;
+}
+
+.beleg-lese .beleg-ul-ud:first-child {
+  width: calc(100% - 165px);
+}
+
+.beleg-lese .beleg-ul-ud:last-child {
+  margin-left: 10px;
+  width: 155px;
+}
+
+.beleg-lese .beleg-ul-ud p {
+  display: inline-block;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  max-width: calc(100% - 10px);
+}
 
 /* METADATEN ------------------------------------ */
 

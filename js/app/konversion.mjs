@@ -621,6 +621,45 @@ const konversionen = {
       karte.bs = karte.bs.replace(/\{(.+?)\}/g, (m, p1) => `<span class="klammer-autorenzusatz">${p1}</span>`);
     }
 
+    // Datenfelder "ud" (Aufrufdatum) und "ul" (URL) in allen Karteikarten ergänzen;
+    // die neuen Datenfelder automatisch aus dem Quellefeld füllen, dann das Quellefeld bereinigen
+    for (const karte of Object.values(data.ka)) {
+      karte.ud = "";
+      karte.ul = "";
+      const qu = karte.qu.split(/\n(.*)/s);
+      if (qu.length > 1) {
+        // URL suchen und eintragen
+        const url = qu[1].match(/https?:[^\s]+|www\.[^\s]+/);
+        if (url) {
+          qu[1] = qu[1].split(url[0]).join("");
+          if (!/^https?:/.test(url[0])) {
+            url[0] = `https://${url[0]}`;
+          }
+          karte.ul = url[0];
+        }
+        // Datum suchen und eintragen
+        const datum = qu[1].match(/(?<day>[0-9]{1,2})\.\s?(?<month>[0-9]{1,2})\.\s?(?<year>[0-9]{2,4})|(?<iso>[0-9]{4}-[0-9]{2}-[0-9]{2})/);
+        if (datum) {
+          if (datum.groups.iso) {
+            karte.ud = datum.groups.iso;
+          } else {
+            const year = datum.groups.year.length === 4 ? datum.groups.year : "20" + datum.groups.year;
+            karte.ud = `${year}-${datum.groups.month.padStart(2, "0")}-${datum.groups.day.padStart(2, "0")}`;
+          }
+          qu[1] = qu[1].split(datum[0]).join("");
+        } else if (karte.ul) {
+          // Erstellungsdatum der Karteikarte als Fallback nutzen,
+          // wenn eine URL vorhanden ist
+          karte.ud = karte.dc.split("T")[0];
+        }
+        // Bereinigung der Karte
+        qu[1] = qu[1].replace(/[A-Za-z]+datum|(ab|auf)gerufen am/g, "");
+        karte.qu = qu.join("\n");
+        karte.qu = karte.qu.replace(/^[\s(),;.:[\]]+$/m, "");
+        karte.qu = karte.qu.trim();
+      }
+    }
+
     // Versionsnummer hochzählen
     data.ve++;
 

@@ -424,11 +424,15 @@ const liste = {
     // Quellenangabe
     if (!filter.volltextSuche.suche && optionen.data.belegliste.detail_qu ||
         filter.volltextSuche.suche && filter.volltextSuche.ka[id].includes("qu")) {
+      let text = data.ka[id].qu;
+      if (data.ka[id].ul) {
+        text += `\n${data.ka[id].ul} (Aufrufdatum: ${helfer.datumFormat(data.ka[id].ud, "einfach")})`;
+      }
       liste.detailErstellen({
         cont: div,
         ds: "qu",
         h: "Quelle",
-        text: data.ka[id].qu,
+        text,
         id,
       });
     }

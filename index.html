@@ -365,9 +365,7 @@
         </tr><tr>
           <th colspan="2"><label for="beleg-qu">Quelle</label
             ><span class="text-tools-quelle"
-              ><a href="#" class="icon-link icon-uhr icon-tools" title="Aufrufdatum einfügen" tabindex="-1">&nbsp;</a
               ><a href="#" class="icon-link icon-pfeil-kreis icon-tools" title="Quellenangabe neu einlesen (Strg + D)" tabindex="-1">&nbsp;</a
-              ><a href="#" class="icon-link icon-link-link icon-tools" title="DTA-Link in Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
             ></span
             ><span class="text-tools"
               ><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1">&nbsp;</a
@@ -376,6 +374,34 @@
           <td colspan="2"><textarea rows="1" class="beleg-form-data" id="beleg-qu" required></textarea></td>
         </tr><tr class="beleg-lese">
           <td colspan="2" id="beleg-lese-qu"></td>
+        </tr><tr>
+          <th colspan="2"
+            ><span class="beleg-ul-ud"
+              ><label for="beleg-ul">URL</label
+              ><span class="text-tools-quelle"
+                ><a href="#" class="icon-link icon-link-link icon-tools" title="DTA-Link in Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
+              ></span
+              ><span class="text-tools"
+                ><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1">&nbsp;</a
+                ><a href="#" class="icon-link icon-tools-einfuegen" title="Text einfügen" tabindex="-1">&nbsp;</a></span
+            ></span
+            ><span class="beleg-ul-ud"
+              ><label for="beleg-ud">Aufrufdatum</label
+              ><span class="text-tools-quelle"
+                ><a href="#" class="icon-link icon-uhr icon-tools" title="Aufrufdatum einfügen" tabindex="-1">&nbsp;</a
+              ></span
+            ></span
+          ></th>
+        </tr><tr class="beleg-form">
+          <td colspan="2"
+            ><input type="text" value="" class="beleg-form-data" id="beleg-ul" tabindex="0"
+            ><input type="date" value="" class="beleg-form-data" id="beleg-ud" tabindex="0"
+          ></td>
+        </tr><tr class="beleg-lese">
+          <td colspan="2"
+            ><span class="beleg-ul-ud" id="beleg-lese-ul"></span
+            ><span class="beleg-ul-ud" id="beleg-lese-ud"></span
+          ></td>
         </tr><tr>
           <th><label for="beleg-kr">Korpus</label
             ><span class="text-tools"
@@ -806,6 +832,8 @@
               ><label for="einstellung-unvollstaendig">neue Karteikarte als unvollständig markieren</label></p>
             <p><input type="checkbox" id="einstellung-karteikarte-fokus-beleg"
               ><label for="einstellung-karteikarte-fokus-beleg">in neuer Karteikarte Belegfeld fokussieren</label></p>
+            <p><input type="checkbox" id="einstellung-karteikarte-quelle-strikt"
+              ><label for="einstellung-karteikarte-quelle-strikt">strikter Modus im Quelle-Feld</label></p>
             <p><input type="checkbox" id="einstellung-immer-ergaenzen"
               ><label for="einstellung-immer-ergaenzen">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</label></p>
             <h3>Import</h3>

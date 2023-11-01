@@ -96,6 +96,8 @@ const beleg = {
       sy: "", // Synonym
       tg: [], // Tags
       ts: "", // Textsorte
+      ud: "", // Aufrufdatum
+      ul: "", // URL
     };
     if (optionen.data.einstellungen.unvollstaendig) {
       karte.tg.push("unvollständig");
@@ -432,6 +434,10 @@ const beleg = {
         // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
         // weil die erste Zeile in der Belegliste angezeigt werden kann
         noLeerzeilen = this.value.match(/^\n+/)[0];
+      } else if (name === "ul" && !beleg.data.ul) {
+        const heute = new Date().toISOString().split("T")[0];
+        document.getElementById("beleg-ud").value = heute;
+        beleg.data.ud = heute;
       }
       beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
       beleg.belegGeaendert(true);
@@ -908,7 +914,8 @@ const beleg = {
     }
     // Check: Quelle angegeben?
     const qu = document.getElementById("beleg-qu");
-    if (!helfer.textTrim(qu.value, true)) {
+    const quVal = helfer.textTrim(qu.value, true);
+    if (!quVal) {
       if (!optionen.data.einstellungen["karteikarte-keine-fehlermeldung"]) {
         dialog.oeffnen({
           typ: "alert",
@@ -921,6 +928,49 @@ const beleg = {
       }
       return false;
     }
+    // Check: verbotene Formate im Quelle-Feld?
+    if (optionen.data.einstellungen["karteikarte-quelle-strikt"]) {
+      const fehler = [];
+      if (/https?:\/\/[^\s]+\.[a-z]+/.test(quVal)) {
+        fehler.push("• URLs sind verboten");
+      }
+      if (/\n/.test(quVal)) {
+        fehler.push("• Zeilenumbrüche sind verboten");
+      }
+      if (fehler.length) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `Das Quelle-Feld ist formal fehlerhaft:\n${fehler.join("<br>")}`,
+          callback: () => beleg.selectFormEle(qu),
+        });
+        return false;
+      }
+    }
+    // Check: Aufrufdatum valide?
+    const ud = document.getElementById("beleg-ud");
+    if (document.querySelector("#beleg-ud:invalid")) {
+      beleg.data.ud = "";
+      ud.value = "";
+    }
+    // Korrektur: URL gefüllt, aber kein Aufrufdatum
+    if (beleg.data.ul && !beleg.data.ud) {
+      const heute = new Date().toISOString().split("T")[0];
+      beleg.data.ud = heute;
+      ud.value = heute;
+    }
+    // Check: URL mit Protokoll?
+    const ul = document.getElementById("beleg-ul");
+    if (beleg.data.ul && !/^https?:\/\//.test(beleg.data.ul)) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Die URL beginnt ohne Protokoll.\nFügen Sie am Anfang http:// oder https:// ein.",
+        callback: () => beleg.selectFormEle(ul),
+      });
+      return false;
+    }
+    // Korrektur: Leerzeichen in der URL maskieren
+    beleg.data.ul = beleg.data.ul.replace(/ /g, "%20");
+    ul.value = beleg.data.ul;
     // Beleg wurde nicht geändert
     if (!beleg.geaendert) {
       direktSchliessen();
@@ -1380,9 +1430,15 @@ const beleg = {
         }
         text += `<p>${helfer.escapeHtml(i)}</p>`;
       });
+      if (obj.ul) {
+        text += `<p>${obj.ul}<br>(Aufrufdatum: ${helfer.datumFormat(obj.ud, "einfach")})</p>`;
+      }
     } else {
       text += "\n\n---\n\n";
       text += obj.qu;
+      if (obj.ul) {
+        text += `\n\n${obj.ul}\n(Aufrufdatum: ${helfer.datumFormat(obj.ud, "einfach")})`;
+      }
     }
     return text;
   },
@@ -1421,7 +1477,7 @@ const beleg = {
   toolsEinfuegen (link) {
     // Element ermitteln
     // Text einlesen
-    const id = link.closest("th").firstChild.getAttribute("for");
+    const id = link.closest("th").querySelector("label").getAttribute("for");
     const ds = id.replace(/^beleg-/, "");
     const feld = document.getElementById(id);
     // Text auslesen
@@ -1812,13 +1868,10 @@ const beleg = {
 
   // Aufrufdatum in Quelle-Feld einfügen
   toolsAufrufdatum () {
-    const qu = document.getElementById("beleg-qu");
-    qu.focus();
-    const heute = new Date();
-    const start = qu.value.substring(0, qu.selectionStart);
-    const ende = qu.value.substring(qu.selectionStart);
-    const leerzeichen = / $/.test(start) ? "" : " ";
-    qu.value = start + leerzeichen + `(Aufrufdatum: ${heute.getDate()}. ${heute.getMonth() + 1}. ${heute.getFullYear()})` + ende;
+    const ud = document.getElementById("beleg-ud");
+    ud.value = new Date().toISOString().split("T")[0];
+    ud.dispatchEvent(new Event("change"));
+    ud.focus();
   },
 
   // Inhalt des Quelle-Felds neu laden
@@ -1961,12 +2014,8 @@ const beleg = {
       return;
     }
     // Titelinfos aus dem DTA herunterladen
-    let url = liste.linksErkennen(beleg.data.qu);
-    if (/href="/.test(url)) {
-      url = url.match(/href="(.+?)"/)[1];
-    }
-    if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
-      const titel = await beleg.toolsQuelleLadenDTA({ url });
+    if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(beleg.data.ul)) {
+      const titel = await beleg.toolsQuelleLadenDTA({ url: beleg.data.ul });
       if (titel) {
         aenderungen.Autor = {
           key: "au",
@@ -2064,8 +2113,8 @@ const beleg = {
   async toolsQuelleLadenDTA ({ url }) {
     const quelle = document.getElementById("beleg-qu");
     // Seitenangabe auslesen
-    const mHier = /, hier (?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
-    const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.\n\n)/.exec(quelle.value);
+    const mHier = /, hier (?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
+    const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
     const seitenData = {
       seite: "",
       seite_zuletzt: "",
@@ -2095,7 +2144,7 @@ const beleg = {
     });
     // Rückgabewerte
     if (fetchOk) {
-      return belegImport.DTAQuelle(true);
+      return belegImport.DTAQuelle();
     }
     return false;
   },
@@ -2157,9 +2206,7 @@ const beleg = {
 
   // DTA-Link aus dem Quelle-Feld in das Importformular holen
   toolsQuelleDTALink () {
-    const quelle = document.querySelector("#beleg-qu").value;
-    const link = quelle.match(/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/);
-    if (!link) {
+    if (!/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/.test(beleg.data.ul)) {
       dialog.oeffnen({
         typ: "alert",
         text: "Kein DTA-Link gefunden.",
@@ -2173,7 +2220,7 @@ const beleg = {
     });
     document.querySelector("#beleg-import-dta").click();
     const dta = document.querySelector("#beleg-dta");
-    dta.value = link[0];
+    dta.value = beleg.data.ul;
     dta.dispatchEvent(new Event("input"));
     document.querySelector("#beleg-dta-bis").select();
   },
@@ -2449,12 +2496,13 @@ const beleg = {
           if (key !== "bd" && key !== "bs") {
             text = helfer.escapeHtml(text);
           }
-          if (/^(no|qu)$/.test(key)) {
+          if (/^(no|qu|ul)$/.test(key)) {
             text = liste.linksErkennen(text);
-          }
-          if (key === "bs") {
+          } else if (key === "bs") {
             text = liste.belegWortHervorheben(text, true);
             text = liste.belegKlammernHervorheben({ text });
+          } else if (key === "ud") {
+            text = helfer.datumFormat(text, "einfach");
           }
         }
         nP.innerHTML = text;
