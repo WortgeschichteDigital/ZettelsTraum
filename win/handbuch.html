@@ -298,7 +298,7 @@
 
             <li>In den Feldern, in denen Zeilenumbrüche eine besondere Bedeutung haben und nicht einfach nur einen neuen Absatz markieren, gibt es ein weiteres Trennzeichen <code class="quelltext">:␣</code> (Doppelpunkt, gefolgt von einem Leerzeichen). Mit ihm wird eine neue Ebene geöffnet, also <abbr title="zum Beispiel">z.&nbsp;B.</abbr> der Wert von einer übergeordneten Kategorie getrennt (<code class="quelltext">Komposition: Teamsitzung</code>). Dieses Trennzeichen funktioniert auch in dem einzeiligen Textfeld <i>Korpus</i>.</li>
 
-            <li>Die Texteingabe in den Feldern <i>Beleg, Quelle</i> und <i>Notizen</i> können Sie sich ruhig übersichtlicher gestalten, indem Sie zwischen Absätzen eine Leerzeile einfügen. Bei der Darstellung des Textes (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> in der <a href="#belegliste">Belegliste</a>) wird das Programm dies erkennen und den Text korrekt in Absätze gliedern, ohne dass überflüssige Leerzeilen angezeigt werden.</li>
+            <li>Die Texteingabe in den Feldern <i>Beleg</i> und <i>Notizen</i> können Sie sich ruhig übersichtlicher gestalten, indem Sie zwischen Absätzen eine Leerzeile einfügen. Bei der Darstellung des Textes (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> in der <a href="#belegliste">Belegliste</a>) wird das Programm dies erkennen und den Text korrekt in Absätze gliedern, ohne dass überflüssige Leerzeilen angezeigt werden.</li>
 
             <li>Fußt ihre Belegsammlung auf Texten aus dem <a href="https://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a>, dem <a href="https://www.dwds.de/"><i>Digitalen Wörterbuch der deutschen Sprache</i></a> oder dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a>, können Karteikarten halbautomatisch gefüllt werden. <a href="#karteikarte-importfunktion">Wie genau der Import funktioniert</a>, wird im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a> in einem eigenen <abbr title="Abschnitt">Abschn.</abbr> beschrieben.</li>
           </ul>
@@ -479,7 +479,7 @@
           <p class="erklaerung-icon" id="karteikarte-kopieren"><img src="../img/kopieren.svg" width="24" height="24" alt="">Text des zugehörigen Feldes kopieren</p>
 
           <div class="info">
-            <p>Beim Kopieren des Belegtextes mithilfe des Icons wird automatisch die Quellenangabe mitkopiert. Wird der kopierte Text in ein Textverarbeitungsprogramm eingefügt, bleiben die Formatierungen erhalten. Im Falle, dass ein Plain-Text-Editor verwendet wird, werden die Formatierungen eliminiert. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-kopierenIcon">Erläuterungen zum Kopieren von Text im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
+            <p>Beim Kopieren des Belegtextes mithilfe des Icons wird automatisch die Quellenangabe und, wenn vorhanden, die zugehörige URL mitkopiert. Wird der kopierte Text in ein Textverarbeitungsprogramm eingefügt, bleiben die Formatierungen erhalten. Im Falle, dass ein Plain-Text-Editor verwendet wird, werden die Formatierungen eliminiert. <abbr title="Vergleiche">Vgl.</abbr> die <a href="#belegliste-kopierenIcon">Erläuterungen zum Kopieren von Text im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
 
             <p>Für markierten Belegtext gibt es die Möglichkeit, ihn als <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet</a> zu kopieren.</p>
           </div>
@@ -691,23 +691,9 @@
           <p class="add-navi-details" id="karteikarte-quelle"><b>Quelle:</b> Quellenangabe zum Beleg</p>
 
           <div class="info">
-            <p>Enthält das Feld <b>Internetlinks</b>, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: https://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>.</p>
+            <p>Wie im <a href="#karteikarte-beleg">Beleg-Feld</a> können Sie zwar im Quelle-Feld auch <b>mehrzeiligen Text</b> eingeben, standardmäßig weigert sich die App aber, eine Karteikarte mit mehrzeiliger Quellenangabe zu speichern. Sie können dieses Verhalten ändern, indem Sie den <a href="#einstellungen-karteikarteQuelleStrikt">strikten Modus</a> in den Einstellungen ausstellen. Empfehlenswert ist dies allerdings nicht, da beim Transformieren des Belegs in ein <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet</a> immer nur die erste Zeile der Quellenangabe ausgewertet wird.</p>
 
-            <p>Ist ein Internetlink vorhanden, wird dieser beim Erstellen eines <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a> erkannt und entsprechend getaggt. In solchen Fällen wird hinter dem Link nach einem <b>Aufrufdatum</b> gesucht. Als Aufrufdatum wird das erste Datum betrachtet, das hinter dem Link zu finden ist. Es ist ganz egal, ob Sie davor noch eine Notiz wie <q>Aufrufdatum:</q> setzen, das Datum einklammern oder ungeklammert stehenlassen. Ausgelesen wird immer nur das Datum, der restliche Text wird ignoriert.</p>
-
-            <p>Durch Klick auf das Icon <img src="../img/uhr.svg" width="20" height="20" alt=""> über dem Quelle-Feld können Sie sich das Aufrufdatum an der aktuellen Cursorposition des Felds einfügen lassen. Es wird immer das aktuelle Tagesdatum gedruckt.</p>
-
-            <p>Es gibt mehrere mögliche Datumsformate: Sie können das Datum im ISO&nbsp;8601-Format angeben (<q>2019-12-24</q>) oder im Format Tag/Monat/Jahr: <q>24.&nbsp;12. 2019</q>. Ob Sie zwischen den einzelnen Datumsteilen Spatien lassen, ob Sie Monate oder Tage &lt; zehn mit führender Null verwenden, ob Sie einen Mix aus all diesen Möglichkeiten produzieren, ist dabei egal. Daten in diesem Format werden immer erkannt.</p>
-
-            <p>Wurde zwar eine URL, aber kein Datum gefunden wird für das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet das Erstellungsdatum der Karteikarte genutzt.</p>
-
-            <p>Auch wenn Sie keine URL angeben, können Sie ein Aufrufdatum notieren (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> um sich zu merken, wann Sie einen Beleg, der nicht durch einen Internetlink referenziert werden kann, aus einem Korpus importiert haben). Exportieren Sie einen Belegschnitt in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, wird das Aufrufdatum auch in diesem Fall ausgelesen und getaggt. Wichtig ist allein, dass Sie hinter der Quellenangabe einen (oder mehrere) Zeilenumbrüche machen. Ein Beispiel:</p>
-
-            <pre class="quelltext">Peters, Carl: Im Goldland des Altertums, München: Lehmann 1902, S.&nbsp;166.
-
-Aufrufdatum: 24.&nbsp;12. 2019</pre>
-
-            <p>Auch in diesem Fall ist es nicht relevant, wie Sie das Datum markieren. Wurde ein Datum erkannt, wird es automatisch in das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet übernommen. Allerdings wird bei Abwesenheit einer URL niemals auf das Erstellungsdatum der Kartei als Fallback zurückgegriffen.</p>
+            <p>Enthält das Feld <b>Internetlinks</b>, werden diese in der Leseansicht der Karteikarte und in der Belegliste als klickbare Links dargestellt, über die sich der Standardbrowser des Betriebssystems öffnet. Für den Linktext werden nur Subdomain, Domain und Top-Level-Domain genutzt. Ein Beispiel: https://www.deutschestextarchiv.de/<wbr>book/<wbr>view/<wbr>gutzkow_wally_1835?p=12 wird automatisch zu <a href="https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=12">www.deutschestextarchiv.de</a>. Im <a href="#einstellungen-karteikarteQuelleStrikt">strikten Modus wird</a> das Speichern der Karteikarte allerdings unterbunden, solange im Quelle-Feld noch Internetlinks zu finden sind. Verweise auf ein Online-Digitalisat des Belegs gehören nämlich in das <a href="#karteikarte-url">URL-Feld</a>.</p>
 
             <figure class="right" title="zum Vergrößern anklicken">
               <img src="../img/win/karteikarte-quelle-laden.png" alt="">
@@ -721,10 +707,24 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
             <p>Die App fragt nach, bevor Datenfelder überschrieben werden und zeigt ihnen an, was sie ändern würde. Bestätigen Sie die Änderungen, wird die Karteikarte automatisch gespeichert.</p>
 
             <p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>D</kbd> aufrufen.</p>
+          </div>
 
-            <p id="karteikarte-quelleDTALink">Mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt=""> über dem Quelle-Feld kann die <b><abbr title="Deutsches Textarchiv">DTA</abbr>-URL in das Importformular</b> geladen werden. Dies funktioniert natürlich nur, wenn im Quelle-Feld eine solche URL vorhanden ist.</p>
+          <p class="add-navi-details" id="karteikarte-url"><b>URL:</b> Internetlink zur Quelle</p>
 
-            <p>Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
+          <div class="info">
+            <p>Geben Sie eine URL ein, wird das <a href="#karteikarte-aufrufdatum">Aufrufdatum</a> automatisch auf das aktuelle Tagesdatum gestellt, allerdings nur, wenn das URL-Feld zuvor leer war.</p>
+
+            <p>Handelt es sich bei der URL um einen Verweis auf das <abbr title="Deutschen Textarchiv">DTA</abbr>, können Sie die URL mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt="">, das über dem Feld steht, in das Importformular laden. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
+          </div>
+
+          <p class="add-navi-details" id="karteikarte-aufrufdatum"><b>Aufrufdatum:</b> Datum, an dem die URL aus dem <a href="#karteikarte-url">URL-Feld</a> aufgerufen wurde</p>
+
+          <div class="info">
+            <p>Durch Klick auf das Icon <img src="../img/uhr.svg" width="20" height="20" alt=""> über dem Feld können Sie das Datum auf das aktuelle Tagesdatum stellen.</p>
+
+            <p>Sollte die Datumsangabe illegal sein (nicht existierender Monat, eines der Datenfelder ist nicht gefüllt <abbr title="und dergleichen">u. dgl.</abbr>), wird die Datumsangabe beim Speichern automatisch gelöscht. Ist das URL-Feld gefüllt, wird stattdessen das aktuelle Tagesdatum eingetragen.</p>
+
+            <p>Auch wenn Sie keine URL angeben, können Sie ein Aufrufdatum notieren (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> um anzumerken, wann Sie einen Beleg, der nicht durch einen Internetlink referenziert werden kann, aus einem Korpus importiert haben). Exportieren Sie einen Belegschnitt in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, wird das Aufrufdatum auch in diesem Fall ausgelesen und getaggt.</p>
           </div>
 
           <p class="add-navi-details" id="karteikarte-korpus"><b>Korpus:</b> Textkorpus, aus dem der Beleg stammt</p>
@@ -789,7 +789,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
             </li>
           </ul>
 
-          <p class="add-navi-details" id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code class="quelltext long">https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
+          <p class="add-navi-details" id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code class="quelltext long">https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
 
           <p>Über das nebenstehende, zweite Datenfeld, in dem eine Ziffer steht, kann gesteuert werden, wie viel Text importiert werden soll. Die Ziffer steht für die Seitengrenze, bis zu der der Belegtext importiert wird. Ein Beispiel: Gibt man eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> ein, die (wie im obigen Fall) auf Image <abbr title="Nummer">Nr.</abbr>&nbsp;35 eines Textes verweist und steht im Ziffernfeld <q>36</q>, wird nur die zu Image <abbr title="Nummer">Nr.</abbr>&nbsp;35 gehörende Seite importiert. Denn <q>36</q> markiert die Seitengrenze, bis zu der importiert werden soll. Sollen sowohl die auf Image 35 als auch auf 36 zu findenden Seiten importiert werden, muss im Ziffernfeld <q>37</q> stehen. Beim Einfügen der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> wird automatisch die Zahl des folgenden Images in das Ziffernfeld eingetragen. Standardmäßig wird also eine Seite importiert. (Image- und Seitennummer weichen <abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> voneinander ab; die in der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> stehende Ziffer ist die Image-Nummer.)</p>
 
@@ -810,7 +810,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
             <li>Suchen Sie im Dateisystemdialog die heruntergeladene Datei.</li>
           </ol>
 
-          <p>Die Datei ist nun mit der App verknüpft. Enthält die Datei nur einen Beleg, wird der Import sofort gestartet. Enthält sie mehrere Belege öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
+          <p>Die Datei ist nun mit der App verknüpft. Enthält die Datei nur einen Beleg, wird der Import sofort gestartet. Enthält sie mehrere Belege öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
 
           <figure class="right" title="zum Vergrößern anklicken">
             <img src="../img/win/karteikarte-importfunktion-dwds-snippet.png" alt="">
@@ -909,7 +909,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
 
           <p>Der <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import über das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Formular ist dem aus dem <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Formular, wo er genauso möglich ist, vorzuziehen. Die heruntergeladenen MODS-Dokumente enthalten häufig deutlich differenziertere und somit auch zuverlässigere Titeldaten als die <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien, die über die API des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> angeboten werden.</p>
 
-          <p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor</i> und <i>Quelle</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
+          <p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor, Quelle, URL</i> und <i>Aufrufdatum</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
 
           <p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien werden <abbr title="unter anderem">u.&nbsp;a.</abbr> von <b><i>GoogleBooks</i></b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> zu exportieren. Beim Importieren eines <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
 
@@ -1383,7 +1383,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
           <p class="erklaerung-icon" id="belegliste-platzhalter"><img src="../img/beleg.svg" width="24" height="24" alt="">Detailansicht: Platzhalter-Icon für den Belegtext</p>
 
           <div class="info">
-            <p>Im Kopf der Belegliste befinden sich sehr viele Icons. Um die Übersicht zu erhöhen, werden alle Icons, die für das Ein- und Ausblenden von Elementen der <a href="#belegliste-detailansicht">Detailansicht der Belege</a> zuständig sind, standardmäßig ausgeblendet – wenn sie inaktiv sind. Bei den Elementen der Detailansicht handelt es sich um die Quellenangabe, die Bedeutung, die Notizen <abbr title="und so weiter">usw.</abbr> Für jedes dieser Elemente gibt es im Icon-Block, der mit dem Platzerhalter-Icon für den Belegtext beginnt, ein eigenes Icon, sodass die Anzeige sehr genau konfiguriert werden kann.</p>
+            <p>Im Kopf der Belegliste befinden sich sehr viele Icons. Um die Übersicht zu erhöhen, werden alle Icons, die für das Ein- und Ausblenden von Elementen der <a href="#belegliste-detailansicht">Detailansicht der Belege</a> zuständig sind, standardmäßig ausgeblendet – wenn sie inaktiv sind. Bei den Elementen der Detailansicht handelt es sich um die Quellenangabe (mit URL und Aufrufdatum), die Bedeutung, die Notizen <abbr title="und so weiter">usw.</abbr> Für jedes dieser Elemente gibt es im Icon-Block, der mit dem Platzerhalter-Icon für den Belegtext beginnt, ein eigenes Icon, sodass die Anzeige sehr genau konfiguriert werden kann.</p>
 
             <p>Ist in der Karteikarte zu einem der Belege eine Position nicht gefüllt, wird diese in der Detailansicht auch nicht sichtbar – selbst wenn das entsprechende Icon aktiviert wurde.</p>
 
@@ -1743,7 +1743,7 @@ Aufrufdatum: 24.&nbsp;12. 2019</pre>
 
               <li><b>ganzes Wort:</b> Die Suchwörter produzieren nur Treffer, wenn sie als ganzes Wort auftauchen, es also links und rechts eines Treffers eine Wortgrenze gibt, die durch einen Punkt, eine Klammer, ein Leerzeichen oder dergleichen markiert ist. Eine Suche nach <q>Team</q> würde in diesem Fall <q>Teams</q> oder <q>Teamvergleich</q> nicht mehr finden. Ist die Option deaktiviert, wird trunkiert gesucht.</li>
 
-              <li><b>Datenfelder:</b> Durch Abwahl einzelner Datenfelder können Sie die Suche einschränken. Ist allein das Datenfeld <i>Beleg</i> abgehakt, wird <abbr title="beispielsweise">bspw.</abbr> nur der Belegtext durchsucht.</li>
+              <li><b>Datenfelder:</b> Durch Abwahl einzelner Datenfelder können Sie die Suche einschränken. Ist allein das Datenfeld <i>Beleg</i> abgehakt, wird <abbr title="beispielsweise">bspw.</abbr> nur der Belegtext durchsucht. Die Checkbox für das Datenfeld <i>Quelle</i> umfasst auch die Felder <i>URL</i> und <i>Aufrufdatum</i>.</li>
             </ul>
 
             <p>Die erweiterten Suchfilter können dadurch deaktiviert werden, dass Sie sie schließen. Die in ihnen vorgenommenen Einstellungen werden gespeichert und beim Neustart des Programms wiederhergestellt.</p>
@@ -4513,7 +4513,7 @@ Mustermann, Erika
 
             <p>Die Funktion <b>Reload</b> im Kopf des Einfügen-Fensters dient dazu, die Belegquellen aufzufrischen. Denn Sie können, während dieses Dialogfenster geöffnet ist, durchaus Änderungen an den Kopierlisten in den Quell-Fenstern vornehmen oder gar neue Listen in weiteren Fenstern anlegen. Mit dem Reload-Button werden solche Änderungen im Einfügen-Fenster sichtbar, ohne dass Sie den Umweg gehen müssen, das Fenster zu schließen und neu zu öffnen. (Ein Reload lässt sich auch über das Tastaturkürzel <kbd>F5</kbd> triggern.)</p>
 
-            <p>Beim Kopieren von Belegen müssen nicht notwendigerweise alle <b>Datenfelder</b> kopiert werden. Im unteren Teil des Einfügen-Fensters werden die Datenfelder aufgelistet, die prinzipiell kopiert werden könnten. Sind die Datenfelder in einer Karteikarte leer, wird ein leerer Wert kopiert; wird der Haken vor einem Datenfeld entfernt, wird es gar nicht kopiert, egal ob es im Original Daten enthält oder nicht. <i class="app-name"></i> merkt sich, welche Datenfelder hier ausgewählt wurden, und stellt die Auswahl nach dem Programmstart wieder her.</p>
+            <p>Beim Kopieren von Belegen müssen nicht notwendigerweise alle <b>Datenfelder</b> kopiert werden. Im unteren Teil des Einfügen-Fensters werden die Datenfelder aufgelistet, die prinzipiell kopiert werden könnten. Sind die Datenfelder in einer Karteikarte leer, wird ein leerer Wert kopiert; wird der Haken vor einem Datenfeld entfernt, wird es gar nicht kopiert, egal ob es im Original Daten enthält oder nicht. <i class="app-name"></i> merkt sich, welche Datenfelder hier ausgewählt wurden, und stellt die Auswahl nach dem Programmstart wieder her. Die Checkbox für das Datenfeld <i>Quelle</i> (die ebenso wie <i>Datum</i> und <i>Beleg</i> nicht abgewählt werden kann) umfasst immer auch die Felder <i>URL</i> und <i>Aufrufdatum</i>.</p>
 
             <p>Da das <b>Datenfeld Bedeutung</b> komplizierter aufgebaut ist als alle anderen Datenfelder, gibt es für das Importieren dieses Feldes im Einfügen-Fenster ein eigenes Formular. In ihm werden alle <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> aufgelistet, die in der ausgewählten Quelle gefunden wurden. (Eine Kartei kann <a href="#bedeutungsgeruest-konfigurationsfenster">beliebig viele Bedeutungsgerüste</a> enthalten.) Jedem der für die ausgewählte Quelle aufgelisteten Bedeutungsgerüste kann ein Bedeutungsgerüst in der Kartei des Ziel-Fensters (also der Kartei, in der das Einfügen-Fenster gerade geöffnet ist) zugewiesen werden. Daneben besteht die Möglichkeit, Gerüste auf <i>kein Import</i> zu stellen. Dann werden beim Einfügen der Belege alle Bedeutungen aus diesem Gerüst übergangen. Stellen Sie alle Gerüste auf <i>kein Import</i> ist die Konsequenz übrigens dieselbe wie das Entfernen des Hakens vor <i>Bedeutung</i> in der Liste der Datenfelder: Aus der Quelle werden keine Bedeutungen übernommen.</p>
 
