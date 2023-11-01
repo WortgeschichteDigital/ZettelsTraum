@@ -131,7 +131,7 @@ const xml = {
     //   - verschachtelte Hervorhebungen zusammenführen
     //   - Versauszeichnungen komplettieren/korrigieren
     text = klammernTaggen(text);
-    text = text.replace(/([^\s])(<Streichung>[,;:/])/, (m, p1, p2) => p1 + " " + p2);
+    text = text.replace(/([^\s])(<Streichung>[,;:/])/g, (m, p1, p2) => p1 + " " + p2);
     text = text.replace(/(<\/Vers><Vers>\s?)+$/, "");
     text = text.replace(/<([a-zA-Z]+)(?: Stil="#[a-z]+")?><\/([a-zA-Z]+)>/g, (m, p1, p2) => {
       if (p1 === p2 &&
