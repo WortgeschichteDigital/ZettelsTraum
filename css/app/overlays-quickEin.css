@@ -19,6 +19,7 @@
 #quick-ein-opts {
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
   max-height: 260px;
   padding: 5px;
   font-size: 14px;

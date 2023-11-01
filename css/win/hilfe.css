@@ -400,6 +400,7 @@ a.aktiv .nav-details-toggle {
 
 #navi-details > div {
   overflow: auto;
+  overscroll-behavior: contain;
   max-height: 435px;
 }
 
