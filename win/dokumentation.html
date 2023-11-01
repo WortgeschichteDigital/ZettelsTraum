@@ -1042,6 +1042,27 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>Lemmaliste;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">er</code></p></td>
+              <td class="datentyp">Array</td>
+              <td>&nbsp;</td>
+              <td>ergänzende Kartei für die angegebenen Hauptlemmata</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">hl</code></p></td>
+              <td class="datentyp">String</td>
+              <td>&nbsp;</td>
+              <td>Hauptlemma (Schreibungen verbunden mit <code class="quelltext">/</code>)</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">ho</code></p></td>
+              <td class="datentyp">Number</td>
+              <td><code class="quelltext">/[0-9]/</code></td>
+              <td>Homographenindex</td>
+            </tr>
+            <tr class="ztj-ebene1">
               <td><p><code class="quelltext">la</code></p></td>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
@@ -1104,11 +1125,11 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
               <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">bis Version&nbsp;12 befand sich dieses <span class="datentyp">Array</span> in <code class="quelltext">data.be</code></span></td>
             </tr>
-            <tr class="ztj-ebene1">
+            <tr class="ztj-ebene1 ztj-alt">
               <td><p><code class="quelltext">bh</code></p></td>
               <td class="datentyp">String</td>
               <td>&nbsp;</td>
-              <td>Wort, mit dem zusammen das aktuelle Karteiwort behandelt wird;<br><span class="obacht">ab Version&nbsp;13</span></td>
+              <td>Wort, mit dem zusammen das aktuelle Karteiwort behandelt wird;<br><span class="obacht">ab Version&nbsp;13; mit Version&nbsp;26 gelöscht</span></td>
             </tr>
             <tr class="ztj-ebene1">
               <td><p><code class="quelltext">er</code></p></td>
