@@ -3918,14 +3918,14 @@ Mustermann, Erika
 
             <p id="menueApp-karteisucheVerweise">In der Trefferliste werden automatisch ermittelte <b>Verweise</b> eingeblendet, wenn die App feststellt, dass in einer der gelisteten Karteien Belege zu mehr als einem Wort zu finden sind oder die Belege einer Kartei im Artikel einer anderen Kartei mit behandelt werden.</p>
 
-            <p>Dass die Belege einer Kartei im Artikel einer anderen Kartei verarbeitet wurden, können Sie im <a href="#menueRedaktion-metadatenBehandeltMit">Behandelt-mit-Feld der Redaktionsmetadaten</a> vermerken. Geben Sie dort einfach das Wort ein, auf das Sie verweisen möchten.</p>
+            <p>Dass die Belege einer Kartei im Artikel einer anderen Kartei mit behandelt werden, können Sie im <a href="#menueKartei-lemmata">Lemmata-Fenster</a> mit der Einstellung <a href="#menueKartei-lemmataErgaenzend">ergänzende Kartei</a> vermerken. Haken Sie dort die Checkbox ab und wählen Sie im sich öffnenden Dateidialog diejenige Kartei aus, zu der die Belege der aktuellen Kartei eine inhaltliche Ergänzung sind.</p>
 
             <figure class="right" title="zum Vergrößern anklicken">
               <img src="../img/win/menueApp-karteisuche-verweise.png" alt="">
               <figcaption>Karteisuche: Verweise auf andere Karteien</figcaption>
             </figure>
 
-            <p>Ein konkretes Beispiel (<abbr title="vergleiche">vgl.</abbr> den nebenstehenden Screenshot): Sie legen sich eine Kartei an, in der Sie bereits im Namen vermerken, dass in ihr Belege zu mehreren Wörtern zu finden sind: <q>Großfamilie, Kleinfamilie, Kernfamilie</q>. In solchen Fällen wird in der Karteisuche immer nur eines der Wörter erscheinen, aber vermerkt werden, dass dieses zusammen mit den anderen beiden behandelt wird. Dafür steht das <q>+</q>. Ein anderer Fall liegt vor, wenn Sie in ihrer Kartei zum Wort <q>Fitnessbewegung</q> (im <a href="#menueRedaktion-metadatenBehandeltMit">Behandelt-mit-Feld</a>) vermerkt haben, dass es zusammen mit <q>Sportbewegung</q> behandelt wird. In der Trefferliste wird <q>Sportbewegung</q> darum durch <q>+&nbsp;Fitnessbewegung</q> und <q>Fitnessbewegung</q> durch <q>→&nbsp;Sportbewegung</q> gekennzeichnet.</p>
+            <p>Einige konkrete Beispiele (<abbr title="vergleiche">vgl.</abbr> den nebenstehenden Screenshot): Sie legen sich eine Kartei an, in der Sie im <a href="#menueKartei-lemmata">Lemmata-Fenster</a> drei Lemmata notiert haben: <i>Großfamilie, Kleinfamilie</i> und <i>Kernfamilie</i>. In solchen Fällen wird in der Karteisuche immer nur eines der Wörter aufgelistet, aber zugleich vermerkt, dass es zusammen mit den anderen beiden behandelt wird. Dafür steht das <q>+</q> vor den blau eingefärbten Wörtern. Ein anderer Fall liegt vor, wenn Sie in ihrer Kartei zum Wort <i>Fitnessbewegung</i> im Lemmata-Fenster durch das Abhaken der Checkbox <a href="#menueKartei-lemmataErgaenzend">ergänzende Kartei</a> angegeben haben, dass <i>Fitnessbewegung</i> zusammen mit <i>Sportbewegung</i> behandelt wird. In der Trefferliste wird <q>Sportbewegung</q> dann um den Zusatz <q>+&nbsp;Fitnessbewegung</q> und <q>Fitnessbewegung</q> um <q>→&nbsp;Sportbewegung</q> ergänzt. Wenn Sie im Lemmata-Fenster einer Kartei Nebenlemmata angelegt haben, verweisen diese in der Ergebnisliste immer mit einem <q>→</q> auf das erste Hauptlemma der Kartei, zu der sie gehören.</p>
 
             <p id="menueApp-karteisucheExport">Sie können die <b>Trefferliste exportieren</b>, indem Sie auf das Icon <img src="../img/dokument-export.svg" width="20" height="20" alt=""> klicken. Dabei können Sie recht kleinteilig bestimmen, welches Format die exportierte Datei haben soll und welche Datenfelder gedruckt werden sollen. Was genau die einzelnen Optionen bewirken, ist entweder selbsterklärend und/oder wird in einem Tooltip erläutert, der beim Herüberfahren mit der Maus sichtbar wird.</p>
 
@@ -4101,6 +4101,8 @@ Mustermann, Erika
             <p>Das rechts neben dem Lemma stehende Nummernfeld steht für den <b>Homographenindex</b>. Handelt es sich bei dem Lemma nicht um einen Homograph zu einem Lemma, das in einer anderen Kartei behandelt wird, lassen Sie den Index auf <code class="quelltext">0</code> stehen. Andernfalls geben Sie hier die passende Homographennummer ein.</p>
 
             <p>Das Feld <b>Kommentar</b> können Sie frei mit Text befüllen. Steht der Kommentar neben einem Hauptlemma, wird er im Artikelkopf eingeklammert und in kleinerer Type angezeigt.</p>
+
+            <p id="menueKartei-lemmataErgaenzend">Mit der Checkbox <b>ergänzende Kartei</b> können Sie die aktuelle Kartei als Ergänzung zu einer bereits bestehenden Kartei markieren. Haken Sie die Checkbox ab, erscheint ein Dateidialog, mit dem Sie die <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Kartei auswählen können, zu der die aktuelle Kartei eine Ergänzung ist. Diese Einstellung ist für die Karteisuche wichtig, damit es dort nicht aussieht, als solle die ergänzende Kartei einen eigenen Artikel konstituieren.</p>
           </div>
 
           <p class="erklaerung-icon-menues" id="menueKartei-formvarianten"><img src="../img/formvarianten.svg" width="24" height="24" alt="">Formvarianten</p>
@@ -4566,8 +4568,6 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
           <div class="info">
             <p>Registriert Metadaten, die in unterschiedlicher Weise die Redaktion von Artikeln betreffen.</p>
-
-            <p id="menueRedaktion-metadatenBehandeltMit"><b><i>Karteiwort&nbsp;&gt; behandelt mit:</i></b> Wird zum aktuellen Karteiwort kein eigener Artikel erstellt, es aber in einem Artikel zu einem anderen Wort mit behandelt, kann das Bezugswort hier vermerkt werden.</p>
 
             <p id="menueRedaktion-metadatenNotizen"><b><i>Karteiwort&nbsp;&gt; Notizen:</i></b> Ein Freitextfeld für Notizen, das in die Volltextsuche der <a href="#menueApp-karteisuche">Karteisuche</a> eingebunden ist.</p>
 
