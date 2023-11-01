@@ -44,6 +44,7 @@ const lemmata = {
 
     // Fenster füllen
     document.getElementById("lemmata-wf").checked = data.la.wf;
+    lemmata.ergaenzendUpdate();
     lemmata.liste();
     document.querySelector("#lemmata-liste input").select();
 
@@ -305,6 +306,133 @@ const lemmata = {
     }
 
     return errors;
+  },
+
+  // ergänzende Kartei: Update der Anzeige
+  ergaenzendUpdate () {
+    const sup = [ "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹" ];
+    const er = document.getElementById("lemmata-er");
+    const erFuer = document.getElementById("lemmata-er-fuer");
+    if (data.la.er.length) {
+      er.checked = true;
+      erFuer.classList.add("kartei-ergaenzt");
+      const la = [];
+      for (const i of data.la.er) {
+        let lemma = "";
+        if (i.ho) {
+          lemma += sup[i.ho - 1];
+        }
+        lemma += i.hl;
+        la.push(lemma);
+      }
+      erFuer.textContent = la.join(", ");
+    } else {
+      er.checked = false;
+      erFuer.classList.remove("kartei-ergaenzt");
+      erFuer.textContent = "…";
+    }
+  },
+
+  // ergänzende Kartei: Verknüpfung entfernen oder ergänzen
+  async ergaenzend () {
+    // Haken entfernt
+    const er = document.getElementById("lemmata-er");
+    if (!er.checked) {
+      data.la.er.length = 0;
+      lemmata.ergaenzendUpdate();
+      lemmata.geaendert = true;
+      return;
+    }
+
+    // Haken gesetzt
+    await new Promise(resolve => {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Wählen Sie im folgenden Dateidialog diejenige ZTJ-Kartei aus, für die die hier geöffnete Kartei ergänzende Belege enthält.",
+        callback: () => resolve(true),
+      });
+    });
+
+    // Kartei öffnen
+    const opt = {
+      title: "Kartei öffnen",
+      defaultPath: appInfo.documents,
+      filters: [
+        {
+          name: `${appInfo.name} JSON`,
+          extensions: [ "ztj" ],
+        },
+        {
+          name: "Alle Dateien",
+          extensions: [ "*" ],
+        },
+      ],
+      properties: [ "openFile" ],
+    };
+    if (optionen.data.letzter_pfad) {
+      opt.defaultPath = optionen.data.letzter_pfad;
+    }
+    const result = await modules.ipc.invoke("datei-dialog", {
+      open: true,
+      winId: winInfo.winId,
+      opt,
+    });
+
+    // Fehler im Dateidialog
+    if (result.message || !Object.keys(result).length) {
+      fehler(result.message);
+      return;
+    }
+
+    // Dialog vom User ohne Auswahl einer Kartei geschlossen
+    if (result.canceled) {
+      er.checked = false;
+      return;
+    }
+
+    // Datei einlesen
+    const content = await io.lesen(result.filePaths[0]);
+    if (typeof content !== "string") {
+      fehler(`${content.name}: ${content.message}`);
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(content);
+    } catch (err) {
+      fehler(`${err.name}: ${err.message}`);
+      return;
+    }
+    if (!json?.la) {
+      fehler("das Lemma-Objekt wurde nicht gefunden");
+      return;
+    }
+
+    // Lemmata registrieren
+    for (const lemma of json.la.la) {
+      if (lemma.nl) {
+        continue;
+      }
+      data.la.er.push({
+        hl: lemma.sc.join("/"),
+        ho: lemma.ho,
+      });
+    }
+    if (!data.la.er.length) {
+      fehler("keine Hauptlemma gefunden");
+      return;
+    }
+    lemmata.ergaenzendUpdate();
+    lemmata.geaendert = true;
+
+    // Fehlermeldung und Checkbox ausschalten
+    function fehler (message) {
+      er.checked = false;
+      dialog.oeffnen({
+        typ: "alert",
+        text: `Beim Einlesen der Datei ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${message.replace(/\n/g, " ")}</p>`,
+      });
+    }
   },
 
   // Liste aufbauen
