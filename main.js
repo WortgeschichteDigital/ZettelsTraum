@@ -1887,6 +1887,11 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
   return false;
 });
 
+// Daten an das Fenster mit der übergebenen mit der übergebenen Web-Content-ID schicken
+ipcMain.handle("webcontents-bridge", (evt, data) => {
+  const contents = webContents.fromId(data.id);
+  contents.send(data.channel, data.data);
+});
 
 // ***** UPDATES ******
 ipcMain.handle("updates-save-data", (evt, notes) => {

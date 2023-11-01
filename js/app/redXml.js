@@ -87,7 +87,11 @@ const redXml = {
       }
     }
     // Daten senden
-    modules.ipc.sendTo(redXml.contentsId, "xml-daten", xmlDaten);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: redXml.contentsId,
+      channel: "xml-daten",
+      data: xmlDaten,
+    });
     // Init als abgeschlossen markieren
     xml.winInit = true;
   },
@@ -101,7 +105,11 @@ const redXml = {
       await redXml.oeffnenPromise();
     }
     // Datensatz an das Fenster schicken
-    modules.ipc.sendTo(redXml.contentsId, "xml-datensatz", xmlDatensatz);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: redXml.contentsId,
+      channel: "xml-datensatz",
+      data: xmlDatensatz,
+    });
     // Animation
     helfer.animation("xml");
   },

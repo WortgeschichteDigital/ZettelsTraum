@@ -49,11 +49,19 @@ const helferWin = {
   async beforeUnload () {
     if (winInfo.typ === "bedeutungen") {
       // Bedeutungsgerüst-Fenster
-      modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-geschlossen");
+      modules.ipc.invoke("webcontents-bridge", {
+        id: bedeutungen.data.contentsId,
+        channel: "bedeutungen-fenster-geschlossen",
+        data: null,
+      });
       await modules.ipc.invoke("fenster-status", winInfo.winId, "fenster-bedeutungen");
     } else if (winInfo.typ === "xml") {
       // XML-Fenster
-      modules.ipc.sendTo(xml.data.contentsId, "red-xml-geschlossen");
+      modules.ipc.invoke("webcontents-bridge", {
+        id: xml.data.contentsId,
+        channel: "red-xml-geschlossen",
+        data: null,
+      });
     }
     // Fenster endgültig schließen
     modules.ipc.invoke("fenster-schliessen-endgueltig");

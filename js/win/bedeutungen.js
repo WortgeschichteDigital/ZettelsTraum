@@ -125,7 +125,11 @@ const bedeutungen = {
 
   // Bedeutungsbaum drucken
   drucken () {
-    modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-drucken", bedeutungen.geruest);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: bedeutungen.data.contentsId,
+      channel: "bedeutungen-fenster-drucken",
+      data: bedeutungen.geruest,
+    });
   },
 
   // Bedeutung in Formular/Belegliste des Hauptfensters umtragen (also ein- oder austragen)
@@ -134,12 +138,17 @@ const bedeutungen = {
   umtragen (ele) {
     ele.addEventListener("click", function (evt) {
       evt.preventDefault();
-      const id = parseInt(this.dataset.id, 10);
-      const eintragen = this.dataset.eintragen === "true";
-      modules.ipc.sendTo(bedeutungen.data.contentsId, "bedeutungen-fenster-umtragen", {
-        gr: bedeutungen.geruest,
-        id,
-      }, eintragen);
+      modules.ipc.invoke("webcontents-bridge", {
+        id: bedeutungen.data.contentsId,
+        channel: "bedeutungen-fenster-umtragen",
+        data: {
+          bd: {
+            gr: bedeutungen.geruest,
+            id: parseInt(this.dataset.id, 10),
+          },
+          eintragen: this.dataset.eintragen === "true",
+        },
+      });
     });
   },
 };

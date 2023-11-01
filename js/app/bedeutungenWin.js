@@ -46,6 +46,10 @@ const bedeutungenWin = {
       contentsId: winInfo.contentsId,
     };
     // Daten senden
-    modules.ipc.sendTo(bedeutungenWin.contentsId, "daten", daten);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: bedeutungenWin.contentsId,
+      channel: "daten",
+      data: daten,
+    });
   },
 };

@@ -113,8 +113,8 @@ window.addEventListener("load", async () => {
     drucken.init("bedeutungen-", gn);
     modules.ipc.invoke("fenster-fokus");
   });
-  modules.ipc.on("bedeutungen-fenster-umtragen", (evt, bd, eintragen) => {
-    beleg.bedeutungenWin(bd, eintragen);
+  modules.ipc.on("bedeutungen-fenster-umtragen", (evt, data) => {
+    beleg.bedeutungenWin(data.bd, data.eintragen);
     modules.ipc.invoke("fenster-fokus");
   });
   // XML-Fenster

@@ -3981,12 +3981,20 @@ const xml = {
 
   // Änderungen in der Kartei speichern
   speichern () {
-    modules.ipc.sendTo(xml.data.contentsId, "red-xml-speichern", xml.data.xl);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: xml.data.contentsId,
+      channel: "red-xml-speichern",
+      data: xml.data.xl,
+    });
   },
 
   // Speichern der Kartei triggern
   speichernKartei () {
-    modules.ipc.sendTo(xml.data.contentsId, "kartei-speichern");
+    modules.ipc.invoke("webcontents-bridge", {
+      id: xml.data.contentsId,
+      channel: "kartei-speichern",
+      data: null,
+    });
     helfer.animation("gespeichert");
   },
 
@@ -4325,7 +4333,11 @@ const xml = {
     const reg = new RegExp(`^.+\\${modules.path.sep}`);
     const pfad = result.filePath.match(reg)[0];
     xml.data.letzter_pfad = pfad;
-    modules.ipc.sendTo(xml.data.contentsId, "optionen-letzter-pfad", pfad);
+    modules.ipc.invoke("webcontents-bridge", {
+      id: xml.data.contentsId,
+      channel: "optionen-letzter-pfad",
+      data: pfad,
+    });
   },
 
   // Importieren: XML-Datei öffnen und überprüfen
