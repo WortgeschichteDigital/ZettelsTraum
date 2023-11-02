@@ -193,6 +193,13 @@ const speichern = {
       });
       return;
     }
+    // Change-Event in Textfeldern der Karteikarte triggern
+    if (helfer.hauptfunktion === "karte" &&
+        document.activeElement.classList.contains("beleg-form-data")) {
+      const ele = document.activeElement;
+      ele.blur();
+      ele.focus();
+    }
     // Option 3: nur Kartei speichern
     // (speichert Kartei, selbst wenn Änderungen in anderen Funktionen noch nicht übernommen)
     if (optionen.data.einstellungen.speichern === "3") {
