@@ -729,7 +729,17 @@ const lemmata = {
       i.addEventListener("change", function () {
         // Datensatz auffrischen
         const idx = parseInt(this.closest("tr").dataset.idx, 10);
-        data.la.la[idx].nl = this.checked;
+        const lemma = data.la.la[idx];
+        lemma.nl = this.checked;
+        // Formvarianten auffrischen
+        if (!data.la.wf) {
+          for (const sc of lemma.sc) {
+            const fv = data.fv[sc];
+            if (fv) {
+              fv.nl = this.checked;
+            }
+          }
+        }
         // Liste auffrischen
         lemmata.geaendert = true;
         lemmata.liste();
