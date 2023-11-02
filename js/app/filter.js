@@ -66,6 +66,18 @@ const filter = {
 
     // Variablen für dynamische Filter
     filter.typen = {
+      lemmata: {
+        name: "Lemmata",
+        filter_vorhanden: false,
+        filter: {
+          "lemmata-undefined": {
+            name: "(kein Lemma gefunden)",
+            wert: 0,
+            reg: null,
+          },
+        },
+        filter_folge: [ "lemmata-undefined" ],
+      },
       bedeutungen: {
         name: "Bedeutungen",
         filter_vorhanden: belege.length,
@@ -139,6 +151,34 @@ const filter = {
       },
     ];
 
+    // Lemmata zusammentragen
+    let lemmata = [];
+    for (const lemma of data.la.la) {
+      if (!lemma.nl && data.la.wf) {
+        continue;
+      }
+      lemmata = lemmata.concat(lemma.sc);
+    }
+    if (lemmata.length > 1) {
+      filter.typen.lemmata.filter_vorhanden = true;
+      for (const lemma of lemmata) {
+        const key = "lemmata-" + lemma;
+        const formVari = helfer.formVariRegExpRegs.find(i => i.wort === lemma);
+        let reg = null;
+        if (formVari && data.fv[formVari.wort].tr) {
+          reg = new RegExp(formVari.reg, "i");
+        } else if (formVari) {
+          reg = new RegExp(`(?:^|[${helfer.ganzesWortRegExp.links}])(?:${formVari.reg})(?:[${helfer.ganzesWortRegExp.rechts}]|$)`, "i");
+        }
+        filter.typen.lemmata.filter[key] = {
+          name: lemma,
+          wert: 0,
+          reg,
+        };
+        filter.typen.lemmata.filter_folge.push(key);
+      }
+    }
+
     // alle Bedeutungen aus dem aktuellen Bedeutungsgerüst pushen
     const bd = data.bd.gr[data.bd.gn].bd;
     for (let i = 0, len = bd.length; i < len; i++) {
@@ -179,6 +219,18 @@ const filter = {
     for (let i = 0, len = belege.length; i < len; i++) {
       const id = belege[i];
       const karte = data.ka[id];
+
+      // LEMMATA
+      let lemmaGefunden = false;
+      for (const lemma of Object.values(filter.typen.lemmata.filter)) {
+        if (lemma.reg?.test(karte.bs)) {
+          lemma.wert++;
+          lemmaGefunden = true;
+        }
+      }
+      if (!lemmaGefunden) {
+        filter.typen.lemmata.filter["lemmata-undefined"].wert++;
+      }
 
       // BEDEUTUNGEN
       let bdGefunden = false;
@@ -1247,6 +1299,18 @@ const filter = {
     }
 
     // Karten filtern
+    const lemmata = [];
+    if (filter.aktiveFilter.lemmata) {
+      for (let i = 1, len = filter.typen.lemmata.filter_folge.length; i < len; i++) {
+        const key = filter.typen.lemmata.filter_folge[i];
+        lemmata.push({
+          key,
+          aktiv: !!filter.aktiveFilter[key],
+        });
+      }
+    }
+    const lemmataA = lemmata.some(i => i.aktiv);
+    const lemmataU = !!filter.aktiveFilter["lemmata-undefined"];
     const tags_aktiv = [];
     for (const k of Object.keys(filter.aktiveFilter)) {
       const m = k.match(/^verschiedenes-tag-(.+)/);
@@ -1280,6 +1344,38 @@ const filter = {
       if (filter.aktiveFilter.kartendatum) {
         const datum = new Date(data.ka[id][kartendatumFeld]);
         if (datum < kartendatumVon || datum > kartendatumBis) {
+          continue;
+        }
+      }
+
+      // Lemmata
+      if (filter.aktiveFilter.lemmata) {
+        let okay = false;
+        if (lemmataA) {
+          for (const lemma of lemmata.filter(i => i.aktiv)) {
+            const reg = filter.typen.lemmata.filter[lemma.key].reg;
+            if (reg.test(data.ka[id].bs)) {
+              okay = true;
+            }
+          }
+        }
+        if (lemmataU && !okay) {
+          let okayU = true;
+          for (const lemma of lemmata) {
+            const reg = filter.typen.lemmata.filter[lemma.key].reg;
+            if (!reg) {
+              continue;
+            }
+            if (reg.test(data.ka[id].bs)) {
+              okayU = false;
+              break;
+            }
+          }
+          if (okayU) {
+            okay = true;
+          }
+        }
+        if (!okay) {
           continue;
         }
       }
