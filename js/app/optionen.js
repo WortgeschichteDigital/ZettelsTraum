@@ -222,6 +222,7 @@ const optionen = {
       "filter-offen-volltext": true,
       "filter-offen-zeitraum": false,
       "filter-offen-kartendatum": false,
+      "filter-offen-lemmata": false,
       "filter-offen-bedeutungen": false,
       "filter-offen-wortbildungen": false,
       "filter-offen-synonyme": false,

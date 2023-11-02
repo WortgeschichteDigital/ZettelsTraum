@@ -100,7 +100,7 @@ const stamm = {
   schliessen () {
     if (stamm.geaendert &&
         helfer.hauptfunktion === "liste") {
-      liste.status(false);
+      liste.status(true);
     } else if (stamm.geaendert &&
         helfer.hauptfunktion === "karte" &&
         beleg.leseansicht) {

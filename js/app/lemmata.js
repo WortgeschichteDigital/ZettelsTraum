@@ -189,6 +189,9 @@ const lemmata = {
 
         // reguläre Ausdrücke auffrischen
         helfer.formVariRegExp();
+
+        // Filterleiste auffrischen
+        liste.status(true);
       }
 
       // Kartei-Wort auffrischen
