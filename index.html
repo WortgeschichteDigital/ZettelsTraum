@@ -87,6 +87,12 @@
     <script src="js/app/erinnerungen.js"></script>
     <script src="js/app/filter.js"></script>
     <script src="js/app/helfer.js"></script>
+    <script src="js/app/importBibtex.js"></script>
+    <script src="js/app/importDereko.js"></script>
+    <script src="js/app/importDWDS.js"></script>
+    <script src="js/app/importLit.js"></script>
+    <script src="js/app/importShared.js"></script>
+    <script src="js/app/importTEI.js"></script>
     <script src="js/app/io.js"></script>
     <script src="js/app/kartei.js"></script>
     <script src="js/app/karteisuche.js"></script>
@@ -255,30 +261,27 @@
         </tr><tr class="beleg-form">
           <td colspan="2"><hr class="flach"></td>
         </tr><tr class="beleg-form">
-          <th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
-            ><label for="beleg-import-dta">DTA</label
-            ><input type="radio" name="beleg-import" id="beleg-import-dwds"
-            ><label for="beleg-import-dwds">DWDS</label
-            ><input type="radio" name="beleg-import" id="beleg-import-dereko"
-            ><label for="beleg-import-dereko">DeReKo</label
-            ><input type="radio" name="beleg-import" id="beleg-import-xml"
-            ><label for="beleg-import-xml">XML</label
-            ><input type="radio" name="beleg-import" id="beleg-import-bibtex"
-            ><label for="beleg-import-bibtex" class="bibtex"><span>Bib</span>T<span>E</span>X</label
+          <th colspan="2">Import<input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-url" checked
+            ><label for="beleg-import-quelle-url">URL</label
+            ><input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-datei"
+            ><label for="beleg-import-quelle-datei">Datei</label
+            ><input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-zwischenablage"
+            ><label for="beleg-import-quelle-zwischenablage">Zwischenablage</label
+            ><a href="#" class="icon-link icon-kreis-fragezeichen link-handbuch" id="beleg-import-hilfe" data-handbuch="karteikarte-importfunktion" tabindex="-1" title="Aus welchen Quellen können Daten importiert werden?">&nbsp;</a
           ></th>
-        </tr><tr class="beleg-form" id="beleg-form-dta">
-          <td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
-            ><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
-            ><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
-        </tr><tr class="beleg-form aus" id="beleg-form-datei">
-          <td colspan="2"
-            ><span id="beleg-datei-name" dir="rtl" class="leer">keine Datei geladen</span
-            ><input type="checkbox" id="beleg-datei-latin1" tabindex="0"><label for="beleg-datei-latin1">Latin-1</label
-            ><input type="button" value="Datei" id="beleg-datei-oeffnen" tabindex="0"
-            ><input type="button" value="Importieren" id="beleg-datei-importieren" tabindex="0"
-            ></td>
         </tr><tr class="beleg-form">
-          <td colspan="2"><hr></td>
+          <td colspan="2" id="beleg-import"><p
+            ><input type="text" value="" placeholder="URL" id="beleg-import-feld" tabindex="0"
+            ><input type="number" value="0" min="0" max="9999" id="beleg-import-von" tabindex="0" title="&lt;i&gt;TEI-Import:&lt;/i&gt; von Seite"
+            ><input type="number" value="0" min="0" max="9999" id="beleg-import-bis" tabindex="0" title="&lt;i&gt;TEI-Import:&lt;/i&gt; bis Seite"
+          ></p><p
+            >&nbsp;<span
+              ><input type="button" value="Datei" id="beleg-import-datei" tabindex="0" class="aus"
+              ><input type="button" value="Importieren" id="beleg-import-start" tabindex="0"
+            ></span
+          ></p></td>
+        </tr><tr class="beleg-form">
+          <td colspan="2"><hr class="flach"></td>
         </tr><tr>
           <th><label for="beleg-da">Datum</label
             ><span class="text-tools"
@@ -379,7 +382,7 @@
             ><span class="beleg-ul-ud"
               ><label for="beleg-ul">URL</label
               ><span class="text-tools-quelle"
-                ><a href="#" class="icon-link icon-link-link icon-tools" title="DTA-Link in Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
+                ><a href="#" class="icon-link icon-link-link icon-tools" title="URL in Import-Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
               ></span
               ><span class="text-tools"
                 ><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1">&nbsp;</a
@@ -838,9 +841,9 @@
               ><label for="einstellung-immer-ergaenzen">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</label></p>
             <h3>Import</h3>
             <p><input type="checkbox" id="einstellung-url-eintragen"
-              ><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</label></p>
-            <p><input type="checkbox" id="einstellung-dta-bevorzugen"
-              ><label for="einstellung-dta-bevorzugen">aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammende <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importieren</label></p>
+              ><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</label></p>
+            <p><input type="checkbox" id="einstellung-karteikarte-original-bevorzugen"
+              ><label for="einstellung-karteikarte-original-bevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</label></p>
             <p><input type="checkbox" id="einstellung-notizen-zeitung"
               ><label for="einstellung-notizen-zeitung">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</label></p>
             <p><input type="checkbox" id="einstellung-wort-check"

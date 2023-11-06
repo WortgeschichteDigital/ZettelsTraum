@@ -679,8 +679,11 @@ const konversionen = {
 export default {
   // aktuelle Version des Dateiformats
   // *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
-  //   1.) Beim Anlegen neuer Datenwerte Objekte in
-  //       kartei.erstellen() u. beleg.karteErstellen() ergänzen!
+  //   1.) Beim Anlegen neuer Datenwerte Objekte anpassen in
+  //         beleg.karteErstellen()
+  //         kartei.erstellen()
+  //         importShared.fillCard()
+  //         importShared.importObject()
   //   2.) Diese Versionsnummer hochzählen!
   version: 26,
 

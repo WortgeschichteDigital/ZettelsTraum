@@ -74,7 +74,7 @@ const overlay = {
       stamm.schliessen();
       return;
     } else if (fenster.id === "import") {
-      belegImport.DateiImportFensterSchliessen();
+      importShared.fileDataWinClose();
       return;
     } else if (fenster.id === "red-lit") {
       redLit.schliessen();

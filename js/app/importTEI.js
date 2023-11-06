@@ -1,19 +1,18 @@
 "use strict";
 
-const importTei = {
+const importTEI = {
   // prepare XML data
   //   xmlPlain = string
   prepareXml (xmlPlain) {
     // remove namespace attribute
-    // (it's easier to transform the XML and avoids problems with evaluate())
-    xmlPlain = xmlPlain.replace(/ xmlns=".+?"/, "");
+    xmlPlain = importShared.removeNS(xmlPlain);
 
     // parse document
     const xmlDoc = new DOMParser().parseFromString(xmlPlain, "text/xml");
 
     // document not well formed
     if (xmlDoc.querySelector("parsererror")) {
-      importTei.error("XML-Daten nicht wohlgeformt");
+      importTEI.error("XML-Daten nicht wohlgeformt");
       return null;
     }
 
@@ -33,19 +32,19 @@ const importTei = {
     tei = tei.replace(/[-¬](<lb.*?\/>)/g, (...args) => `[¬]${args[1]}`);
 
     // load xsl if needed
-    if (!importTei.transformXsl) {
+    if (!importTEI.transformXsl) {
       await helfer.resourcesLoad({
         file: "xml-import-tei.xsl",
-        targetObj: importTei,
+        targetObj: importTEI,
         targetKey: "transformXsl",
       });
-      if (!importTei.transformXsl) {
+      if (!importTEI.transformXsl) {
         return "";
       }
     }
 
     // prepare XSLT
-    const xslt = new DOMParser().parseFromString(importTei.transformXsl, "application/xml");
+    const xslt = new DOMParser().parseFromString(importTEI.transformXsl, "application/xml");
     const processor = new XSLTProcessor();
     processor.setParameter(null, "teiType", type.replace(/^tei-?/, ""));
     processor.importStylesheet(xslt);
@@ -333,7 +332,7 @@ const importTei = {
         }
       } else {
         // error: start page not found
-        importTei.error("Startseite im XML-Dokument nicht gefunden", "von");
+        importTEI.error("Startseite im XML-Dokument nicht gefunden", "von");
         return "";
       }
     }
@@ -362,7 +361,7 @@ const importTei = {
           }
         } else {
           // error: end page not found
-          importTei.error("Endseite im XML-Dokument nicht gefunden", "bis");
+          importTEI.error("Endseite im XML-Dokument nicht gefunden", "bis");
           return "";
         }
       }
@@ -375,7 +374,7 @@ const importTei = {
       if (idxEnd <= idxStart) {
         // error: order of the detected <pb> tags is wrong
         const order = idxEnd < idxStart ? "liegt vor" : "ist identisch mit";
-        importTei.error(`ermittelte Endseite ${order} der Startseite`, "bis");
+        importTEI.error(`ermittelte Endseite ${order} der Startseite`, "bis");
         return "";
       }
     }
@@ -489,7 +488,7 @@ const importTei = {
     // try to get page from URL path
     let page = 1;
     if (!titleId) {
-      titleId = importTei.dtaGetTitleId(url);
+      titleId = importTEI.dtaGetTitleId(url);
       if (!titleId) {
         return page;
       }
