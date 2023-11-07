@@ -712,7 +712,10 @@ const importShared = {
         pageTo = pageFrom + 1;
         bis.value = pageTo;
       }
-      // TODO
+      // TODO DTA-Import temporär wiederhergestellt
+      typeData = {
+        type: "tei-dta",
+      };
     } else if (ansicht === "datei") {
       const fileCont = await importShared.fileRead();
       if (fileCont) {
@@ -775,7 +778,8 @@ const importShared = {
         }
       }
     } else if (/^tei/.test(typeData.type)) {
-      // TODO
+      // TODO DTA-Import temporär wiederhergestellt
+      belegImport.DTA();
     } else if (typeData.type === "xml-dwds") {
       result = importDWDS.startImportXML({ ...typeData.data, ansicht });
     } else if (/^xml-(fundstelle|mods)$/.test(typeData.type)) {

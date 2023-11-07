@@ -35,7 +35,7 @@ const belegImport = {
 
   // DTA-Import: Daten aus dem DTA importieren
   DTA () {
-    const dta = document.getElementById("beleg-dta");
+    const dta = document.getElementById("beleg-import-feld");
     const url = helfer.textTrim(dta.value, true);
     // URL fehlt
     if (!url) {
@@ -118,7 +118,9 @@ const belegImport = {
       const url_xml = `https://www.deutschestextarchiv.de/book/download_xml/${titel_id}`;
       document.activeElement.blur();
       const result = await belegImport.DTARequest(url_xml, fak);
-      belegImport.clearClipboard(result, false);
+      if (result && optionen.data.einstellungen["karteikarte-clear-clipboard"]) {
+        modules.clipboard.clear();
+      }
     }
   },
 
@@ -209,7 +211,7 @@ const belegImport = {
       typ: "alert",
       text: `Beim Download der Textdaten aus dem DTA ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${fehlertyp}`,
       callback: () => {
-        const dta = document.getElementById("beleg-dta");
+        const dta = document.getElementById("beleg-import-feld");
         dta.select();
       },
     });
@@ -340,7 +342,7 @@ const belegImport = {
     // Grenze des Textimports ermitteln
     // (importiert wird bis zum Seitenumbruch "fak_bis", aber nie darüber hinaus)
     const int_fak = parseInt(fak, 10);
-    const int_fak_bis = parseInt(document.getElementById("beleg-dta-bis").value, 10);
+    const int_fak_bis = parseInt(document.getElementById("beleg-import-bis").value, 10);
     let fak_bis = "";
     if (int_fak_bis && int_fak_bis > int_fak) {
       fak_bis = int_fak_bis.toString();
@@ -623,7 +625,7 @@ const belegImport = {
     beleg.formular(false, true);
     beleg.belegGeaendert(true);
     // Wort gefunden?
-    importShared.checkQutation();
+    importShared.checkQuotation();
   },
 
   // DTA-Import: Quelle zusammensetzen
