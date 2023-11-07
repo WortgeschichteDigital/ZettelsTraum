@@ -2750,44 +2750,26 @@ const redLit = {
 
   // Eingabeformular: BibTeX-Import aus der Zwischenablage
   async eingabeBibTeX () {
-    // PPN-Feld auslesen
-    const pn = document.getElementById("red-lit-eingabe-pn");
-    let ppn = pn.value.split(/[,\s]/)[0];
-    if (!importShared.isPPN(ppn)) {
-      ppn = "";
-    }
     // Formular leeren
     redLit.eingabeLeeren();
     redLit.eingabeStatus("add");
     // BibTeX-Daten suchen
-    const cb = modules.clipboard.readText().trim();
     let bibtexDaten = "";
-    if (importShared.isPPN(cb)) {
-      ppn = cb;
-    } else if (importShared.isBibtex(cb)) {
-      ppn = "";
+    const cb = modules.clipboard.readText().trim();
+    if (importShared.isBibtex(cb)) {
       bibtexDaten = cb;
-    }
-    if (ppn) {
-      bibtexDaten = await belegImport.PPNBibTeX({
-        ppn,
-        fokus: "red-lit-eingabe-ti-bibtex",
-      });
-      if (!bibtexDaten) {
-        return;
-      }
     }
     // kein BibTeX-Datensatz in Zwischenablage
     if (!bibtexDaten) {
       dialog.oeffnen({
         typ: "alert",
-        text: 'Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.',
+        text: 'Es wurden keine <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten in der Zwischenablage gefunden.',
         callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
       });
       return;
     }
     // BibTeX-Datensatz einlesen
-    const titel = belegImport.BibTeXLesen(bibtexDaten, true);
+    const titel = await importBibtex.startImport({ content: bibtexDaten, returnTitle: true });
     // Einlesen ist fehlgeschlagen
     if (!titel) {
       dialog.oeffnen({
@@ -2811,13 +2793,13 @@ const redLit = {
     ti.value = quelle.normalize("NFC");
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN
-    if (!ppn) {
+    const pn = document.getElementById("red-lit-eingabe-pn");
+    if (!pn.value) {
+      let ppn = "";
       const m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
       if (m && importShared.isPPN(m.groups.ppn)) {
         ppn = m.groups.ppn;
       }
-    }
-    if (!pn.value) {
       pn.value = ppn;
     }
     // Titel fokussieren

@@ -4951,7 +4951,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
               <li><i>Metadaten:</i> Die Metadaten unterhalb des Formulars (<i>BearbeiterIn, Datum, Aufnahme</i>) werden von der App eigenständig befüllt und können nicht manuell geändert werden. Das Feld <i>Aufnahme</i> ist klicksensitiv: Man kann mit ihm das <a href="#menueRedaktion-literaturVersionen">Versionen-Popup</a> öffnen.</li>
             </ul>
 
-            <p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA</i>, <i>XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Dabei haben Sie folgende Möglichkeiten:</p>
+            <p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA, PPN/XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Hinter den Funktionen verbergen sich die folgenden Importmöglichkeiten:</p>
 
             <figure class="right" title="zum Vergrößern anklicken">
               <img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
@@ -4962,7 +4962,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
               <li><i><abbr title="Deutsches Textarchiv">DTA</abbr>:</i> Liegt in der Zwischenablage eine Internetadresse des <a href="https://www.deutschestextarchiv.de/" title="Deutsches Textarchiv">DTA</a>, in der sich eine Titel-ID befindet, können die dort im TEI-Header hinterlegten Titeldaten importiert werden. Ob die URL auf die Überblicksseite oder die Textseite eines Werks zeigt, ist dabei unerheblich.</li>
 
               <li>
-                <p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
+                <p><i><abbr title="Pica-Produktionsnummer">PPN</abbr>/<abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
 
                 <ol>
                   <li>ein <a href="#menueRedaktion-literaturFundstellenSnippet">Fundstellen-Snippet</a> (diese Snippets können aus den Suchtreffern einer Literaturdatenbank via Rechtsklick in die Zwischenablage geschoben werden),</li>
@@ -4972,11 +4972,11 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
                   <li>eine <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
                 </ol>
 
-                <p>Liegt in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird über die <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a> im Hintergrund ein MODS-Dokument aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a> heruntergeladen und analysiert. Das Formular wird dann mit den ermittelten Titeldaten befüllt. Dieser Weg ist dem <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import via <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> vorzuziehen.</p>
+                <p>Liegt in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird über die <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a> im Hintergrund ein MODS-Dokument aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a> heruntergeladen und analysiert. Das Formular wird dann mit den ermittelten Titeldaten befüllt.</p>
               </li>
 
               <li>
-                <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>:</i> Liegt ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in der Zwischenablage, wird dieser direkt für den Import genutzt. Findet sich dort eine <abbr title="Pica-Produktionsnummer">PPN</abbr> wird ein entsprechender Datensatz über die unAPI geladen. Der Import via <abbr title="Pica-Produktionsnummer">PPN</abbr> sollte allerdings besser über die Funktion <i title="Extensible Markup Language" lang="en">XML</i> erfolgen.</p>
+                <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>:</i> Liegt ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in der Zwischenablage, wird dieser direkt für den Import genutzt.</p>
               </li>
             </ul>
 
