@@ -12,7 +12,8 @@ const importShared = {
 
   // Typ der zu importierenden Textdaten ermitteln
   //   str = string
-  detectType (str) {
+  //   html = string | undefined
+  detectType (str, html = "") {
     str = str.trim();
 
     // keine Textdaten übergeben
@@ -95,8 +96,6 @@ const importShared = {
       };
     }
 
-    // TODO HTML
-
     // Plain-Text (bekanntes Format)
     const plain = importShared.isKnownPlainText(str);
     if (plain) {
@@ -110,7 +109,54 @@ const importShared = {
       };
     }
 
-    // TODO Plain-Text (unbekanntes Format)
+    // HTML und Plain-Text (unbekanntes Format)
+    let text = beleg.toolsEinfuegenHtml(html || str);
+    let textType = "plain";
+    let htmlTags = [ ...beleg.toolsEinfuegenHtmlTags.inline_keep ];
+    htmlTags = htmlTags.concat(Object.keys(beleg.toolsEinfuegenHtmlTags.speziell));
+    for (const tag of htmlTags) {
+      const reg = new RegExp(`<${tag}>`, "i");
+      if (reg.test(text)) {
+        textType = "html";
+        break;
+      }
+    }
+    if (text) {
+      // nicht jeden Text akzeptieren
+      //   - einzeiliger Text, der zu kurz ist
+      //   - URLs und Dateipfade
+      const lines = text.match(/\n/g)?.length || 1;
+      if (lines === 1 && text.length < 200 ||
+          /^(https?|file):\/\//.test(text)) {
+        return null;
+      }
+
+      // Plain-tText aufbereiten
+      if (textType === "plain") {
+        text = str.replace(/\n+/g, "\n\n");
+      }
+
+      // Raw-Input aufbereiten
+      const bx = [];
+      for (let line of (html || str).split("\n")) {
+        line = line.trim();
+        if (line) {
+          bx.push(line);
+        }
+      }
+
+      return {
+        data: {
+          // string
+          bs: text,
+          // string
+          bx: bx.join("\n"),
+        },
+        type: textType,
+        formView: "zwischenablage",
+        formText: textType === "plain" ? "Plain-Text (nur Beleg)" : "HTML (nur Beleg)",
+      };
+    }
 
     // Fallback
     return null;
@@ -732,7 +778,7 @@ const importShared = {
         typeData = false;
       }
     } else if (ansicht === "zwischenablage") {
-      typeData = importShared.detectType(modules.clipboard.readText());
+      typeData = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
       if (typeData.formView !== "zwischenablage") {
         beleg.formularImport({
           src: typeData.formView,
@@ -758,13 +804,15 @@ const importShared = {
       result = await importShared.fileDataImport();
     } else if (typeData.type === "bibtex") {
       result = await importBibtex.startImport({ content: typeData.data, ansicht });
-    } else if (typeData.type === "html") {
-      // TODO
+    } else if (/^(html|plain)$/.test(typeData.type)) {
+      const ds = importShared.importObject().ds;
+      ds.bi = typeData.type;
+      ds.bs = typeData.data.bs;
+      ds.bx = typeData.data.bx;
+      result = await importShared.fillCard(ds);
     } else if (typeData.type === "json-dwds") {
       importDWDS.startImportJSON(typeData.data);
       result = await importShared.fileDataImport();
-    } else if (typeData.type === "plain") {
-      // TODO
     } else if (typeData.type === "plain-dereko") {
       importDereko.meta(typeData.data.meta);
       importDereko.belege(typeData.data.belege);

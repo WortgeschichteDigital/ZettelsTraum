@@ -206,7 +206,7 @@ const beleg = {
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     if (neu && !beleg.leseansicht) {
       // Zwischenablage auswerten
-      const cb = importShared.detectType(modules.clipboard.readText());
+      const cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
 
       // keine bekannten Daten in der Zwischenablage
       if (!cb) {
@@ -492,7 +492,7 @@ const beleg = {
 
     // Textfeld entsprechend der Zwischenablage füllen
     if (autoFill) {
-      const cb = typeData || importShared.detectType(modules.clipboard.readText());
+      const cb = typeData || importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
       if (optionen.data.einstellungen["url-eintragen"] &&
           (src === "url" && cb?.type === "url" ||
           src === "datei" && cb?.type === "file")) {
@@ -586,7 +586,7 @@ const beleg = {
       if (this.value || this.readOnly || !optionen.data.einstellungen["url-eintragen"]) {
         return;
       }
-      const cb = importShared.detectType(modules.clipboard.readText());
+      const cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
       if (cb?.type === "file" || cb?.type === "url") {
         setTimeout(() => {
           // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
@@ -1546,29 +1546,9 @@ const beleg = {
     }
   },
 
-  // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
-  //   html = String
-  //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
-  //   minimum = true | undefined
-  //     (nur ein absolutes Minimum an Tags bleibt erhalten)
-  toolsEinfuegenHtml (html, minimum = false) {
-    // wenn <body> => splitten
-    const body = html.split(/<body.*?>/);
-    if (body.length > 1) {
-      html = body[1];
-    }
-    // Style-Block(s) und Kommentare entfernen
-    html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
-    html = html.replace(/<!--.+?-->/gs, "");
-    // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
-    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function (m, p1) {
-      return `<${p1}>`;
-    });
-    // HTML in temporären Container schieben
-    const container = document.createElement("div");
-    container.innerHTML = html;
-    // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
-    let inline_keep = [
+  // Tags, die beim Einfügen von HTML-Text erhalten bleiben sollen
+  toolsEinfuegenHtmlTags: {
+    inline_keep: [
       "B",
       "BR",
       "CITE",
@@ -1584,8 +1564,8 @@ const beleg = {
       "SUP",
       "U",
       "VAR",
-    ];
-    let speziell = {
+    ],
+    speziell: {
       BIG: { // obsolete!
         ele: "span",
         class: "dta-groesser",
@@ -1614,7 +1594,33 @@ const beleg = {
         ele: "span",
         class: "dta-groesser",
       },
-    };
+    },
+  },
+
+  // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
+  //   html = String
+  //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
+  //   minimum = true | undefined
+  //     (nur ein absolutes Minimum an Tags bleibt erhalten)
+  toolsEinfuegenHtml (html, minimum = false) {
+    // wenn <body> => splitten
+    const body = html.split(/<body.*?>/);
+    if (body.length > 1) {
+      html = body[1];
+    }
+    // Style-Block(s) und Kommentare entfernen
+    html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
+    html = html.replace(/<!--.+?-->/gs, "");
+    // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
+    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function (m, p1) {
+      return `<${p1}>`;
+    });
+    // HTML in temporären Container schieben
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
+    let inline_keep = [ ...beleg.toolsEinfuegenHtmlTags.inline_keep ];
+    let speziell = structuredClone(beleg.toolsEinfuegenHtmlTags.speziell);
     // ggf. Anzahl der Tags reduzieren, die erhalten bleiben sollen
     if (minimum) {
       inline_keep = [
