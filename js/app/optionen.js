@@ -1286,6 +1286,8 @@ const optionen = {
       liste.status(true);
     } else if (/^belegliste-(referenz|mark|notizen|textsorte)$/.test(e) && kartei.wort) { // Details für Belegkopf der Belegliste umgestellt
       liste.status(false);
+    } else if (e === "karteikarte-tagging" && helfer.hauptfunktion === "karte") {
+      beleg.tagsFill();
     }
     // Optionen speichern
     optionen.speichern();
