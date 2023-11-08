@@ -193,7 +193,7 @@ const xml = {
           } else if (c.nodeType === Node.ELEMENT_NODE &&
               !c.classList.contains("annotierung-wort")) {
             // visuelle Textauszeichnung
-            // @Stil: hier können (fast) alle @rendition des DTA rein
+            // @Stil: hier können (fast) alle @rendition rein, die bei einem TEI-Import erhalten bleiben
             const stil = xml.stil(c);
             if (stil) {
               text += `<Hervorhebung Stil="${stil}">`;
@@ -217,9 +217,9 @@ const xml = {
     //   text = String
     //     (Belegtext, der getaggt werden soll)
     function klammernTaggen (text) {
-      // DTA-Import Trennstriche auflösen (folgt Großbuchstabe => Trennstrich erhalten)
+      // TEI-Import: Trennstriche auflösen (folgt Großbuchstabe => Trennstrich erhalten)
       text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
-      // DTA-Import: technische Klammern entfernen
+      // TEI-Import: technische Klammern entfernen
       // (Trennstriche, Seiten- und Spaltenwechsel)
       text = text.replace(/\[(¬|:.+?:)\]/g, "");
       // Korrekturen Taggingfehler
@@ -584,21 +584,19 @@ const xml = {
       return "";
     }
     switch (n.getAttribute("class")) {
-      case "dta-antiqua":
+      case "tei-antiqua":
         return "#aq";
-      case "dta-blau":
-        return "#blue";
-      case "dta-groesser":
+      case "tei-fr":
+        return "#fr";
+      case "tei-groesser":
         return "#larger";
-      case "dta-gesperrt":
+      case "tei-gesperrt":
         return "#g";
-      case "dta-initiale":
+      case "tei-initiale":
         return "#in";
-      case "dta-kapitaelchen":
+      case "tei-kapitaelchen":
         return "#k";
-      case "dta-rot":
-        return "#red";
-      case "dta-doppelt":
+      case "tei-doppelt":
         return "#uu";
     }
   },

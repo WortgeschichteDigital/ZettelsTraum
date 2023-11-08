@@ -495,23 +495,22 @@ const helfer = {
     }
     // Annotierungen endgültig löschen
     helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");
-    // DTA-Klassen umwandeln
+    // TEI-Klassen umwandeln
     const styles = {
-      "dta-antiqua": "font-family: sans-serif",
-      "dta-blau": "color: blue",
-      "dta-doppelt": "text-decoration: underline double",
-      "dta-gesperrt": "letter-spacing: 4px",
-      "dta-groesser": "font-size: 20px",
-      "dta-initiale": "font-size: 24px",
-      "dta-kapitaelchen": "font-variant: small-caps",
-      "dta-rot": "color: red",
+      "tei-antiqua": "font-family: sans-serif",
+      "tei-doppelt": "text-decoration: underline double",
+      "tei-gesperrt": "letter-spacing: 4px",
+      "tei-fr": "font-size: 20px",
+      "tei-groesser": "font-size: 20px",
+      "tei-initiale": "font-size: 24px",
+      "tei-kapitaelchen": "font-variant: small-caps",
     };
     for (const style of Object.keys(styles)) {
       stylesAnpassen(style);
     }
     // Ergebnis der Bereinigung zurückggeben
     return cont.innerHTML;
-    // Ersetzungsfunktion für die DTA-Layout-Container
+    // Ersetzungsfunktion für die TEI-Layout-Container
     function stylesAnpassen (style) {
       cont.querySelectorAll(`.${style}`).forEach(i => {
         i.setAttribute("style", styles[style]);

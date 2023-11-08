@@ -551,7 +551,7 @@ const beleg = {
     });
   },
 
-  // Events in DTA-Feldern
+  // Events in Feldern des Import-Formulars
   formularEvtImport () {
     // Import anstoßen
     document.querySelectorAll("#beleg-import-feld, #beleg-import-von, #beleg-import-bis").forEach(input => {
@@ -1568,31 +1568,31 @@ const beleg = {
     speziell: {
       BIG: { // obsolete!
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H1: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H2: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H3: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H4: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H5: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H6: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
     },
   },
@@ -1719,7 +1719,7 @@ const beleg = {
     // Tags ermitteln
     const tags = {
       antiqua: {
-        start: '<span class="dta-antiqua">',
+        start: '<span class="tei-antiqua">',
         ende: "</span>",
       },
       autorenzusatz: {
@@ -1735,7 +1735,7 @@ const beleg = {
         ende: "",
       },
       caps: {
-        start: '<span class="dta-kapitaelchen">',
+        start: '<span class="tei-kapitaelchen">',
         ende: "</span>",
       },
       italic: {
@@ -1751,11 +1751,11 @@ const beleg = {
         ende: "</mark>",
       },
       size: {
-        start: '<span class="dta-groesser">',
+        start: '<span class="tei-groesser">',
         ende: "</span>",
       },
       spacing: {
-        start: '<span class="dta-gesperrt">',
+        start: '<span class="tei-gesperrt">',
         ende: "</span>",
       },
       streichung: {
@@ -1944,7 +1944,7 @@ const beleg = {
         };
         ausfuellen();
       } else if (titel === "") {
-        // "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
+        // "titel" könnte "false" sein, wenn der Internet-Request gescheitert ist;
         // in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
         lesefehler();
       }
