@@ -174,7 +174,7 @@ const tastatur = {
           beleg.leseToggle(true);
         }
       } else if (m === "Ctrl+Shift" && evt.code === "KeyD") {
-        beleg.toolsQuelleDTALink();
+        beleg.toolsQuelleURL();
       }
       return;
     }

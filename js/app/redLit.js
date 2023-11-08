@@ -2334,7 +2334,7 @@ const redLit = {
     // PPN-Feld auslesen
     const pn = document.getElementById("red-lit-eingabe-pn");
     let ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ ppn })) {
+    if (!importShared.isPPN(ppn)) {
       ppn = "";
     }
     // Formular leeren
@@ -2343,13 +2343,13 @@ const redLit = {
     // XML-Daten suchen
     const cb = modules.clipboard.readText().trim();
     let xmlDaten = redLit.eingabeXMLCheck({ xmlStr: cb });
-    if (belegImport.PPNCheck({ ppn: cb })) {
+    if (importShared.isPPN(cb)) {
       ppn = cb;
     } else if (xmlDaten) {
       ppn = "";
     }
     if (ppn) {
-      xmlDaten = await belegImport.PPNXML({
+      xmlDaten = await redLit.eingabeXMLPPN({
         ppn,
         fokus: "red-lit-eingabe-ti-xml",
       });
@@ -2424,11 +2424,60 @@ const redLit = {
     return false;
   },
 
+  // PPN-Download: XML-Datensatz herunterladen
+  //   ppn = String
+  //     (die PPN, deren Datensatz heruntergeladen werden soll)
+  //   fokus = String | undefined
+  //     (ID des Elements, das ggf. fokussiert werden soll)
+  //   returnXmlStr
+  async eingabeXMLPPN ({ ppn, fokus = "", returnXmlStr = false }) {
+    // MODS-Dokument herunterladen
+    const feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+    const result = new Promise(resolve => {
+      // Fehler: Dokument konnte nicht korrekt heruntergeladen werden
+      if (feedback.fehler) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `Der Download des XML-Dokuments mit den Titeldaten ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+          callback: () => {
+            if (fokus) {
+              document.getElementById(fokus).focus();
+            }
+            resolve("");
+          },
+        });
+        return;
+      }
+      // ggf. XML-String direkt zurückgeben
+      if (returnXmlStr) {
+        resolve(feedback.text);
+        return;
+      }
+      // Daten parsen
+      const xmlDaten = redLit.eingabeXMLCheck({ xmlStr: feedback.text });
+      if (!xmlDaten) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.",
+          callback: () => {
+            if (fokus) {
+              document.getElementById(fokus).focus();
+            }
+            resolve("");
+          },
+        });
+        return;
+      }
+      resolve(xmlDaten);
+    });
+    return result;
+  },
+
   // Eingabeformular: einen leeren Datensatz zur Verfügung stellen
   // (der Datensatz muss so strukturiert sein, dass man ihn auch zum
   // Import in eine Karteikarte nutzen kann)
   eingabeXMLDatensatz () {
-    const data = belegImport.DateiDatensatz();
+    const data = importShared.importObject();
     data.td = {
       si: "", // Sigle
       id: "", // ID
@@ -2532,11 +2581,11 @@ const redLit = {
     } else if (td.url.some(i => /books\.google/.test(i))) {
       data.ds.kr = "GoogleBooks";
     }
-    data.ds.qu = belegImport.makeTitle(td);
+    data.ds.qu = importShared.makeTitle(td);
     data.ds.ul = td.url[0] || "";
     data.ds.ud = data.ds.ul ? new Date().toISOString().split("T")[0] : "";
     // Datensatz für Literaturdatenbank ausfüllen
-    data.td.ti = belegImport.makeTitle(td);
+    data.td.ti = importShared.makeTitle(td);
     data.td.ul = td.url[0] || "";
     data.td.pn = td.ppn.join(", ");
     // Datensatz zurückgeben
@@ -2547,7 +2596,7 @@ const redLit = {
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
   eingabeXMLModsTd ({ xmlDoc }) {
-    const td = belegImport.makeTitleDataObject();
+    const td = importShared.makeTitleObject();
     // Helfer-Funktionen
     const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
     const pusher = (result, key) => {
@@ -2701,44 +2750,26 @@ const redLit = {
 
   // Eingabeformular: BibTeX-Import aus der Zwischenablage
   async eingabeBibTeX () {
-    // PPN-Feld auslesen
-    const pn = document.getElementById("red-lit-eingabe-pn");
-    let ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ ppn })) {
-      ppn = "";
-    }
     // Formular leeren
     redLit.eingabeLeeren();
     redLit.eingabeStatus("add");
     // BibTeX-Daten suchen
-    const cb = modules.clipboard.readText().trim();
     let bibtexDaten = "";
-    if (belegImport.PPNCheck({ ppn: cb })) {
-      ppn = cb;
-    } else if (belegImport.BibTeXCheck(cb)) {
-      ppn = "";
+    const cb = modules.clipboard.readText().trim();
+    if (importShared.isBibtex(cb)) {
       bibtexDaten = cb;
-    }
-    if (ppn) {
-      bibtexDaten = await belegImport.PPNBibTeX({
-        ppn,
-        fokus: "red-lit-eingabe-ti-bibtex",
-      });
-      if (!bibtexDaten) {
-        return;
-      }
     }
     // kein BibTeX-Datensatz in Zwischenablage
     if (!bibtexDaten) {
       dialog.oeffnen({
         typ: "alert",
-        text: 'Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.',
+        text: 'Es wurden keine <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten in der Zwischenablage gefunden.',
         callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
       });
       return;
     }
     // BibTeX-Datensatz einlesen
-    const titel = belegImport.BibTeXLesen(bibtexDaten, true);
+    const titel = await importBibtex.startImport({ content: bibtexDaten, returnTitle: true });
     // Einlesen ist fehlgeschlagen
     if (!titel) {
       dialog.oeffnen({
@@ -2762,13 +2793,13 @@ const redLit = {
     ti.value = quelle.normalize("NFC");
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN
-    if (!ppn) {
+    const pn = document.getElementById("red-lit-eingabe-pn");
+    if (!pn.value) {
+      let ppn = "";
       const m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
-      if (m && belegImport.PPNCheck({ ppn: m.groups.ppn })) {
+      if (m && importShared.isPPN(m.groups.ppn)) {
         ppn = m.groups.ppn;
       }
-    }
-    if (!pn.value) {
       pn.value = ppn;
     }
     // Titel fokussieren
@@ -3040,7 +3071,7 @@ const redLit = {
       const korrekt = [];
       const fehlerhaft = [];
       for (const i of ppns) {
-        if (i && !belegImport.PPNCheck({ ppn: i })) {
+        if (i && !importShared.isPPN(i)) {
           fehlerhaft.push(i);
         } else if (i) {
           korrekt.push(i);

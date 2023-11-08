@@ -2417,24 +2417,24 @@ Mustermann, Erika
             <p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
           </div>
 
-          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</p>
+          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</p>
 
           <div class="info">
             <p><i>Standard:</i> aktiviert</p>
 
-            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Textfeld <i><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</i> in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> befindet. Ist dem der Fall, wird diese umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Seite, die referenziert wird, zu importieren.</p>
+            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Import-Feld in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder ein Dateipfad befindet. Ist dem der Fall, wird der Inhalt der Zwischenablage umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Quelle zu importieren.</p>
 
-            <p>Beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> wird automatisch das <abbr title="Deutsches Textarchiv">DTA</abbr>-Feld fokussiert. Ist die Einstellung aktiviert, sparen Sie sich somit den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr>.</p>
+            <p>Haben Sie einen Verweis in der Zwischenablage wird beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> das Import-Feld automatisch fokussiert. Ist diese Einstellung aktiviert, sparen Sie sich dann den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder des Dateipfads.</p>
           </div>
 
-          <p class="erklaerung-option" id="einstellungen-karteikarteDtaBevorzugen">aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammende <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importieren</p>
+          <p class="erklaerung-option" id="einstellungen-karteikarteOriginalBevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</p>
 
           <div class="info">
             <p><i>Standard:</i> nicht aktiviert</p>
 
-            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammt, immer automatisch aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> bezogen.</p>
+            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus einer bekannten Online-Ressource stammt, immer automatisch von der Originalquelle bezogen.</p>
 
-            <p>Der <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
+            <p>Dabei wird ein Download von der im Snippet angegebenen URL angestoßen. Dies hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
           </div>
 
           <p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
@@ -3164,7 +3164,7 @@ Mustermann, Erika
             <td><kbd>Umsch</kbd></td><td>+</td>
             <td><kbd>D</kbd></td>
             <td>
-              <p><a href="#karteikarte">Karteikarte</a>: <a href="#karteikarte-quelleDTALink">DTA-Link in Formular laden</a></p>
+              <p><a href="#karteikarte">Karteikarte</a>: <a href="#karteikarte-quelleURL">URL in Import-Formular laden</a></p>
             </td>
           </tr><tr>
             <td><kbd>Alt</kbd></td><td>+</td>
@@ -4951,7 +4951,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
               <li><i>Metadaten:</i> Die Metadaten unterhalb des Formulars (<i>BearbeiterIn, Datum, Aufnahme</i>) werden von der App eigenständig befüllt und können nicht manuell geändert werden. Das Feld <i>Aufnahme</i> ist klicksensitiv: Man kann mit ihm das <a href="#menueRedaktion-literaturVersionen">Versionen-Popup</a> öffnen.</li>
             </ul>
 
-            <p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA</i>, <i>XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Dabei haben Sie folgende Möglichkeiten:</p>
+            <p id="menueRedaktion-literaturTitelaufnahmeImport">Sie können Titelaufnahmen mithilfe der Funktionen <i>DTA, PPN/XML</i> und <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> (rechts über dem Titelfeld) automatisch aus der Zwischenablage <b>importieren</b>. Hinter den Funktionen verbergen sich die folgenden Importmöglichkeiten:</p>
 
             <figure class="right" title="zum Vergrößern anklicken">
               <img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
@@ -4962,7 +4962,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
               <li><i><abbr title="Deutsches Textarchiv">DTA</abbr>:</i> Liegt in der Zwischenablage eine Internetadresse des <a href="https://www.deutschestextarchiv.de/" title="Deutsches Textarchiv">DTA</a>, in der sich eine Titel-ID befindet, können die dort im TEI-Header hinterlegten Titeldaten importiert werden. Ob die URL auf die Überblicksseite oder die Textseite eines Werks zeigt, ist dabei unerheblich.</li>
 
               <li>
-                <p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
+                <p><i><abbr title="Pica-Produktionsnummer">PPN</abbr>/<abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
 
                 <ol>
                   <li>ein <a href="#menueRedaktion-literaturFundstellenSnippet">Fundstellen-Snippet</a> (diese Snippets können aus den Suchtreffern einer Literaturdatenbank via Rechtsklick in die Zwischenablage geschoben werden),</li>
@@ -4972,11 +4972,11 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
                   <li>eine <abbr title="Pica-Produktionsnummer">PPN</abbr>.</li>
                 </ol>
 
-                <p>Liegt in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird über die <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a> im Hintergrund ein MODS-Dokument aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a> heruntergeladen und analysiert. Das Formular wird dann mit den ermittelten Titeldaten befüllt. Dieser Weg ist dem <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import via <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> vorzuziehen.</p>
+                <p>Liegt in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird über die <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a> im Hintergrund ein MODS-Dokument aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a> heruntergeladen und analysiert. Das Formular wird dann mit den ermittelten Titeldaten befüllt.</p>
               </li>
 
               <li>
-                <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>:</i> Liegt ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in der Zwischenablage, wird dieser direkt für den Import genutzt. Findet sich dort eine <abbr title="Pica-Produktionsnummer">PPN</abbr> wird ein entsprechender Datensatz über die unAPI geladen. Der Import via <abbr title="Pica-Produktionsnummer">PPN</abbr> sollte allerdings besser über die Funktion <i title="Extensible Markup Language" lang="en">XML</i> erfolgen.</p>
+                <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>:</i> Liegt ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in der Zwischenablage, wird dieser direkt für den Import genutzt.</p>
               </li>
             </ul>
 

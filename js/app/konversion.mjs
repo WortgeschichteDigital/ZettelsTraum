@@ -668,6 +668,20 @@ const konversionen = {
       }
     }
 
+    // Bezeichnung veralteter Importtypen durch neue ersetzen;
+    // veraltete Layoutklassen ersetzen bzw. löschen
+    const biMap = {
+      dereko: "plain-dereko",
+      dwds: "xml-dwds",
+    };
+    for (const karte of Object.values(data.ka)) {
+      if (biMap[karte.bi]) {
+        karte.bi = biMap[karte.bi];
+      }
+      karte.bs = karte.bs.replace(/<span class="dta-(?:blau|rot)">(.+?)<\/span>/g, (...args) => args[1]);
+      karte.bs = karte.bs.replace(/\bdta-(antiqua|doppelt|fr|gesperrt|groesser|initiale|kapitaelchen)\b/g, (...args) => "tei-" + args[1]);
+    }
+
     // Versionsnummer hochzählen
     data.ve++;
 
@@ -679,8 +693,11 @@ const konversionen = {
 export default {
   // aktuelle Version des Dateiformats
   // *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
-  //   1.) Beim Anlegen neuer Datenwerte Objekte in
-  //       kartei.erstellen() u. beleg.karteErstellen() ergänzen!
+  //   1.) Beim Anlegen neuer Datenwerte Objekte anpassen in
+  //         beleg.karteErstellen()
+  //         kartei.erstellen()
+  //         importShared.fillCard()
+  //         importShared.importObject()
   //   2.) Diese Versionsnummer hochzählen!
   version: 26,
 

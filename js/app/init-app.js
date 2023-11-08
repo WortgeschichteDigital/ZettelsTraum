@@ -3,6 +3,7 @@
 // MODULE
 const modules = {
   clipboard: require("electron").clipboard,
+  crypto: require("crypto"),
   cp: require("child_process"),
   fsp: require("fs").promises,
   ipc: require("electron").ipcRenderer,
@@ -280,7 +281,7 @@ window.addEventListener("load", async () => {
       beleg.formularEvtFormData(i);
     }
   });
-  beleg.formularEvtDTA();
+  beleg.formularEvtImport();
   document.getElementById("beleg-bs").addEventListener("paste", evt => beleg.pasteBs(evt));
   document.querySelectorAll("#beleg .icon-link, #beleg .text-link").forEach(a => {
     if (/icon-tools/.test(a.getAttribute("class"))) { // Text-Tools
@@ -294,7 +295,7 @@ window.addEventListener("load", async () => {
     beleg.ctrlLinks(a);
   });
   // Datei-Import
-  document.getElementById("import-abbrechen-button").addEventListener("click", () => belegImport.DateiImportFensterSchliessen());
+  document.getElementById("import-abbrechen-button").addEventListener("click", () => importShared.fileDataWinClose());
   // Sonderzeichen
   document.querySelectorAll("#sonderzeichen-cont a").forEach(i => sonderzeichen.eintragen(i));
   // Kopierfunktion
