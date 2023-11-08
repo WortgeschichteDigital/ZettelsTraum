@@ -127,7 +127,7 @@ const lemmata = {
             if (/ /.test(lemma)) {
               // Formvarianten für Einzelwörter aus Wortverbindungen aufnehmen
               for (const wort of lemma.split(" ")) {
-                if (!woerter.includes(wort)) {
+                if (!woerter.includes(wort) && !data.fv[wort]) {
                   woerter.push(wort);
                   ausWortverbindung.add(wort);
                   if (nl.has(lemma)) {
