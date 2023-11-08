@@ -202,7 +202,10 @@ const importTEI = {
     // amend HTML result
     result = result.replace(/\r?\n/g, "");
     // <div> to paragraphs divided by a blank line
+    // (sometimes text follows directly after a <div> => insert blank lines in that case, too)
     result = result.replace(/<\/div> +<div>/g, "</div><div>");
+    result = result.replace(/<\/div> +/g, "</div>");
+    result = result.replace(/<\/div>(?=[^\s])/g, "</div>\n\n");
     result = result.replace(/<div> */g, "\n\n");
     result = result.replace(/ *<\/div>/g, "");
     // line break after <br>
