@@ -1,6 +1,4 @@
-"use strict";
-
-// MODULE
+// ELECTRON- und NODE-MODULE
 const modules = {
   clipboard: require("electron").clipboard,
   crypto: require("crypto"),
@@ -12,6 +10,12 @@ const modules = {
   shell: require("electron").shell,
   zlib: require("zlib"),
 };
+window.modules = modules;
+
+// ZT-MODULE
+import konversion from "./konversion.mjs";
+window.konversion = konversion;
+
 
 // INITIALISIERUNG DER APP
 window.addEventListener("load", async () => {
