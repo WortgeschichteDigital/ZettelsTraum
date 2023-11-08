@@ -223,10 +223,13 @@ const importTEI = {
     }
     result = div.join("\n\n");
     // merge twin tags
-    result = result.replace(/((<[^>]+>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
+    result = result.replace(/((<[^/>]{1}[^>]*>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
       // detect twins
       const start = args[1].match(/(?<=<).+?(?=>)/g);
       const end = args[4].match(/(?<=<).+?(?=>)/g);
+      if (start.length !== end.length) {
+        return args[0];
+      }
       const ex = [];
       for (let i = 1, len = start.length; i < len; i++) {
         if (/span/.test(start[i])) {
