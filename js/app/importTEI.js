@@ -200,7 +200,6 @@ const importTEI = {
     result = rend.innerHTML;
 
     // amend HTML result
-    result = result.replace(/.+<body>(.+)<\/body>.+/, (...args) => args[1]);
     result = result.replace(/\r?\n/g, "");
     // <div> to paragraphs divided by a blank line
     result = result.replace(/<\/div> +<div>/g, "</div><div>");
