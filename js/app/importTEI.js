@@ -527,7 +527,7 @@ const importTEI = {
     dialog.oeffnen({
       typ: "alert",
       text: `Der TEI-Import ist gescheitert.\n<h3>Fehlermeldung</h3>\n${message}`,
-      callback: () => document.querySelector(`#beleg-tei-${focusField}`).select(),
+      callback: () => document.querySelector(`#beleg-import-${focusField}`).select(),
     });
   },
 };
