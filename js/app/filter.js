@@ -1301,16 +1301,13 @@ const filter = {
     // Karten filtern
     const lemmata = [];
     if (filter.aktiveFilter.lemmata) {
-      for (let i = 1, len = filter.typen.lemmata.filter_folge.length; i < len; i++) {
-        const key = filter.typen.lemmata.filter_folge[i];
+      for (const key of filter.typen.lemmata.filter_folge) {
         lemmata.push({
           key,
           aktiv: !!filter.aktiveFilter[key],
         });
       }
     }
-    const lemmataA = lemmata.some(i => i.aktiv);
-    const lemmataU = !!filter.aktiveFilter["lemmata-undefined"];
     const tags_aktiv = [];
     for (const k of Object.keys(filter.aktiveFilter)) {
       const m = k.match(/^verschiedenes-tag-(.+)/);
@@ -1350,29 +1347,26 @@ const filter = {
 
       // Lemmata
       if (filter.aktiveFilter.lemmata) {
-        let okay = false;
-        if (lemmataA) {
-          for (const lemma of lemmata.filter(i => i.aktiv)) {
-            const reg = filter.typen.lemmata.filter[lemma.key].reg;
-            if (reg.test(data.ka[id].bs)) {
-              okay = true;
-            }
+        const found = Array(lemmata.length).fill(false);
+        for (let i = 0, len = lemmata.length; i < len; i++) {
+          const reg = filter.typen.lemmata.filter[lemmata[i].key].reg;
+          if (reg?.test(data.ka[id].bs)) {
+            found[i] = true;
           }
         }
-        if (lemmataU && !okay) {
-          let okayU = true;
-          for (const lemma of lemmata) {
-            const reg = filter.typen.lemmata.filter[lemma.key].reg;
-            if (!reg) {
-              continue;
-            }
-            if (reg.test(data.ka[id].bs)) {
-              okayU = false;
+        if (!found.some(i => i)) {
+          found[0] = true;
+        }
+        let okay = false;
+        for (let i = 0, len = lemmata.length; i < len; i++) {
+          if (optionen.data.filter.reduzieren && lemmata[i].aktiv && !found[i]) {
+            okay = false;
+            break;
+          } else if (lemmata[i].aktiv && found[i]) {
+            okay = true;
+            if (!optionen.data.filter.reduzieren) {
               break;
             }
-          }
-          if (okayU) {
-            okay = true;
           }
         }
         if (!okay) {
