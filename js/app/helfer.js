@@ -1185,11 +1185,27 @@ const helfer = {
       }
       let url = this.getAttribute("href");
       // URL ggf. aufbereiten
-      if (!/^http/.test(url)) {
+      if (!/^(http|mailto)/.test(url)) {
         url = `https://${url}`;
       }
+      // sicherstellen, dass eine valide URL und kein Schadcode an openExternal() übergeben wird
+      let validURL;
+      try {
+        validURL = new URL(url).href;
+      } catch (err) {
+        if (typeof dialog !== "undefined") {
+          // in Nebenfenstern steht dialog.js nicht zur Verfügung;
+          // dort gibt es aber auch keine nutzergenerierten Links,
+          // die an diese Funktion geschickt werden
+          dialog.oeffnen({
+            typ: "alert",
+            text: `Der Link wird nicht geöffnet, weil es sich bei ihm nicht um eine valide URL handelt.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+          });
+        }
+        return;
+      }
       // URL im Browser öffnen
-      modules.shell.openExternal(url);
+      modules.shell.openExternal(validURL);
     });
   },
 
