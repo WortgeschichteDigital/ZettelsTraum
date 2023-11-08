@@ -23,10 +23,17 @@ const importTEI = {
   // xsl stylsheet
   transformXsl: "",
 
+  // set with unknown renditions that are found during the transformation
+  // (this set only serves for evaluation purposes)
+  transformUnknownRenditions: null,
+
   // transform the passed XML snippet
   //   tei = string
   //   type = string (tei | tei-dta)
   async transformXml ({ tei, type }) {
+    // reset set for unknown renditions
+    importTEI.transformUnknownRenditions = new Set();
+
     // preprocess tei
     // mark hyphens that appear immediately before a <lb>
     tei = tei.replace(/[-¬](<lb.*?\/>)/g, (...args) => `[¬]${args[1]}`);
@@ -141,53 +148,56 @@ const importTEI = {
 
     const rend = document.createElement("div");
     rend.innerHTML = result;
-    rend.querySelectorAll("[data-rendition]").forEach(i => {
-      const r = i.dataset.rendition;
-      for (const rend of r.split(/(?<!:) /)) {
-        // rendition key found
-        if (renditions[rend]) {
-          addRendition(i, rend);
-          continue;
-        }
-        // search for matching css style
-        for (const [ k, v ] of Object.entries(renditions)) {
-          if (v?.reg?.test(rend)) {
-            addRendition(i, k);
+    let rendRun = 0;
+    const rendTemplate = document.createElement("template");
+    while (rend.querySelector("[data-rendition]")) {
+      rendRun++;
+      if (rendRun > 10) {
+        // safety net
+        break;
+      }
+      rend.querySelectorAll("[data-rendition]").forEach(i => {
+        const rAttr = i.dataset.rendition;
+        x: for (const rKey of rAttr.split(/(?<!:) /)) {
+          // rendition key found
+          if (renditions[rKey]) {
+            addRendition(i, rKey);
             continue;
           }
+          // search for matching css style
+          for (const [ k, v ] of Object.entries(renditions)) {
+            if (v?.reg?.test(rKey)) {
+              addRendition(i, k);
+              continue x;
+            }
+          }
+          // unknown rendition => remove it
+          importTEI.transformUnknownRenditions.add(rKey);
+          addRendition(i, rKey);
         }
-      }
-    });
+      });
+    }
 
     function addRendition (node, renditionKey) {
-      const start = document.createTextNode(`[[[${renditionKey}]]]`);
-      const end = document.createTextNode(`[[[/${renditionKey}]]]`);
-      node.insertBefore(start, node.firstChild);
-      node.appendChild(end);
+      if (!node.parentNode) {
+        return;
+      }
+      if (!renditions?.[renditionKey]?.tag) {
+        // ignore rendition
+        rendTemplate.innerHTML = node.innerHTML;
+        node.parentNode.replaceChild(rendTemplate.content, node);
+      } else {
+        // create appropriate tag
+        const ele = document.createElement(renditions[renditionKey].tag);
+        if (renditions[renditionKey].class) {
+          ele.classList.add(renditions[renditionKey].class);
+        }
+        ele.innerHTML = node.innerHTML;
+        node.parentNode.replaceChild(ele, node);
+      }
     }
 
     result = rend.innerHTML;
-    result = result.replace(/<span data-rendition="[^"]+">(\[{3}.+?\]{3})/g, (...args) => args[1]);
-    result = result.replace(/(\[{3}\/.+?\]{3})<\/span>/g, (...args) => args[1]);
-
-    result = result.replace(/\[{3}(.+?)\]{3}/g, (...args) => {
-      let r = args[1];
-      let end = "";
-      if (/^\//.test(r)) {
-        end = "/";
-        r = r.substring(1);
-      }
-      if (!renditions?.[r]?.tag) {
-        // these renditions should be ignored
-        return "";
-      }
-      const tag = renditions[r].tag;
-      let cl = "";
-      if (!end && renditions[r].class) {
-        cl = ` class="${renditions[r].class}"`;
-      }
-      return `<${end}${tag}${cl}>`;
-    });
 
     // amend HTML result
     result = result.replace(/.+<body>(.+)<\/body>.+/, (...args) => args[1]);
