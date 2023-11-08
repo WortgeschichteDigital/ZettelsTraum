@@ -636,7 +636,8 @@ const beleg = {
         add.parentNode.insertBefore(bewertung, add);
 
         // Checkboxes hinzufügen
-        for (const i of Object.keys(beleg.tags)) {
+        const alleTags = beleg.tagsAlle();
+        for (const i of [ ...alleTags ].sort(beleg.tagsSort)) {
           const tag = beleg.tagAlt(i);
           cont.appendChild(tag);
         }
@@ -753,13 +754,7 @@ const beleg = {
   // Tags: Liste mit vorhanden Tags füllen
   tagsList () {
     // alle Tags ermitteln
-    const alleTags = new Set();
-    Object.keys(beleg.tags).forEach(i => alleTags.add(i));
-    for (const karte of Object.values(data.ka)) {
-      for (const tag of karte.tg) {
-        alleTags.add(tag);
-      }
-    }
+    const alleTags = beleg.tagsAlle();
 
     // Tagliste bereinigen
     const tags = [ ...alleTags ].sort(beleg.tagsSort);
@@ -816,6 +811,18 @@ const beleg = {
     beleg.tagsFill();
     beleg.belegGeaendert(true);
     return true;
+  },
+
+  // Tags: Set mit allen Tags zurückgeben, die zur Verfügung stehen
+  tagsAlle () {
+    const alleTags = new Set();
+    Object.keys(beleg.tags).forEach(i => alleTags.add(i));
+    for (const karte of Object.values(data.ka)) {
+      for (const tag of karte.tg) {
+        alleTags.add(tag);
+      }
+    }
+    return alleTags;
   },
 
   // Tags: Sortierung nach dem Hinzufügen
