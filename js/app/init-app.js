@@ -3,6 +3,7 @@
 // MODULE
 const modules = {
   clipboard: require("electron").clipboard,
+  crypto: require("crypto"),
   cp: require("child_process"),
   fsp: require("fs").promises,
   ipc: require("electron").ipcRenderer,

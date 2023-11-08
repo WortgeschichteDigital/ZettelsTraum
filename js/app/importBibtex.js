@@ -4,18 +4,13 @@ const importBibtex = {
   // BibTeX-Datei importieren
   //   content = string
   //     (Inhalt der Datei)
-  //   ansicht = string | undefined
-  //     (url | datei | zwischenablage)
   //   returnTitle = true | undefined
   //     (Array mit Titeldaten soll zurückgegeben werden)
-  async startImport ({ content, ansicht = "datei", returnTitle = false }) {
+  async startImport ({ content, returnTitle = false }) {
     // Content fixen
     content = importBibtex.fix(content);
 
     // Zwischenspeicher der Titel
-    if (!returnTitle && ansicht !== "datei") {
-      importShared.fileDataReset();
-    }
     const titel = [];
 
     // Daten parsen

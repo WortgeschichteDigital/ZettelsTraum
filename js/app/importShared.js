@@ -33,6 +33,7 @@ const importShared = {
         type: "url",
         formView: "url",
         formText: "",
+        usesFileData: false,
       };
     }
 
@@ -48,6 +49,7 @@ const importShared = {
         type: "file",
         formView: "datei",
         formText: "",
+        usesFileData: false,
       };
     }
 
@@ -59,6 +61,7 @@ const importShared = {
         type: "ppn",
         formView: "zwischenablage",
         formText: "PPN",
+        usesFileData: true,
       };
     }
 
@@ -70,6 +73,7 @@ const importShared = {
         type: "bibtex",
         formView: "zwischenablage",
         formText: "BibTeX",
+        usesFileData: true,
       };
     }
 
@@ -82,6 +86,7 @@ const importShared = {
         type: json.type,
         formView: "zwischenablage",
         formText: json.formText,
+        usesFileData: json.usesFileData,
       };
     }
 
@@ -93,6 +98,7 @@ const importShared = {
         type: xml.type,
         formView: "zwischenablage",
         formText: xml.formText,
+        usesFileData: xml.usesFileData,
       };
     }
 
@@ -106,6 +112,7 @@ const importShared = {
         type: plain.type,
         formView: "zwischenablage",
         formText: plain.formText,
+        usesFileData: plain.usesFileData,
       };
     }
 
@@ -155,6 +162,7 @@ const importShared = {
         type: textType,
         formView: "zwischenablage",
         formText: textType === "plain" ? "Plain-Text (nur Beleg)" : "HTML (nur Beleg)",
+        usesFileData: false,
       };
     }
 
@@ -197,6 +205,7 @@ const importShared = {
         data: json,
         type: "json-dwds",
         formText: "JSON (DWDS)",
+        usesFileData: true,
       };
     }
 
@@ -221,6 +230,7 @@ const importShared = {
         },
         type: "plain-dereko",
         formText: "Plain-Text (DeReKo)",
+        usesFileData: true,
       };
     }
     return null;
@@ -262,6 +272,7 @@ const importShared = {
         },
         type: "xml-dwds",
         formText: "XML (DWDS)",
+        usesFileData: false,
       };
     }
 
@@ -276,6 +287,7 @@ const importShared = {
           },
           type: "tei-dta",
           formText: "TEI-XML (DTA)",
+          usesFileData: false,
         };
       }
 
@@ -287,6 +299,7 @@ const importShared = {
         },
         type: "tei",
         formText: "TEI-XML",
+        usesFileData: false,
       };
     }
 
@@ -299,6 +312,7 @@ const importShared = {
         },
         type: "xml-mods",
         formText: "XML (MODS)",
+        usesFileData: true,
       };
     }
 
@@ -311,6 +325,7 @@ const importShared = {
         },
         type: "xml-fundstelle",
         formText: "XML (Fundstelle)",
+        usesFileData: true,
       };
     }
 
@@ -466,7 +481,6 @@ const importShared = {
     if (result) {
       importShared.fileDataReset();
       importShared.fileData.path = pfad;
-      importShared.fileData.raw = result;
     }
     return result;
 
@@ -506,16 +520,16 @@ const importShared = {
 
   // Dateidaten
   fileData: {
-    // Pfad zur Datei
-    path: "",
-    // Importtyp
-    type: "",
-    // Rohdaten
-    raw: "",
-    // gemeinsame Metadaten für alle Belege
-    meta: "",
     // Belege
     data: [],
+    // gemeinsame Metadaten für alle Belege
+    meta: "",
+    // Pfad zur Datei
+    path: "",
+    // SHA1-ID
+    sha1: "",
+    // Importtyp
+    type: "",
   },
 
   // Dateidaten zurücksetzen
@@ -735,6 +749,7 @@ const importShared = {
     // Daten einlesen
     let typeData;
     if (ansicht === "url") {
+      // URL
       // Datenfelder auslesen (inkl. Fehlerkorrekturen)
       const urlFeld = document.getElementById("beleg-import-feld");
       const url = urlFeld.value.trim();
@@ -763,6 +778,7 @@ const importShared = {
         type: "tei-dta",
       };
     } else if (ansicht === "datei") {
+      // DATEI
       const fileCont = await importShared.fileRead();
       if (fileCont) {
         // Datentyp ermitteln
@@ -778,6 +794,7 @@ const importShared = {
         typeData = false;
       }
     } else if (ansicht === "zwischenablage") {
+      // ZWISCHENABLAGE
       typeData = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
       if (typeData.formView !== "zwischenablage") {
         beleg.formularImport({
@@ -785,6 +802,18 @@ const importShared = {
           typeData,
         });
         return;
+      }
+      if (typeData.usesFileData) {
+        const str = typeof typeData.data === "string" ? typeData.data : JSON.stringify(typeData.data);
+        const sha1 = modules.crypto.createHash("sha1").update(str).digest("hex");
+        if (sha1 !== importShared.fileData.sha1) {
+          // Dateidaten aus der Zwischenablage neu einlesen
+          importShared.fileDataReset();
+          importShared.fileData.sha1 = sha1;
+        } else if (importShared.fileData.data.length) {
+          // Dateidaten aus der Zwischenablage bereits eingelesen
+          typeData = true;
+        }
       }
     }
     if (!typeData) {
@@ -803,35 +832,43 @@ const importShared = {
       // Dateidaten wurden bereits eingelesen
       result = await importShared.fileDataImport();
     } else if (typeData.type === "bibtex") {
-      result = await importBibtex.startImport({ content: typeData.data, ansicht });
-    } else if (/^(html|plain)$/.test(typeData.type)) {
+      // BIBTEX
+      result = await importBibtex.startImport({ content: typeData.data });
+    } else if (typeData.type === "html" || typeData.type === "plain") {
+      // HTML | PLAIN
       const ds = importShared.importObject().ds;
       ds.bi = typeData.type;
       ds.bs = typeData.data.bs;
       ds.bx = typeData.data.bx;
       result = await importShared.fillCard(ds);
     } else if (typeData.type === "json-dwds") {
+      // JSON-DWDS
       importDWDS.startImportJSON(typeData.data);
       result = await importShared.fileDataImport();
     } else if (typeData.type === "plain-dereko") {
+      // PLAIN-DEREKO
       importDereko.meta(typeData.data.meta);
       importDereko.belege(typeData.data.belege);
       result = await importShared.fileDataImport();
     } else if (typeData.type === "ppn") {
+      // PPN
       const xmlStr = await redLit.eingabeXMLPPN({ ppn: typeData.data, returnXmlStr: true });
       if (xmlStr) {
         const xml = importShared.isKnownXML(xmlStr);
         if (xml) {
-          result = await importLit.startImport({ ...xml.data, type: "xml-mods", ansicht });
+          result = await importLit.startImport({ ...xml.data, type: "xml-mods" });
         }
       }
     } else if (/^tei/.test(typeData.type)) {
+      // TEI
       // TODO DTA-Import temporär wiederhergestellt
       belegImport.DTA();
     } else if (typeData.type === "xml-dwds") {
+      // XML-DWDS
       result = importDWDS.startImportXML({ ...typeData.data, ansicht });
-    } else if (/^xml-(fundstelle|mods)$/.test(typeData.type)) {
-      result = await importLit.startImport({ ...typeData.data, type: typeData.type, ansicht });
+    } else if (typeData.type === "xml-fundstelle" || typeData.type === "xml-mods") {
+      // XML-FUNDSTELLE | XML-MODS
+      result = await importLit.startImport({ ...typeData.data, type: typeData.type });
     }
 
     // ggf. Clipboard löschen

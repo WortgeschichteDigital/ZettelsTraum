@@ -8,12 +8,7 @@ const importLit = {
   //     (XML-Dokument, nicht geparst)
   //   type = string
   //     (Importtyp)
-  //   ansicht = string
-  //     (url | datei | zwischenablage)
-  async startImport ({ xmlDoc, xmlStr, type, ansicht }) {
-    if (ansicht !== "datei") {
-      importShared.fileDataReset();
-    }
+  async startImport ({ xmlDoc, xmlStr, type }) {
     const titel = [];
 
     if (type === "xml-fundstelle") {

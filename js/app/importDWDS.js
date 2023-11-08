@@ -355,16 +355,16 @@ const importDWDS = {
 
       // Beleg-XML
       let xmlStr = "<Beleg>";
-      xmlStr += `<Belegtext>${ds.bs}</Belegtext>`;
+      xmlStr += `<Belegtext>${helferXml.maskieren({ text: ds.bs })}</Belegtext>`;
       xmlStr += "<Fundstelle>";
       if (i.meta_.urlDate) {
         xmlStr += `<Aufrufdatum>${i.meta_.urlDate}</Aufrufdatum>`;
       }
       if (i.meta_.author) {
-        xmlStr += `<Autor>${i.meta_.author}</Autor>`;
+        xmlStr += `<Autor>${helferXml.maskieren({ text: i.meta_.author })}</Autor>`;
       }
       if (i.meta_.bibl) {
-        xmlStr += `<Bibl>${i.meta_.bibl}</Bibl>`;
+        xmlStr += `<Bibl>${helferXml.maskieren({ text: i.meta_.bibl })}</Bibl>`;
       }
       if (ds.da) {
         xmlStr += `<Datum>${ds.da}</Datum>`;
@@ -382,10 +382,10 @@ const importDWDS = {
         xmlStr += `<Textklasse>${i.textclass}</Textklasse>`;
       }
       if (i.meta_.title) {
-        xmlStr += `<Titel>${i.meta_.title}</Titel>`;
+        xmlStr += `<Titel>${helferXml.maskieren({ text: i.meta_.title })}</Titel>`;
       }
       if (i.meta_.url) {
-        xmlStr += `<URL>${i.meta_.url}</URL>`;
+        xmlStr += `<URL>${helferXml.maskieren({ text: i.meta_.url })}</URL>`;
       }
       xmlStr += "</Fundstelle></Beleg>";
       const xmlDoc = new DOMParser().parseFromString(xmlStr, "text/xml");
