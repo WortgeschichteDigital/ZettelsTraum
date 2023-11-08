@@ -38,7 +38,7 @@ const tastatur = {
         dropdown.schliessen();
         return;
       }
-      if (document.activeElement.classList.contains("dropdown2-input")) {
+      if (document.activeElement.closest(".dropdown2-cont")) {
         document.activeElement.blur();
         return;
       }
