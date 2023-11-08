@@ -64,7 +64,8 @@ const importTEI = {
     // replace rendition tags
     // (keys are DTA renditions; renditions with empty objects are being deleted;
     // Chrome has severe issues with fn:document(); that's why we're unable
-    // to map the renditions in a sane manner within the XSL)
+    // to map the renditions in a sane manner within the XSL;
+    // the following rendition tags stem mainly from DTABf.)
     const renditions = {
       "#aq": {
         tag: "span",
@@ -112,8 +113,11 @@ const importTEI = {
         class: "tei-groesser",
         reg: /font-size: ?larger/,
       },
+      "#left": {},
       "#red": {},
       "#right": {},
+      // #rkd in www.jeanpaul-edition.de (meaning unclear)
+      "#rkd": {},
       "#s": {
         tag: "s",
         class: "",
