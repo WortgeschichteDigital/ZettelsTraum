@@ -259,7 +259,7 @@ const importTEI = {
     result = decoder.value;
 
     // return result
-    return result;
+    return result.normalize("NFC");
   },
 
   // get the proper snippet of <text> using the submitted <pb> numbers
@@ -445,7 +445,7 @@ const importTEI = {
     text = text.replace(/ {2,}/g, " ");
 
     // return <text>
-    return text;
+    return text.normalize("NFC");
 
     // get index in node list
     function getIndex (n) {
