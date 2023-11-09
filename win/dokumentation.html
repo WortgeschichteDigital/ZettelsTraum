@@ -876,17 +876,29 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>&nbsp;</td>
               <td>Autor des Belegs</td>
             </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">bb</code></p></td>
+              <td class="datentyp">Number</td>
+              <td>&nbsp;</td>
+              <td>Seite bis zu der das XML aus einer Datei importiert wurde;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+            </tr>
             <tr class="ztj-ebene2 ztj-alt">
               <td><p><code class="quelltext">bc</code></p></td>
               <td class="datentyp">Boolean</td>
               <td>&nbsp;</td>
-              <td>Buchung (Beleg wurde im Artikel zitiert)<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
+              <td>Buchung (Beleg wurde im Artikel zitiert);<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
             </tr>
             <tr class="ztj-ebene2 ztj-alt">
               <td><p><code class="quelltext">bd</code></p></td>
               <td class="datentyp">String</td>
               <td><code class="quelltext">\n</code> möglich</td>
               <td>Bedeutung; mehrere Bedeutungen durch <code class="quelltext">\n</code> voneinander getrennt; neue Hierarchie beginnt mit <code class="quelltext">":&nbsp;"</code>;<br><span class="obacht">Version&nbsp;1–4</span></td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">bv</code></p></td>
+              <td class="datentyp">Number</td>
+              <td>&nbsp;</td>
+              <td>Seite von der ab das XML aus einer Datei importiert wurde;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bd</code></p></td>
@@ -937,7 +949,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">bu</code></p></td>
               <td class="datentyp">Boolean</td>
               <td>&nbsp;</td>
-              <td>Bücherdienst (Beleg muss am Original überprüft werden)<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
+              <td>Bücherdienst (Beleg muss am Original überprüft werden);<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">bx</code></p></td>
@@ -958,6 +970,12 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td>Zeitpunkt, zu dem die Karteikarte erstellt wurde</td>
             </tr>
             <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">di</code></p></td>
+              <td class="datentyp">String</td>
+              <td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
+              <td>Zeitpunkt, zu dem der Beleg importiert wurde;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+            </tr>
+            <tr class="ztj-ebene2">
               <td><p><code class="quelltext">dm</code></p></td>
               <td class="datentyp">String</td>
               <td>ISO 8601-Datum:<br><code class="quelltext">"2001-11-01<br>T11:22:33.444Z"</code></td>
@@ -967,7 +985,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">ko</code></p></td>
               <td class="datentyp">Boolean</td>
               <td>&nbsp;</td>
-              <td>Kontext (der Kontext des Belegs ist zu dürftig und muss am Original begutachtet werden)<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
+              <td>Kontext (der Kontext des Belegs ist zu dürftig und muss am Original begutachtet werden);<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">kr</code></p></td>
@@ -1003,7 +1021,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">tg</code></p></td>
               <td class="datentyp">Array</td>
               <td>&nbsp;</td>
-              <td>Tags<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+              <td>Tags;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2">
               <td><p><code class="quelltext">ts</code></p></td>
@@ -1015,19 +1033,19 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
               <td><p><code class="quelltext">ud</code></p></td>
               <td class="datentyp">String</td>
               <td>ISO 8601-Datum:<br><code class="quelltext">&quot;YYYY-MM-DD&quot;</code></td>
-              <td>Aufrufdatum<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+              <td>Aufrufdatum;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2 ztj">
               <td><p><code class="quelltext">ul</code></p></td>
               <td class="datentyp">String</td>
               <td>&nbsp;</td>
-              <td>URL<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
+              <td>URL;<br><span class="obacht">mit Version&nbsp;26 ergänzt</span></td>
             </tr>
             <tr class="ztj-ebene2 ztj-alt">
               <td><p><code class="quelltext">un</code></p></td>
               <td class="datentyp">Boolean</td>
               <td>&nbsp;</td>
-              <td>Beleg unvollständig (er muss weiter bearbeitet werden)<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
+              <td>Beleg unvollständig (er muss weiter bearbeitet werden);<br><span class="obacht">mit Version&nbsp;26 entfernt</span></td>
             </tr>
             <tr class="ztj-ebene2 ztj-alt">
               <td><p><code class="quelltext">up</code></p></td>

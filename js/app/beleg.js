@@ -81,14 +81,17 @@ const beleg = {
     const karte = {
       an: [], // Anhänge
       au: "", // Autor
+      bb: "", // Seite, bis zu der das XML aus einer Datei importiert wurde
       bd: [], // Bedeutung
       be: 0, // Bewertung (Markierung)
       bi: "", // Importtyp (bezieht sich auf die Daten in bx)
       bl: "", // Wortbildung
       bs: "", // Beleg
+      bv: "", // Seite, von der an das XML aus einer Datei importiert wurde
       bx: "", // Beleg-XML
       da: "", // Belegdatum
       dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
+      di: "", // Importdatum
       dm: "", // Datum Karteikarten-Änderung
       kr: "", // Korpus
       no: "", // Notizen
@@ -158,9 +161,9 @@ const beleg = {
     for (let i = 0, len = felder.length; i < len; i++) {
       const feld = felder[i];
       const name = feld.id.replace(/^beleg-/, "");
-      if (neu && name === "import-feld") {
+      if (name === "import-feld") {
         feld.value = "";
-      } else if (neu && /^import-(von|bis)$/.test(name)) {
+      } else if (/^import-(von|bis)$/.test(name)) {
         feld.value = "0";
       } else if (feld.classList.contains("beleg-form-data")) {
         feld.value = beleg.data[name];
@@ -463,13 +466,13 @@ const beleg = {
 
     // Formular zurücksetzen
     const feld = document.getElementById("beleg-import-feld");
+    const von = document.getElementById("beleg-import-von");
+    const bis = document.getElementById("beleg-import-bis");
     if (autoFill) {
       feld.value = "";
+      von.value = "0";
+      bis.value = "0";
     }
-    const von = document.getElementById("beleg-import-von");
-    von.value = "0";
-    const bis = document.getElementById("beleg-import-bis");
-    bis.value = "0";
 
     // Formular umstellen
     const placeholders = {
@@ -565,18 +568,22 @@ const beleg = {
     // Werte vom Von- und vom Bis-Feld automatisch ermitteln
     const feld = document.getElementById("beleg-import-feld");
     feld.addEventListener("input", function () {
-      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value) &&
+      let parsedURL;
+      try {
+        parsedURL = new URL(this.value.trim());
+      } catch {
+        return;
+      }
+      if (parsedURL.origin === "https://www.deutschestextarchiv.de" &&
           document.getElementById("beleg-import-quelle-url").checked) {
-        const fak = belegImport.DTAGetFak(this.value, "");
-        if (fak) {
-          const von = this.nextSibling;
-          const bis = von.nextSibling;
-          if (von.value === "0") {
-            von.value = parseInt(fak, 10);
-          }
-          if (bis.value === "0") {
-            bis.value = parseInt(fak, 10) + 1;
-          }
+        const page = importTEI.dtaGetPageNo(parsedURL);
+        const von = this.nextSibling;
+        const bis = von.nextSibling;
+        if (von.value === "0") {
+          von.value = page;
+        }
+        if (bis.value === "0") {
+          bis.value = page + 1;
         }
       }
     });
@@ -2006,7 +2013,7 @@ const beleg = {
         aenderungen.Autor = {
           key: "au",
           ori: beleg.data.au,
-          neu: belegImport.DTAData.autor.join("/"),
+          neu: importTEI.data.cit.autor.join("/"),
         };
         if (!aenderungen.Autor.neu) {
           aenderungen.Autor.neu = "N.\u00A0N.";
@@ -2102,8 +2109,8 @@ const beleg = {
     const mHier = /, hier (?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
     const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
     const seitenData = {
-      seite: "",
-      seite_zuletzt: "",
+      seiteStart: "",
+      seiteEnde: "",
       spalte: false,
     };
     let seiten;
@@ -2117,9 +2124,9 @@ const beleg = {
     }
     if (seiten) {
       const seitenSp = seiten.split(/[-–]/);
-      seitenData.seite = seitenSp[0];
+      seitenData.seiteStart = seitenSp[0];
       if (seitenSp[1]) {
-        seitenData.seite_zuletzt = seitenSp[1];
+        seitenData.seiteEnde = seitenSp[1];
       }
     }
     // TEI-Header herunterladen
@@ -2130,7 +2137,7 @@ const beleg = {
     });
     // Rückgabewerte
     if (fetchOk) {
-      return belegImport.DTAQuelle();
+      return importTEI.makeQu();
     }
     return false;
   },
@@ -2221,6 +2228,10 @@ const beleg = {
 
     // Formular füllen
     document.querySelector("#beleg-import-feld").value = beleg.data.ul;
+    if (beleg.data.bb && beleg.data.bv) {
+      document.querySelector("#beleg-import-von").value = beleg.data.bv;
+      document.querySelector("#beleg-import-bis").value = beleg.data.bb;
+    }
     beleg.formularImport({ src: "url", autoFill: false });
   },
 
@@ -2996,7 +3007,7 @@ const beleg = {
 
   // Metadaten: füllen oder auffrischen
   metadaten () {
-    const felder = [ "dc", "dm", "bi", "bx" ];
+    const felder = [ "dc", "dm", "bi", "di", "bv", "bb", "bx" ];
     for (const feld of felder) {
       const cont = document.querySelector(`#beleg-${feld}`);
       cont.replaceChildren();
@@ -3004,9 +3015,12 @@ const beleg = {
         // Importdaten
         const pre = document.createElement("pre");
         cont.appendChild(pre);
-        if (/^<.+>/.test(beleg.data.bx)) {
+        if (/^(tei|xml)/.test(beleg.data.bi)) {
+          let xmlDoc = new DOMParser().parseFromString(beleg.data.bx, "text/xml");
+          xmlDoc = helferXml.indent(xmlDoc);
+          const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
           const pretty = helferXml.prettyPrint({
-            xmlStr: beleg.data[feld],
+            xmlStr,
           });
           pre.innerHTML = pretty;
         } else {

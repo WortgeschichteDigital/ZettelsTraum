@@ -2002,6 +2002,28 @@ ipcMain.handle("ztj-cache-status-set", (evt, status) => {
 ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
 
 
+// ***** DOWNLOAD-CACHE *****
+//   id = string
+//   text = string
+const downloads = [];
+
+ipcMain.handle("downloads-cache-save", (evt, data) => {
+  if (downloads.length > 40) {
+    downloads.pop();
+  }
+  downloads.unshift(data);
+});
+
+ipcMain.handle("downloads-cache-get", (evt, id) => {
+  const idx = downloads.findIndex(i => i.id === id);
+  if (idx > 0) {
+    downloads.unshift({ ...downloads[idx] });
+    downloads.splice(idx + 1, 1);
+  }
+  return downloads[idx];
+});
+
+
 // ***** CLI *****
 ipcMain.handle("cli-message", (evt, message) => console.log(message));
 

@@ -4,9 +4,12 @@ const importShared = {
   // Online-Ressourcen
   onlineResources: [
     {
+      name: "DTA",
       desc: "aus dem DTA",
       type: "tei-dta",
       originReg: /^https:\/\/www\.deutschestextarchiv\.de$/,
+      xmlPath: "https://www.deutschestextarchiv.de/book/download_xml/",
+      xmlPathReg: /^\/book\/download_xml\/[^/]+/,
     },
   ],
 
@@ -253,7 +256,7 @@ const importShared = {
     }
     for (const i of importShared.onlineResources) {
       if (i.originReg.test(validURL.origin)) {
-        return true;
+        return i;
       }
     }
     return false;
@@ -269,9 +272,8 @@ const importShared = {
       // => Gar nicht erst parsen, wenn kein Tag im String zu finden ist.
       return null;
     }
-    str = importShared.removeNS(str);
-    const xml = new DOMParser().parseFromString(str, "text/xml");
-    if (xml.querySelector("parsererror")) {
+    const xml = importShared.parseXML(str);
+    if (!xml) {
       return null;
     }
 
@@ -375,14 +377,20 @@ const importShared = {
       ds: {
         // Autor
         au: "",
+        // Import bis Seite
+        bb: "",
         // Importtyp
         bi: "",
         // Beleg
         bs: "",
+        // Import von Seite
+        bv: "",
         // Original
         bx: "",
         // Belegdatum
         da: "",
+        // Importdatum
+        di: new Date().toISOString(),
         // Korpus
         kr: "",
         // Notizen
@@ -540,8 +548,6 @@ const importShared = {
     path: "",
     // SHA1-ID
     sha1: "",
-    // Importtyp
-    type: "",
   },
 
   // Dateidaten zurücksetzen
@@ -762,44 +768,18 @@ const importShared = {
     let typeData;
     if (ansicht === "url") {
       // URL
-      // Datenfelder auslesen (inkl. Fehlerkorrekturen)
-      const urlFeld = document.getElementById("beleg-import-feld");
-      const url = urlFeld.value.trim();
-      const validURL = importShared.isKnownURL(url);
-      if (!validURL) {
-        const fehler = validURL === null ? "URL nicht valide" : "URL aus unbekannter Online-Ressource";
-        dialog.oeffnen({
-          typ: "alert",
-          text: `Beim Einlesen des Formulars ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler}</p>`,
-          callback: () => urlFeld.select(),
-        });
-        return;
+      const data = await importURL.startImport();
+      typeData = data.typeData;
+      if (typeData) {
+        typeData.formData = data.formData;
+        typeData.urlData = data.urlData;
       }
-      const von = document.getElementById("beleg-import-von");
-      const bis = document.getElementById("beleg-import-bis");
-      for (const i of [ von, bis ]) {
-        helfer.inputNumber(i);
-      }
-      const pageFrom = parseInt(von.value, 10);
-      let pageTo = parseInt(bis.value, 10);
-      if (pageFrom && pageTo <= pageFrom) {
-        // automatische Fehlerkorrektur bei den Seitenangaben
-        pageTo = pageFrom + 1;
-        bis.value = pageTo;
-      }
-      // TODO DTA-Import temporär wiederhergestellt
-      typeData = {
-        type: "tei-dta",
-      };
     } else if (ansicht === "datei") {
       // DATEI
       const fileCont = await importShared.fileRead();
       if (fileCont) {
         // Datentyp ermitteln
         typeData = importShared.detectType(fileCont);
-        if (typeData) {
-          importShared.fileData.type = typeData.type;
-        }
       } else if (fileCont === null && importShared.fileData.data.length) {
         // Datei bereits eingelesen
         typeData = true;
@@ -875,8 +855,7 @@ const importShared = {
       }
     } else if (/^tei/.test(typeData.type)) {
       // TEI
-      // TODO DTA-Import temporär wiederhergestellt
-      belegImport.DTA();
+      result = await importTEI.startImport(typeData);
     } else if (typeData.type === "xml-dwds") {
       // XML-DWDS
       result = importDWDS.startImportXML({ ...typeData.data, ansicht });
@@ -1086,6 +1065,16 @@ const importShared = {
       return false;
     }
     return true;
+  },
+  // XML-String parsen
+  //   xmlStr = string
+  parseXML (xmlStr) {
+    xmlStr = importShared.removeNS(xmlStr);
+    const xmlDoc = new DOMParser().parseFromString(xmlStr, "text/xml");
+    if (xmlDoc.querySelector("parsererror")) {
+      return null;
+    }
+    return xmlDoc;
   },
 
   // @xmlns aus einem XML-String entfernen

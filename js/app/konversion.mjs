@@ -669,17 +669,29 @@ const konversionen = {
     }
 
     // Bezeichnung veralteter Importtypen durch neue ersetzen;
-    // veraltete Layoutklassen ersetzen bzw. löschen
+    // veraltete Layoutklassen ersetzen bzw. löschen;
+    // neue Datenfelder für den Import anlegen:
+    //   bb = Seite, bis zu der das XML aus einer Datei importiert wurde
+    //   bv = Seite, von der an das XML aus einer Datei importiert wurde
+    //   di = Importdatum
     const biMap = {
       dereko: "plain-dereko",
       dwds: "xml-dwds",
     };
     for (const karte of Object.values(data.ka)) {
+      // Importtypen umbenennen
       if (biMap[karte.bi]) {
         karte.bi = biMap[karte.bi];
       }
+
+      // Lyoutklassen auffrischen
       karte.bs = karte.bs.replace(/<span class="dta-(?:blau|rot)">(.+?)<\/span>/g, (...args) => args[1]);
       karte.bs = karte.bs.replace(/\bdta-(antiqua|doppelt|fr|gesperrt|groesser|initiale|kapitaelchen)\b/g, (...args) => "tei-" + args[1]);
+
+      // neue Datenfelder
+      karte.bb = 0;
+      karte.bv = 0;
+      karte.di = "";
     }
 
     // Versionsnummer hochzählen

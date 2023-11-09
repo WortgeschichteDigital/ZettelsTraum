@@ -20,11 +20,16 @@
 <xsl:template match="fw|teiHeader"/>
 
 <xsl:template match="cb|pb">
-  <xsl:if test="@n">
-    <xsl:text>[:</xsl:text>
-    <xsl:value-of select="@n"/>
-    <xsl:text>:]</xsl:text>
-  </xsl:if>
+  <xsl:text>[:</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@n">
+        <xsl:value-of select="@n"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>?</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  <xsl:text>:]</xsl:text>
 </xsl:template>
 
 <xsl:template match="byline|closer|dateline|div|head|item|lg|sp|titlePage">

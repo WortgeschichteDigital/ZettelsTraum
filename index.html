@@ -77,7 +77,6 @@
     <script src="js/app/beleg.js"></script>
     <script src="js/app/belegKlammern.js"></script>
     <script src="js/app/belegeTaggen.js"></script>
-    <script src="js/app/belegImport.js"></script>
     <script src="js/app/cli.js"></script>
     <script src="js/app/dialog.js"></script>
     <script src="js/app/drucken.js"></script>
@@ -90,6 +89,7 @@
     <script src="js/app/importLit.js"></script>
     <script src="js/app/importShared.js"></script>
     <script src="js/app/importTEI.js"></script>
+    <script src="js/app/importURL.js"></script>
     <script src="js/app/io.js"></script>
     <script src="js/app/kartei.js"></script>
     <script src="js/app/karteisuche.js"></script>
@@ -452,9 +452,17 @@
           <td id="beleg-dc"></td>
           <td id="beleg-dm"></td>
         </tr><tr class="beleg-form meta aus">
-          <th colspan="2">Importtyp</th>
+          <th>Importtyp</th>
+          <th>Importdatum</th>
         </tr><tr class="beleg-form meta aus">
-          <td colspan="2" id="beleg-bi"></td>
+          <td id="beleg-bi"></td>
+          <td id="beleg-di"></td>
+        </tr><tr class="beleg-form meta aus">
+          <th>Import von Seite</th>
+          <th>Import bis Seite</th>
+        </tr><tr class="beleg-form meta aus">
+          <td id="beleg-bv"></td>
+          <td id="beleg-bb"></td>
         </tr><tr class="beleg-form meta aus">
           <th colspan="2">Importdaten<span class="text-tools"
             ><a href="#" class="icon-link icon-pfeil-kreis icon-tools" id="beleg-meta-reimport" title="Beleg aus den Importdaten erneut importieren" tabindex="-1">&nbsp;</a

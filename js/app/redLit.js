@@ -2239,7 +2239,7 @@ const redLit = {
     }
     // Titel-Feld ausfüllen
     const ti = document.getElementById("red-lit-eingabe-ti");
-    ti.value = belegImport.DTAQuelle();
+    ti.value = importTEI.makeQu();
     ti.dispatchEvent(new KeyboardEvent("input"));
     // URL-Feld ausfüllen
     const ul = document.getElementById("red-lit-eingabe-ul");
@@ -2259,7 +2259,7 @@ const redLit = {
   //     die Quellenangabe der Karteikarte neu geladen werden soll)
   async eingabeDTAFetch ({ url, fokusId, seitenData = {} }) {
     // Titel-ID ermitteln
-    const titelId = belegImport.DTAGetTitelId(url);
+    const titelId = importTEI.dtaGetTitleId(url);
     if (!titelId) {
       await new Promise(meldung => {
         dialog.oeffnen({
@@ -2318,14 +2318,13 @@ const redLit = {
       });
       return "";
     }
-    belegImport.DTAResetData();
-    if (seitenData.seite) {
-      belegImport.DTAData.seite = seitenData.seite;
-      belegImport.DTAData.seite_zuletzt = seitenData.seite_zuletzt;
-      belegImport.DTAData.spalte = seitenData.spalte;
+    importTEI.data.cit = importTEI.citObject();
+    if (seitenData.seiteStart) {
+      importTEI.data.cit.seiteStart = seitenData.seiteStart;
+      importTEI.data.cit.seiteEnde = seitenData.seiteEnde;
+      importTEI.data.cit.spalte = seitenData.spalte;
     }
-    belegImport.DTAData.url = url;
-    belegImport.DTAMeta(xmlDoc);
+    importTEI.citFill(xmlDoc);
     return titelId;
   },
 

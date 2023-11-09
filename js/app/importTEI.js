@@ -1,40 +1,365 @@
 "use strict";
 
 const importTEI = {
-  // prepare XML data
-  //   xmlPlain = string
-  prepareXml (xmlPlain) {
-    // remove namespace attribute
-    xmlPlain = importShared.removeNS(xmlPlain);
+  // start the import
+  //   importData       = object
+  //     data           = object (XML data)
+  //       xmlDoc       = document
+  //       xmlStr       = string
+  //     formData       = object (form values and resource data)
+  //       bis          = number (from page)
+  //       resource     = object
+  //         name       = string
+  //         desc       = string
+  //         originReg  = RegExp
+  //         type       = string
+  //         xmlPath    = string
+  //         xmlPathReg = RegExp
+  //       url          = string (form URL)
+  //       von          = number (to page)
+  //     formText       = string
+  //     formView       = string
+  //     type           = string
+  //     urlData        = object (URL data)
+  //       id           = string (in case of "tei-dta" = title ID)
+  //       url          = string (download URL)
+  //     usesFileData   = boolean
+  async startImport (importData) {
+    // reset data objects
+    const data = importTEI.data;
+    data.cit = importTEI.citObject();
+    data.ds = importShared.importObject().ds;
 
-    // parse document
-    const xmlDoc = new DOMParser().parseFromString(xmlPlain, "text/xml");
-
-    // document not well formed
-    if (xmlDoc.querySelector("parsererror")) {
-      importTEI.error("XML-Daten nicht wohlgeformt");
-      return null;
+    // fill in already known value
+    data.ds.bb = importData.formData.bis;
+    data.ds.bi = importData.type;
+    data.ds.bv = importData.formData.von;
+    data.ds.kr = importData.formData.resource.name;
+    data.ds.ud = new Date().toISOString().split("T")[0];
+    if (importData.type === "tei-dta" && data.ds.bv) {
+      data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
+    } else {
+      data.ds.ul = importData.formData.url;
     }
 
-    // return parsed document
-    return xmlDoc;
+    // get text snippet
+    const snippet = importTEI.getTextSnippet({
+      pageFrom: data.ds.bv,
+      pageTo: data.ds.bb,
+      type: data.ds.bi,
+      xmlDoc: importData.data.xmlDoc,
+      xmlStr: importData.data.xmlStr,
+    });
+    if (!snippet) {
+      return false;
+    }
+
+    // create a complete TEI document with the extracted snippet
+    data.ds.bx = importTEI.createCompleteDoc({
+      text: snippet,
+      xmlDoc: importData.data.xmlDoc,
+    });
+
+    // fill in citation data
+    importTEI.citFill(importData.data.xmlDoc);
+
+    // detect column count
+    //   - no folio count
+    //   - snippet has <cb/>
+    if (!/[rv]$/.test(data.cit.seiteStart) &&
+        !/[rv]$/.test(data.cit.seiteEnde) &&
+        /<cb[ /]/.test(snippet)) {
+      data.cit.spalte = true;
+    }
+
+    // fill in missing card values
+    // date
+    let da = data.cit.datumEntstehung;
+    if (!da && data.cit.datumDruck) {
+      da = data.cit.datumDruck;
+    } else if (data.cit.datumDruck) {
+      da += ` (Publikation von ${data.cit.datumDruck})`;
+    }
+    beleg.data.da = da;
+    // author
+    beleg.data.au = data.cit.autor.join("/") || "N.\u00A0N.";
+    // citation
+    data.ds.qu = importTEI.makeQu();
+    // text class
+    if (data.cit.textsorte.length) {
+      const textclass = new Set();
+      for (let i = 0, len = data.cit.textsorte.length; i < len; i++) {
+        const ts = data.cit.textsorte[i];
+        const tsSub = data.cit.textsorteSub[i] || "";
+        if (/[,;] /.test(tsSub)) {
+          const tsSubSp = tsSub.split(/[,;] /);
+          for (let j = 0, len = tsSubSp.length; j < len; j++) {
+            textclass.add(`${ts}: ${tsSubSp[j]}`);
+          }
+        } else if (tsSub) {
+          textclass.add(`${ts}: ${tsSub}`);
+        } else {
+          textclass.add(ts);
+        }
+      }
+      beleg.data.ts = [ ...textclass ].join("\n");
+    }
+
+    // get quotation
+    const quotation = await importTEI.transformXML({
+      tei: data.ds.bx,
+      type: importData.type,
+    });
+    if (!quotation) {
+      return false;
+    }
+    data.ds.bs = quotation;
+
+    // fill in card
+    const result = await importShared.fillCard(data.ds);
+    return result;
   },
+
+  // imported data
+  data: {
+    // citation data
+    cit: {},
+    // card data
+    ds: {},
+  },
+
+  // new citation data object
+  citObject () {
+    return {
+      autor: [],
+      hrsg: [],
+      titel: [],
+      untertitel: [],
+      band: "",
+      auflage: "",
+      ort: [],
+      verlag: "",
+      datumDruck: "",
+      datumEntstehung: "",
+      spalte: false,
+      seiten: "",
+      seiteStart: "",
+      seiteEnde: "",
+      zeitschrift: "",
+      zeitschriftJg: "",
+      zeitschriftH: "",
+      serie: "",
+      serieBd: "",
+      textsorte: [],
+      textsorteSub: [],
+    };
+  },
+
+  // read citation data from <teiHeader>
+  //   xmlDoc = document
+  citFill (xmlDoc) {
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const data = importTEI.data.cit;
+
+    // persons
+    const persons = {
+      autor: evaluator("//biblFull/titleStmt/author/persName"),
+      hrsg: evaluator("//biblFull/titleStmt/editor/persName"),
+    };
+    for (const [ k, v ] of Object.entries(persons)) {
+      let item = v.iterateNext();
+      while (item) {
+        const forename = item.querySelector("forename");
+        const surname = item.querySelector("surname");
+        // <addName> often gives the whole name like this: "forename surname";
+        // in that case, <forename> and <surname> are missing
+        const addName = item.querySelector("addName");
+        if (surname) {
+          const name = [ trimmer(surname.textContent) ];
+          if (forename) {
+            name.push(trimmer(forename.textContent));
+          }
+          data[k].push(name.join(", "));
+        } else if (addName) {
+          data[k].push(trimmer(addName.textContent));
+        }
+        item = v.iterateNext();
+      }
+    }
+
+    // further pub infos
+    const pub = {
+      titel: evaluator("//biblFull/titleStmt/title[@type='main']"),
+      untertitel: evaluator("//biblFull/titleStmt/title[@type='sub']"),
+      band: evaluator("//biblFull/titleStmt/title[@type='volume']"),
+      auflage: evaluator("//biblFull/editionStmt/edition"),
+      ort: evaluator("//biblFull/publicationStmt/pubPlace"),
+      verlag: evaluator("//biblFull/publicationStmt/publisher/name"),
+      datumDruck: evaluator("//biblFull/publicationStmt/date[@type='publication']"),
+      datumEntstehung: evaluator("//biblFull/publicationStmt/date[@type='creation']"),
+    };
+    for (const [ k, v ] of Object.entries(pub)) {
+      let item = v.iterateNext();
+      while (item) {
+        if (Array.isArray(data[k])) {
+          data[k].push(trimmer(item.textContent));
+        } else {
+          data[k] = trimmer(item.textContent);
+        }
+        item = v.iterateNext();
+      }
+    }
+
+    // journal/series
+    let isJournal = false;
+    const journalEval = evaluator("//sourceDesc/bibl").iterateNext();
+    if (/^JA?/.test(journalEval.getAttribute("type"))) {
+      isJournal = true;
+    }
+    const series = {
+      titel: evaluator("//biblFull/seriesStmt/title"),
+      bdJg: evaluator("//biblFull/seriesStmt/biblScope[@unit='volume']"),
+      heft: evaluator("//biblFull/seriesStmt/biblScope[@unit='issue']"),
+      seiten: evaluator("//biblFull/seriesStmt/biblScope[@unit='pages']"),
+    };
+    const seriesTitel = [];
+    let item = series.titel.iterateNext();
+    while (item) {
+      seriesTitel.push(trimmer(item.textContent));
+      item = series.titel.iterateNext();
+    }
+    if (isJournal) {
+      // journal
+      data.zeitschrift = seriesTitel.join(". ");
+      item = series.bdJg.iterateNext();
+      if (item) {
+        data.zeitschriftJg = trimmer(item.textContent);
+      }
+      item = series.heft.iterateNext();
+      if (item) {
+        data.zeitschriftH = trimmer(item.textContent);
+      }
+      item = series.seiten.iterateNext();
+      if (item) {
+        data.seiten = trimmer(item.textContent);
+      }
+    } else {
+      // series
+      data.serie = seriesTitel.join(". ");
+      item = series.bdJg.iterateNext();
+      if (item) {
+        data.serieBd = trimmer(item.textContent);
+      }
+    }
+
+    // fallback for documents without full bibliographic information
+    if (!data.titel.length) {
+      const fallback = {
+        titel1: evaluator("//sourceDesc/bibl"),
+        titel2: evaluator("//titleStmt/title"),
+      };
+      for (const v of Object.values(fallback)) {
+        const item = v.iterateNext();
+        const text = trimmer(item.textContent);
+        if (text) {
+          data.titel.push(text);
+          break;
+        }
+      }
+    }
+
+    // text class
+    const textclass = evaluator("//profileDesc//textClass/classCode");
+    item = textclass.iterateNext();
+    while (item) {
+      const scheme = item.getAttribute("scheme");
+      let key = "";
+      if (/main$/.test(scheme)) {
+        key = "textsorte";
+      } else if (/sub$/.test(scheme)) {
+        key = "textsorteSub";
+      }
+      if (key) {
+        data[key].push(trimmer(item.textContent));
+      }
+      item = textclass.iterateNext();
+    }
+
+    // special trim function
+    function trimmer (v) {
+      v = v.replace(/\n/g, " ");
+      v = helfer.textTrim(v, true);
+      return v;
+    }
+  },
+
+  // create citation for the card
+  makeQu () {
+    const data = importTEI.data.cit;
+    const td = importShared.makeTitleObject();
+
+    // fill in data
+    td.autor = [ ...data.autor ];
+    td.hrsg = [ ...data.hrsg ];
+    td.titel = [ ...data.titel ];
+    td.untertitel = [ ...data.untertitel ];
+    if (data.zeitschrift) {
+      td.inTitel.push(data.zeitschrift);
+    }
+    const regBand = new RegExp(helfer.escapeRegExp(data.band));
+    if (data.band &&
+        !data.titel.some(i => regBand.test(i)) &&
+        !data.untertitel.some(i => regBand.test(i))) {
+      td.band = data.band;
+    }
+    td.auflage = data.auflage;
+    td.ort = [ ...data.ort ];
+    td.verlag = data.verlag !== "s. e." ? data.verlag : "";
+    td.jahrgang = data.zeitschriftJg;
+    td.jahr = data.datumDruck;
+    if (!data.datumDruck) {
+      td.jahr = data.datumEntstehung;
+    } else {
+      td.jahrZuerst = data.datumEntstehung;
+    }
+    if (data.zeitschriftH && !data.zeitschriftJg) {
+      td.jahrgang = data.zeitschriftH;
+    } else if (data.zeitschriftH) {
+      td.heft = data.zeitschriftH;
+    }
+    td.spalte = data.spalte;
+    td.seiten = data.seiten;
+    if (data.seiteStart) {
+      td.seite = data.seiteStart.replace(/^0+/, "");
+      if (data.seiteEnde !== data.seiteStart) {
+        td.seite += `–${data.seiteEnde.replace(/^0+/, "")}`;
+      }
+    }
+    td.serie = data.serie;
+    td.serieBd = data.serie_bd;
+    td.url.push(data.url);
+
+    // make and return title
+    let title = importShared.makeTitle(td);
+    title = title.normalize("NFC");
+    return title;
+  },
+
+  // set with unknown renditions that are found during the transformation
+  // (this set only serves for evaluation purposes)
+  unknownRenditions: null,
 
   // xsl stylsheet
   transformXsl: "",
 
-  // set with unknown renditions that are found during the transformation
-  // (this set only serves for evaluation purposes)
-  transformUnknownRenditions: null,
-
   // transform the passed XML snippet
   //   tei = string
   //   type = string (tei | tei-dta)
-  async transformXml ({ tei, type }) {
+  async transformXML ({ tei, type }) {
     // reset set for unknown renditions
-    importTEI.transformUnknownRenditions = new Set();
+    importTEI.unknownRenditions = new Set();
 
-    // preprocess tei
+    // preprocess TEI
     // mark hyphens that appear immediately before a <lb>
     tei = tei.replace(/[-¬](<lb.*?\/>)/g, (...args) => `[¬]${args[1]}`);
 
@@ -176,7 +501,7 @@ const importTEI = {
             }
           }
           // unknown rendition => remove it
-          importTEI.transformUnknownRenditions.add(rKey);
+          importTEI.unknownRenditions.add(rKey);
           addRendition(i, rKey);
         }
       });
@@ -286,8 +611,8 @@ const importTEI = {
   //   pageTo = number
   //   type = string (tei | tei-dta)
   //   xmlDoc = document
-  //   xmlPlain = string
-  getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlPlain }) {
+  //   xmlStr = string
+  getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
     // try default values for @facs by import type
     const pb = xmlDoc.querySelectorAll("pb");
     let pbStartSel;
@@ -398,6 +723,17 @@ const importTEI = {
       }
     }
 
+    // register page numbers
+    const idxStart = getIndex(pbStart);
+    const idxEnd = pbEnd ? getIndex(pbEnd) : pb.length;
+    for (let i = idxStart; i < idxEnd; i++) {
+      const n = pb[i].getAttribute("n") || "";
+      if (i === idxStart) {
+        importTEI.data.cit.seiteStart = n;
+      }
+      importTEI.data.cit.seiteEnde = n;
+    }
+
     // cut pages from <text>
     // 1. start of cut
     let text = "";
@@ -409,10 +745,10 @@ const importTEI = {
     } while (parent.nodeName !== "text");
     if (pbStartSel) {
       const splitterStart = new RegExp(`<pb[^>]+?${pbStartSel}.*?>`);
-      text = tagsStart.join("") + xmlPlain.split(splitterStart)[1];
+      text = tagsStart.join("") + xmlStr.split(splitterStart)[1];
     } else {
-      const splitted = xmlPlain.split(/<pb.*?>/);
-      const pbXml = xmlPlain.match(/<pb.*?>/g);
+      const splitted = xmlStr.split(/<pb.*?>/);
+      const pbXml = xmlStr.match(/<pb.*?>/g);
       let xml = "";
       for (let i = 0, len = splitted.length; i < len; i++) {
         if (i >= pageFrom) {
@@ -477,10 +813,29 @@ const importTEI = {
     }
   },
 
+  // create a complete TEI document from a given text snippet
+  //   text = string
+  //     (extracted pages from the complete document)
+  //   xmlDoc = document
+  //     (complete XML document)
+  createCompleteDoc ({ text, xmlDoc }) {
+    let header = xmlDoc?.querySelector("teiHeader")?.outerHTML || "";
+    header = header.replace(/\r?\n/g, "");
+    header = header.normalize("NFC");
+    return `<TEI>${header}${text}</TEI>`;
+  },
+
   // DTA: get title ID
-  //   url = object
-  //     (already parsed with URL())
+  //   url = string | object
   dtaGetTitleId (url) {
+    if (typeof url === "string") {
+      try {
+        url = new URL(url);
+      } catch {
+        return false;
+      }
+    }
+
     if (/\/(download_xml|show|view)\//.test(url.pathname)) {
       return url.pathname.replace(/\/$/, "").match(/([^/]+)$/)?.[1] || false;
     }
@@ -488,9 +843,18 @@ const importTEI = {
   },
 
   // DTA: get page number
-  //   url = object
-  //     (already parsed with URL())
-  dtaGetPageNo (url) {
+  //   url = string | object
+  //   titleId = string | undefined
+  dtaGetPageNo (url, titleId = "") {
+    // parse URL if not already done
+    if (typeof url === "string") {
+      try {
+        url = new URL(url);
+      } catch {
+        return false;
+      }
+    }
+
     // from search parameter
     const p = url.searchParams.get("p");
     if (p) {
@@ -498,7 +862,9 @@ const importTEI = {
     }
 
     // from URL path
-    const titleId = importTEI.dtaGetTitleId(url);
+    if (!titleId) {
+      titleId = importTEI.dtaGetTitleId(url);
+    }
     if (titleId) {
       const page = url.pathname.match(/[0-9]+$/);
       const titleReg = new RegExp(titleId + "$");
