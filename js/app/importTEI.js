@@ -44,22 +44,13 @@ const importTEI = {
       data.ds.ul = importData.formData.url;
     }
 
-    // update XML document (whitespace correction)
-    let xmlStr = importData.data.xmlStr.replace(/^\s+/gm, "");
-    xmlStr = helfer.textTrim(xmlStr, true);
-    const xmlDoc = importShared.parseXML(xmlStr);
-    if (!xmlDoc) {
-      importTEI.error("Vorbereitung des XML-Dokuments misslungen", "feld");
-      return false;
-    }
-
     // get text snippet
-    const snippet = importTEI.getTextSnippet({
+    const snippet = await importTEI.getTextSnippet({
       pageFrom: data.ds.bv,
       pageTo: data.ds.bb,
       type: data.ds.bi,
-      xmlDoc,
-      xmlStr,
+      xmlDoc: importData.data.xmlDoc,
+      xmlStr: importData.data.xmlStr,
     });
     if (!snippet) {
       return false;
@@ -68,11 +59,11 @@ const importTEI = {
     // create a complete TEI document with the extracted snippet
     data.ds.bx = importTEI.createCompleteDoc({
       text: snippet,
-      xmlDoc,
+      xmlDoc: importData.data.xmlDoc,
     });
 
     // fill in citation data
-    importTEI.citFill(xmlDoc);
+    importTEI.citFill(importData.data.xmlDoc);
 
     // detect column count
     //   - no folio count
@@ -892,7 +883,7 @@ const importTEI = {
 
     // normalize whitespace
     text = text.replace(/\r?\n/g, "");
-    text = text.replace(/ {2,}/g, " ");
+    text = helfer.textTrim(text, true);
 
     // return <text>
     return text.normalize("NFC");
@@ -915,7 +906,14 @@ const importTEI = {
   //     (complete XML document)
   createCompleteDoc ({ text, xmlDoc }) {
     let header = xmlDoc?.querySelector("teiHeader")?.outerHTML || "";
-    header = header.replace(/\r?\n/g, "");
+    header = header.replace(/^\s+/gm, "");
+    header = header.replace(/\r?\n([\p{L}\p{N}])?/gu, (...args) => {
+      if (args[1]) {
+        return " " + args[1];
+      }
+      return "";
+    });
+    header = helfer.textTrim(header, true);
     header = header.normalize("NFC");
     return `<TEI>${header}${text}</TEI>`;
   },
