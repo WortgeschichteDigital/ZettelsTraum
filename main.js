@@ -1575,6 +1575,17 @@ if (cliCommandFound || !locked) {
     }, 3e4);
   });
 
+  // Sicherheit für Web-Contents erhöhen:
+  //   - Navigieren zu anderen Seiten als derjenigen,
+  //     die beim Öffnen des Fenster aus der main.js heraus
+  //     geladen wird, unterbinden.
+  //   - Erzeugen von Fenstern via window.open()
+  //     aus einem Web-Content heraus unterbinden.
+  app.on("web-contents-created", (evt, contents) => {
+    contents.on("will-navigate", evt => evt.preventDefault());
+    contents.setWindowOpenHandler(() => ({ action: "deny" }));
+  });
+
   // App beenden, wenn alle Fenster geschlossen worden sind
   app.on("window-all-closed", async () => {
     // Optionen schreiben
