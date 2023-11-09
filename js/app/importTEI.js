@@ -478,46 +478,37 @@ const importTEI = {
   },
 
   // DTA: get title ID
-  //   url = string
+  //   url = object
+  //     (already parsed with URL())
   dtaGetTitleId (url) {
-    let titleId = "";
-    let m;
-    if (/\/(show|view)\//.test(url)) {
-      m = /\/(show|view)\/(?<titleId>[^/?]+)/.exec(url);
-    } else {
-      m = /deutschestextarchiv\.de\/(?<titleId>[^/?]+)/.exec(url);
+    if (/\/(download_xml|show|view)\//.test(url.pathname)) {
+      return url.pathname.replace(/\/$/, "").match(/([^/]+)$/)?.[1] || false;
     }
-    if (m?.groups?.titleId) {
-      titleId = m.groups.titleId;
-    }
-    return titleId;
+    return url.pathname.match(/^\/(.+?)\//)?.[1] || false;
   },
 
   // DTA: get page number
-  //   url = string
-  //   titleId = string | undefined
-  dtaGetPageNo (url, titleId) {
-    // try to get page from GET variable
-    const regGet = /p=(?<page>[0-9]+)/;
-    const mGet = regGet.exec(url);
-    if (mGet?.groups?.page) {
-      return parseInt(mGet.groups.page, 10);
+  //   url = object
+  //     (already parsed with URL())
+  dtaGetPageNo (url) {
+    // from search parameter
+    const p = url.searchParams.get("p");
+    if (p) {
+      return parseInt(p, 10);
     }
 
-    // try to get page from URL path
-    let page = 1;
-    if (!titleId) {
-      titleId = importTEI.dtaGetTitleId(url);
-      if (!titleId) {
-        return page;
+    // from URL path
+    const titleId = importTEI.dtaGetTitleId(url);
+    if (titleId) {
+      const page = url.pathname.match(/[0-9]+$/);
+      const titleReg = new RegExp(titleId + "$");
+      if (page && !titleReg.test(url.pathname)) {
+        return parseInt(page[0], 10);
       }
     }
-    const regPath = new RegExp(`${titleId}\\/(?<page>[0-9]+)`);
-    const mPath = regPath.exec(url);
-    if (mPath?.groups?.page) {
-      page = parseInt(mPath.groups.page, 10);
-    }
-    return page;
+
+    // return default
+    return 1;
   },
 
   // show error message
