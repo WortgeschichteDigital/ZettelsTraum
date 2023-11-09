@@ -10,7 +10,7 @@
 
 <!--
   available variables:
-    $teiType = "" | "dta"
+    $teiType = "" | "dingler" | "dta"
 -->
 
 <xsl:template match="TEI/text">
@@ -61,7 +61,7 @@
         <span>
           <xsl:attribute name="data-rendition">
             <xsl:choose>
-              <xsl:when test="$teiType = 'dta'">
+              <xsl:when test="$teiType = 'dingler' or $teiType = 'dta'">
                 <xsl:value-of select="$currentRendition"/>
               </xsl:when>
               <xsl:when test="$renditionHeader">

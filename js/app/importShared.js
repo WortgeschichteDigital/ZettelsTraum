@@ -11,6 +11,14 @@ const importShared = {
       xmlPath: "https://www.deutschestextarchiv.de/book/download_xml/",
       xmlPathReg: /^\/book\/download_xml\/[^/]+/,
     },
+    {
+      name: "Polytechnisches Journal",
+      desc: "aus dem Polytechnischen Journal",
+      type: "tei-dingler",
+      originReg: /^https:\/\/dingler\.bbaw\.de$/,
+      xmlPath: "https://dingler.bbaw.de/xml/articles/",
+      xmlPathReg: /^\/xml\/articles\/[^/]+/,
+    },
   ],
 
   // Typ der zu importierenden Textdaten ermitteln
@@ -301,6 +309,19 @@ const importShared = {
           },
           type: "tei-dta",
           formText: "TEI-XML (DTA)",
+          usesFileData: false,
+        };
+      }
+
+      // Polytechnisches Journal
+      if (/Dingler/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-dingler",
+          formText: "TEI-XML (Polytechnisches Journal)",
           usesFileData: false,
         };
       }

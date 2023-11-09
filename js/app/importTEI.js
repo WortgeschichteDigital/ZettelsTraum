@@ -21,7 +21,7 @@ const importTEI = {
   //     formView       = string
   //     type           = string
   //     urlData        = object (URL data)
-  //       id           = string (in case of "tei-dta" = title ID)
+  //       id           = string (in case of "tei-dta" and "tei-dingler" = title ID)
   //       url          = string (download URL)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -38,8 +38,19 @@ const importTEI = {
     data.ds.ud = new Date().toISOString().split("T")[0];
     if (importData.type === "tei-dta" && data.ds.bv) {
       data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
+    } else if (importData.type === "tei-dingler") {
+      data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
     } else {
       data.ds.ul = importData.formData.url;
+    }
+
+    // update XML document (whitespace correction)
+    let xmlStr = importData.data.xmlStr.replace(/^\s+/gm, "");
+    xmlStr = helfer.textTrim(xmlStr, true);
+    const xmlDoc = importShared.parseXML(xmlStr);
+    if (!xmlDoc) {
+      importTEI.error("Vorbereitung des XML-Dokuments misslungen", "feld");
+      return false;
     }
 
     // get text snippet
@@ -47,8 +58,8 @@ const importTEI = {
       pageFrom: data.ds.bv,
       pageTo: data.ds.bb,
       type: data.ds.bi,
-      xmlDoc: importData.data.xmlDoc,
-      xmlStr: importData.data.xmlStr,
+      xmlDoc,
+      xmlStr,
     });
     if (!snippet) {
       return false;
@@ -57,11 +68,11 @@ const importTEI = {
     // create a complete TEI document with the extracted snippet
     data.ds.bx = importTEI.createCompleteDoc({
       text: snippet,
-      xmlDoc: importData.data.xmlDoc,
+      xmlDoc,
     });
 
     // fill in citation data
-    importTEI.citFill(importData.data.xmlDoc);
+    importTEI.citFill(xmlDoc);
 
     // detect column count
     //   - no folio count
@@ -345,6 +356,171 @@ const importTEI = {
     return title;
   },
 
+  // list of known renditions;
+  // this list's sources are (mainly) DTABf and Polytechnisches Journal
+  // (renditions with empty objects are being deleted;
+  // Chrome has severe issues with fn:document(); that's why we're unable
+  // to map the renditions in a sane manner within the XSL)
+  knownRenditions: {
+    "#aq": {
+      tag: "span",
+      class: "tei-antiqua",
+      reg: /font-family:.*?sans-serif|antiqua/,
+    },
+    "#b": {
+      tag: "b",
+      class: "",
+      reg: /font-weight: ?bold/,
+    },
+    "#bold": {
+      tag: "b",
+      class: "",
+      reg: null,
+    },
+    "#blue": {},
+    "#c": {},
+    "#center": {},
+    "#double-underline": {
+      tag: "span",
+      class: "tei-doppelt",
+      reg: null,
+    },
+    "#et": {},
+    "#et2": {},
+    "#et3": {},
+    "#f": {},
+    "#fr": {
+      tag: "span",
+      class: "tei-fr",
+      reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
+    },
+    "#g": {
+      tag: "span",
+      class: "tei-gesperrt",
+      reg: /letter-spacing:/,
+    },
+    "#hidden": {},
+    "#i": {
+      tag: "i",
+      class: "",
+      reg: /font-style: ?italic/,
+    },
+    "#in": {
+      tag: "span",
+      class: "tei-initiale",
+      reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
+    },
+    "#indent-1": {},
+    "#indent-2": {},
+    "#italic": {
+      tag: "i",
+      class: "",
+      reg: null,
+    },
+    "#k": {
+      tag: "span",
+      class: "tei-kapitaelchen",
+      reg: /font-variant: ?small-caps/,
+    },
+    "#l1em": {},
+    "#l2em": {},
+    "#l3em": {},
+    "#large": {
+      tag: "span",
+      class: "tei-groesser",
+      reg: null,
+    },
+    "#larger": {
+      tag: "span",
+      class: "tei-groesser",
+      reg: /font-size: ?(larger|(x+-)?large)/,
+    },
+    "#left": {},
+    "#no_indent": {},
+    "#r1em": {},
+    "#red": {},
+    "#right": {},
+    "#roman": {},
+    "#rkd": {},
+    "#s": {
+      tag: "s",
+      class: "",
+      reg: /text-decoration: ?line-through/,
+    },
+    "#sub": {
+      tag: "sub",
+      class: "",
+      reg: /vertical-align: ?sub/,
+    },
+    "#subscript": {
+      tag: "sub",
+      class: "",
+      reg: null,
+    },
+    "#sup": {
+      tag: "sup",
+      class: "",
+      reg: /vertical-align: ?super/,
+    },
+    "#superscript": {
+      tag: "sup",
+      class: "",
+      reg: null,
+    },
+    // check #small and #smaller after #sub, #sup etc.!
+    // (there might be a mismatch due to the font-size)
+    "#small": {
+      tag: "small",
+      class: "",
+      reg: null,
+    },
+    "#smaller": {
+      tag: "small",
+      class: "",
+      reg: /font-size: ?(0?\.[0-9]+em|smaller|x+-small)/,
+    },
+    "#u": {
+      tag: "u",
+      class: "",
+      reg: /text-decoration: ?underline/,
+    },
+    "#underline": {
+      tag: "u",
+      class: "",
+      reg: null,
+    },
+    "#uu": {
+      tag: "span",
+      class: "tei-doppelt",
+      reg: /border-bottom:[^;]*double/,
+    },
+    "#wide": {
+      tag: "span",
+      class: "tei-gesperrt",
+      reg: null,
+    },
+    "#x-large": {
+      tag: "span",
+      class: "tei-groesser",
+      reg: null,
+    },
+    "#x-small": {
+      tag: "small",
+      class: "",
+      reg: null,
+    },
+    "#xx-large": {
+      tag: "span",
+      class: "tei-groesser",
+      reg: null,
+    },
+    "#xx-small": {
+      tag: "small",
+      class: "",
+      reg: null,
+    },
+  },
+
   // set with unknown renditions that are found during the transformation
   // (this set only serves for evaluation purposes)
   unknownRenditions: null,
@@ -354,7 +530,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dta)
+  //   type = string (tei | tei-dingler | tei-dta)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -387,94 +563,7 @@ const importTEI = {
     let result = new XMLSerializer().serializeToString(xmlTrans);
 
     // replace rendition tags
-    // (keys are DTA renditions; renditions with empty objects are being deleted;
-    // Chrome has severe issues with fn:document(); that's why we're unable
-    // to map the renditions in a sane manner within the XSL;
-    // the following rendition tags stem mainly from DTABf.)
-    const renditions = {
-      "#aq": {
-        tag: "span",
-        class: "tei-antiqua",
-        reg: /font-family:.*?sans-serif|antiqua/,
-      },
-      "#b": {
-        tag: "b",
-        class: "",
-        reg: /font-weight: ?bold/,
-      },
-      "#blue": {},
-      "#c": {},
-      "#et": {},
-      "#et2": {},
-      "#et3": {},
-      "#f": {},
-      "#fr": {
-        tag: "span",
-        class: "tei-fr",
-        reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
-      },
-      "#g": {
-        tag: "span",
-        class: "tei-gesperrt",
-        reg: /letter-spacing:/,
-      },
-      "#i": {
-        tag: "i",
-        class: "",
-        reg: /font-style: ?italic/,
-      },
-      "#in": {
-        tag: "span",
-        class: "tei-initiale",
-        reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
-      },
-      "#k": {
-        tag: "span",
-        class: "tei-kapitaelchen",
-        reg: /font-variant: ?small-caps/,
-      },
-      "#larger": {
-        tag: "span",
-        class: "tei-groesser",
-        reg: /font-size: ?larger/,
-      },
-      "#left": {},
-      "#red": {},
-      "#right": {},
-      // #rkd in www.jeanpaul-edition.de (meaning unclear)
-      "#rkd": {},
-      "#s": {
-        tag: "s",
-        class: "",
-        reg: /text-decoration: ?line-through/,
-      },
-      "#smaller": {
-        tag: "small",
-        class: "",
-        reg: /font-size: ?smaller/,
-      },
-      "#sub": {
-        tag: "sub",
-        class: "",
-        reg: /vertical-align: ?sub/,
-      },
-      "#sup": {
-        tag: "sup",
-        class: "",
-        reg: /vertical-align: ?super/,
-      },
-      "#u": {
-        tag: "u",
-        class: "",
-        reg: /text-decoration: ?underline/,
-      },
-      "#uu": {
-        tag: "span",
-        class: "tei-doppelt",
-        reg: /border-bottom: ?double/,
-      },
-    };
-
+    const renditions = importTEI.knownRenditions;
     const rend = document.createElement("div");
     rend.innerHTML = result;
     let rendRun = 0;
@@ -609,7 +698,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dta)
+  //   type = string (tei | tei-dingler | tei-dta)
   //   xmlDoc = document
   //   xmlStr = string
   getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -625,17 +714,23 @@ const importTEI = {
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
       pbEndSel = `facs="#f${pageTo.toString().padStart(4, "0")}"`;
       pbEnd = xmlDoc.querySelector(`pb[${pbEndSel}]`);
+    } else if (type === "tei-dingler") {
+      // Polytechnisches Journal => search for @n="n"
+      pbStartSel = `n="${pageFrom}"`;
+      pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
+      pbEndSel = `n="${pageTo}"`;
+      pbEnd = xmlDoc.querySelector(`pb[${pbEndSel}]`);
     }
 
     // unable to find starting <pb> => try different selectors
     if (!pbStart) {
       const selectors = [
-        `facs="${pageFrom}"`,
-        `facs="#${pageFrom}"`,
-        `facs$="0${pageFrom}"`,
         `n="${pageFrom}"`,
         `n="#${pageFrom}"`,
         `n$="0${pageFrom}"`,
+        `facs="${pageFrom}"`,
+        `facs="#${pageFrom}"`,
+        `facs$="0${pageFrom}"`,
       ];
       for (const sel of selectors) {
         pbStart = xmlDoc.querySelector(`pb[${sel}]`);
@@ -825,15 +920,25 @@ const importTEI = {
     return `<TEI>${header}${text}</TEI>`;
   },
 
+  // Polytechnisches Journal: get title ID
+  //   url = string | object
+  dinglerGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    return url.pathname.match(/\/articles\/(.+?)\.(html|xml)$/)?.[1] || false;
+  },
+
   // DTA: get title ID
   //   url = string | object
   dtaGetTitleId (url) {
-    if (typeof url === "string") {
-      try {
-        url = new URL(url);
-      } catch {
-        return false;
-      }
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
     }
 
     if (/\/(download_xml|show|view)\//.test(url.pathname)) {
@@ -846,13 +951,10 @@ const importTEI = {
   //   url = string | object
   //   titleId = string | undefined
   dtaGetPageNo (url, titleId = "") {
-    // parse URL if not already done
-    if (typeof url === "string") {
-      try {
-        url = new URL(url);
-      } catch {
-        return false;
-      }
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
     }
 
     // from search parameter
@@ -875,6 +977,19 @@ const importTEI = {
 
     // return default
     return 1;
+  },
+
+  // parse the given URL (if necessary)
+  //   url = string
+  parseURL (url) {
+    if (typeof url === "string") {
+      try {
+        url = new URL(url);
+      } catch {
+        return false;
+      }
+    }
+    return url;
   },
 
   // show error message

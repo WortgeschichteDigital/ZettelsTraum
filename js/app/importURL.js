@@ -90,6 +90,12 @@ const importURL = {
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId;
       }
+    } else if (formData.resource.type === "tei-dingler") {
+      const titleId = importTEI.dinglerGetTitleId(parsedURL);
+      result.id = titleId;
+      if (!result.url) {
+        result.url = formData.resource.xmlPath + titleId + ".xml";
+      }
     }
 
     // ID ggf. generisch füllen
