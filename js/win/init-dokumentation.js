@@ -3,6 +3,7 @@
 // MODULE
 const modules = {
   ipc: require("electron").ipcRenderer,
+  shell: require("electron").shell,
 };
 
 window.addEventListener("load", async () => {
