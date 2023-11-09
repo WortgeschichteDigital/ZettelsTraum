@@ -2202,10 +2202,12 @@ const beleg = {
     }
 
     // URL bekannt?
-    if (!importShared.isKnownURL(beleg.data.ul)) {
+    const validURL = importShared.isKnownURL(beleg.data.ul);
+    if (!validURL) {
+      const text = validURL === null ? "Die URL ist nicht valide." : "Bei der URL handelt es sich nicht um eine bekannte Importquelle.";
       dialog.oeffnen({
         typ: "alert",
-        text: "Bei der URL handelt es sich nicht um eine bekannte Import-Quelle.",
+        text,
       });
       return;
     }

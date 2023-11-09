@@ -6,7 +6,7 @@ const importShared = {
     {
       desc: "aus dem DTA",
       type: "tei-dta",
-      reg: /^https?:\/\/www\.deutschestextarchiv\.de\//,
+      originReg: /^https:\/\/www\.deutschestextarchiv\.de$/,
     },
   ],
 
@@ -182,7 +182,13 @@ const importShared = {
   // Check: Dateipfad
   //   str = string
   isFilePath (str) {
-    if (/^file:\/\//.test(str)) {
+    let validPath;
+    try {
+      validPath = new URL(str).href;
+    } catch {
+      return null;
+    }
+    if (/^file:\/\//.test(validPath)) {
       return true;
     }
     return false;
@@ -239,8 +245,14 @@ const importShared = {
   // Check: URL einer bekannten Quelle
   //   str = string
   isKnownURL (str) {
+    let validURL;
+    try {
+      validURL = new URL(str);
+    } catch {
+      return null;
+    }
     for (const i of importShared.onlineResources) {
-      if (i.reg.test(str)) {
+      if (i.originReg.test(validURL.origin)) {
         return true;
       }
     }
@@ -457,7 +469,7 @@ const importShared = {
       return false;
     }
     if (!importShared.isFilePath(pfad)) {
-      fehler("Dateipfad nich valide");
+      fehler("Dateipfad nicht valide");
       return false;
     }
     pfad = modules.path.normalize(pfad.replace(/^file:\/\//, ""));
@@ -753,10 +765,12 @@ const importShared = {
       // Datenfelder auslesen (inkl. Fehlerkorrekturen)
       const urlFeld = document.getElementById("beleg-import-feld");
       const url = urlFeld.value.trim();
-      if (!importShared.isKnownURL(url)) {
+      const validURL = importShared.isKnownURL(url);
+      if (!validURL) {
+        const fehler = validURL === null ? "URL nicht valide" : "URL aus unbekannter Online-Ressource";
         dialog.oeffnen({
           typ: "alert",
-          text: 'Beim Einlesen des Formulars ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">URL aus unbekannter Online-Ressource</p>',
+          text: `Beim Einlesen des Formulars ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${fehler}</p>`,
           callback: () => urlFeld.select(),
         });
         return;
@@ -958,8 +972,14 @@ const importShared = {
 
     // Wurde aus einer bekannten Online-Ressource importiert?
     let source = null;
+    let validURL;
+    try {
+      validURL = new URL(ds.ul);
+    } catch {
+      return false;
+    }
     for (const i of importShared.onlineResources) {
-      if (i.reg.test(ds.ul)) {
+      if (i.originReg.test(validURL.origin)) {
         if (ds.bi !== i.type) {
           source = i;
         }
