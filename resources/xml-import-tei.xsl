@@ -17,7 +17,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="fw|teiHeader"/>
+<xsl:template match="fw|index|teiHeader"/>
 
 <xsl:template match="cb|pb">
   <xsl:text>[:</xsl:text>

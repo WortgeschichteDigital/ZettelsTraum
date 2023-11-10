@@ -528,7 +528,7 @@ const importTEI = {
   unknownRenditions: null,
 
   // xsl stylsheet
-  transformXsl: "",
+  transformXSL: "",
 
   // transform the passed XML snippet
   //   tei = string
@@ -542,19 +542,19 @@ const importTEI = {
     tei = tei.replace(/[-¬](<lb.*?\/>)/g, (...args) => `[¬]${args[1]}`);
 
     // load xsl if needed
-    if (!importTEI.transformXsl) {
+    if (!importTEI.transformXSL) {
       await helfer.resourcesLoad({
         file: "xml-import-tei.xsl",
         targetObj: importTEI,
-        targetKey: "transformXsl",
+        targetKey: "transformXSL",
       });
-      if (!importTEI.transformXsl) {
+      if (!importTEI.transformXSL) {
         return "";
       }
     }
 
     // prepare XSLT
-    const xslt = new DOMParser().parseFromString(importTEI.transformXsl, "application/xml");
+    const xslt = new DOMParser().parseFromString(importTEI.transformXSL, "application/xml");
     const processor = new XSLTProcessor();
     processor.setParameter(null, "teiType", type.replace(/^tei-?/, ""));
     processor.importStylesheet(xslt);
@@ -646,6 +646,10 @@ const importTEI = {
     result = result.replace(/ {2,}/g, " ").trim();
     // remove <br> at the end of the text
     result = result.replace(/<br>$/, "");
+    // remove placeholders for <cb> and <pb> at the end and the beginning of the text
+    result = result.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
+    // erase empty placeholders for <cb> and <pb> that follow immediately after another placeholder
+    result = result.replace(/(\[:.+?:\]) \[:\?:\]/g, (...args) => args[1]);
     // trim paragraphs
     const div = result.split("\n\n");
     for (let i = 0, len = div.length; i < len; i++) {
