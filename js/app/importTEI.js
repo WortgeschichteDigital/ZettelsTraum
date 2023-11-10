@@ -283,6 +283,8 @@ const importTEI = {
         key = "textsorte";
       } else if (/sub$/.test(scheme)) {
         key = "textsorteSub";
+      } else if (!/DTACorpus$/.test(scheme)) {
+        key = "textsorte";
       }
       if (key) {
         data[key].push(trimmer(item.textContent));
