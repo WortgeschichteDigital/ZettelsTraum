@@ -2895,8 +2895,13 @@ const beleg = {
             xmlStr,
           });
           pre.innerHTML = pretty;
+        } else if (/<[^>]+>/.test(beleg.data.bx)) {
+          const pretty = helferXml.prettyPrint({
+            xmlStr: beleg.data.bx,
+          });
+          pre.innerHTML = pretty;
         } else {
-          pre.textContent = beleg.data[feld];
+          pre.textContent = beleg.data.bx;
         }
       } else {
         // weitere Datenfelder
