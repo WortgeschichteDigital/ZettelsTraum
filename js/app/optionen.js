@@ -28,6 +28,8 @@ const optionen = {
       trennung: true,
       // Anzeige Metadatenfelder
       meta: false,
+      // Anzeige von <teiHeader> umstellen
+      header: false,
     },
     // Filterleiste
     filter: {
@@ -502,6 +504,8 @@ const optionen = {
       optionen.data.beleg.meta = !optionen.data.beleg.meta;
       beleg.metadatenToggle(false);
     }
+    optionen.data.beleg.header = !optionen.data.beleg.header;
+    beleg.metadatenHeaderToggle(false);
   },
 
   // Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)

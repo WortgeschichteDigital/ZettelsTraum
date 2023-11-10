@@ -1215,6 +1215,8 @@ const beleg = {
       evt.preventDefault();
       if (this.id === "beleg-meta-toggle") {
         beleg.metadatenToggle(true);
+      } else if (this.id === "beleg-meta-header") {
+        beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
         beleg.metadatenReimport();
       } else if (this.classList.contains("icon-tools-kopieren")) {
@@ -3020,7 +3022,11 @@ const beleg = {
         const pre = document.createElement("pre");
         cont.appendChild(pre);
         if (/^(tei|xml)/.test(beleg.data.bi)) {
-          let xmlDoc = new DOMParser().parseFromString(beleg.data.bx, "text/xml");
+          let bx = beleg.data.bx;
+          if (!optionen.data.beleg.header) {
+            bx = bx.replace(/<teiHeader>.+?<\/teiHeader>/s, "<teiHeader>[ausgeblendet]</teiHeader>");
+          }
+          let xmlDoc = new DOMParser().parseFromString(bx, "text/xml");
           xmlDoc = helferXml.indent(xmlDoc);
           const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
           const pretty = helferXml.prettyPrint({
@@ -3044,7 +3050,7 @@ const beleg = {
   },
 
   // Metadaten: Anzeige umschalten
-  //   optionenSpeichern = Booleand
+  //   optionenSpeichern = Boolean
   metadatenToggle (optionenSpeichern) {
     // Icon umstellen
     const link = document.querySelector("#beleg-meta-toggle");
@@ -3073,6 +3079,32 @@ const beleg = {
     if (optionenSpeichern) {
       optionen.speichern();
     }
+  },
+
+  // Metadaten: Anzeige von <teiHeader> umstellen
+  //   optionenSpeichern = Boolean
+  metadatenHeaderToggle (optionenSpeichern) {
+    // Optionen auffrischen
+    optionen.data.beleg.header = !optionen.data.beleg.header;
+    if (optionenSpeichern) {
+      optionen.speichern();
+    }
+
+    // Icon umstellen
+    const link = document.querySelector("#beleg-meta-header");
+    if (optionen.data.beleg.header) {
+      link.classList.add("icon-tools-header-aus");
+      link.classList.remove("icon-tools-header-an");
+      link.title = "&lt;teiHeader&gt; in den Importdaten ausblenden";
+    } else {
+      link.classList.remove("icon-tools-header-aus");
+      link.classList.add("icon-tools-header-an");
+      link.title = "&lt;teiHeader&gt; in den Importdaten einblenden";
+    }
+    tooltip.init(link.parentNode);
+
+    // Anzeige der Metadaten auffrischen
+    beleg.metadaten();
   },
 
   // Metadaten: Daten aus bx erneut importieren
