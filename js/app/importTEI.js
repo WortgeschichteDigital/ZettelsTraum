@@ -35,13 +35,15 @@ const importTEI = {
     data.ds.bi = importData.type;
     data.ds.bv = importData.formData.von;
     data.ds.kr = importData.formData?.resource?.name || "";
-    data.ds.ud = new Date().toISOString().split("T")[0];
-    if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
-      data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
-    } else if (importData.type === "tei-dingler" && importData.urlData) {
-      data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
-    } else {
-      data.ds.ul = importData.formData.url;
+    if (importData.urlData) {
+      data.ds.ud = new Date().toISOString().split("T")[0];
+      if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
+        data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
+      } else if (importData.type === "tei-dingler" && importData.urlData) {
+        data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
+      } else {
+        data.ds.ul = importData.formData.url;
+      }
     }
 
     // get text snippet
