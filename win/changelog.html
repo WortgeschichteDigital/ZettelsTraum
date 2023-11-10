@@ -55,7 +55,7 @@
         <ul>
           <li><a href="#menueRedaktion-metadaten" class="link-handbuch">Redaktionsmetadaten</a>: Das Feld für Nebenlemmata wurde entfernt. Nutzen Sie stattdessen das neue <a href="#menueKartei-lemmata" class="link-handbuch">Dialogfenster für Lemmata</a>, in dem sowohl Haupt- als auch Nebenlemmata eingetragen werden können.</li>
 
-          <li>Redaktionsmetadaten: Das Feld <i>behandelt mit</i> wurde entfernt. Nutzen Sie imm Lemmata-Fenster stattdessen die Funktion <i>ergänzende Kartei für</i>.</li>
+          <li>Redaktionsmetadaten: Das Feld <i>behandelt mit</i> wurde entfernt. Nutzen Sie im Lemmata-Fenster stattdessen die Funktion <i>ergänzende Kartei für</i>.</li>
 
           <li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Die Möglichkeit, über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> in der Zwischenablage GVK-Titeldaten im <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format <a href="#menueRedaktion-literaturTitelaufnahmeImport" class="link-handbuch">zu importieren</a>, wurde entfernt. Nutzen Sie stattdessen den zuverlässigeren Import über die Funktion <i><abbr title="Pica-Produktionsnummer">PPN</abbr>/<abbr title="Extensible Markup Language" lang="en">XML</abbr></i>.</li>
 
@@ -68,6 +68,18 @@
           <li><a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Fenster</a>: Es gab bisher keine Möglichkeit, die in einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei behandelten Wörter und ihre Schreibvarianten, strukturiert in einer einheitlichen Oberfläche zu verwalten. Die verstreuten, unstrukturierten Datenfelder, in denen Lemmata notiert wurden, sind alle in das neue Lemmata-Fenster aufgegangen. Das Dialogfenster wird auch für das Erstellen einer neuen Kartei genutzt. Zu Details <abbr title="siehe">s.</abbr> den verlinkten Handbuch-Abschnitt.</li>
 
           <li><a href="#filter" class="link-handbuch">Filter</a>: Mit dem neuen <a href="#filter-lemmata" class="link-handbuch">Lemmata-Filter</a> können die Belege danach gefiltert werden, ob ein bestimmtes Lemma in ihnen auftaucht oder nicht. Dieser Filter ist besonders für Karteien gedacht, in denen Belege zu mehreren Lemmata zugleich gesammelt werden.</li>
+
+          <li>
+            <p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die <a href="#karteikarte-importfunktion" class="link-handbuch">Importfunktion</a> wurde grundlegen überarbeitet und erweitert.</p>
+
+            <p>Die wichtigste Neuerung ist, dass nun <em>alle</em> in <a href="https://tei-c.org/"><abbr title="Text Encoding Initiative" lang="en">TEI</abbr></a> kodierten <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien importiert werden können. Es ist also ganz gleich, welcher Anbieter Daten mit interessanten Textbelegen bereitstellt – solange sie in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodiert sind, können sie mit <i class="app-name"></i> in guter bis sehr guter Qualität eingelesen werden.</p>
+
+            <p>Darüber hinaus können nun alle Datentypen, die importiert werden können, sowohl aus einer Datei als auch aus der Zwischenablage ausgelesen werden. Die App erkennt automatisch, um was für Daten es sich handelt. Aus diesem Grund konnte das Formular auch vereinfacht werden: Sie müssen nur noch die Importquelle (<i>URL, Datei, Zwischenablage</i>) auswählen, nicht mehr den Datentyp. Liegen in der Zwischenablage Daten, die die App erkennt, stellt sie beim Öffnen einer neuen Karteikarte das Importformular wie gehabt automatisch um.</p>
+
+            <p>Die Importmöglichkeit via URL ist erhalten geblieben. Neben Texten aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> können nun allerdings auch die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien des <a href="https://dingler.bbaw.de/">Polytechnischen Journals</a> und die Editionen der <a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitalen Bibliothek</a> (WDB) direkt importiert werden. Neu ist, dass Direktlinks zu den XML-Dateien nun auch akzeptiert werden. (<abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Dateien können <em>nur</em> via Direktlink importiert werden.)</p>
+
+            <p>Es gibt auch noch andere Datentypen, die importiert werden können (<abbr title="siehe">s.</abbr> zu Details den <a href="#karteikarte-importfunktion" class="link-handbuch">entsprechenden Handbuchabschnitt</a>). Grundsätzlich können mit der Importfunktion fortan aber beliebige Textdaten eingelesen werden. Wenn das Format nicht bekannt ist, bereinigt <i class="app-name"></i> die Daten um die meisten <abbr title="Extensible Markup Language" lang="en">XML</abbr>- und <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags (nur eine Auswahl bekannter Tags bleibt erhalten) und fügt sie in das Belegfeld ein.</p>
+          </li>
 
           <li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Checkboxes im Kopf der Karteikarte, mit denen ein Beleg eine bestimmte Eigenschaft (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <i>Buchung</i>) zugewiesen werden konnte, wurden durch ein <a href="#karteikarte-tags" class="link-handbuch">Tagging-System</a> ersetzt. Dieses ermöglicht es nun, neben einer Liste vordefinierter Tags, selbstdefinierte Tags zu vergeben. Die alte Ansicht kann durch das <a href="#einstellungen-karteikarteTagging" class="link-handbuch">Deaktivieren einer Option</a> wiederhergestellt werden.</li>
 
