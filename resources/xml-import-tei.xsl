@@ -32,7 +32,7 @@
   <xsl:text>:]</xsl:text>
 </xsl:template>
 
-<xsl:template match="byline|closer|dateline|div|head|item|lg|sp|titlePage">
+<xsl:template match="byline|closer|dateline|div|item|lg|sp|titlePage">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -53,6 +53,14 @@
   <xsl:text>[</xsl:text>
     <xsl:apply-templates/>
   <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="head">
+  <div>
+    <b>
+      <xsl:apply-templates/>
+    </b>
+  </div>
 </xsl:template>
 
 <xsl:template match="hi">
@@ -147,6 +155,25 @@
       </div>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="titlePart">
+  <xsl:if test="@type != 'column'">
+    <div>
+      <b>
+        <xsl:choose>
+          <xsl:when test="@type = 'main'">
+            <span class="tei-groesser">
+              <xsl:apply-templates/>
+            </span>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </b>
+    </div>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
