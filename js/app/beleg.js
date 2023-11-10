@@ -1615,19 +1615,22 @@ const beleg = {
     if (body.length > 1) {
       html = body[1];
     }
+
     // Style-Block(s) und Kommentare entfernen
     html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
     html = html.replace(/<!--.+?-->/gs, "");
+
     // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
-    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function (m, p1) {
-      return `<${p1}>`;
-    });
+    html = html.replace(/<\??([a-zA-Z0-9_-]+) [^>]+>/g, (...args) => `<${args[1]}>`);
+
     // HTML in temporären Container schieben
     const container = document.createElement("div");
     container.innerHTML = html;
+
     // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
     let inline_keep = [ ...beleg.toolsEinfuegenHtmlTags.inline_keep ];
     let speziell = structuredClone(beleg.toolsEinfuegenHtmlTags.speziell);
+
     // ggf. Anzahl der Tags reduzieren, die erhalten bleiben sollen
     if (minimum) {
       inline_keep = [
@@ -1637,11 +1640,11 @@ const beleg = {
       ];
       speziell = {};
     }
+
     // Text extrahieren
     let text = "";
-    container.childNodes.forEach(function (i) {
-      ana(i, false);
-    });
+    container.childNodes.forEach(i => ana(i, false));
+
     // erhaltene Inline-Auszeichnungen korrigieren
     Object.keys(speziell).forEach(tag => {
       const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
@@ -1663,10 +1666,13 @@ const beleg = {
     text = text.replace(/<br><\/br>/g, "<br>");
     text = text.replace(/\n\r?<br>/g, "<br>");
     text = text.replace(/<br>(?!\n)/g, "<br>\n");
+
     // viele Absätze am Stück bereinigen
     text = text.replace(/\n{3,}/g, "\n\n");
+
     // gereinigtes HTML zurückgeben
     return helfer.textTrim(text, true);
+
     // rekursive Analyse der Tags
     //   ele = Element
     //     (Knoten im XML-Baum)
@@ -1699,9 +1705,7 @@ const beleg = {
             preformatted = true;
           }
         }
-        ele.childNodes.forEach(function (i) {
-          ana(i, preformatted);
-        });
+        ele.childNodes.forEach(i => ana(i, preformatted));
       }
     }
   },

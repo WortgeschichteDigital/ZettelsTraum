@@ -149,8 +149,10 @@ const importShared = {
         return null;
       }
 
-      // Plain-tText aufbereiten
-      if (textType === "plain") {
+      // Plain-Text aufbereiten
+      // (if a random XML file was imported, "str" contains the XML tags;
+      // do not normalize the line breaks in that case)
+      if (textType === "plain" && !/<[a-zA-Z0-9_-]+?>/.test(str)) {
         text = str.replace(/\n+/g, "\n\n");
       }
 
