@@ -719,6 +719,28 @@ const importTEI = {
       } else if (pbStart.getAttribute("n")) {
         pbStartSel = `n="${pbStart.getAttribute("n")}"`;
       }
+
+      // warn about or even prevent the import of a very large file as a whole
+      const strBytes = new Blob([ xmlStr ]).size;
+      const message = `Die Datei ist <b>${Math.round(strBytes / 1024)} KB</b> groß.`;
+      if (strBytes > 400 * 1024) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `${message}\nWeil sie zu groß ist, wird der Import wird nicht ausgeführt.\nWählen Sie zuerst aus, welche Seiten aus der Datei importiert werden sollen.`,
+        });
+        return false;
+      } else if (strBytes > 200 * 1024) {
+        const result = await new Promise(resolve => {
+          dialog.oeffnen({
+            typ: "confirm",
+            text: `${message}\nSoll wirklich der komplette Inhalt dieser recht großen Datei importiert werden?`,
+            callback: () => resolve(dialog.antwort),
+          });
+        });
+        if (!result) {
+          return false;
+        }
+      }
     } else if (type === "tei-dta") {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
