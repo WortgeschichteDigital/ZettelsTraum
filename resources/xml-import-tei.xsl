@@ -64,7 +64,7 @@
               <xsl:when test="$teiType = 'dingler' or $teiType = 'dta'">
                 <xsl:value-of select="$currentRendition"/>
               </xsl:when>
-              <xsl:when test="$renditionHeader">
+              <xsl:when test="$renditionHeader != ''">
                 <xsl:value-of select="$renditionHeader"/>
               </xsl:when>
               <xsl:otherwise>
