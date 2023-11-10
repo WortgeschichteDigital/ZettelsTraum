@@ -10,7 +10,7 @@
 
 <!--
   available variables:
-    $teiType = "" | "dingler" | "dta"
+    $teiType = "" | dingler | dta | wdb
 -->
 
 <xsl:template match="TEI/text">
@@ -47,6 +47,12 @@
       <xsl:apply-templates select="./*[1]"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ex">
+  <xsl:text>[</xsl:text>
+    <xsl:apply-templates/>
+  <xsl:text>]</xsl:text>
 </xsl:template>
 
 <xsl:template match="hi">
@@ -93,7 +99,7 @@
 
 <xsl:template match="note">
   <xsl:variable name="notEmpty" select="./node()"/>
-  <xsl:if test="not(@type = 'editorial') and $notEmpty">
+  <xsl:if test="not(@type = 'editorial') and not(@resp) and $notEmpty">
     <xsl:text>[Anmerkung</xsl:text>
     <xsl:if test="@n">
       <xsl:text> </xsl:text>

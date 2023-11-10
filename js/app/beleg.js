@@ -3024,7 +3024,7 @@ const beleg = {
         if (/^(tei|xml)/.test(beleg.data.bi)) {
           let bx = beleg.data.bx;
           if (!optionen.data.beleg.header) {
-            bx = bx.replace(/<teiHeader>.+?<\/teiHeader>/s, "<teiHeader>[ausgeblendet]</teiHeader>");
+            bx = bx.replace(/<teiHeader[^>]*>.+?<\/teiHeader>/s, "<teiHeader>[ausgeblendet]</teiHeader>");
           }
           let xmlDoc = new DOMParser().parseFromString(bx, "text/xml");
           xmlDoc = helferXml.indent(xmlDoc);

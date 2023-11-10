@@ -19,6 +19,14 @@ const importShared = {
       xmlPath: "https://dingler.bbaw.de/xml/articles/",
       xmlPathReg: /^\/xml\/articles\/[^/]+/,
     },
+    {
+      name: "WDB",
+      desc: "aus der WDB",
+      type: "tei-wdb",
+      originReg: /^https?:\/\/diglib\.hab\.de$/,
+      xmlPath: "",
+      xmlPathReg: /\.xml$/,
+    },
   ],
 
   // Typ der zu importierenden Textdaten ermitteln
@@ -324,6 +332,20 @@ const importShared = {
           },
           type: "tei-dingler",
           formText: "TEI-XML (Polytechnisches Journal)",
+          usesFileData: false,
+        };
+      }
+
+      // WDB
+      if (/<TEI [^>]+\/{2}diglib\.hab\.de\//.test(str) ||
+          /Herzog August Bibliothek/.test(xml.querySelector("publicationStmt publisher name[type='org']")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-wdb",
+          formText: "TEI-XML (WDB)",
           usesFileData: false,
         };
       }

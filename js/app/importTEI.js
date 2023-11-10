@@ -19,7 +19,7 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-dingler | tei-dta)
+  //     type           = string (tei | tei-dingler | tei-dta | tei-wdb)
   //     urlData        = object
   //       id           = string (tei-dta and tei-dingler => title ID)
   //       url          = string (URL to XML file)
@@ -364,10 +364,15 @@ const importTEI = {
   // Chrome has severe issues with fn:document(); that's why we're unable
   // to map the renditions in a sane manner in the XSLT)
   knownRenditions: {
+    "#antiqua": {
+      tag: "span",
+      class: "tei-antiqua",
+      reg: null,
+    },
     "#aq": {
       tag: "span",
       class: "tei-antiqua",
-      reg: /font-family:.*?sans-serif|antiqua/,
+      reg: /font-family:.*?sans-serif/,
     },
     "#b": {
       tag: "b",
@@ -449,6 +454,16 @@ const importTEI = {
       class: "",
       reg: /text-decoration: ?line-through/,
     },
+    "#smallCaps": {
+      tag: "span",
+      class: "tei-kapitaelchen",
+      reg: null,
+    },
+    "#small-caps": {
+      tag: "span",
+      class: "tei-kapitaelchen",
+      reg: null,
+    },
     "#sub": {
       tag: "sub",
       class: "",
@@ -463,6 +478,11 @@ const importTEI = {
       tag: "sup",
       class: "",
       reg: /vertical-align: ?super/,
+    },
+    "#super": {
+      tag: "sup",
+      class: "",
+      reg: null,
     },
     "#superscript": {
       tag: "sup",
@@ -481,12 +501,22 @@ const importTEI = {
       class: "",
       reg: /font-size: ?(0?\.[0-9]+em|smaller|x+-small)/,
     },
+    "#spaced": {
+      tag: "span",
+      class: "tei-gesperrt",
+      reg: null,
+    },
     "#u": {
       tag: "u",
       class: "",
       reg: /text-decoration: ?underline/,
     },
     "#underline": {
+      tag: "u",
+      class: "",
+      reg: null,
+    },
+    "#underline_dotted": {
       tag: "u",
       class: "",
       reg: null,
@@ -532,7 +562,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dingler | tei-dta)
+  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -580,8 +610,9 @@ const importTEI = {
         const rAttr = i.dataset.rendition;
         x: for (const rKey of rAttr.split(/(?<!:) /)) {
           // rendition key found
-          if (renditions[rKey]) {
-            addRendition(i, rKey);
+          const rKeyHash = /^#/.test(rKey) ? rKey : "#" + rKey;
+          if (renditions[rKeyHash]) {
+            addRendition(i, rKeyHash);
             continue;
           }
           // search for matching css style
@@ -697,6 +728,12 @@ const importTEI = {
     decoder.innerHTML = result;
     result = decoder.value;
 
+    // show warning message if no text remains
+    if (!result) {
+      importTEI.error("kein Text transformiert", "feld");
+      return false;
+    }
+
     // return result
     return result.normalize("NFC");
   },
@@ -704,7 +741,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dingler | tei-dta)
+  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
   //   xmlDoc = document
   //   xmlStr = string
   async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -1034,7 +1071,20 @@ const importTEI = {
   //   xmlDoc = document
   //     (complete XML document)
   createCompleteDoc ({ text, xmlDoc }) {
+    // purge irrelevant lists to shrink the header size
+    const lists = [ "list", "listBibl", "listOrg", "listPerson", "listPlace" ];
+    for (const i of lists) {
+      let list = xmlDoc.querySelector(`sourceDesc > ${i}`);
+      while (list) {
+        list.parentNode.removeChild(list);
+        list = xmlDoc.querySelector(`sourceDesc > ${i}`);
+      }
+    }
+
+    // <teiHeader> to string
     let header = xmlDoc?.querySelector("teiHeader")?.outerHTML || "";
+
+    // clean-up operations
     header = header.replace(/^\s+/gm, "");
     header = header.replace(/\r?\n([\p{L}\p{N}])?/gu, (...args) => {
       if (args[1]) {
@@ -1044,6 +1094,8 @@ const importTEI = {
     });
     header = helfer.textTrim(header, true);
     header = header.normalize("NFC");
+
+    // return complete document
     return `<TEI>${header}${text}</TEI>`;
   },
 

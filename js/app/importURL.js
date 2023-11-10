@@ -37,7 +37,11 @@ const importURL = {
   getFormData (onlyKnownURL) {
     // URL einlesen
     const feld = document.getElementById("beleg-import-feld");
-    const url = feld.value.trim();
+    let url = feld.value.trim();
+    if (/^http:\/\//.test(url)) {
+      url = url.replace(/^http:/, "https:");
+      feld.value = url;
+    }
     const resource = importShared.isKnownURL(url);
     if (onlyKnownURL && !resource) {
       const error = resource === null ? "URL nicht valide" : "URL aus unbekannter Online-Ressource";
