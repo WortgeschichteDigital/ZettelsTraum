@@ -1909,298 +1909,160 @@ const beleg = {
   // Inhalt des Quelle-Felds neu laden
   //   shortcut = true | undefined
   async toolsQuelleLaden (shortcut = false) {
-    // Zwischenspeicher für Änderungen
+    // keine Quelle gefunden
+    if (!beleg.data.bx || !beleg.data.bi) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+        callback: () => document.getElementById("beleg-qu").focus(),
+      });
+      return;
+    }
+
+    // Variablen vorbereiten
     const aenderungen = {};
-    // Titelinfos aus bx laden
-    const bx = beleg.bxTyp({ bx: beleg.data.bx });
-    if (bx.typ) {
-      let titel = "";
-      if (bx.typ === "bibtex") {
-        const bibtex = await importBibtex.startImport({ content: bx.daten, returnTitle: true });
-        if (bibtex.length) {
-          titel = bibtex[0].ds.qu;
-        }
-      } else if (bx.typ === "plain-dereko") {
-        const reg = new RegExp(`^(${importDereko.idForm})(.+)`);
-        titel = bx.daten.match(reg)[2] + ".";
-      } else if (bx.typ === "xml-dwds") {
-        const dwds = await importDWDS.startImportXML({
-          xmlDoc: bx.daten,
-          xmlStr: "",
-          returnResult: true,
-        });
-        if (dwds.qu) {
-          if (beleg.data.au && !importDWDS.platzhalterName.test(beleg.data.au)) {
-            // für den Fall, dass der Autor manuell nachgetragen wurde
-            dwds.qu = dwds.qu.replace(/^N\.\sN\./, beleg.data.au);
-            dwds.au = beleg.data.au;
-          }
-          aenderungen.Autor = {
-            key: "au",
-            ori: beleg.data.au,
-            neu: dwds.au,
-          };
-          titel = dwds.qu;
-        }
-      } else if (bx.typ === "xml-fundstelle") {
-        const daten = redLit.eingabeXMLFundstelle({ xmlDoc: bx.daten, xmlStr: "" });
-        titel = daten.ds.qu;
-      } else if (bx.typ === "xml-mods") {
-        const daten = redLit.eingabeXMLMODS({ xmlDoc: bx.daten, xmlStr: "" });
-        titel = daten.ds.qu;
-      }
-      if (titel) {
-        aenderungen.Quelle = {
-          key: "qu",
-          ori: beleg.data.qu,
-          neu: titel,
-        };
-        ausfuellen();
-      } else if (titel === "") {
-        // "titel" könnte "false" sein, wenn der Internet-Request gescheitert ist;
-        // in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
-        lesefehler();
-      }
-      return;
+    let titel = "";
+    let xmlDoc;
+    if (/^(tei|xml)/.test(beleg.data.bi)) {
+      xmlDoc = importShared.parseXML(beleg.data.bx);
     }
-    // wenn Korpus "DWDS" => mit dem Text arbeiten, der im Quelle-Feld steht
-    if (/^DWDS/.test(beleg.data.kr)) {
-      const quelle = beleg.data.qu.split("\n");
-      const data = {
-        au: beleg.data.au,
-        da: beleg.data.da,
-        qu: quelle[0],
-      };
-      // versuchen, relativ wild in das Quelle-Feld
-      // kopierte Daten zu Titel und Autor auszulesen
-      const titeldaten = {};
-      const autor = /, Autor: (?<Autor>.+?), Titel:/.exec(data.qu);
-      const titel = /, Titel: (?<Titel>.+?)(?<Ende>$|, S)/.exec(data.qu);
-      if (autor) {
-        data.au = autor.groups.Autor;
-        data.qu = data.qu.replace(/, Autor: .+?, Titel:/, ", Titel:");
-      }
-      if (titel) {
-        titeldaten.titel = titel.groups.Titel;
-        const reg = new RegExp(", Titel: .+" + titel.groups.Ende);
-        data.qu = data.qu.replace(reg, titel.groups.Ende);
-      }
-      // Autor und Quelle nachbearbeiten
-      data.au = importDWDS.korrekturen({
-        typ: "au",
-        txt: data.au,
+
+    // Titelinfos abhängig vom Importtyp ermitteln
+    if (beleg.data.bi === "bibtex") {
+      // BIBTEX
+      const bibtex = await importBibtex.startImport({
+        content: beleg.data.bx,
+        returnTitle: true,
       });
-      importDWDS.korrekturen({
-        typ: "qu",
-        txt: data.qu,
-        ds: data,
-        titeldaten,
+      if (bibtex.length) {
+        titel = bibtex[0].ds.qu;
+      }
+    } else if (beleg.data.bi === "plain-dereko") {
+      // PLAIN-DEREKO
+      const reg = new RegExp(`^(${importDereko.idForm})(.+)`);
+      titel = beleg.data.bx.match(reg)[2] + ".";
+    } else if (/^tei/.test(beleg.data.bi) && xmlDoc) {
+      // TEI
+      importTEI.data.cit = importTEI.citObject();
+      importTEI.citFill(xmlDoc);
+      importTEI.data.cit.spalte = /, Sp\.\s/.test(beleg.data.qu);
+      titel = importTEI.makeQu();
+    } else if (beleg.data.bi === "xml-dwds" && xmlDoc) {
+      // XML-DWDS
+      const dwds = await importDWDS.startImportXML({
+        xmlDoc,
+        xmlStr: "",
+        returnResult: true,
       });
-      // Änderungen ermitteln
-      aenderungen.Autor = {
-        key: "au",
-        ori: beleg.data.au,
-        neu: data.au,
-      };
-      quelle[0] = data.qu;
-      aenderungen.Quelle = {
-        key: "qu",
-        ori: beleg.data.qu,
-        neu: quelle.join("\n"),
-      };
-      // fragen, ob Änderungen übernommen werden sollen
-      ausfuellen();
-      return;
-    }
-    // Titelinfos aus dem DTA herunterladen
-    if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(beleg.data.ul)) {
-      const titel = await beleg.toolsQuelleLadenDTA({ url: beleg.data.ul });
-      if (titel) {
+      if (dwds.qu) {
+        if (beleg.data.au && !importDWDS.platzhalterName.test(beleg.data.au)) {
+          // für den Fall, dass der Autor manuell nachgetragen wurde
+          dwds.qu = dwds.qu.replace(/^N\.\sN\./, beleg.data.au);
+          dwds.au = beleg.data.au;
+        }
         aenderungen.Autor = {
           key: "au",
           ori: beleg.data.au,
-          neu: importTEI.data.cit.autor.join("/"),
+          neu: dwds.au,
         };
-        if (!aenderungen.Autor.neu) {
-          aenderungen.Autor.neu = "N.\u00A0N.";
-        }
-        aenderungen.Quelle = {
-          key: "qu",
-          ori: beleg.data.qu,
-          neu: titel,
-        };
-        ausfuellen();
-      } else if (titel === "") {
-        lesefehler();
+        titel = dwds.qu;
+      }
+    } else if (beleg.data.bi === "xml-fundstelle" && xmlDoc) {
+      // XML-FUNDSTELLE
+      const daten = redLit.eingabeXMLFundstelle({
+        xmlDoc,
+        xmlStr: "",
+      });
+      titel = daten.ds.qu;
+    } else if (beleg.data.bi === "xml-mods" && xmlDoc) {
+      // XML-MODS
+      const daten = redLit.eingabeXMLMODS({
+        xmlDoc,
+        xmlStr: "",
+      });
+      titel = daten.ds.qu;
+    } else if (beleg.data.bi === "xml-wgd" && xmlDoc) {
+      // XML-WGD
+      titel = xmlDoc.querySelector("Fundstelle unstrukturiert")?.firstChild?.textContent || "";
+    }
+
+    // keine Titeldaten gefunden
+    if (!titel) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Beim Einlesen der Titeldaten ist etwas schiefgegangen.",
+      });
+      return;
+    }
+
+    // Titeldaten gefunden
+    aenderungen.Quelle = {
+      key: "qu",
+      ori: beleg.data.qu,
+      neu: titel,
+    };
+
+    // Änderungen ermitteln
+    const txt = [];
+    for (const [ k, v ] of Object.entries(aenderungen)) {
+      const [ ori ] = v.ori.split("\n");
+      const [ neu ] = v.neu.split("\n");
+      if (ori === neu) {
+        continue;
+      }
+      let val = `<strong>${k}</strong><br>`;
+      val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>${"\u00A0".repeat(5)}→<br>${v.neu}`;
+      txt.push(val);
+    }
+
+    // abbrechen, weil keine Änderungen gefunden wurden
+    const quelle = document.getElementById("beleg-qu");
+    if (!txt.length) {
+      if (!shortcut) {
+        quelle.focus();
+      } else {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Keine Änderungen nötig.",
+        });
       }
       return;
     }
-    // keine Quelle gefunden
-    dialog.oeffnen({
-      typ: "alert",
-      text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
-    });
-    // Quellenfeld ausfüllen (wenn gewünscht)
-    function ausfuellen () {
-      // Änderungen ermitteln
-      const txt = [];
-      for (const [ k, v ] of Object.entries(aenderungen)) {
-        const [ ori ] = v.ori.split("\n");
-        const [ neu ] = v.neu.split("\n");
-        if (ori === neu) {
-          continue;
-        }
-        let val = `<strong>${k}</strong><br>`;
-        val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>${"\u00A0".repeat(5)}→<br>${v.neu}`;
-        txt.push(val);
-      }
-      // abbrechen, weil keine Änderungen gefunden wurden
-      const quelle = document.getElementById("beleg-qu");
-      if (!txt.length) {
-        if (!shortcut) {
-          quelle.focus();
-        } else {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Keine Änderungen nötig.",
-          });
-        }
-        return;
-      }
-      // nachfragen, ob Änderungen übernommen werden sollen
-      let numerus = "Soll die folgende Änderung";
-      if (txt.length > 1) {
-        numerus = "Sollen die folgenden Änderungen";
-      }
+
+    // nachfragen, ob Änderungen übernommen werden sollen
+    let numerus = "Soll die folgende Änderung";
+    if (txt.length > 1) {
+      numerus = "Sollen die folgenden Änderungen";
+    }
+    const result = await new Promise(resolve => {
       dialog.oeffnen({
         typ: "confirm",
         text: `${numerus} vorgenommen werden?\n${txt.join("\n")}`,
         callback: () => {
-          if (dialog.antwort) {
-            for (const v of Object.values(aenderungen)) {
-              beleg.data[v.key] = v.neu;
-              document.getElementById(`beleg-${v.key}`).value = v.neu;
-              if (v.key === "qu") {
-                helfer.textareaGrow(quelle);
-              }
-            }
-            beleg.belegGeaendert(true);
-            beleg.aktionSpeichern();
-          } else if (!shortcut) {
-            quelle.focus();
-          }
           setTimeout(() => {
             document.querySelector("#dialog > div").classList.remove("breit");
           }, 200);
+          resolve(dialog.antwort);
         },
       });
       document.querySelector("#dialog > div").classList.add("breit");
       document.querySelectorAll("#dialog-text p").forEach(p => p.classList.add("force-wrap"));
-    }
-    // generische Fehlermeldung
-    function lesefehler () {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
-      });
-    }
-  },
-
-  // Zitiertitelanfrage an das DTA
-  //   url = String
-  //     (DTA-Link)
-  async toolsQuelleLadenDTA ({ url }) {
-    const quelle = document.getElementById("beleg-qu");
-    // Seitenangabe auslesen
-    const mHier = /, hier (?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
-    const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
-    const seitenData = {
-      seiteStart: "",
-      seiteEnde: "",
-      spalte: false,
-    };
-    let seiten;
-    if (mHier) {
-      seiten = mHier.groups.seiten;
-    } else if (mSeiten) {
-      seiten = mSeiten.groups.seiten;
-      if (mSeiten.groups.typ === ", Sp.") {
-        seitenData.spalte = true;
-      }
-    }
-    if (seiten) {
-      const seitenSp = seiten.split(/[-–]/);
-      seitenData.seiteStart = seitenSp[0];
-      if (seitenSp[1]) {
-        seitenData.seiteEnde = seitenSp[1];
-      }
-    }
-    // TEI-Header herunterladen
-    const fetchOk = await redLit.eingabeDTAFetch({
-      url,
-      fokusId: "beleg-qu",
-      seitenData,
     });
-    // Rückgabewerte
-    if (fetchOk) {
-      return importTEI.makeQu();
-    }
-    return false;
-  },
 
-  // Typ der Daten im bx-Datensatz ermitteln
-  //   bx = String
-  //     (Datensatz, der überprüft werden soll)
-  bxTyp ({ bx }) {
-    // keine Daten vorhanden
-    if (!bx) {
-      return {
-        typ: "",
-        daten: "",
-      };
-    }
-    // BibTeX-Daten
-    if (importShared.isBibtex(bx)) {
-      return {
-        typ: "bibtex",
-        daten: bx,
-      };
-    }
-    // DeReKo-Daten
-    const reg = new RegExp(`^${importDereko.idForm}`);
-    if (reg.test(bx)) {
-      return {
-        typ: "plain-dereko",
-        daten: bx,
-      };
-    }
-    // XML-Daten
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
-    if (!xmlDoc.querySelector("parsererror")) {
-      const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
-      let typ = "";
-      if (evaluator("//teiHeader/sourceDesc/biblFull")) {
-        typ = "tei";
-      } else if (evaluator("/Beleg/Fundstelle")) {
-        typ = "xml-dwds";
-      } else if (evaluator("/Fundstelle")) {
-        typ = "xml-fundstelle";
-      } else if (evaluator("/mods/titleInfo")) {
-        typ = "xml-mods";
-      } else {
-        typ = "";
+    // Änderungen übernehmen oder einfach nur das Quelle-Feld fokussieren
+    if (result) {
+      for (const v of Object.values(aenderungen)) {
+        beleg.data[v.key] = v.neu;
+        document.getElementById(`beleg-${v.key}`).value = v.neu;
+        if (v.key === "qu") {
+          helfer.textareaGrow(quelle);
+        }
       }
-      return {
-        typ,
-        daten: xmlDoc,
-      };
+      beleg.belegGeaendert(true);
+      beleg.aktionSpeichern();
+    } else if (!shortcut) {
+      quelle.focus();
     }
-    // Datenformat unbekannt
-    return {
-      typ: "",
-      daten: "",
-    };
   },
 
   // Link aus dem URL-Feld in das Importformular laden
