@@ -213,7 +213,7 @@ const importTEI = {
     // journal/series
     let isJournal = false;
     const journalEval = evaluator("//sourceDesc/bibl").iterateNext();
-    if (/^JA?/.test(journalEval.getAttribute("type"))) {
+    if (/^JA?/.test(journalEval?.getAttribute("type"))) {
       isJournal = true;
     }
     const series = {
@@ -260,6 +260,9 @@ const importTEI = {
       };
       for (const v of Object.values(fallback)) {
         const item = v.iterateNext();
+        if (!item) {
+          continue;
+        }
         const text = trimmer(item.textContent);
         if (text) {
           data.titel.push(text);
@@ -697,6 +700,16 @@ const importTEI = {
     let pbEndSel;
     let pbEnd;
 
+    // no <pb> found => return the whole <text>
+    if (!pb.length) {
+      const text = xmlStr.match(/<text[ >].+?<\/text>/s)?.[0] || false;
+      if (!text) {
+        importTEI.error("kein <text> gefunden", "feld");
+        return false;
+      }
+      return normalize(text);
+    }
+
     // try default values by import type
     if (!pageFrom) {
       // pageFrom == 0 => import everything
@@ -945,12 +958,8 @@ const importTEI = {
       text = xml + tagsEnd.join("");
     }
 
-    // normalize whitespace
-    text = text.replace(/\r?\n/g, "");
-    text = helfer.textTrim(text, true);
-
-    // return <text>
-    return text.normalize("NFC");
+    // normalize and return text
+    return normalize(text);
 
     // get index in node list
     function getIndex (n) {
@@ -960,6 +969,13 @@ const importTEI = {
         }
       }
       return -1;
+    }
+
+    // normalize text
+    function normalize (text) {
+      text = text.replace(/\r?\n/g, "");
+      text = helfer.textTrim(text, true);
+      return text.normalize("NFC");
     }
   },
 
