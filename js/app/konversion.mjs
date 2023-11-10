@@ -684,7 +684,7 @@ const konversionen = {
         karte.bi = biMap[karte.bi];
       }
 
-      // Lyoutklassen auffrischen
+      // Layoutklassen auffrischen
       karte.bs = karte.bs.replace(/<span class="dta-(?:blau|rot)">(.+?)<\/span>/g, (...args) => args[1]);
       karte.bs = karte.bs.replace(/\bdta-(antiqua|doppelt|fr|gesperrt|groesser|initiale|kapitaelchen)\b/g, (...args) => "tei-" + args[1]);
 

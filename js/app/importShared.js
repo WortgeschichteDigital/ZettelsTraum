@@ -314,7 +314,7 @@ const importShared = {
       }
 
       // Polytechnisches Journal
-      if (/Dingler/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
+      if (/\bDingler\b/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
         return {
           data: {
             xmlDoc: xml,
@@ -522,8 +522,12 @@ const importShared = {
     if (result) {
       importShared.fileDataReset();
       importShared.fileData.path = pfad;
+      importShared.fileData.raw = result;
     }
-    return result;
+    return {
+      content: result,
+      path: pfad,
+    };
 
     async function readFile () {
       let fileCont;
@@ -567,6 +571,8 @@ const importShared = {
     meta: "",
     // Pfad zur Datei
     path: "",
+    // Rohdaten der Datei
+    raw: "",
     // SHA1-ID
     sha1: "",
   },
@@ -797,16 +803,24 @@ const importShared = {
       }
     } else if (ansicht === "datei") {
       // DATEI
-      const fileCont = await importShared.fileRead();
-      if (fileCont) {
+      const fileData = await importShared.fileRead();
+      if (fileData.content) {
         // Datentyp ermitteln
-        typeData = importShared.detectType(fileCont);
-      } else if (fileCont === null && importShared.fileData.data.length) {
+        typeData = importShared.detectType(fileData.content);
+      } else if (fileData.content === null) {
         // Datei bereits eingelesen
-        typeData = true;
+        if (importShared.fileData.data.length) {
+          typeData = true;
+        } else if (fileData.path === importShared.fileData.path && importShared.fileData.raw) {
+          typeData = importShared.detectType(importShared.fileData.raw);
+        }
       } else {
         // Einlesen gescheitert
         typeData = false;
+      }
+      // bei TEI-Dokumenten Formulardaten hinzufügen
+      if (/^tei/.test(typeData?.type)) {
+        typeData.formData = importURL.getFormData(false);
       }
     } else if (ansicht === "zwischenablage") {
       // ZWISCHENABLAGE

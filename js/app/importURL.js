@@ -4,15 +4,14 @@ const importURL = {
   // Import aus einer URL starten
   async startImport () {
     // Formular einlesen
-    const formData = importURL.getFormData();
+    const formData = importURL.getFormData(true);
     if (!formData) {
       return false;
     }
 
     // URL-Daten ermitteln
     const urlData = importURL.getURLData(formData);
-    if (!urlData.url) {
-      importURL.error([ "Beim Einlesen des Formulars", "Download-URL konnte nicht ermittelt werden" ]);
+    if (!urlData) {
       return false;
     }
 
@@ -34,14 +33,18 @@ const importURL = {
   },
 
   // Formular einlesen
-  getFormData () {
+  //   onlyKnownURL = boolean
+  getFormData (onlyKnownURL) {
     // URL einlesen
     const feld = document.getElementById("beleg-import-feld");
     const url = feld.value.trim();
     const resource = importShared.isKnownURL(url);
-    if (!resource) {
-      const fehler = resource === null ? "URL nicht valide" : "URL aus unbekannter Online-Ressource";
-      importURL.error([ "Beim Einlesen des Formulars", fehler ]);
+    if (onlyKnownURL && !resource) {
+      const error = resource === null ? "URL nicht valide" : "URL aus unbekannter Online-Ressource";
+      importURL.error({
+        message: "Beim Einlesen des Formulars",
+        error,
+      });
       return false;
     }
 
@@ -98,6 +101,15 @@ const importURL = {
       }
     }
 
+    // URL nicht ermittelt
+    if (!result.url) {
+      importURL.error({
+        message: "Beim Einlesen des Formulars",
+        error: "Download-URL konnte nicht ermittelt werden",
+      });
+      return false;
+    }
+
     // ID ggf. generisch füllen
     if (!result.id) {
       result.id = result.url;
@@ -122,19 +134,31 @@ const importURL = {
     const response = await helfer.fetchURL(urlData.url);
 
     // Fehlerbehandlung
-    const message = "Beim Download der Textdaten " + formData.resource.desc;
+    let message = "Beim Download der Textdaten";
+    if (formData?.resource?.desc) {
+      message += " " + formData.resource.desc;
+    }
     if (response.fehler) {
       // Download-Fehler
-      importURL.error([ message, `Download: ${response.fehler}` ]);
+      importURL.error({
+        message,
+        error: `Download: ${response.fehler}`,
+      });
       return false;
     } else if (!response.text) {
       // keine Textdaten
-      importURL.error([ message, "Download: keine Daten empfangen" ]);
+      importURL.error({
+        message,
+        error: "Download: keine Daten empfangen",
+      });
       return false;
-    } else if (formData.resource.type === "tei-dta" &&
+    } else if (formData?.resource?.type === "tei-dta" &&
         /<title>DTA Qualitätssicherung<\/title>/.test(response.text)) {
       // DTAQ (Titel noch nicht freigeschaltet)
-      importURL.error([ message, "DTAQ: Titel noch nicht freigeschaltet" ]);
+      importURL.error({
+        message,
+        error: "DTAQ: Titel noch nicht freigeschaltet",
+      });
       return false;
     }
 
@@ -149,11 +173,12 @@ const importURL = {
   },
 
   // Fehlermeldung anzeigen
-  //   message = array
-  error (message) {
+  //   message = string
+  //   error = string
+  error ({ message, error }) {
     dialog.oeffnen({
       typ: "alert",
-      text: `${message[0]} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${message[1]}`,
+      text: `${message} ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n${error}`,
       callback: () => document.getElementById("beleg-import-feld").select(),
     });
   },

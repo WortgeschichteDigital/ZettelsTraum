@@ -3,13 +3,13 @@
 const importTEI = {
   // start the import
   //   importData       = object
-  //     data           = object (XML data)
-  //       xmlDoc       = document
-  //       xmlStr       = string
-  //     formData       = object (form values and resource data)
+  //     data           = object
+  //       xmlDoc       = document (XML document, parsed)
+  //       xmlStr       = string (XML document, string)
+  //     formData       = object
   //       bis          = number (from page)
   //       resource     = object
-  //         name       = string
+  //         name       = string (resource name, used as corpus name)
   //         desc       = string
   //         originReg  = RegExp
   //         type       = string
@@ -19,10 +19,10 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string
-  //     urlData        = object (URL data)
-  //       id           = string (in case of "tei-dta" and "tei-dingler" = title ID)
-  //       url          = string (download URL)
+  //     type           = string (tei | tei-dingler | tei-dta)
+  //     urlData        = object
+  //       id           = string (tei-dta and tei-dingler => title ID)
+  //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
     // reset data objects
@@ -30,15 +30,15 @@ const importTEI = {
     data.cit = importTEI.citObject();
     data.ds = importShared.importObject().ds;
 
-    // fill in already known value
+    // fill in already known values
     data.ds.bb = importData.formData.bis;
     data.ds.bi = importData.type;
     data.ds.bv = importData.formData.von;
-    data.ds.kr = importData.formData.resource.name;
+    data.ds.kr = importData.formData?.resource?.name || "";
     data.ds.ud = new Date().toISOString().split("T")[0];
-    if (importData.type === "tei-dta" && data.ds.bv) {
+    if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
       data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
-    } else if (importData.type === "tei-dingler") {
+    } else if (importData.type === "tei-dingler" && importData.urlData) {
       data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
     } else {
       data.ds.ul = importData.formData.url;
@@ -65,9 +65,7 @@ const importTEI = {
     // fill in citation data
     importTEI.citFill(importData.data.xmlDoc);
 
-    // detect column count
-    //   - no folio count
-    //   - snippet has <cb/>
+    // detect column count (no mark as recto/verso folio and snippet has <cb/>)
     if (!/[rv]$/.test(data.cit.seiteStart) &&
         !/[rv]$/.test(data.cit.seiteEnde) &&
         /<cb[ /]/.test(snippet)) {
@@ -254,7 +252,7 @@ const importTEI = {
       }
     }
 
-    // fallback for documents without full bibliographic information
+    // fallback for documents without full bibliographical information
     if (!data.titel.length) {
       const fallback = {
         titel1: evaluator("//sourceDesc/bibl"),
@@ -289,7 +287,7 @@ const importTEI = {
 
     // special trim function
     function trimmer (v) {
-      v = v.replace(/\n/g, " ");
+      v = v.replace(/\r?\n/g, " ");
       v = helfer.textTrim(v, true);
       return v;
     }
@@ -338,7 +336,7 @@ const importTEI = {
       }
     }
     td.serie = data.serie;
-    td.serieBd = data.serie_bd;
+    td.serieBd = data.serieBd;
     td.url.push(data.url);
 
     // make and return title
@@ -351,7 +349,7 @@ const importTEI = {
   // this list's sources are (mainly) DTABf and Polytechnisches Journal
   // (renditions with empty objects are being deleted;
   // Chrome has severe issues with fn:document(); that's why we're unable
-  // to map the renditions in a sane manner within the XSL)
+  // to map the renditions in a sane manner in the XSLT)
   knownRenditions: {
     "#aq": {
       tag: "span",
@@ -843,8 +841,9 @@ const importTEI = {
       importTEI.data.cit.seiteEnde = n;
     }
 
-    // the cut does not work when multiple <pb> with the same value of @n or @facs are present
-    // => fall back to pageFrom and pageTo
+    // the cutting which follows does not work when multiple <pb>
+    // with the same value of @n or @facs are present
+    // => in that case, fall back to pageFrom and pageTo
     if (pbStartSel) {
       const startReg = new RegExp(`<pb[^>]+?${pbStartSel}.*?>`, "g");
       const startMatch = xmlStr.match(startReg);
