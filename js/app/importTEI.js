@@ -557,7 +557,7 @@ const importTEI = {
   // (this set only serves for evaluation purposes)
   unknownRenditions: null,
 
-  // xsl stylsheet
+  // XSL stylsheet
   transformXSL: "",
 
   // transform the passed XML snippet
@@ -571,7 +571,7 @@ const importTEI = {
     // mark hyphens that appear immediately before a <lb>
     tei = tei.replace(/[-¬](<lb.*?\/>)/g, (...args) => `[¬]${args[1]}`);
 
-    // load xsl if needed
+    // load XSL if needed
     if (!importTEI.transformXSL) {
       await helfer.resourcesLoad({
         file: "xml-import-tei.xsl",
@@ -651,46 +651,77 @@ const importTEI = {
     result = rend.innerHTML;
 
     // amend HTML result
-    result = result.replace(/\r?\n/g, "");
+    result = importTEI.transformHTML(result);
+
+    // show warning message if no text remains
+    if (!result) {
+      importTEI.error("kein Text transformiert", "feld");
+      return false;
+    }
+
+    // return result
+    return result;
+  },
+
+  // prepare the XML that was transformed into HTML
+  //   str = string
+  transformHTML (str) {
+    // remove line breaks
+    str = str.replace(/\r?\n/g, "");
+
     // <div> to paragraphs divided by a blank line
     // (sometimes text follows directly after a <div> => insert blank lines in that case, too)
-    result = result.replace(/<\/div> +<div>/g, "</div><div>");
-    result = result.replace(/<\/div> +/g, "</div>");
-    result = result.replace(/<\/div>(?=[^\s])/g, "</div>\n\n");
-    result = result.replace(/<div> */g, "\n\n");
-    result = result.replace(/ *<\/div>/g, "");
+
+    str = str.replace(/<\/div> +<div>/g, "</div><div>");
+    str = str.replace(/<\/div> +/g, "</div>");
+    str = str.replace(/<\/div>(?=[^\s])/g, "</div>\n\n");
+    str = str.replace(/<div> */g, "\n\n");
+    str = str.replace(/ *<\/div>/g, "");
+
     // line break after <br>
-    result = result.replace(/ *<br> */g, "<br>\n");
+    str = str.replace(/ *<br ?\/?> */g, "<br>\n");
+
     // erase last <br> in a line
-    result = result.replace(/<br>\n\n/g, "\n");
+    str = str.replace(/<br>\n\n/g, "\n");
+
     // ensure that there are spaces around <cb> and <pb>
-    result = result.replace(/(\[:.+?:\])/g, m => ` ${m} `);
+    str = str.replace(/(\[:.+?:\])/g, m => ` ${m} `);
+
     // remove spaces after marked hypens
-    result = result.replace(/(\[[-¬]\]) /g, (...args) => args[1]);
+    str = str.replace(/(\[[-¬]\]) /g, (...args) => args[1]);
+
     // remove whitespace before closing bracket of a note
-    result = result.replace(/\s*\/Anmerkung\]/g, () => "]");
+    str = str.replace(/\s*\/Anmerkung\]/g, () => "]");
+
     // collapse multiple empty lines
-    result = result.replace(/\n{3,}/g, "\n\n");
+    str = str.replace(/\n{3,}/g, "\n\n");
+
     // erase spaces at the beginning of a paragraph
-    result = result.replace(/\n +/g, "\n");
+    str = str.replace(/^ +/gm, "");
+
     // collapse multiple spaces
-    result = result.replace(/ {2,}/g, " ").trim();
+    str = str.replace(/ {2,}/g, " ").trim();
+
     // remove <br> at the end of the text
-    result = result.replace(/<br>$/, "");
+    str = str.replace(/<br>$/, "");
+
     // remove placeholders for <cb> and <pb> at the end and the beginning of the text
-    result = result.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
+    str = str.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
+
     // erase empty placeholders for <cb> and <pb> that follow immediately after another placeholder
-    result = result.replace(/(\[:.+?:\]) \[:\?:\]/g, (...args) => args[1]);
+    str = str.replace(/(\[:.+?:\]) \[:\?:\]/g, (...args) => args[1]);
+
     // trim paragraphs
-    const div = result.split("\n\n");
+    const div = str.split("\n\n");
     for (let i = 0, len = div.length; i < len; i++) {
       div[i] = div[i].trim();
       div[i] = div[i].replace(/^(<[^>]+?>) +/, (...args) => args[1]);
       div[i] = div[i].replace(/ +(<[^>]+?>) *$/, (...args) => args[1]);
     }
-    result = div.join("\n\n");
+    str = div.join("\n\n");
+
     // merge twin tags
-    result = result.replace(/((<[^/>]{1}[^>]*>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
+    str = str.replace(/((<[^/>]{1}[^>]*>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
       // detect twins
       const start = args[1].match(/(?<=<).+?(?=>)/g);
       const end = args[4].match(/(?<=<).+?(?=>)/g);
@@ -723,19 +754,17 @@ const importTEI = {
       // return result
       return startMerged.join("") + args[3] + endMerged.join("");
     });
+
     // decode entities
     const decoder = document.createElement("textarea");
-    decoder.innerHTML = result;
-    result = decoder.value;
+    decoder.innerHTML = str;
+    str = decoder.value;
 
-    // show warning message if no text remains
-    if (!result) {
-      importTEI.error("kein Text transformiert", "feld");
-      return false;
-    }
+    // normalize unicode
+    str = str.normalize("NFC")
 
     // return result
-    return result.normalize("NFC");
+    return str;
   },
 
   // get the proper snippet of <text> using the submitted <pb> numbers

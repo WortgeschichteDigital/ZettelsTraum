@@ -226,7 +226,7 @@ const importShared = {
       return null;
     }
 
-    // DWDS?
+    // DWDS
     if (json?.[0]?.ctx_ && json?.[0]?.meta_) {
       return {
         data: json,
@@ -295,6 +295,19 @@ const importShared = {
       return null;
     }
 
+    // Fundstelle
+    if (/^Fundstellen?$/.test(xml.documentElement.nodeName)) {
+      return {
+        data: {
+          xmlDoc: xml,
+          xmlStr: str,
+        },
+        type: "xml-fundstelle",
+        formText: "XML (Fundstelle)",
+        usesFileData: true,
+      };
+    }
+
     // DWDS
     if (xml.documentElement.nodeName === "Beleg" && xml.querySelector("Fundstelle Korpus")) {
       return {
@@ -305,6 +318,19 @@ const importShared = {
         type: "xml-dwds",
         formText: "XML (DWDS)",
         usesFileData: false,
+      };
+    }
+
+    // MODS
+    if (xml.documentElement.nodeName === "mods" && xml.querySelector("mods titleInfo")) {
+      return {
+        data: {
+          xmlDoc: xml,
+          xmlStr: str,
+        },
+        type: "xml-mods",
+        formText: "XML (MODS)",
+        usesFileData: true,
       };
     }
 
@@ -362,29 +388,16 @@ const importShared = {
       };
     }
 
-    // MODS
-    if (xml.documentElement.nodeName === "mods" && xml.querySelector("mods titleInfo")) {
+    // WGd
+    if (xml.documentElement.nodeName === "Beleg" && xml.querySelector("Fundstelle unstrukturiert")) {
       return {
         data: {
           xmlDoc: xml,
           xmlStr: str,
         },
-        type: "xml-mods",
-        formText: "XML (MODS)",
-        usesFileData: true,
-      };
-    }
-
-    // Fundstelle
-    if (/^Fundstellen?$/.test(xml.documentElement.nodeName)) {
-      return {
-        data: {
-          xmlDoc: xml,
-          xmlStr: str,
-        },
-        type: "xml-fundstelle",
-        formText: "XML (Fundstelle)",
-        usesFileData: true,
+        type: "xml-wgd",
+        formText: "XML (WGd)",
+        usesFileData: false,
       };
     }
 
@@ -921,6 +934,9 @@ const importShared = {
     } else if (typeData.type === "xml-fundstelle" || typeData.type === "xml-mods") {
       // XML-FUNDSTELLE | XML-MODS
       result = await importLit.startImport({ ...typeData.data, type: typeData.type });
+    } else if (typeData.type === "xml-wgd") {
+      // XML-WGD
+      result = await importWGd.startImport({ ...typeData.data, ansicht });
     }
 
     // ggf. Clipboard löschen
