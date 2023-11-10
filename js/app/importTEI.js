@@ -843,6 +843,48 @@ const importTEI = {
       importTEI.data.cit.seiteEnde = n;
     }
 
+    // the cut does not work when multiple <pb> with the same value of @n or @facs are present
+    // => fall back to pageFrom and pageTo
+    if (pbStartSel) {
+      const startReg = new RegExp(`<pb[^>]+?${pbStartSel}.*?>`, "g");
+      const startMatch = xmlStr.match(startReg);
+      if (startMatch?.length > 1) {
+        pbStartSel = "";
+        if (!pageFrom) {
+          pageFrom = 1;
+        } else {
+          pageFrom = 0;
+          for (const i of pb) {
+            pageFrom++;
+            if (i === pbStart) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (pbEndSel) {
+      const endReg = new RegExp(`<pb[^>]+?${pbEndSel}.*?>`, "g");
+      const endMatch = xmlStr.match(endReg);
+      if (endMatch?.length > 1) {
+        pbEndSel = "";
+        if (!pageFrom) {
+          pageTo = pb.length + 1;
+        } else {
+          pageTo = 0;
+          for (const i of pb) {
+            pageTo++;
+            if (i === pbEnd) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    if (pageFrom && pageTo <= pageFrom) {
+      pageTo = pageFrom + 1;
+    }
+
     // cut pages from <text>
     // 1. start of cut
     let text = "";
