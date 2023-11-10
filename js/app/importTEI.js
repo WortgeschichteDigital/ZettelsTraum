@@ -692,14 +692,23 @@ const importTEI = {
   //   type = string (tei | tei-dingler | tei-dta)
   //   xmlDoc = document
   //   xmlStr = string
-  getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
-    // try default values for @facs by import type
+  async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
     const pb = xmlDoc.querySelectorAll("pb");
     let pbStartSel;
     let pbStart;
     let pbEndSel;
     let pbEnd;
-    if (type === "tei-dta") {
+
+    // try default values by import type
+    if (!pageFrom) {
+      // pageFrom == 0 => import everything
+      pbStart = pb[0];
+      if (pbStart.getAttribute("facs")) {
+        pbStartSel = `facs="${pbStart.getAttribute("facs")}"`;
+      } else if (pbStart.getAttribute("n")) {
+        pbStartSel = `n="${pbStart.getAttribute("n")}"`;
+      }
+    } else if (type === "tei-dta") {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
@@ -763,12 +772,12 @@ const importTEI = {
       } else {
         // error: start page not found
         importTEI.error("Startseite im XML-Dokument nicht gefunden", "von");
-        return "";
+        return false;
       }
     }
 
     // unable to find ending <pb> => try to find it via starting <pb>
-    if (!pbEnd) {
+    if (!pbEnd && pageFrom) {
       const idxStart = getIndex(pbStart);
       if (idxStart === pb.length - 1 ||
           idxStart + pageTo - pageFrom >= pb.length) {
@@ -792,7 +801,7 @@ const importTEI = {
         } else {
           // error: end page not found
           importTEI.error("Endseite im XML-Dokument nicht gefunden", "bis");
-          return "";
+          return false;
         }
       }
     }
@@ -805,13 +814,27 @@ const importTEI = {
         // error: order of the detected <pb> tags is wrong
         const order = idxEnd < idxStart ? "liegt vor" : "ist identisch mit";
         importTEI.error(`ermittelte Endseite ${order} der Startseite`, "bis");
-        return "";
+        return false;
+      }
+    }
+
+    // pose a security question if a large number of pages is about to be imported
+    const idxStart = getIndex(pbStart);
+    const idxEnd = pbEnd ? getIndex(pbEnd) : pb.length;
+    if (idxEnd - idxStart > 9) {
+      const result = await new Promise(resolve => {
+        dialog.oeffnen({
+          typ: "confirm",
+          text: `Sie haben <b>${idxEnd - idxStart} Seiten</b> für den Import ausgewählt.\nSoll der Import mit dieser großen Anzahl an Seiten wirklich ausgeführt werden?`,
+          callback: () => resolve(dialog.antwort),
+        });
+      });
+      if (!result) {
+        return false;
       }
     }
 
     // register page numbers
-    const idxStart = getIndex(pbStart);
-    const idxEnd = pbEnd ? getIndex(pbEnd) : pb.length;
     for (let i = idxStart; i < idxEnd; i++) {
       const n = pb[i].getAttribute("n") || "";
       if (i === idxStart) {
