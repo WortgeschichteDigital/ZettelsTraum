@@ -29,6 +29,12 @@ const importTEI = {
     const data = importTEI.data;
     data.cit = importTEI.citObject();
     data.ds = importShared.importObject().ds;
+    if (!importData.formData.resource) {
+      const resource = importShared.onlineResources.find(i => i.type === importData.type);
+      if (resource) {
+        importData.formData.resource = resource;
+      }
+    }
 
     // fill in already known values
     data.ds.bb = importData.formData.bis;
