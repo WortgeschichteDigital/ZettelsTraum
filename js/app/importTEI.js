@@ -727,6 +727,7 @@ const importTEI = {
         dialog.oeffnen({
           typ: "alert",
           text: `${message}\nWeil sie zu groß ist, wird der Import wird nicht ausgeführt.\nWählen Sie zuerst aus, welche Seiten aus der Datei importiert werden sollen.`,
+          callback: () => document.querySelector("#beleg-import-von").select(),
         });
         return false;
       } else if (strBytes > 200 * 1024) {
@@ -738,6 +739,7 @@ const importTEI = {
           });
         });
         if (!result) {
+          document.querySelector("#beleg-import-von").select();
           return false;
         }
       }
@@ -851,18 +853,29 @@ const importTEI = {
       }
     }
 
-    // pose a security question if a large number of pages is about to be imported
+    // pose a security question or even prevent the import
+    // if a large number of pages is about to be imported
     const idxStart = getIndex(pbStart);
     const idxEnd = pbEnd ? getIndex(pbEnd) : pb.length;
     if (idxEnd - idxStart > 9) {
+      const number = `Sie haben <b>${idxEnd - idxStart} Seiten</b> für den Import ausgewählt.`;
+      if (idxEnd - idxStart > 29) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `${number}\nDer Import von mehr als 30 Seiten wird nicht ausgeführt.`,
+          callback: () => document.querySelector("#beleg-import-von").select(),
+        });
+        return false;
+      }
       const result = await new Promise(resolve => {
         dialog.oeffnen({
           typ: "confirm",
-          text: `Sie haben <b>${idxEnd - idxStart} Seiten</b> für den Import ausgewählt.\nSoll der Import mit dieser großen Anzahl an Seiten wirklich ausgeführt werden?`,
+          text: `${number}\nSoll der Import mit dieser großen Anzahl an Seiten wirklich ausgeführt werden?`,
           callback: () => resolve(dialog.antwort),
         });
       });
       if (!result) {
+        document.querySelector("#beleg-import-von").select();
         return false;
       }
     }
