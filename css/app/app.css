@@ -131,6 +131,18 @@ mark.wort-kein-ende {
   border-bottom-right-radius: 0;
 }
 
+sup,
+sub {
+  position: relative;
+  vertical-align: unset;
+  font-size: .8em;
+  top: .25em;
+}
+
+sup {
+  top: -.45em;
+}
+
 .wortFarbe0 {
   background-color: var(--palette0) !important;
 }
