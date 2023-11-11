@@ -1103,7 +1103,7 @@ const liste = {
     // TEI-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
     // in eckigen Klammern nachgestellt. Schließende Klammer nicht hervorheben!
     // Das macht Probleme, wenn innerhalb der Anmerkung andere Klammern sind.
-    text = text.replace(/\[Anmerkung:/g, '<span class="klammer-technisch">[Anmerkung:</span>');
+    text = text.replace(/\[Anmerkung(.{0,10}):/g, (...args) => `<span class="klammer-technisch">[Anmerkung${args[1]}:</span>`);
     // TEI-Import: Trenn- oder Bindestrich am Ende einer Zeile
     text = text.replace(/\[¬\]/g, m => `<span class="klammer-technisch">${m}</span>`);
     // TEI-Import: Spalten- oder Seitenumbruch
