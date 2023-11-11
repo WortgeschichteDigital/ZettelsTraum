@@ -256,6 +256,10 @@ const suchleiste = {
     for (const t of treffer) {
       t.innerHTML = helfer.suchtrefferBereinigen(t.innerHTML.replace(regKomplex, setzenMark), "suchleiste");
       suchleiste.suchenEventsWiederherstellen(t);
+      // Suchtreffer unterhalb des Kürzungsplatzhalters entfernen
+      t.querySelectorAll(".kuerzung").forEach(k => {
+        k.querySelectorAll(".suchleiste").forEach(m => m.parentNode.removeChild(m));
+      });
     }
 
     // zum ersten Treffer springen
