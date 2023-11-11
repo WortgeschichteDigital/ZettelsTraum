@@ -575,12 +575,13 @@ const suchleiste = {
         // Karteikarte
         const kopf = document.getElementById("beleg").offsetTop;
         const header = document.querySelector("#beleg header").offsetHeight;
-        if (rect.top < kopf + header ||
+        const titel = document.getElementById("beleg-titel").offsetHeight;
+        if (rect.top < kopf + header + titel ||
             rect.top > window.innerHeight - suchleisteHeight - 24) {
           window.scrollTo({
             left: 0,
             // 24px = Höhe Standardzeile
-            top: window.scrollY + rect.top - kopf - header - 72,
+            top: window.scrollY + rect.top - kopf - header - titel - 72,
             behavior: "smooth",
           });
         }
