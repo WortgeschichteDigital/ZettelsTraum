@@ -124,7 +124,7 @@ const suchleiste = {
     input.addEventListener("keydown", function (evt) {
       tastatur.detectModifiers(evt);
       if (!tastatur.modifiers && evt.key === "Enter") {
-        suchleiste.suchen();
+        suchleiste.suchen(false, evt);
       }
     });
     input.addEventListener("focus", function () {
@@ -136,9 +136,11 @@ const suchleiste = {
   suchenZuletzt: "",
 
   // Suche starten
-  //   neuaufbau = true | undefined
-  //     (die Suchergebnisse sollen nur neu aufgebaut werden, sonst nichts)
-  suchen (neuaufbau = false) {
+  //   neuaufbau = boolean
+  //     (die Suchergebnisse sollen nur neu aufgebaut werden)
+  //   evt = object | undefined
+  //     (Event-Objekt)
+  suchen (neuaufbau, evt) {
     // Suchtext vorhanden?
     let text = document.getElementById("suchleiste-text").value;
     const textMitSpitz = helfer.textTrim(text, true);
@@ -147,57 +149,87 @@ const suchleiste = {
       if (neuaufbau) {
         return;
       }
+
       // ggf. Annotierungs-Popup schließen
       if (winInfo.typ === "index") {
         annotieren.modSchliessen();
       }
+
       // alte Suche ggf. löschen
       suchleiste.suchenReset();
+
       // visualisieren, dass damit nichts gefunden werden kann
       suchleiste.suchenKeineTreffer();
       return;
     }
+
     // Suchtext mit der letzten Suche identisch => eine Position weiterrücken
     if (text === suchleiste.suchenZuletzt && !neuaufbau) {
-      suchleiste.navi(true);
+      suchleiste.navi(true, evt);
       return;
     }
+
     // ggf. Annotierungs-Popup schließen
     if (winInfo.typ === "index") {
       annotieren.modSchliessen();
     }
+
     // alte Suche löschen
     suchleiste.suchenReset();
+
     // Elemente mit Treffer zusammentragen
-    let e;
+    const form = helfer.hauptfunktion === "karte" && !beleg.leseansicht;
+    const genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i";
+    const reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue);
+    let e = [];
     if (winInfo.typ === "changelog") {
       e = document.querySelectorAll("div > h2, div > h3, div > p, ul li");
     } else if (/dokumentation|handbuch/.test(winInfo.typ)) {
       e = document.querySelectorAll("section:not(.aus) > h2, section:not(.aus) > p, section:not(.aus) #suchergebnisse > p, section:not(.aus) > div p, section:not(.aus) > pre, section:not(.aus) li, section:not(.aus) td, section:not(.aus) th");
     } else if (winInfo.typ === "index") {
-      if (helfer.hauptfunktion === "karte") { // Karteikarte (Leseansicht)
+      if (helfer.hauptfunktion === "karte" && beleg.leseansicht) {
+        // Karteikarte (Leseansicht)
         e = document.querySelectorAll("#beleg th, .beleg-lese td");
-      } else { // Belegliste
+      } else if (form) {
+        // Karteikarte (Formularansicht)
+        // RegExp für Beleg-Feld erstellen
+        const formText = textMitSpitz.split("");
+        for (let i = 0, len = formText.length; i < len; i++) {
+          let letter = helfer.escapeRegExp(formText[i]);
+          letter = helfer.formVariSonderzeichen(letter);
+          letter = letter.replace(/\s/g, "(&nbsp;|\\s)");
+          formText[i] = letter;
+        }
+        const reg = new RegExp(formText.join("(?:<[^>]+>)*"), "g" + genaue);
+        beleg.ctrlSpringenFormMatches(reg);
+        // Feld mit Importdaten hinzufügen (wenn es sichtbar ist)
+        if (!document.getElementById("beleg-bx").closest("tr").classList.contains("aus")) {
+          e = document.querySelectorAll("#beleg-bx");
+        }
+      } else {
+        // Belegliste
         e = document.querySelectorAll(".liste-kopf > span, .liste-details");
       }
     }
-    const genaue = document.getElementById("suchleiste-genaue").checked ? "" : "i";
-    const reg = new RegExp(helfer.formVariSonderzeichen(helfer.escapeRegExp(textMitSpitz)).replace(/\s/g, "\\s"), genaue);
     const treffer = new Set();
     for (const i of e) {
       if (reg.test(i.innerText)) {
         treffer.add(i);
       }
     }
+
     // Treffer?
     if (!treffer.size) {
-      if (!neuaufbau) {
+      if (form && beleg.ctrlSpringenFormReg.matches.length) {
+        suchleiste.naviBelegtext(evt, true);
+      } else if (!neuaufbau) {
         suchleiste.suchenKeineTreffer();
       }
       return;
     }
     suchleiste.suchenZuletzt = text;
-    // komplizierten RegExp erstellen
+
+    // RegExp erstellen
     let textKomplex = helfer.escapeRegExp(text.charAt(0));
     for (let i = 1, len = text.length; i < len; i++) {
       textKomplex += "(<[^>]+>)*";
@@ -205,15 +237,18 @@ const suchleiste = {
     }
     textKomplex = helfer.formVariSonderzeichen(textKomplex).replace(/\s/g, "(&nbsp;|\\s)");
     const regKomplex = new RegExp(textKomplex, "g" + genaue);
+
     // Text hervorheben
     for (const t of treffer) {
       t.innerHTML = helfer.suchtrefferBereinigen(t.innerHTML.replace(regKomplex, setzenMark), "suchleiste");
       suchleiste.suchenEventsWiederherstellen(t);
     }
+
     // zum ersten Treffer springen
     if (!neuaufbau) {
-      suchleiste.navi(true);
+      suchleiste.navi(true, evt);
     }
+
     // Ersetzungsfunktion
     // (ein bisschen komplizierter, um illegales Nesting zu vermeiden und
     // die Suchtreffer schön aneinanderzuhängen, sodass sie wie ein Element aussehen)
@@ -244,6 +279,7 @@ const suchleiste = {
           }
         }
       }
+
       // aufbereiteten Match auswerfen
       return m;
     }
@@ -362,7 +398,8 @@ const suchleiste = {
     if (!leiste || !leiste.classList.contains("an")) {
       suchleiste.einblenden();
       return;
-    } else if (!document.querySelector(".suchleiste")) {
+    } else if (!document.querySelector(".suchleiste") &&
+        !(helfer.hauptfunktion === "karte" && !beleg.leseansicht && beleg.ctrlSpringenFormReg.matches.length)) {
       suchleiste.suchenKeineTreffer();
       leiste.firstChild.select();
       return;
@@ -388,13 +425,26 @@ const suchleiste = {
   // Navigation durch die Suchergebnisse
   //   next = Boolean
   //     (zum nächsten Treffer springen)
-  navi (next) {
-    const marks = document.querySelectorAll(".suchleiste");
+  //   evt = Object | undefined
+  //     (Event-Objekt)
+  navi (next, evt) {
+    // Formularansicht der Karteikarte?
+    const form = helfer.hauptfunktion === "karte" && !beleg.leseansicht;
+    const formData = typeof beleg !== "undefined" ? beleg.ctrlSpringenFormReg : null;
+
     // Navigation mit Pfeilen ggf. abfangen
+    const marks = document.querySelectorAll(".suchleiste");
     if (!marks.length) {
-      suchleiste.suchenKeineTreffer();
+      if (form && formData.matches.length) {
+        // durch die Treffer im Belegfeld springen
+        suchleiste.naviBelegtext(evt, next);
+      } else {
+        // keine Treffer
+        suchleiste.suchenKeineTreffer();
+      }
       return;
     }
+
     // aktives Element vorhanden?
     let pos = -1;
     const aktiv = document.querySelectorAll(".suchleiste-aktiv");
@@ -409,9 +459,24 @@ const suchleiste = {
       // ist nur ein Element aktiv, bleibt die Position mit dieser Formel identisch
       pos += aktiv.length - 1;
     }
+
+    // aktive Elemente demarkieren
+    // (wird über Tag-Grenzen hinweg gesucht, können mehrere Elemente am Stück aktiv sein)
+    document.querySelectorAll(".suchleiste-aktiv").forEach(i => i.classList.remove("suchleiste-aktiv"));
+
+    // beim Start einer Suche zunächst durch die Treffer im Belegfeld springen
+    if (pos === -1 &&
+        next &&
+        form &&
+        formData.matches.length &&
+        formData.lastMatch !== formData.matches.length - 1) {
+      suchleiste.naviBelegtext(evt, next);
+      return;
+    }
+
     // kein aktives Element vorhanden =>
     // ersten Suchtreffer finden, der der derzeitigen Fensterposition folgt
-    if (!aktiv.length) {
+    if (pos === -1 && !form) {
       let headerHeight = document.querySelector("body > header").offsetHeight;
       const quick = document.getElementById("quick");
       if (quick) { // man ist im Hauptfenster
@@ -432,29 +497,46 @@ const suchleiste = {
         }
       }
     }
+
     // Position bestimmen
     if (next) {
       pos++;
       if (pos > marks.length - 1) {
+        if (form && formData.matches.length) {
+          // wird nur aufgerufen, wenn der letzte <mark> tatsächlich aktiv war;
+          // gibt es keine <mark> wird oben direkt zu suchleiste.naviBelegtext() gesprungen
+          formData.lastMatch = -1;
+          suchleiste.naviBelegtext(evt, next);
+          return;
+        }
         pos = 0;
         helfer.animation("wrap");
       }
     } else {
       pos--;
       if (pos < 0) {
+        if (form &&
+            formData.matches.length &&
+            (pos === -1 ||
+            pos === -2 && formData.lastMatch > 0)) {
+          // pos === -1 => bei der letzten Navigation war der erste <mark> in den Importdaten aktiv
+          //   => zum letzten Match im Belegtext
+          // pos === -2 => bei der letzten Navigation war kein <mark> in den Importdaten aktiv
+          //   => einen Match im Belegtext weiter nach vorne
+          if (pos === -1) {
+            formData.lastMatch = 0;
+          }
+          suchleiste.naviBelegtext(evt, next);
+          return;
+        }
         pos = marks.length - 1;
         helfer.animation("wrap");
       }
     }
+
     // aktive(s) Element(e) hervorheben
-    // (wird über Tag-Grenzen hinweg gesucht, können mehrere Elemente am Stück aktiv sein)
-    if (aktiv.length) {
-      document.querySelectorAll(".suchleiste-aktiv").forEach(function (i) {
-        i.classList.remove("suchleiste-aktiv");
-      });
-    }
+    // (ggf. müssen auch direkt anhängende Elemente hervorgehoben werden)
     marks[pos].classList.add("suchleiste-aktiv");
-    // ggf. direkt anhängende Elemente auch noch hervorheben
     if (marks[pos].classList.contains("suchleiste-kein-ende")) {
       for (let i = pos + 1, len = marks.length; i < len; i++) {
         const m = marks[i];
@@ -466,30 +548,35 @@ const suchleiste = {
         m.classList.add("suchleiste-aktiv");
       }
     }
+
     // zum aktiven Element springen
     const headerHeight = document.querySelector("header").offsetHeight;
     const suchleisteHeight = document.getElementById("suchleiste").offsetHeight;
     const rect = marks[pos].getBoundingClientRect();
     if (winInfo.typ === "index") {
-      if (helfer.hauptfunktion === "karte") { // Karteikarte
+      if (helfer.hauptfunktion === "karte") {
+        // Karteikarte
         const kopf = document.getElementById("beleg").offsetTop;
         const header = document.querySelector("#beleg header").offsetHeight;
         if (rect.top < kopf + header ||
             rect.top > window.innerHeight - suchleisteHeight - 24) {
           window.scrollTo({
             left: 0,
-            top: window.scrollY + rect.top - kopf - header - 72, // 24px = Höhe Standardzeile
+            // 24px = Höhe Standardzeile
+            top: window.scrollY + rect.top - kopf - header - 72,
             behavior: "smooth",
           });
         }
-      } else { // Belegliste
+      } else {
+        // Belegliste
         const kopf = document.getElementById("liste").offsetTop;
         const listenkopf = document.querySelector("#liste-belege header").offsetHeight;
         if (rect.top < kopf + listenkopf ||
             rect.top > window.innerHeight - suchleisteHeight - 24) {
           window.scrollTo({
             left: 0,
-            top: window.scrollY + rect.top - kopf - listenkopf - 72, // 24px = Höhe Standardzeile
+            // 24px = Höhe Standardzeile
+            top: window.scrollY + rect.top - kopf - listenkopf - 72,
             behavior: "smooth",
           });
         }
@@ -500,10 +587,36 @@ const suchleiste = {
         rect.top > window.innerHeight - suchleisteHeight - 24) {
       window.scrollTo({
         left: 0,
-        top: window.scrollY + rect.top - headerHeight - 72, // 24px = Höhe Standardzeile
+        // 24px = Höhe Standardzeile
+        top: window.scrollY + rect.top - headerHeight - 72,
         behavior: "smooth",
       });
     }
+  },
+
+  // im <textarea> mit dem Belegtext navigieren
+  //   evt = Oject
+  //     (Event-Objekt)
+  //   next = boolean
+  async naviBelegtext (evt, next) {
+    evt?.preventDefault();
+    const formData = beleg.ctrlSpringenFormReg;
+    if (next) {
+      formData.lastMatch++;
+      if (formData.lastMatch === formData.matches.length) {
+        formData.lastMatch = 0;
+        helfer.animation("wrap");
+      }
+    } else {
+      formData.lastMatch--;
+      if (formData.lastMatch === -1) {
+        formData.lastMatch = formData.matches.length - 1;
+        helfer.animation("wrap");
+      }
+    }
+    beleg.selectFormEle(document.getElementById("beleg-bs"), false);
+    await helfer.scrollEnd();
+    beleg.ctrlSpringenFormHighlight(formData.matches[formData.lastMatch]);
   },
 
   // seitenweises Scrollen

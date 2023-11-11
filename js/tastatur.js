@@ -118,8 +118,7 @@ const tastatur = {
     // Key "F3"
     if ((!m || m === "Shift") && evt.key === "F3") {
       if (!overlayId &&
-          (helfer.hauptfunktion === "liste" ||
-          helfer.belegOffen() && beleg.leseansicht)) {
+          (helfer.hauptfunktion === "liste" || helfer.belegOffen())) {
         suchleiste.f3(evt);
       }
       return;

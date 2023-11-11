@@ -145,7 +145,6 @@ const beleg = {
   //     (Formular wird direkt nach einem Import gefüllt)
   async formular (neu, imp = false) {
     // regulären Ausdruck für Sprung zum Wort zurücksetzen
-    beleg.ctrlSpringenFormReg.again = false;
     beleg.ctrlSpringenFormReset();
 
     // Beleg-Titel eintragen
@@ -1038,7 +1037,9 @@ const beleg = {
   // ist es nicht im Blick => in den Blick scrollen
   //   ele = Element
   //     (das Element, das selektiert werden soll)
-  selectFormEle (ele) {
+  //   select = true | undefined
+  //     (wird auch genutzt, um zum Element zu scrollen, ohne es zu selektieren)
+  selectFormEle (ele, select = true) {
     const hBody = document.querySelector("body > header").offsetHeight;
     const hKarte = document.querySelector("#beleg > header").offsetHeight;
     const hTitle = document.querySelector("#beleg-titel").offsetHeight;
@@ -1056,7 +1057,9 @@ const beleg = {
         behavior: "smooth",
       });
     }
-    ele.select();
+    if (select) {
+      ele.select();
+    }
   },
 
   // visualisiert, dass in einem Elementfeld ein Fehler aufgetreten ist
@@ -2557,14 +2560,27 @@ const beleg = {
     }, 1000);
   },
 
-  // regulärer Ausdruck für den Sprung im Beleg-Formular
+  // Springen im <textarea> des Belegtexts: Datenobjekt
   ctrlSpringenFormReg: {
+    // nur Sprung-Icon
+    // (RegExp mit allen Karteiwörtern)
     reg: null,
+    // nur Sprung-Icon
+    // (direkt noch einmal suchen)
     again: false,
+    // nur Suchleiste
+    // (alle Treffer im Belegtext)
+    //   index = number (Index des Treffers)
+    //   len = number (Zeichenlänge des Treffers)
+    matches: [],
+    // nur Sucheleiste
+    // (letzter Match, zu dem gesprungen wurde)
+    lastMatch: -1,
   },
 
-  // regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
+  // Springen im <textarea> des Belegtexts: regulären Ausdruck zurücksetzen (nur Sprung-Icon)
   ctrlSpringenFormReset () {
+    // RegExp ermitteln
     const regs = [];
     for (const i of helfer.formVariRegExpRegs) {
       if (!data.fv[i.wort].tr) {
@@ -2574,29 +2590,42 @@ const beleg = {
       }
     }
     beleg.ctrlSpringenFormReg.reg = new RegExp(regs.join("|"), "gi");
+    beleg.ctrlSpringenFormReg.again = false;
   },
 
-  // <textarea> mit dem Belegtext zum Wort scrollen
-  ctrlSpringenForm (evt) {
-    if (evt) {
-      evt.preventDefault();
+  // Springen im <textarea> des Belegtexts: Matches ermitteln (nur Suchleiste)
+  //   reg = RegExp
+  ctrlSpringenFormMatches (reg) {
+    const matches = beleg.ctrlSpringenFormReg.matches;
+    matches.length = 0;
+    beleg.ctrlSpringenFormReg.again = false;
+
+    const bs = document.getElementById("beleg-bs");
+    for (const m of bs.value.matchAll(reg)) {
+      matches.push({
+        index: m.index,
+        len: m[0].length,
+      });
     }
+
+    beleg.ctrlSpringenFormReg.lastMatch = -1;
+  },
+
+  // Springen im <textarea> des Belegtexts: durch die Treffer springen (nur Sprung-Icon)
+  ctrlSpringenForm (evt) {
+    evt?.preventDefault();
     const textarea = document.getElementById("beleg-bs");
     const val = textarea.value;
     const search = beleg.ctrlSpringenFormReg.reg.exec(val);
-    if (search) { // Wort gefunden
+    if (search) {
+      // Wort gefunden
       beleg.ctrlSpringenFormReg.again = false;
-      const ende = search.index + search[0].length;
-      textarea.scrollTop = 0;
-      textarea.value = val.substring(0, ende);
-      textarea.scrollTop = ende;
-      textarea.value = val;
-      if (textarea.scrollTop > 0) {
-        textarea.scrollTop += 120;
-      }
-      textarea.setSelectionRange(search.index, ende);
-      textarea.focus();
-    } else if (beleg.ctrlSpringenFormReg.again) { // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
+      beleg.ctrlSpringenFormHighlight({
+        index: search.index,
+        len: search[0].length,
+      });
+    } else if (beleg.ctrlSpringenFormReg.again) {
+      // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
       beleg.ctrlSpringenFormReg.again = false;
       dialog.oeffnen({
         typ: "alert",
@@ -2607,10 +2636,29 @@ const beleg = {
           textarea.focus();
         },
       });
-    } else { // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
+    } else {
+      // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
       beleg.ctrlSpringenFormReg.again = true;
       beleg.ctrlSpringenForm(evt);
     }
+  },
+
+  // Springen im <textarea> des Belegtexts: zum Suchtreffer scrollen
+  //   index = number
+  //   len = number
+  ctrlSpringenFormHighlight ({ index, len }) {
+    const bs = document.getElementById("beleg-bs");
+    const val = bs.value;
+    const ende = index + len;
+    bs.scrollTop = 0;
+    bs.value = val.substring(0, ende);
+    bs.scrollTop = ende;
+    bs.value = val;
+    if (bs.scrollTop > 0) {
+      bs.scrollTop += 120;
+    }
+    bs.setSelectionRange(index, ende);
+    bs.focus();
   },
 
   // Kopiert den aktuellen Beleg in die Zwischenablage,

@@ -1140,6 +1140,32 @@ const helfer = {
     }, 1000);
   },
 
+  // Ende des Scrollens detektieren
+  // (da scrollend nicht feuert, wenn nich gescrollt wird,
+  // ist so eine Funktion weiterhin nötig
+  //   obj = node
+  //     (das Element, das gescrollt wird)
+  async scrollEnd (obj = window) {
+    await new Promise(resolve => {
+      let scrolling = false;
+      function scrollDetected () {
+        scrolling = true;
+      }
+      function scrollEnd () {
+        obj.removeEventListener("scroll", scrollDetected);
+        obj.removeEventListener("scrollend", scrollEnd);
+        resolve(true);
+      }
+      obj.addEventListener("scroll", scrollDetected);
+      obj.addEventListener("scrollend", scrollEnd);
+      setTimeout(() => {
+        if (!scrolling) {
+          scrollEnd();
+        }
+      }, 50);
+    });
+  },
+
   // Sperr-Overlay erzeugen
   //   cont = Element
   //     (Container, in den das Overlay eingehängt werden soll)
