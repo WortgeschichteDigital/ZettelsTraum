@@ -7,29 +7,37 @@ const suchleiste = {
   // Leiste einblenden
   einblenden () {
     // Leiste ggf. erzeugen
-    if (!document.getElementById("suchleiste")) {
+    let leiste = document.getElementById("suchleiste");
+    if (!leiste) {
       suchleiste.make();
+      leiste = document.getElementById("suchleiste");
+      void leiste.offsetWidth;
     }
+
     // zwischenspeichern, dass die Leiste aktiv ist
     suchleiste.aktiv = true;
+
     // Leiste einblenden und fokussieren
-    setTimeout(function () {
-      // ohne Timeout kommt nach dem Erzeugen der Leiste keine Animation
-      const leiste = document.getElementById("suchleiste");
-      leiste.classList.add("an");
-      leiste.firstChild.select();
-      if (winInfo.typ === "changelog") {
-        document.querySelector("main").classList.add("padding-suchleiste");
-      } else if (/dokumentation|handbuch/.test(winInfo.typ)) {
-        document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
-      } else if (winInfo.typ === "index") {
-        if (helfer.hauptfunktion === "karte") { // Karteikarte
-          document.getElementById("beleg").classList.add("padding-suchleiste");
-        } else { // Belegliste
-          document.getElementById("liste-belege-cont").classList.add("padding-suchleiste");
-        }
+    leiste.classList.add("an");
+    const feld = leiste.firstChild;
+    feld.value = suchleiste.suchenZuletzt;
+    leiste.firstChild.select();
+    suchleiste.suchenZuletzt = "";
+
+    // Padding der Seite erhöhen
+    if (winInfo.typ === "changelog") {
+      document.querySelector("main").classList.add("padding-suchleiste");
+    } else if (/dokumentation|handbuch/.test(winInfo.typ)) {
+      document.querySelector("section:not(.aus)").classList.add("padding-suchleiste");
+    } else if (winInfo.typ === "index") {
+      if (helfer.hauptfunktion === "karte") {
+        // Karteikarte
+        document.getElementById("beleg").classList.add("padding-suchleiste");
+      } else {
+        // Belegliste
+        document.getElementById("liste-belege-cont").classList.add("padding-suchleiste");
       }
-    }, 1);
+    }
   },
 
   // Listener für das Ausblenden via Link
@@ -142,7 +150,8 @@ const suchleiste = {
   //     (Event-Objekt)
   suchen (neuaufbau, evt) {
     // Suchtext vorhanden?
-    let text = document.getElementById("suchleiste-text").value;
+    const sucheText = document.getElementById("suchleiste-text");
+    let text = sucheText.value;
     const textMitSpitz = helfer.textTrim(text, true);
     text = helfer.textTrim(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), true);
     if (!text) {
@@ -157,6 +166,7 @@ const suchleiste = {
 
       // alte Suche ggf. löschen
       suchleiste.suchenReset();
+      suchleiste.suchenZuletzt = "";
 
       // visualisieren, dass damit nichts gefunden werden kann
       suchleiste.suchenKeineTreffer();
@@ -176,6 +186,7 @@ const suchleiste = {
 
     // alte Suche löschen
     suchleiste.suchenReset();
+    suchleiste.suchenZuletzt = "";
 
     // Elemente mit Treffer zusammentragen
     const form = helfer.hauptfunktion === "karte" && !beleg.leseansicht;
@@ -222,12 +233,15 @@ const suchleiste = {
     if (!treffer.size) {
       if (form && beleg.ctrlSpringenFormReg.matches.length) {
         suchleiste.naviBelegtext(evt, true);
+        suchleiste.suchenZuletzt = text;
+        sucheText.select();
       } else if (!neuaufbau) {
         suchleiste.suchenKeineTreffer();
       }
       return;
     }
     suchleiste.suchenZuletzt = text;
+    sucheText.select();
 
     // RegExp erstellen
     let textKomplex = helfer.escapeRegExp(text.charAt(0));
@@ -287,9 +301,6 @@ const suchleiste = {
 
   // alte Suche zurücksetzen
   suchenReset () {
-    // zuletzt gesuchten Text zurücksetzen
-    suchleiste.suchenZuletzt = "";
-    // alte Suchtreffer entfernen
     const knoten = new Set();
     document.querySelectorAll(".suchleiste").forEach(function (i) {
       knoten.add(i.parentNode);
@@ -395,16 +406,18 @@ const suchleiste = {
   //     (das Event-Objekt)
   f3 (evt) {
     const leiste = document.getElementById("suchleiste");
+    const feld = leiste?.firstChild;
     if (!leiste || !leiste.classList.contains("an")) {
       suchleiste.einblenden();
+      return;
+    } else if (feld.value.trim() !== suchleiste.suchenZuletzt) {
+      suchleiste.suchen(false, evt);
       return;
     } else if (!document.querySelector(".suchleiste") &&
         !(helfer.hauptfunktion === "karte" && !beleg.leseansicht && beleg.ctrlSpringenFormReg.matches.length)) {
       suchleiste.suchenKeineTreffer();
-      leiste.firstChild.select();
       return;
     }
-    leiste.firstChild.select();
     suchleiste.navi(!evt.shiftKey);
   },
 
