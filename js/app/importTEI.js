@@ -166,13 +166,13 @@ const importTEI = {
   // read citation data from <teiHeader>
   //   xmlDoc = document
   citFill (xmlDoc) {
-    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, helferXml.nsResolver, XPathResult.ANY_TYPE, null);
     const data = importTEI.data.cit;
 
     // persons
     const persons = {
-      autor: evaluator("//biblFull/titleStmt/author/persName"),
-      hrsg: evaluator("//biblFull/titleStmt/editor/persName"),
+      autor: evaluator("//t:biblFull/t:titleStmt/t:author/t:persName"),
+      hrsg: evaluator("//t:biblFull/t:titleStmt/t:editor/t:persName"),
     };
     for (const [ k, v ] of Object.entries(persons)) {
       let item = v.iterateNext();
@@ -197,14 +197,14 @@ const importTEI = {
 
     // further pub infos
     const pub = {
-      titel: evaluator("//biblFull/titleStmt/title[@type='main']"),
-      untertitel: evaluator("//biblFull/titleStmt/title[@type='sub']"),
-      band: evaluator("//biblFull/titleStmt/title[@type='volume']"),
-      auflage: evaluator("//biblFull/editionStmt/edition"),
-      ort: evaluator("//biblFull/publicationStmt/pubPlace"),
-      verlag: evaluator("//biblFull/publicationStmt/publisher/name"),
-      datumDruck: evaluator("//biblFull/publicationStmt/date[@type='publication']"),
-      datumEntstehung: evaluator("//biblFull/publicationStmt/date[@type='creation']"),
+      titel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='main']"),
+      untertitel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='sub']"),
+      band: evaluator("//t:biblFull/t:titleStmt/t:title[@type='volume']"),
+      auflage: evaluator("//t:biblFull/t:editionStmt/t:edition"),
+      ort: evaluator("//t:biblFull/t:publicationStmt/t:pubPlace"),
+      verlag: evaluator("//t:biblFull/t:publicationStmt/t:publisher/t:name"),
+      datumDruck: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='publication']"),
+      datumEntstehung: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='creation']"),
     };
     for (const [ k, v ] of Object.entries(pub)) {
       let item = v.iterateNext();
@@ -220,15 +220,15 @@ const importTEI = {
 
     // journal/series
     let isJournal = false;
-    const journalEval = evaluator("//sourceDesc/bibl").iterateNext();
+    const journalEval = evaluator("//t:sourceDesc/t:bibl").iterateNext();
     if (/^JA?/.test(journalEval?.getAttribute("type"))) {
       isJournal = true;
     }
     const series = {
-      titel: evaluator("//biblFull/seriesStmt/title"),
-      bdJg: evaluator("//biblFull/seriesStmt/biblScope[@unit='volume']"),
-      heft: evaluator("//biblFull/seriesStmt/biblScope[@unit='issue']"),
-      seiten: evaluator("//biblFull/seriesStmt/biblScope[@unit='pages']"),
+      titel: evaluator("//t:biblFull/t:seriesStmt/t:title"),
+      bdJg: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='volume']"),
+      heft: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='issue']"),
+      seiten: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='pages']"),
     };
     const seriesTitel = [];
     let item = series.titel.iterateNext();
@@ -263,8 +263,8 @@ const importTEI = {
     // fallback for documents without full bibliographical information
     if (!data.titel.length) {
       const fallback = {
-        titel1: evaluator("//sourceDesc/bibl"),
-        titel2: evaluator("//titleStmt/title"),
+        titel1: evaluator("//t:sourceDesc/t:bibl"),
+        titel2: evaluator("//t:titleStmt/t:title"),
       };
       for (const v of Object.values(fallback)) {
         const item = v.iterateNext();
@@ -280,7 +280,7 @@ const importTEI = {
     }
 
     // text class
-    const textclass = evaluator("//profileDesc//textClass/classCode");
+    const textclass = evaluator("//t:profileDesc//t:textClass/t:classCode");
     item = textclass.iterateNext();
     while (item) {
       const scheme = item.getAttribute("scheme");
@@ -584,13 +584,13 @@ const importTEI = {
     }
 
     // prepare XSLT
-    const xslt = new DOMParser().parseFromString(importTEI.transformXSL, "application/xml");
+    const xslt = helferXml.parseXML(importTEI.transformXSL, "application/xml");
     const processor = new XSLTProcessor();
     processor.setParameter(null, "teiType", type.replace(/^tei-?/, ""));
     processor.importStylesheet(xslt);
 
     // transform <TEI>
-    const xmlOri = new DOMParser().parseFromString(tei, "text/xml");
+    const xmlOri = helferXml.parseXML(tei);
     const xmlTrans = processor.transformToDocument(xmlOri);
     let result = new XMLSerializer().serializeToString(xmlTrans);
 
@@ -1112,6 +1112,7 @@ const importTEI = {
 
     // <teiHeader> to string
     let header = xmlDoc?.querySelector("teiHeader")?.outerHTML || "";
+    header = header.replace(/ xmlns=".+?"/g, "");
 
     // clean-up operations
     header = header.replace(/^\s+/gm, "");
@@ -1125,7 +1126,7 @@ const importTEI = {
     header = header.normalize("NFC");
 
     // return complete document
-    return `<TEI>${header}${text}</TEI>`;
+    return `<TEI xmlns="http://www.tei-c.org/ns/1.0">${header}${text}</TEI>`;
   },
 
   // Polytechnisches Journal: get title ID

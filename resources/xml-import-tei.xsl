@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <xsl:stylesheet
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+  xmlns:t="http://www.tei-c.org/ns/1.0"
+  exclude-result-prefixes="t"
+  xpath-default-namespace="http://www.tei-c.org/ns/1.0">
 
 <xsl:output
   method="html" media-type="text/html"
@@ -13,13 +16,13 @@
     $teiType = "" | dingler | dta | wdb
 -->
 
-<xsl:template match="TEI/text">
+<xsl:template match="t:TEI/t:text">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="fw|index|teiHeader"/>
+<xsl:template match="t:fw|t:index|t:teiHeader"/>
 
-<xsl:template match="cb|pb">
+<xsl:template match="t:cb|t:pb">
   <xsl:text>[:</xsl:text>
     <xsl:choose>
       <xsl:when test="@n">
@@ -32,16 +35,16 @@
   <xsl:text>:]</xsl:text>
 </xsl:template>
 
-<xsl:template match="byline|closer|dateline|div|item|lg|sp|titlePage">
+<xsl:template match="t:byline|t:closer|t:dateline|t:div|t:item|t:lg|t:sp|t:titlePage">
   <div>
     <xsl:apply-templates/>
   </div>
 </xsl:template>
 
-<xsl:template match="choice">
+<xsl:template match="t:choice">
   <xsl:choose>
     <xsl:when test="$teiType = 'dta'">
-      <xsl:apply-templates select="abbr|corr|orig"/>
+      <xsl:apply-templates select="t:abbr|t:corr|t:orig"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="./*[1]"/>
@@ -49,13 +52,13 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="ex">
+<xsl:template match="t:ex">
   <xsl:text>[</xsl:text>
     <xsl:apply-templates/>
   <xsl:text>]</xsl:text>
 </xsl:template>
 
-<xsl:template match="head">
+<xsl:template match="t:head">
   <div>
     <b>
       <xsl:apply-templates/>
@@ -63,14 +66,14 @@
   </div>
 </xsl:template>
 
-<xsl:template match="hi">
+<xsl:template match="t:hi">
   <xsl:variable name="notEmpty" select="./node()"/>
   <xsl:if test="$notEmpty">
     <xsl:choose>
       <xsl:when test="@rend or @rendition">
         <xsl:variable name="currentRendition" select="@rend | @rendition"/>
         <xsl:variable name="renditionHeader">
-          <xsl:value-of select="//tagsDecl/rendition[@xml:id = substring($currentRendition, 2)]"/>
+          <xsl:value-of select="//t:tagsDecl/t:rendition[@xml:id = substring($currentRendition, 2)]"/>
         </xsl:variable>
         <span>
           <xsl:attribute name="data-rendition">
@@ -96,16 +99,16 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="l">
+<xsl:template match="t:l">
   <xsl:apply-templates/>
   <br/>
 </xsl:template>
 
-<xsl:template match="lb">
+<xsl:template match="t:lb">
   <xsl:text> </xsl:text>
 </xsl:template>
 
-<xsl:template match="note">
+<xsl:template match="t:note">
   <xsl:variable name="notEmpty" select="./node()"/>
   <xsl:if test="not(@type = 'editorial') and not(@resp) and $notEmpty">
     <xsl:text>[Anmerkung</xsl:text>
@@ -119,7 +122,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="p">
+<xsl:template match="t:p">
   <xsl:choose>
     <xsl:when test="name(parent::*/*[1]) = 'speaker' and parent::*/*[2] = .">
       <xsl:text> </xsl:text>
@@ -133,13 +136,13 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="speaker">
+<xsl:template match="t:speaker">
   <b>
     <xsl:apply-templates/>
   </b>
 </xsl:template>
 
-<xsl:template match="stage">
+<xsl:template match="t:stage">
   <xsl:choose>
     <xsl:when test="(name(parent::*/*[1]) = 'speaker' and parent::*/*[2] = .) or name(parent::*) = 'p'">
       <xsl:text> </xsl:text>
@@ -157,7 +160,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="titlePart">
+<xsl:template match="t:titlePart">
   <xsl:if test="@type != 'column'">
     <div>
       <b>

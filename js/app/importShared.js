@@ -290,7 +290,7 @@ const importShared = {
       // => Gar nicht erst parsen, wenn kein Tag im String zu finden ist.
       return null;
     }
-    const xml = importShared.parseXML(str);
+    const xml = helferXml.parseXML(str);
     if (!xml) {
       return null;
     }
@@ -1140,26 +1140,6 @@ const importShared = {
       return false;
     }
     return true;
-  },
-  // XML-String parsen
-  //   xmlStr = string
-  parseXML (xmlStr) {
-    xmlStr = importShared.removeNS(xmlStr);
-    const xmlDoc = new DOMParser().parseFromString(xmlStr, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
-      return null;
-    }
-    return xmlDoc;
-  },
-
-  // @xmlns aus einem XML-String entfernen
-  // (Hintergrund ist, dass XPath 1.0 das Konzept eines default namespace ohne
-  // Präfix nicht kennt. Darum kann evalute() mit XML-Dateien,
-  // die einen default namespace haben, nicht funktionieren.)
-  //   xmlStr = string
-  removeNS (xmlStr) {
-    xmlStr = xmlStr.replace(/ xmlns=".+?"/, "");
-    return xmlStr;
   },
 
   // Titelaufnahme: neuen Datensatz erstellen

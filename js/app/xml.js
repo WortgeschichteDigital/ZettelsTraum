@@ -40,8 +40,7 @@ const xml = {
     const ns = "http://www.w3.org/1999/xhtml";
 
     // <Beleg>
-    const parser = new DOMParser();
-    let schnitt = parser.parseFromString("<Beleg></Beleg>", "text/xml");
+    let schnitt = helferXml.parseXML("<Beleg></Beleg>");
 
     // @xml:id
     schnitt.firstChild.setAttribute("xml:id", xml.belegId({}));
@@ -154,7 +153,7 @@ const xml = {
     });
 
     // Belegtext einhängen
-    const belegtext = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
+    const belegtext = helferXml.parseXML(`<Belegtext>${text}</Belegtext>`);
     schnitt.firstChild.appendChild(belegtext.firstChild);
 
     // Elemente und Text extrahieren
@@ -325,7 +324,7 @@ const xml = {
 
     // Text in String umwandeln und aufbereiten
     let xmlStr = new XMLSerializer().serializeToString(schnitt);
-    xmlStr = xmlStr.replace(/\sxmlns="http:\/\/www\.w3\.org\/1999\/xhtml"/g, "");
+    xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
     const zeichen = new Map([
       [ "&amp;amp;", "&amp;" ],
       [ "&amp;lt;", "&lt;" ],
@@ -364,9 +363,8 @@ const xml = {
       const reg = new RegExp(helfer.escapeRegExp(h[0]));
       text = text.replace(reg, ersatz);
       // ein Test, ob wohlgeformtes XML produziert wurde
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(`<Belegtext>${text}</Belegtext>`, "text/xml");
-      if (xmlDoc.querySelector("parsererror")) {
+      const xmlDoc = helferXml.parseXML(`<Belegtext>${text}</Belegtext>`);
+      if (!xmlDoc) {
         text = bak;
       }
     }

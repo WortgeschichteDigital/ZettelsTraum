@@ -481,8 +481,7 @@ const redLit = {
         content += redLit.dbExportierenSnippetXML(i);
       }
       content += "</Literaturliste></WGD>";
-      const parser = new DOMParser();
-      let xmlDoc = parser.parseFromString(content, "text/xml");
+      let xmlDoc = helferXml.parseXML(content);
       xmlDoc = helferXml.indent(xmlDoc);
       content = new XMLSerializer().serializeToString(xmlDoc);
       // Fixes
@@ -2303,9 +2302,8 @@ const redLit = {
       return "";
     }
     // Titeldaten ermitteln
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(feedback.text, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(feedback.text);
+    if (!xmlDoc) {
       await new Promise(meldung => {
         dialog.oeffnen({
           typ: "alert",
@@ -2403,12 +2401,9 @@ const redLit = {
     if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
       return false;
     }
-    // Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
-    xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
     // XML nicht wohlgeformt
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xmlStr);
+    if (!xmlDoc) {
       return false;
     }
     // Fundstellen-Snippet
@@ -2597,7 +2592,7 @@ const redLit = {
   eingabeXMLModsTd ({ xmlDoc }) {
     const td = importShared.makeTitleObject();
     // Helfer-Funktionen
-    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, helferXml.nsResolver, XPathResult.ANY_TYPE, null);
     const pusher = (result, key) => {
       let item = result.iterateNext();
       if (Array.isArray(td[key])) {
@@ -2613,13 +2608,13 @@ const redLit = {
       }
     };
     // Autor
-    const autor = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'aut')]");
+    const autor = evaluator("//m:name[@type='personal']/m:namePart[not(@*)][contains(following-sibling::role/m:roleTerm[@type='code'],'aut')]");
     pusher(autor, "autor");
     // Herausgeber
-    const hrsg = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'edt')]");
+    const hrsg = evaluator("//m:name[@type='personal']/m:namePart[not(@*)][contains(following-sibling::role/m:roleTerm[@type='code'],'edt')]");
     pusher(hrsg, "hrsg");
     // Titel
-    const titel = evaluator("/mods/titleInfo[not(@*)]/title");
+    const titel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:title");
     pusher(titel, "titel");
     // Korrektur: Großschreibung
     gross({
@@ -2627,13 +2622,13 @@ const redLit = {
       start: 1,
     });
     // Titel-Vorsatz
-    const titelVorsatz = evaluator("/mods/titleInfo[not(@*)]/nonSort");
+    const titelVorsatz = evaluator("/m:mods/m:titleInfo[not(@*)]/m:nonSort");
     let item = titelVorsatz.iterateNext();
     if (item) {
       td.titel[0] = helfer.textTrim(item.textContent + td.titel[0], true);
     }
     // Untertitel
-    const untertitel = evaluator("/mods/titleInfo[not(@*)]/subTitle");
+    const untertitel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:subTitle");
     pusher(untertitel, "untertitel");
     // Korrektur: Großschreibung
     gross({
@@ -2641,7 +2636,7 @@ const redLit = {
       start: 0,
     });
     // Zeitschrift/Sammelband
-    const inTitel = evaluator("//relatedItem[@type='host']//title");
+    const inTitel = evaluator("//m:relatedItem[@type='host']//m:title");
     pusher(inTitel, "inTitel");
     // Korrektur: Großschreibung
     gross({
@@ -2649,33 +2644,33 @@ const redLit = {
       start: 0,
     });
     // Band
-    const band = evaluator("/mods/titleInfo[not(@*)]/partNumber");
+    const band = evaluator("/m:mods/m:titleInfo[not(@*)]/m:partNumber");
     pusher(band, "band");
     // Bandtitel
-    const bandtitel = evaluator("/mods/titleInfo[not(@*)]/partName");
+    const bandtitel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:partName");
     pusher(bandtitel, "bandtitel");
     // Auflage
-    const auflage = evaluator("/mods/originInfo[not(@*)]//edition");
+    const auflage = evaluator("/m:mods/m:originInfo[not(@*)]//m:edition");
     pusher(auflage, "auflage");
     // Qualifikationsschrift
-    const quali = evaluator("/mods/note[@type='thesis']");
+    const quali = evaluator("/m:mods/m:note[@type='thesis']");
     pusher(quali, "quali");
     // Ort
-    const ort = evaluator("/mods/originInfo[@eventType='publication']//placeTerm");
+    const ort = evaluator("/m:mods/m:originInfo[@eventType='publication']//m:placeTerm");
     pusher(ort, "ort");
     // Verlag
     let verlag;
     if (td.inTitel.length) {
-      verlag = evaluator("//relatedItem[@type='host']/originInfo/publisher");
+      verlag = evaluator("//m:relatedItem[@type='host']/m:originInfo/m:publisher");
     } else {
-      verlag = evaluator("/mods/originInfo[@eventType='publication']/publisher");
+      verlag = evaluator("/m:mods/m:originInfo[@eventType='publication']/m:publisher");
     }
     pusher(verlag, "verlag");
     // Jahr
-    const jahr = evaluator("/mods/originInfo[@eventType='publication']/dateIssued");
+    const jahr = evaluator("/m:mods/m:originInfo[@eventType='publication']/m:dateIssued");
     pusher(jahr, "jahr");
     // Jahrgang, Jahr, Heft, Seiten, Spalten
-    const inDetails = evaluator("//relatedItem[@type='host']/part/text");
+    const inDetails = evaluator("//m:relatedItem[@type='host']/m:part/m:text");
     item = inDetails.iterateNext();
     if (item) {
       const jahrgang = /(?<val>[0-9]+)\s?\(/.exec(item.textContent);
@@ -2699,14 +2694,14 @@ const redLit = {
       }
     }
     // Serie
-    const serie = evaluator("//relatedItem[@type='series']/titleInfo/title");
+    const serie = evaluator("//m:relatedItem[@type='series']/m:titleInfo/m:title");
     pusher(serie, "serie");
     // URL
-    const url = evaluator("//url[@displayLabel='Volltext']");
+    const url = evaluator("//m:url[@displayLabel='Volltext']");
     pusher(url, "url");
     td.url.sort(helfer.sortURL);
     // PPN
-    const ppn = evaluator("//recordIdentifier[@source='DE-627']");
+    const ppn = evaluator("//m:recordIdentifier[@source='DE-627']");
     pusher(ppn, "ppn");
     // Korrektur: Auflage ohne eckige Klammern
     td.auflage = td.auflage.replace(/^\[|\]$/g, "");
@@ -3892,9 +3887,8 @@ const redLit = {
     } else if (typ === "plain") {
       text = redLit.dbExportierenSnippetPlain(popup.titelaufnahme.ds);
     } else if (typ === "xml") {
-      const parser = new DOMParser();
       const snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds);
-      let xmlDoc = parser.parseFromString(snippet, "text/xml");
+      let xmlDoc = helferXml.parseXML(snippet);
       xmlDoc = helferXml.indent(xmlDoc);
       text = new XMLSerializer().serializeToString(xmlDoc);
     } else if (typ === "sigle") {

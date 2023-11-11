@@ -1,6 +1,37 @@
 "use strict";
 
 const helferXml = {
+  // XML-String parsen
+  //   xmlStr = string
+  //   mimeType = string | undefined
+  parseXML (xmlStr, mimeType = "text/xml") {
+    const xmlDoc = new DOMParser().parseFromString(xmlStr, mimeType);
+    if (xmlDoc.querySelector("parsererror")) {
+      return null;
+    }
+    return xmlDoc;
+  },
+
+  // Standard XML-Namespaces auflösen
+  nsResolver (prefix) {
+    switch (prefix) {
+      // TEI
+      case "t":
+        return "http://www.tei-c.org/ns/1.0";
+      // MODS
+      case "m":
+        return "http://www.loc.gov/mods/v3";
+      // XML
+      case "xml":
+        return "http://www.w3.org/XML/1998/namespace";
+      // ZDL
+      case "z":
+        return "http://www.zdl.org/ns/1.0";
+      default:
+        return "";
+    }
+  },
+
   // Fundort anhand der URL ermitteln
   //   url = String
   //     (URL, aus der der Fundort abgeleitet werden soll)
@@ -176,7 +207,7 @@ const helferXml = {
   //   xml = Document
   //     (das XML-Snippet)
   indent (xml) {
-    const xslt = new DOMParser().parseFromString(helferXml.indentXsl, "application/xml");
+    const xslt = helferXml.parseXML(helferXml.indentXsl, "application/xml");
     const processor = new XSLTProcessor();
     processor.importStylesheet(xslt);
     return processor.transformToDocument(xml);

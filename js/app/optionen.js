@@ -933,11 +933,10 @@ const optionen = {
   //   content = String
   //     (Inhalt der geladenen Tag-Datei)
   tagsParsen (content) {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(content, "text/xml");
+    const xml = helferXml.parseXML(content);
     const typ = xml.documentElement.nodeName;
-    // <parsererror>
-    if (xml.querySelector("parsererror")) {
+    // parser error
+    if (!xml) {
       optionen.tagsFehlerMeldungen[typ] = '<abbr title="Extensible Markup Language">XML</span>-Datei korrupt';
       return [ null, typ ];
     }

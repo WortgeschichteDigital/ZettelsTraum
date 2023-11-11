@@ -118,9 +118,8 @@ const xml = {
       return data;
     }
     // Bedeutungsgerüst nicht wohlgeformt
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xml.data.xl.bg[xml.bgAkt].xl);
+    if (!xmlDoc) {
       data.err = true;
       return data;
     }
@@ -765,10 +764,9 @@ const xml = {
   // Beleg aus Zwischenablage einfügen
   belegEinfuegen () {
     const cb = modules.clipboard.readText();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(cb, "text/xml");
+    const xmlDoc = helferXml.parseXML(cb);
     // Validierung
-    if (xmlDoc.querySelector("parsererror")) {
+    if (!xmlDoc) {
       dialog.oeffnen({
         typ: "alert",
         text: 'Beim Einlesen des Belegs ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">kein wohlgeformtes XML-Snippet gefunden</p>',
@@ -874,9 +872,8 @@ const xml = {
       });
       return;
     }
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xml.data.xl.bg[xml.bgAkt].xl);
+    if (!xmlDoc) {
       dialog.oeffnen({
         typ: "alert",
         text: "Das Bedeutungsgerüst ist nicht wohlgeformt.",
@@ -956,9 +953,8 @@ const xml = {
       });
       return;
     }
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xml.data.xl.bg[xml.bgAkt].xl);
+    if (!xmlDoc) {
       dialog.oeffnen({
         typ: "alert",
         text: "Das Bedeutungsgerüst ist nicht wohlgeformt.",
@@ -1198,9 +1194,8 @@ const xml = {
 
   // Bedeutungsgerüst: Textreferenzen im Bedeutungsgerüst auffrischen
   bgTextreferenzenRefresh () {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xml.data.xl.bg[xml.bgAkt].xl);
+    if (!xmlDoc) {
       return;
     }
     xmlDoc.querySelectorAll("Lesart").forEach(i => {
@@ -1237,7 +1232,7 @@ const xml = {
     });
     // Stringify + Namespaces entfernen
     let xmlStr = new XMLSerializer().serializeToString(xmlDoc);
-    xmlStr = xmlStr.replace(/ xmlns.*?=".+?"/g, "");
+    xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
     xmlStr = xmlStr.replace(/[a-z0-9]+:Ziel/g, "Ziel");
     xmlStr = xmlStr.replace(/><\/Textreferenz>/g, "/>");
     // Daten auffrischen
@@ -1306,9 +1301,8 @@ const xml = {
       return;
     }
     // Bedeutungsgerüst nicht wohlgeformt
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml.data.xl.bg[xml.bgAkt].xl, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xml.data.xl.bg[xml.bgAkt].xl);
+    if (!xmlDoc) {
       return;
     }
     // Bedeutungsgerüst parsen
@@ -2380,8 +2374,7 @@ const xml = {
       // Formulardaten wiederherstellen
       if (restore) {
         const xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+        const xmlDoc = helferXml.parseXML(xmlStr);
         const felder = {
           dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
           bildposition: xmlDoc.documentElement.getAttribute("Position"),
@@ -2945,9 +2938,8 @@ const xml = {
   //     (XML-Snippet darf editiert werden)
   preview ({ xmlStr, key, slot, slotBlock = null, after = null, textblockCont = null, animation = true, editable = false }) {
     // Einzüge hinzufügen (wenn möglich)
-    const parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xmlStr, "text/xml");
-    if (!xmlDoc.querySelector("parsererror")) {
+    let xmlDoc = helferXml.parseXML(xmlStr);
+    if (xmlDoc) {
       xmlDoc = helferXml.indent(xmlDoc);
       xmlStr = new XMLSerializer().serializeToString(xmlDoc);
     }
@@ -3899,8 +3891,7 @@ const xml = {
   //   xmlStr = String
   //     (XML-Snippet, das überprüft werden soll)
   check ({ warn, xmlStr }) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+    const xmlDoc = new DOMParser().parseFromString(xmlStr, "text/xml");
     if (xmlDoc.querySelector("parsererror")) {
       warn.classList.add("aktiv");
       const err = xmlDoc.querySelector("parsererror div").textContent;
@@ -4003,7 +3994,6 @@ const xml = {
     if (!xml.exportierenEval()) {
       return;
     }
-    const parser = new DOMParser();
     const d = xml.data.xl;
     // XML zusammenbauen
     let xmlStr = '<?xml-model href="../share/rnc/Wortgeschichten.rnc" type="application/relax-ng-compact-syntax"?>\n';
@@ -4147,7 +4137,7 @@ const xml = {
     xml.exportierenSpeichern({ xmlStr });
     // Funktionen zum Einrücken der Zeilen eines bestehenden XML-String
     function indentXml (str, level) {
-      let xmlDoc = parser.parseFromString(str, "text/xml");
+      let xmlDoc = helferXml.parseXML(str);
       xmlDoc = helferXml.indent(xmlDoc);
       const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
       return indentStr(xmlStr, level);
@@ -4379,10 +4369,9 @@ const xml = {
     // Datei einlesen
     modules.fsp.readFile(result.filePaths[0], { encoding: "utf8" })
       .then(content => {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(content, "text/xml");
+        const xmlDoc = helferXml.parseXML(content);
         // XML-Datei ist nicht wohlgeformt
-        if (xmlDoc.querySelector("parsererror")) {
+        if (!xmlDoc) {
           dialog.oeffnen({
             typ: "alert",
             text: "Die XML-Datei kann nicht eingelesen werden.\n<h3>Fehlermeldung</h3>\nXML nicht wohlgeformt",
@@ -4423,15 +4412,7 @@ const xml = {
   //     (die XML-Datei, die eingelesen werden soll)
   async importierenEinlesen ({ xmlDoc }) {
     // Helfer-Funktionen
-    const nsResolver = prefix => {
-      switch (prefix) {
-        case "x":
-          return "http://www.zdl.org/ns/1.0";
-        case "xml":
-          return "http://www.w3.org/XML/1998/namespace";
-      }
-    };
-    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, nsResolver, XPathResult.ANY_TYPE, null);
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, helferXml.nsResolver, XPathResult.ANY_TYPE, null);
     const normierer = snippet => {
       let xmlStr = new XMLSerializer().serializeToString(snippet);
       xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
@@ -4447,16 +4428,16 @@ const xml = {
     await xml.resetFormular();
     // Metadaten
     const xl = xml.data.xl;
-    xl.md.id = evaluator("//x:Artikel/@xml:id").iterateNext().textContent;
+    xl.md.id = evaluator("//z:Artikel/@xml:id").iterateNext().textContent;
     xl.md.tf = [];
-    const tff = evaluator("//x:Artikel/x:Diasystematik/x:Themenfeld");
+    const tff = evaluator("//z:Artikel/z:Diasystematik/z:Themenfeld");
     let tf = tff.iterateNext();
     while (tf) {
       xl.md.tf.push(tf.textContent);
       tf = tff.iterateNext();
     }
-    xl.md.ty = evaluator("//x:Artikel/@Typ").iterateNext().textContent;
-    const re = evaluator("//x:Revision");
+    xl.md.ty = evaluator("//z:Artikel/@Typ").iterateNext().textContent;
+    const re = evaluator("//z:Revision");
     let i = re.iterateNext();
     while (i) {
       const o = {
@@ -4473,7 +4454,7 @@ const xml = {
       i = re.iterateNext();
     }
     // Lemmata
-    const le = evaluator("//x:Artikel/x:Lemma");
+    const le = evaluator("//z:Artikel/z:Lemma");
     i = le.iterateNext();
     while (i) {
       const o = {
@@ -4504,7 +4485,7 @@ const xml = {
       },
     ];
     for (const i of w) {
-      const a = evaluator(`//x:${i.tag}//x:Abschnitt`);
+      const a = evaluator(`//z:${i.tag}//z:Abschnitt`);
       let j = a.iterateNext();
       while (j) {
         // Abschnitt
@@ -4522,7 +4503,7 @@ const xml = {
           parent = parent.parentNode;
         }
         // Element-Knoten im Abschnitt
-        const n = evaluator(`//x:${i.tag}//x:Abschnitt/*`);
+        const n = evaluator(`//z:${i.tag}//z:Abschnitt/*`);
         let k = n.iterateNext();
         while (k) {
           if (k.parentNode !== j || k.nodeName === "Abschnitt") {
@@ -4546,7 +4527,7 @@ const xml = {
       }
     }
     // Belege
-    const bl = evaluator("//x:Belegreihe/x:Beleg");
+    const bl = evaluator("//z:Belegreihe/z:Beleg");
     i = bl.iterateNext();
     while (i) {
       const o = {
@@ -4561,7 +4542,7 @@ const xml = {
       i = bl.iterateNext();
     }
     // Literatur
-    const lt = evaluator("//x:Literaturtitel");
+    const lt = evaluator("//z:Literaturtitel");
     i = lt.iterateNext();
     while (i) {
       const id = i.getAttribute("xml:id");
@@ -4575,7 +4556,7 @@ const xml = {
     }
     // Wortinformationen
     xl.wi["1"] = [];
-    const wi = evaluator("//x:Verweise/*");
+    const wi = evaluator("//z:Verweise/*");
     i = wi.iterateNext();
     while (i) {
       const o = {
@@ -4597,7 +4578,7 @@ const xml = {
       i = wi.iterateNext();
     }
     // Bedeutungsgerüst
-    const bg = evaluator("//x:Lesarten");
+    const bg = evaluator("//z:Lesarten");
     let bgNr = 1;
     i = bg.iterateNext();
     while (i) {

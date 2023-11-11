@@ -106,12 +106,12 @@ const importWGd = {
     }
 
     // prepare XSLT
-    const xslt = new DOMParser().parseFromString(importWGd.transformXSL, "application/xml");
+    const xslt = helferXml.parseXML(importWGd.transformXSL, "application/xml");
     const processor = new XSLTProcessor();
     processor.importStylesheet(xslt);
 
     // transform XML
-    const xmlOri = new DOMParser().parseFromString(xml, "text/xml");
+    const xmlOri = helferXml.parseXML(xml);
     const xmlTrans = processor.transformToDocument(xmlOri);
     let result = new XMLSerializer().serializeToString(xmlTrans);
 

@@ -1924,7 +1924,7 @@ const beleg = {
     let titel = "";
     let xmlDoc;
     if (/^(tei|xml)/.test(beleg.data.bi)) {
-      xmlDoc = importShared.parseXML(beleg.data.bx);
+      xmlDoc = helferXml.parseXML(beleg.data.bx);
     }
 
     // Titelinfos abhängig vom Importtyp ermitteln
@@ -2886,9 +2886,9 @@ const beleg = {
         if (/^(tei|xml)/.test(beleg.data.bi)) {
           let bx = beleg.data.bx;
           if (!optionen.data.beleg.header) {
-            bx = bx.replace(/<teiHeader[^>]*>.+?<\/teiHeader>/s, "<teiHeader>[ausgeblendet]</teiHeader>");
+            bx = bx.replace(/<teiHeader([^>]*)>.+?<\/teiHeader>/s, (...args) => `<teiHeader${args[1]}>[ausgeblendet]</teiHeader>`);
           }
-          let xmlDoc = new DOMParser().parseFromString(bx, "text/xml");
+          let xmlDoc = helferXml.parseXML(bx);
           xmlDoc = helferXml.indent(xmlDoc);
           const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
           const pretty = helferXml.prettyPrint({

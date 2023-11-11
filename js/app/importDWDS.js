@@ -388,7 +388,7 @@ const importDWDS = {
         xmlStr += `<URL>${helferXml.maskieren({ text: i.meta_.url })}</URL>`;
       }
       xmlStr += "</Fundstelle></Beleg>";
-      const xmlDoc = new DOMParser().parseFromString(xmlStr, "text/xml");
+      const xmlDoc = helferXml.parseXML(xmlStr);
       const xmlDocIndent = helferXml.indent(xmlDoc);
       ds.bi = "xml-dwds";
       ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
