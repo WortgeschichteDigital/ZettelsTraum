@@ -2016,11 +2016,15 @@ ipcMain.handle("downloads-cache-save", (evt, data) => {
 
 ipcMain.handle("downloads-cache-get", (evt, id) => {
   const idx = downloads.findIndex(i => i.id === id);
+  if (idx === -1) {
+    return false;
+  }
+  const data = { ...downloads[idx] };
   if (idx > 0) {
-    downloads.unshift({ ...downloads[idx] });
+    downloads.unshift(data);
     downloads.splice(idx + 1, 1);
   }
-  return downloads[idx];
+  return data;
 });
 
 
