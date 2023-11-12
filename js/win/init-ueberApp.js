@@ -2,6 +2,7 @@
 
 // MODULE
 const modules = {
+  clipboard: require("electron").clipboard,
   ipc: require("electron").ipcRenderer,
   shell: require("electron").shell,
 };
