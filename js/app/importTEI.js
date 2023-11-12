@@ -51,6 +51,7 @@ const importTEI = {
     data.ds.bv = importData.formData.von;
     data.ds.kr = importData.formData?.resource?.name || "";
     if (importData.urlData) {
+      data.ds.ui = importData.urlData.url;
       data.ds.ud = new Date().toISOString().split("T")[0];
       if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
         data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;

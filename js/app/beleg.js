@@ -2925,7 +2925,7 @@ const beleg = {
 
   // Metadaten: füllen oder auffrischen
   metadaten () {
-    const felder = [ "dc", "dm", "bi", "di", "bv", "bb", "bx" ];
+    const felder = [ "dc", "dm", "bi", "di", "bv", "bb", "bx", "ui" ];
     for (const feld of felder) {
       const cont = document.querySelector(`#beleg-${feld}`);
       cont.replaceChildren();

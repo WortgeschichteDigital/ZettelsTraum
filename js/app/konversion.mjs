@@ -629,10 +629,14 @@ const konversionen = {
       karte.bs = karte.bs.replace(/\{(.+?)\}/g, (m, p1) => `<span class="klammer-autorenzusatz">${p1}</span>`);
     }
 
-    // Datenfelder "ud" (Aufrufdatum) und "ul" (URL) in allen Karteikarten ergänzen;
-    // die neuen Datenfelder automatisch aus dem Quellefeld füllen, dann das Quellefeld bereinigen
+    // die folgenden Datenfelder in allen Karteikarten ergänzen:
+    //   - "ud" (Aufrufdatum)
+    //   - "ui" (Import-URL)
+    //   - "ul" (URL)
+    // "ud" und "ul" automatisch aus dem Quellefeld füllen, dann das Quellefeld bereinigen
     for (const karte of Object.values(data.ka)) {
       karte.ud = "";
+      karte.ui = "";
       karte.ul = "";
       const qu = karte.qu.split(/\n(.*)/s);
       if (qu.length > 1) {
