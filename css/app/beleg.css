@@ -389,6 +389,10 @@ span#beleg-bewertung {
   height: 24px;
 }
 
+#beleg .meta .text-tools a {
+  margin-left: 24px;
+}
+
 
 /* TEXT-TOOLS ----------------------------------- */
 

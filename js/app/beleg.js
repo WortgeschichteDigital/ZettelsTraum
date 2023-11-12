@@ -1218,6 +1218,8 @@ const beleg = {
       evt.preventDefault();
       if (this.id === "beleg-meta-toggle") {
         beleg.metadatenToggle(true);
+      } else if (this.id === "beleg-meta-bx-copy") {
+        beleg.metadatenBxCopy();
       } else if (this.id === "beleg-meta-header") {
         beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
@@ -3048,5 +3050,23 @@ const beleg = {
 
     // Reimport starten
     importShared.startImport();
+  },
+
+  // Metadaten: Importdaten in die Zwischenablage kopieren
+  metadatenBxCopy () {
+    // keine Importdaten vorhanden
+    if (!beleg.data.bx) {
+      dialog.oeffnen({
+        type: "alert",
+        text: "Keine Importdaten gespeichert.",
+      });
+      return;
+    }
+
+    // Daten kopieren
+    modules.clipboard.writeText(beleg.data.bx);
+
+    // Feedback geben
+    helfer.animation("zwischenablage");
   },
 };
