@@ -1882,7 +1882,7 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
               <p><b>&lt;Hervorhebung&gt;:</b> <i>fakultativ</i>. Markierung rein typographischer Textauszeichnungen.</p>
 
-              <p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="https://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-dta">Import von Texten aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./js/app/belegImport.js</span> entnehmen. <abbr title="Siehe">S.</abbr> <code class="quelltext">const rend</code> in <code class="quelltext">belegImport.DTAText()</code>.</p>
+              <p class="eingerueckt"><b>@Stil:</b> <i>fakultativ</i>. Das Attribut kann eine Liste von Werten enthalten, die <a href="https://www.deutschestextarchiv.de/doku/basisformat/typogrAllg.html">im <abbr title="Deutsches Textarchiv-Basisformat">DTABf</abbr> verwendet</a> werden. Beim <a href="#verschiedenes-tei">Import von in <abbr title="Text Encoding Intiative" lang="en">TEI</abbr> kodierten Texten</a> werden nicht alle Textmerkmale übernommen; grob gesagt nur die Inline-Formate. Diese können jedoch prinzipiell alle im @Stil auftauchen. Welche Formate <i class="app-name"></i> importiert, kann man der Datei <span class="datei">./resources/xml-import-tei.xsl</span> entnehmen. <abbr title="Siehe">S.</abbr> auch <span class="datei">./js/app/importTEI.js</span>.</p>
 
               <p><b>&lt;Loeschung&gt;:</b> <i>fakultativ</i>. Text, der als Löschung ausgezeichnet wurde. Der Text soll im Endprodukt (Webseite) auf keinen Fall mehr erscheinen. Der Tag kann verwendet werden, wenn in einem Belegschnitt aus datenschutzrechtlichen Gründen Text vor der Publikation entfernt werden soll oder muss. Der getaggte Text soll also durch eine Ellipse ersetzt werden: […].</p>
 
@@ -1957,30 +1957,16 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
 
         <!-- VERSCHIEDENES -->
         <section id="sektion-verschiedenes" class="suche aus">
-          <!-- DTA-Import -->
-          <h2 id="verschiedenes-dta"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</h2>
+          <!-- TEI-Import -->
+          <h2 id="verschiedenes-tei"><abbr title="Text Encoding Intiative" lang="en">TEI</abbr>-Import</h2>
 
-          <p>Importiert wird grundsätzlich der gesamte Text der Seite, die sich hinter der eingegebenen URL im Karteikarten-Formular verbirgt – mit einigen wenigen Ausnahmen. Ignoriert werden die Textinhalte in:</p>
-
-          <ul>
-            <li>Kustoden (<code class="quelltext">&lt;catch&gt;</code>),</li>
-
-            <li>Kolumnentiteln (<code class="quelltext">&lt;header&gt;</code>),</li>
-
-            <li>Bogensignaturen (<code class="quelltext">&lt;sig&gt;</code>),</li>
-
-            <li>Schreib- oder Setzfehlern (<code class="quelltext">&lt;sic&gt;</code>), wobei der korrigierte Text in <code class="quelltext">&lt;corr&gt;</code> importiert wird.</li>
-          </ul>
+          <p>Importiert wird grundsätzlich der gesamte Text der Seite, die sich hinter der eingegebenen URL im Karteikarten-Formular verbirgt – allerdings mit einigen wenigen Ausnahmen. Genaueres kann dem Stylsheet unter <span class="datei">./resources/xml-import-tei.xsl</span> und dem Script <span class="datei">./js/app/importTEI.js</span> entnommen werden.</p>
 
           <p>Beim Import wird versucht, Inline-Formatierungen wie Kursivierungen, Fettungen oder Sperrungen zu erhalten. Auf einen Absatz bezogene Formatierungen (Zentrierung oder <abbr title="dergleichen">dgl.</abbr>) werden immer ignoriert.</p>
 
           <p>Die Trennstriche am Ende einer Textzeile (das sind <q>-</q> oder <q>¬</q>) werden zu <q>[¬]</q> normalisiert, sodass sie für die Leseansicht der Belege automatisch ausgeblendet werden können.</p>
 
-          <p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <code class="quelltext">␣[:35:]␣</code>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus dem n-Attribute des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde.</p>
-
-          <p>Wird der den Import begrenzende <code class="quelltext">&lt;pb&gt;</code> nicht gefunden (weil man sich auf der letzten Seite des Texts befindet oder die NutzerIn bei der Eingabe einen Fehler gemacht hat), wird versucht, den Text des Buchs ab dem Start-<code class="quelltext">&lt;pb&gt;</code> komplett zu importieren.</p>
-
-          <p>Die Funktionen, die den Import durchführen, stehen alle in <span class="datei">./js/app/belegImport.js</span>. Ihr Name beginnt immer mit <code class="quelltext">DTA</code>.</p>
+          <p>Werden mehrere Seiten importiert, wird jeder Seitenumbruch nach diesem Muster markiert: <code class="quelltext">␣[:35:]␣</code>. Dabei steht hier die <q>35</q> für die Seitenangabe, die aus <code class="quelltext">@n</code> des <code class="quelltext">&lt;pb&gt;</code> ausgelesen wurde. Mit <code class="quelltext">&lt;cb&gt;</code> wird genauso verfahren. Hier fehlt <code class="quelltext">@n</code> <abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> jedoch das Attribut, sodass nur ein Platzhalter eingefügt werden kann: <code class="quelltext">␣[:?:]␣</code>.</p>
 
           <!-- Tag-Dateien -->
           <h2 id="verschiedenes-tagDateien">Format Tag-Dateien</h2>
