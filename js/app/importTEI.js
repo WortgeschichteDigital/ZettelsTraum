@@ -25,6 +25,15 @@ const importTEI = {
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
+    // on reimport from the saved import data, formData ist not present;
+    // import from page 0, so everything is imported
+    if (!importData.formData) {
+      importData.formData = {
+        von: 0,
+        bis: 0,
+      };
+    }
+
     // reset data objects
     const data = importTEI.data;
     data.cit = importTEI.citObject();
@@ -48,7 +57,7 @@ const importTEI = {
       } else if (importData.type === "tei-dingler" && importData.urlData) {
         data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
       } else {
-        data.ds.ul = importData.formData.url;
+        data.ds.ul = importData.formData?.url || "";
       }
     }
 
