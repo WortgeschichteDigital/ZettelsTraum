@@ -790,25 +790,11 @@ const importTEI = {
     let pbEndSel;
     let pbEnd;
 
-    // no <pb> found => return the whole <text>
-    if (!pb.length) {
-      const text = xmlStr.match(/<text[ >].+?<\/text>/s)?.[0] || false;
-      if (!text) {
-        importTEI.error("kein <text> gefunden", "feld");
-        return false;
-      }
-      return normalize(text);
-    }
-
     // try default values by import type
-    if (!pageFrom) {
-      // pageFrom == 0 => import everything
-      pbStart = pb[0];
-      if (pbStart.getAttribute("facs")) {
-        pbStartSel = `facs="${pbStart.getAttribute("facs")}"`;
-      } else if (pbStart.getAttribute("n")) {
-        pbStartSel = `n="${pbStart.getAttribute("n")}"`;
-      }
+    if (!pb.length || !pageFrom) {
+      // import everything if:
+      //   - no <pb> found
+      //   - pageFrom == 0
 
       // warn about or even prevent the import of a very large file as a whole
       const strBytes = new Blob([ xmlStr ]).size;
@@ -833,6 +819,14 @@ const importTEI = {
           return false;
         }
       }
+
+      // return the whole content of <text>
+      const text = xmlStr.match(/<text[ >].+?<\/text>/s)?.[0] || false;
+      if (!text) {
+        importTEI.error("kein <text> gefunden", "feld");
+        return false;
+      }
+      return normalize(text);
     } else if (type === "tei-dta") {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
@@ -902,7 +896,7 @@ const importTEI = {
     }
 
     // unable to find ending <pb> => try to find it via starting <pb>
-    if (!pbEnd && pageFrom) {
+    if (!pbEnd) {
       const idxStart = getIndex(pbStart);
       if (idxStart === pb.length - 1 ||
           idxStart + pageTo - pageFrom >= pb.length) {
@@ -987,15 +981,11 @@ const importTEI = {
       const startMatch = xmlStr.match(startReg);
       if (startMatch?.length > 1) {
         pbStartSel = "";
-        if (!pageFrom) {
-          pageFrom = 1;
-        } else {
-          pageFrom = 0;
-          for (const i of pb) {
-            pageFrom++;
-            if (i === pbStart) {
-              break;
-            }
+        pageFrom = 0;
+        for (const i of pb) {
+          pageFrom++;
+          if (i === pbStart) {
+            break;
           }
         }
       }
@@ -1005,20 +995,16 @@ const importTEI = {
       const endMatch = xmlStr.match(endReg);
       if (endMatch?.length > 1) {
         pbEndSel = "";
-        if (!pageFrom) {
-          pageTo = pb.length + 1;
-        } else {
-          pageTo = 0;
-          for (const i of pb) {
-            pageTo++;
-            if (i === pbEnd) {
-              break;
-            }
+        pageTo = 0;
+        for (const i of pb) {
+          pageTo++;
+          if (i === pbEnd) {
+            break;
           }
         }
       }
     }
-    if (pageFrom && pageTo <= pageFrom) {
+    if (pageTo <= pageFrom) {
       pageTo = pageFrom + 1;
     }
 
