@@ -2566,6 +2566,8 @@ const redLit = {
       data.ds.au = td.autor.join("/");
     } else if (td.hrsg.length) {
       data.ds.au = `${td.hrsg.join("/")} (Hrsg.)`;
+    } else {
+      data.ds.au = "N.\u00A0N.";
     }
     data.ds.bi = "xml-mods";
     data.ds.bx = xmlStr;
