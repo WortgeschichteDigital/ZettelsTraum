@@ -208,9 +208,16 @@ const beleg = {
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     if (neu && !beleg.leseansicht) {
       // Zwischenablage auswerten
-      const cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
+      let cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
 
-      // keine bekannten Daten in der Zwischenablage
+      // keine bekannten Daten in der Zwischenablage => Dateidaten vorhanden?
+      if (!cb &&
+          importShared.fileData.data.length > 1 &&
+          importShared.fileData.path) {
+        cb = importShared.detectType("file://" + importShared.fileData.path, "");
+      }
+
+      // immer noch keine bekannten Daten in der Zwischenablage => Fokus setzen
       if (!cb) {
         const feld = optionen.data.einstellungen["karteikarte-fokus-beleg"] ? "beleg-bs" : "beleg-da";
         document.getElementById(feld).focus();
@@ -502,6 +509,10 @@ const beleg = {
         feld.dispatchEvent(new Event("input"));
       } else if (src === "zwischenablage" && cb?.formView === "zwischenablage") {
         feld.value = "Zwischenablage: " + cb.formText;
+      } else if (src === "datei" &&
+          importShared.fileData.data.length > 1 &&
+          importShared.fileData.path) {
+        feld.value = "file://" + importShared.fileData.path;
       }
     } else {
       feld.dispatchEvent(new Event("input"));
