@@ -1231,7 +1231,7 @@ const beleg = {
       } else if (this.classList.contains("icon-uhr")) {
         beleg.toolsAufrufdatum();
       } else if (this.parentNode.classList.contains("text-tools-beleg") ||
-        this.parentNode.classList.contains("text-tools-bedeutung")) {
+          this.parentNode.classList.contains("text-tools-bedeutung")) {
         beleg.toolsText(this);
       } else if (this.parentNode.classList.contains("text-tools-quelle")) {
         beleg.toolsQuelle(this);
@@ -2130,7 +2130,7 @@ const beleg = {
         kurz.push(text[i]);
         kurzZuletzt = i;
       } else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) { // Kürzungszeichen
-        kurz.push("[[…]]" + seitenumbruch(text[i]));
+        kurz.push('<span class="klammer-loeschung">…</span>' + seitenumbruch(text[i]));
       } else {
         const su = seitenumbruch(text[i]);
         if (su) {
@@ -2145,7 +2145,7 @@ const beleg = {
       }
       return "";
     }
-    if (/\[\[…\]\]/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
+    if (/<span class="klammer-loeschung">…<\/span>/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
       kurz.pop();
     }
     // gekürzten Text übernehmen
