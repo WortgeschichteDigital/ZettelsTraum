@@ -847,9 +847,11 @@ const importTEI = {
         `n="${pageFrom}"`,
         `n="#${pageFrom}"`,
         `n$="0${pageFrom}"`,
+        `n^="${pageFrom}"`,
         `facs="${pageFrom}"`,
         `facs="#${pageFrom}"`,
         `facs$="0${pageFrom}"`,
+        `facs^="${pageFrom}"`,
       ];
       for (const sel of selectors) {
         pbStart = xmlDoc.querySelector(`pb[${sel}]`);
