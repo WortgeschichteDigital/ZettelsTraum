@@ -124,7 +124,6 @@ const importWGd = {
     // map rendition styles
     const styleMap = {
       "#aq": "tei-antiqua",
-      "#fr": "tei-fr",
       "#larger": "tei-groesser",
       "#g": "tei-gesperrt",
       "#in": "tei-initiale",

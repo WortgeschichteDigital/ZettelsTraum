@@ -10,7 +10,7 @@
     indent="yes"
     encoding="utf-8"/>
 
-  <xsl:strip-space elements="t:body t:div t:front t:text"/>
+  <xsl:strip-space elements="t:body t:back t:div t:front t:text"/>
 
   <xsl:template match="node()|@*">
     <xsl:copy>

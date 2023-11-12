@@ -11,39 +11,74 @@
   indent="no"
   encoding="utf-8"/>
 
-<!--
-  available variables:
-    $teiType = "" | dingler | dta | wdb
--->
+<!-- $teiType = "" | dingler | dta | wdb -->
 
 <xsl:template match="t:TEI/t:text">
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="t:fw|t:index|t:teiHeader"/>
 
-<xsl:template match="t:cb|t:pb">
-  <xsl:text>[:</xsl:text>
-    <xsl:choose>
-      <xsl:when test="@n">
-        <xsl:value-of select="@n"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>?</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  <xsl:text>:]</xsl:text>
-</xsl:template>
+<!-- ignore content -->
+<xsl:template match="t:figDesc|t:fw|t:index|t:teiHeader"/>
 
-<xsl:template match="t:byline|t:closer|t:dateline|t:div|t:item|t:lg|t:sp|t:titlePage">
+
+<!-- typical block content -->
+<xsl:template match="t:byline|t:castList|t:castGroup|t:cit|t:closer|t:dateline|t:div|t:figure|t:floatingText|t:item|t:lg|t:listBibl|t:opener|t:postscript|t:row|t:salute|t:signed|t:sp|t:table|t:titlePage|t:trailer">
   <div>
     <xsl:apply-templates/>
   </div>
 </xsl:template>
 
+
+<!-- identical transformation for several elements -->
+<xsl:template match="t:argument|t:epigraph">
+  <small>
+    <xsl:apply-templates/>
+  </small>
+</xsl:template>
+
+<xsl:template match="t:cb|t:pb">
+  <xsl:if test="$teiType != 'dingler' or not(parent::t:note)">
+    <!-- in "Polytechnisches Journal" <pb>s are often repeated within a <note> -->
+    <xsl:text>[:</xsl:text>
+      <xsl:choose>
+        <xsl:when test="@n">
+          <xsl:value-of select="@n"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>?</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    <xsl:text>:]</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="t:lb|t:space">
+  <xsl:text> </xsl:text>
+</xsl:template>
+
+<xsl:template match="t:q|t:quote">
+  <q>
+    <xsl:apply-templates/>
+  </q>
+</xsl:template>
+
+
+<!-- special transformation for various elements -->
+<xsl:template match="t:add">
+  <xsl:text>[</xsl:text>
+    <xsl:apply-templates/>
+  <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="t:cell">
+  <xsl:apply-templates/>
+  <xsl:text> |</xsl:text>
+</xsl:template>
+
 <xsl:template match="t:choice">
   <xsl:choose>
-    <xsl:when test="$teiType = 'dta'">
+    <xsl:when test="$teiType = 'dingler' or $teiType = 'dta'">
       <xsl:apply-templates select="t:abbr|t:corr|t:orig"/>
     </xsl:when>
     <xsl:otherwise>
@@ -52,10 +87,22 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="t:del">
+  <s>
+    <xsl:apply-templates/>
+  </s>
+</xsl:template>
+
 <xsl:template match="t:ex">
   <xsl:text>[</xsl:text>
     <xsl:apply-templates/>
   <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="t:formula">
+  <i>
+    <xsl:apply-templates/>
+  </i>
 </xsl:template>
 
 <xsl:template match="t:head">
@@ -102,10 +149,6 @@
 <xsl:template match="t:l">
   <xsl:apply-templates/>
   <br/>
-</xsl:template>
-
-<xsl:template match="t:lb">
-  <xsl:text> </xsl:text>
 </xsl:template>
 
 <xsl:template match="t:note">

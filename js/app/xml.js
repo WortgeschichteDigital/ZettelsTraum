@@ -584,8 +584,6 @@ const xml = {
     switch (n.getAttribute("class")) {
       case "tei-antiqua":
         return "#aq";
-      case "tei-fr":
-        return "#fr";
       case "tei-groesser":
         return "#larger";
       case "tei-gesperrt":

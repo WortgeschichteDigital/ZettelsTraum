@@ -406,11 +406,7 @@ const importTEI = {
     "#et2": {},
     "#et3": {},
     "#f": {},
-    "#fr": {
-      tag: "span",
-      class: "tei-fr",
-      reg: /font-size: ?(1[0-9]{2}%|1\.[0-9]+)/,
-    },
+    "#fr": {},
     "#g": {
       tag: "span",
       class: "tei-gesperrt",
@@ -719,7 +715,30 @@ const importTEI = {
     str = str.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
 
     // erase empty placeholders for <cb> and <pb> that follow immediately after another placeholder
-    str = str.replace(/(\[:.+?:\]) \[:\?:\]/g, (...args) => args[1]);
+    str = str.replace(/(\[:.+?:\])\s+\[:\?:\]/g, (...args) => args[1]);
+
+    // ensure that <small> is an inline style
+    str = str.replace(/<small>(.+?)<\/small>/gs, (...args) => {
+      const p = args[1].trim().split(/\n+/);
+      const result = [];
+      for (const i of p) {
+        result.push(`<small>${i}</small>`);
+      }
+      return result.join("\n\n");
+    });
+
+    // replace <q> with quotation marks
+    str = str.replace(/<q>(.)(.+?)(.)<\/q>/gs, (...args) => {
+      let start = args[1];
+      if (!/[„‚»›«‹“]/.test(start)) {
+        start = "„" + start;
+      }
+      let end = args[3];
+      if (!/[“‘»›«‹”]/.test(end)) {
+        end += "“";
+      }
+      return start + args[2].trim() + end;
+    });
 
     // trim paragraphs
     const div = str.split("\n\n");
@@ -727,11 +746,16 @@ const importTEI = {
       div[i] = div[i].trim();
       div[i] = div[i].replace(/^(<[^>]+?>) +/, (...args) => args[1]);
       div[i] = div[i].replace(/ +(<[^>]+?>) *$/, (...args) => args[1]);
+      // detect empty lines that only have tags and spaces
+      const hasText = div[i].replace(/<.+?>/g, "").trim();
+      if (!hasText) {
+        div[i] = "";
+      }
     }
-    str = div.join("\n\n");
+    str = div.filter(i => i).join("\n\n");
 
     // merge twin tags
-    str = str.replace(/((<[^/>]{1}[^>]*>){2,})([^<]+?)((<\/[^>]+>){2,})/g, (...args) => {
+    str = str.replace(/((<[^/>]{1}[^>]*>){2,})(.+?)((<\/[^>]+>){2,})/g, (...args) => {
       // detect twins
       const start = args[1].match(/(?<=<).+?(?=>)/g);
       const end = args[4].match(/(?<=<).+?(?=>)/g);
@@ -770,8 +794,8 @@ const importTEI = {
     decoder.innerHTML = str;
     str = decoder.value;
 
-    // normalize unicode
-    str = str.normalize("NFC")
+    // trim a last time and normalize unicode
+    str = str.trim().normalize("NFC")
 
     // return result
     return str;

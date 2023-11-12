@@ -500,7 +500,6 @@ const helfer = {
       "tei-antiqua": "font-family: sans-serif",
       "tei-doppelt": "text-decoration: underline double",
       "tei-gesperrt": "letter-spacing: 4px",
-      "tei-fr": "font-size: 20px",
       "tei-groesser": "font-size: 20px",
       "tei-initiale": "font-size: 24px",
       "tei-kapitaelchen": "font-variant: small-caps",
