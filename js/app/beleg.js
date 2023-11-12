@@ -1218,8 +1218,8 @@ const beleg = {
       evt.preventDefault();
       if (this.id === "beleg-meta-toggle") {
         beleg.metadatenToggle(true);
-      } else if (this.id === "beleg-meta-bx-copy") {
-        beleg.metadatenBxCopy();
+      } else if (/beleg-meta-copy/.test(this.id)) {
+        beleg.metadatenCopy(this.id);
       } else if (this.id === "beleg-meta-header") {
         beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
@@ -3053,18 +3053,26 @@ const beleg = {
   },
 
   // Metadaten: Importdaten in die Zwischenablage kopieren
-  metadatenBxCopy () {
+  //   id = string
+  metadatenCopy (id) {
+    // Feld ermitteln
+    const field = id.replace(/.+-/, "");
+
     // keine Importdaten vorhanden
-    if (!beleg.data.bx) {
+    if (!beleg.data[field]) {
+      const fieldMap = {
+        bx: "Importdaten",
+        ui: "Import-URL",
+      };
       dialog.oeffnen({
         type: "alert",
-        text: "Keine Importdaten gespeichert.",
+        text: `Keine ${fieldMap[field]} gespeichert.`,
       });
       return;
     }
 
     // Daten kopieren
-    modules.clipboard.writeText(beleg.data.bx);
+    modules.clipboard.writeText(beleg.data[field]);
 
     // Feedback geben
     helfer.animation("zwischenablage");
