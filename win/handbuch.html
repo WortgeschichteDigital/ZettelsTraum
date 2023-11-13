@@ -100,7 +100,7 @@
 
           <p>Die auf virtuellen Karteikarten gesammelten Belege lassen sich <a href="#belegliste">auflisten</a> und in vielfältiger Weise <a href="#filter">filtern</a>, <a href="#menueKartei-suche">durchsuchen</a>, <a href="#belegliste-annotieren">markieren</a>, <a href="#menueBelege-kopieren">kopieren</a>, <a href="#karteikarte-duplizieren">duplizieren</a>, auf Wunsch sogar <a href="#karteikarte-drucken">ausdrucken</a>. Die Wortkarteidaten werden dafür in einem ausführlich dokumentieren Klartextformat gespeichert (dem <a href="#ztj-ztj" class="link-dokumentation"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateiformat</a>), das auf einen Notationsstandard aufsetzt, der auch in der ferneren Zukunft problemlos von Computerprogrammen zu lesen sein sollte.</p>
 
-          <p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Sie können Belege aus beliebigen Korpora einpflegen. Allerdings enthält sie spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Belegen aus dem <a href="https://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten mithilfe einer <abbr title="Pica-Produktionsnummer">PPN</abbr> (unter Nutzung der <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a>) oder einer Datei im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS</a>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format zu importieren. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien mit Titeldaten werden von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten.</p>
+          <p>Die App ist agnostisch, was die Verwendung eines bestimmten Textkorpus angeht. Mit Daten, die in <a href="https://tei-c.org/">TEI-XML</a> kodiert sind, kann sie allerdings besonders gut umgehen. Prinzipiell können Sie zwar Belege aus beliebigen Korpora einpflegen, allerdings hat <i class="app-name"></i> spezielle <a href="#karteikarte-importfunktion">Importfunktionen</a>, die das Erstellen von Karteikarten mit Texten aus dem <a href="https://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a> (DTA), dem <a href="https://dingler.bbaw.de/"><i>Polytechnischen Journal</i></a> (Dingler Online), der <a href="https://www.hab.de/digitale-editionen/"><i>Wolfenbütteler Digitalen Bibliothek</i></a> (WDB), den <a href="https://www.dwds.de/r">Korpora</a> des <a href="https://www.dwds.de/"><i>Digitalen Wörterbuchs der deutschen Sprache</i></a> (DWDS) und dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a> (DeReKo) erheblich erleichtern und beschleunigen. Mit nur einem Klick kann die Karteikarte sowohl mit dem Belegtext als auch mit den zugehörigen Metadaten gefüllt werden. Daneben besteht die Möglichkeit, Titeldaten mithilfe einer <abbr title="Pica-Produktionsnummer">PPN</abbr> (unter Nutzung der <a href="https://verbundwiki.gbv.de/display/VZG/unAPI">unAPI</a>) oder einer Datei im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS</a>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format zu importieren. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien mit Titeldaten werden von <a href="https://books.google.com/"><i>GoogleBooks</i></a> oder Bibliothekskatalogen wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=2/TTL=1/"><i>Gemeinsamen Verbundkatalog</i></a> (GVK) zum Download angeboten.</p>
 
           <p>Neben vielem anderen verfügt die App außerdem über eine <a href="#menueRedaktion-literatur">Literaturdatenbank</a> und ein <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionssystem</a>. Literaturtitel aus der Datenbank, <a href="#belegliste-xmlZwischenablage">Belegschnitte</a>, <a href="#bedeutungsgeruest">Bedeutungsgerüste</a> können mit leicht zu handhabenden Funktionen in der Form eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets (alternativ auch in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> oder als Klartext) kopiert und in anderen Programmen weiterverwendet werden.</p>
 
@@ -300,7 +300,7 @@
 
             <li>Die Texteingabe in den Feldern <i>Beleg</i> und <i>Notizen</i> können Sie sich ruhig übersichtlicher gestalten, indem Sie zwischen Absätzen eine Leerzeile einfügen. Bei der Darstellung des Textes (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> in der <a href="#belegliste">Belegliste</a>) wird das Programm dies erkennen und den Text korrekt in Absätze gliedern, ohne dass überflüssige Leerzeilen angezeigt werden.</li>
 
-            <li>Fußt ihre Belegsammlung auf Texten aus dem <a href="https://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a>, dem <a href="https://www.dwds.de/"><i>Digitalen Wörterbuch der deutschen Sprache</i></a> oder dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a>, können Karteikarten halbautomatisch gefüllt werden. <a href="#karteikarte-importfunktion">Wie genau der Import funktioniert</a>, wird im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a> in einem eigenen <abbr title="Abschnitt">Abschn.</abbr> beschrieben.</li>
+            <li>Fußt ihre Belegsammlung <abbr title="unter anderem">u.&nbsp;a.</abbr> auf Texten aus dem <a href="https://www.deutschestextarchiv.de/"><i>Deutschen Textarchiv</i></a>, dem <a href="https://www.dwds.de/"><i>Digitalen Wörterbuch der deutschen Sprache</i></a> oder dem <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><i>Deutschen Referenzkorpus</i></a>, können Karteikarten halbautomatisch gefüllt werden. <a href="#karteikarte-importfunktion">Wie genau der Import funktioniert</a>, wird im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a> in einem eigenen <abbr title="Abschnitt">Abschn.</abbr> beschrieben.</li>
           </ul>
 
           <p><b><i>Bedeutungsgerüst</i></b> <img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt="">&nbsp;<a href="#bedeutungsgeruest">Handbuch-Kapitel</a></p>
@@ -416,11 +416,11 @@
           <p class="erklaerung-icon" id="karteikarte-trennung"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd>; nur <i>Leseansicht</i>; Silbentrennung ein- <abbr title="beziehungsweise">bzw.</abbr> ausblenden</p>
 
           <div class="info">
-            <p id="karteikarte-bindestrich">Beim <a href="#karteikarte-dtaImport">Import von Belegen aus dem <abbr title="Deutschen Textarchiv">DTA</abbr></a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
+            <p id="karteikarte-bindestrich">Beim <a href="#karteikarte-teiImport">Import von in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Belegen</a> werden Trennstriche am Zeilenende durch die Markierung <q>[¬]</q> ersetzt. Wird die Trennstrichmarkierung ausgeschaltet, erscheint ein Bindestrich, wenn das nächste Wort mit einem Großbuchstaben beginnt. Aus <q>Eisenbahn[¬]Differentialtarife</q> wird darum <q>Eisenbahn-Differentialtarife</q>, aus <q>Groß[¬]industrieller</q> hingegen <q>Großindustrieller</q>. Die Markierungen bleiben beim Import erhalten, weil der Computer dem Lexikographen die Entscheidung, ob ein Trennstrich gesetzt werden muss oder nicht, eigentlich nicht abnehmen kann.</p>
 
             <p>Werden mehrere Seiten importiert, erscheint vor jeder neuen Seite eine Umbruchsmarkierung nach dem Muster <q>␣[:SEITENZAHL:]␣</q> (davor und dahinter ein Leerzeichen). Folgt auf die Markierung Seite&nbsp;351 des importierten Textes, stünde hier demnach <q>␣[:351:]␣</q>. Diese Umbruchsmarkierungen werden von der Einstellung zusätzlich zu den Trennstrichen erfasst und ein- oder ausgeblendet.</p>
 
-            <p>Weitere <a href="#verschiedenes-dta" class="link-dokumentation">Details zum <abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> finden sich in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</p>
+            <p>Weitere <a href="#verschiedenes-tei" class="link-dokumentation">Details zum <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import</a> finden sich in der <a href="#" class="link-dokumentation">technischen Dokumentation</a>.</p>
           </div>
 
           <p class="erklaerung-icon" id="karteikarte-suchleiste"><img src="../img/lupe-suchleiste.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>F3</kbd>; Suchleiste öffnen <abbr title="beziehungsweise">bzw.</abbr> fokussieren</p>
@@ -581,9 +581,9 @@
           <p class="add-navi-details" id="karteikarte-beleg"><b>Beleg:</b> <i>Pflichtfeld</i>; Belegtext</p>
 
           <div class="info">
-            <p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert (was bei einem automatischen Import aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> tatsächlich wohl immer der Fall ist). Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die <b>Spitzklammern</b> &lt; und&nbsp;&gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
+            <p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert. Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die <b>Spitzklammern</b> &lt; und&nbsp;&gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
 
-            <p id="karteikarte-kuerzenBeleg">Mithilfe des Icons <img src="../img/kuerzung.svg" width="20" height="20" alt=""> kann der <b>Belegtext gekürzt</b> werden. Die Funktion operiert auf der Ebene von Absätzen. Standardmäßig werden alle Absätze gestrichen, in denen das Karteiwort nicht auftaucht. Für gekürzte Absätze wird <abbr title="gegebenenfalls">ggf.</abbr> ein Kürzungszeichen eingefügt: <code class="quelltext">[[...]]</code> (falls sie zwischen Absätzen mit Karteiwort stehen). Über Einstellungen lässt sich steuern, dass der <a href="#einstellungen-karteikarteTextKuerzenKontext">Kontext erhalten</a> bleibt (ein Absatz vor und einer hinter einem Absatz mit Karteiwort) oder die <a href="#einstellungen-karteikarteTextKuerzenAuto">Kürzung nach dem Import automatisch</a> vorgenommen wird.</p>
+            <p id="karteikarte-kuerzenBeleg">Mithilfe des Icons <img src="../img/kuerzung.svg" width="20" height="20" alt=""> kann der <b>Belegtext gekürzt</b> werden. Die Funktion operiert auf der Ebene von Absätzen. Standardmäßig werden alle Absätze gestrichen, in denen das Karteiwort nicht auftaucht. Für gekürzte Absätze wird <abbr title="gegebenenfalls">ggf.</abbr> ein Kürzungszeichen eingefügt: <code class="quelltext">&lt;span class="klammer-loeshung"&gt;...&lt;/span&gt;</code> (falls sie zwischen Absätzen mit Karteiwort stehen). Über Einstellungen lässt sich steuern, dass der <a href="#einstellungen-karteikarteTextKuerzenKontext">Kontext erhalten</a> bleibt (ein Absatz vor und einer hinter einem Absatz mit Karteiwort) oder die <a href="#einstellungen-karteikarteTextKuerzenAuto">Kürzung nach dem Import automatisch</a> vorgenommen wird.</p>
 
             <p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/pi.svg" width="20" height="20" alt=""> können einige <b>Sonderzeichen</b> an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern. Befinden Sie sich im Beleg- der Bedeutungs-Feld kann die Funktion auch mit <kbd>Strg</kbd> + <kbd>M</kbd> aufgerufen werden.</p>
 
@@ -627,7 +627,7 @@
 
             <p>Diese Tags werden beim Einfügen unverändert importiert (<abbr title="eventuell">evtl.</abbr> vorhandene Attribute werden gelöscht): <code class="quelltext">&lt;b&gt; &lt;cite&gt; &lt;del&gt; &lt;dfn&gt; &lt;em&gt; &lt;i&gt; &lt;mark&gt; &lt;s&gt; &lt;small&gt; &lt;strong&gt; &lt;sub&gt; &lt;sup&gt; &lt;u&gt; &lt;var&gt;</code>.</p>
 
-            <p>Die Tags <code class="quelltext">&lt;h1–6&gt;</code> und <code class="quelltext">&lt;big&gt;</code> werden durch einen größeren Schriftgrad dargestellt: <code class="quelltext">&lt;span class="dta-groesser"&gt;</code>.</p>
+            <p>Die Tags <code class="quelltext">&lt;h1–6&gt;</code> und <code class="quelltext">&lt;big&gt;</code> werden durch einen größeren Schriftgrad dargestellt: <code class="quelltext">&lt;span class="tei-groesser"&gt;</code>.</p>
 
             <p>Dass der formatierte Text nicht eins zu eins übernommen wird, hat praktische, aber auch Sicherheitsgründe. Zum einen können solche Textdaten Header-Informationen enthalten, die in Bezug auf den Belegtext schlicht uninteressant, im Beleg-Feld dann aber verwirrend, ja sogar störend sein können. Zum anderen ist zu bedenken, dass der Inhalt des Belegfeldes an verschiedenen Stellen des Programms als <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> interpretiert wird. Anweisungen wie <abbr title="zum Beispiel">z.&nbsp;B.</abbr> das Laden von Bild- oder Script-Dateien würden dabei ausgeführt. Auf diese Weise könnten potenziell schädliche Ressourcen in das Programm gelangen und unter Umständen Schaden an Ihrem Computer anrichten. Das Risiko ist eher ein theoretisches, weil das Laden solch externer Daten schon durch andere Sicherheitsmaßnahmen unterbunden würde. Es ist aber besser, potenziell Schädliches landet gar nicht erst in der Kartei.</p>
 
@@ -669,11 +669,11 @@
 
             <p><b>[[Text]]</b> → <b>[…]</b> = Löschung. Der markierte Belegtext wird beim Export gestrichen und durch eine Ellipse ersetzt. Diese Differenzierung ist nur für den <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Export</a> relevant, zumal das Ergebnis an der Oberfläche identisch mit dem einer Streichung ist. (Es gibt eine <a href="#einstellungen-kopierenLoeschung">Einstellung</a>, die Sie aktivieren können, damit der Text zwar eingeklammert, aber nicht durch eine Ellipse ersetzt wird.)</p>
 
-            <p><b>[¬]</b> → <i>wird gelöscht/durch Bindestrich ersetzt</i>. Trennstriche am Zeilenende, die über den <a href="#karteikarte-dtaImport"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a> in den Belegtext kommen können. Es wird <a href="#karteikarte-bindestrich">der oben beschriebene Algorithmus</a> angewandt.</p>
+            <p><b>[¬]</b> → <i>wird gelöscht/durch Bindestrich ersetzt</i>. Trennstriche am Zeilenende, die über den <a href="#karteikarte-teiImport"><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import</a> in den Belegtext kommen können. Es wird <a href="#karteikarte-bindestrich">der oben beschriebene Algorithmus</a> angewandt.</p>
 
-            <p><b>[:SEITENZAHL:]</b> → <i>wird gelöscht</i>. Markierung von Seiten- oder Spaltenumbrüchen, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
+            <p><b>[:SEITENZAHL:]</b> → <i>wird gelöscht</i>. Markierung von Seiten- oder Spaltenumbrüchen, die über den <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import in den Belegtext kommen können. Wurde keine Seiten- oder Spaltenzahl gefunden, wird das Fragezeichen als Platzhalter eingefügt: <b>[:?:]</b>.</p>
 
-            <p><b>[Anmerkung: Text]</b> → <b>[Anmerkung: Text]</b>. Anmerkungen im Originaltext, die über den <abbr title="Deutsches Textarchiv">DTA</abbr>-Import in den Belegtext kommen können.</p>
+            <p><b>[Anmerkung: Text]</b> → <b>[Anmerkung: Text]</b>. Anmerkungen im Originaltext, die über den <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import in den Belegtext kommen können.</p>
           </div>
 
           <p class="add-navi-details" id="karteikarte-bedeutung"><b>Bedeutung:</b> mit dem Beleg verknüpfte Wortbedeutung(en)</p>
@@ -704,9 +704,7 @@
               <figcaption>Verbesserungsvorschläge für fehlerhafte Datensätze</figcaption>
             </figure>
 
-            <p id="karteikarte-quelleLaden">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> über dem Quelle-Feld kann die <b>Literaturangabe neu eingelesen</b> werden. Haben Sie die Karteikarte über die <a href="#karteikarte-importfunktion">Importfunktion</a> ausgefüllt, wurde im Hintergrund ein Datensatz mit den Originaldaten angelegt und in der Kartei gespeichert. Ist dieser Datensatz vorhanden, wird beim Klick auf das Icon versucht, die Titeldaten aus diesem Datensatz zu rekonstruieren. Bei einem <abbr title="Deutsches Textarchiv">DTA</abbr>-Import wird der Datensatz derzeit noch nicht gefüllt. Findet sich im Quelle-Feld jedoch eine passende URL, werden die Titeldaten direkt von der <abbr title="Deutsches Textarchiv">DTA</abbr>-Webseite heruntergeladen.</p>
-
-            <p>Stammen die Daten aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> oder dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird zusätzlich überprüft, ob der Text im Datenfeld <i>Autor</i> angepasst werden sollte. Liegen zu einem Beleg aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> keine Originaldaten vor, wird der Inhalt des Quelle-Felds ausgewertet.</p>
+            <p id="karteikarte-quelleLaden">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> über dem Quelle-Feld kann die <b>Literaturangabe neu eingelesen</b> werden. Haben Sie die Karteikarte über die <a href="#karteikarte-importfunktion">Importfunktion</a> ausgefüllt, wurde im Hintergrund ein Datensatz mit den Originaldaten angelegt und in der Kartei gespeichert. Ist dieser Datensatz vorhanden, wird beim Klick auf das Icon versucht, die Titeldaten aus diesem Datensatz zu rekonstruieren. Stammen die Daten aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird zusätzlich überprüft, ob der Text im Datenfeld <i>Autor</i> angepasst werden sollte.</p>
 
             <p>Die App fragt nach, bevor Datenfelder überschrieben werden und zeigt ihnen an, was sie ändern würde. Bestätigen Sie die Änderungen, wird die Karteikarte automatisch gespeichert.</p>
 
@@ -718,7 +716,7 @@
           <div class="info">
             <p>Geben Sie eine URL ein, wird das <a href="#karteikarte-aufrufdatum">Aufrufdatum</a> automatisch auf das aktuelle Tagesdatum gestellt, allerdings nur, wenn das URL-Feld zuvor leer war.</p>
 
-            <p>Handelt es sich bei der URL um einen Verweis auf das <abbr title="Deutschen Textarchiv">DTA</abbr>, können Sie die URL mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt="">, das über dem Feld steht, in das Importformular laden. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
+            <p>Handelt es sich bei der URL um einen Verweis auf eine bekannte <a href="#karteikarte-importfunktion">Importquelle</a>, können Sie die URL mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt="">, das über dem Feld steht, in das Importformular laden. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
           </div>
 
           <p class="add-navi-details" id="karteikarte-aufrufdatum"><b>Aufrufdatum:</b> Datum, an dem die URL aus dem <a href="#karteikarte-url">URL-Feld</a> aufgerufen wurde</p>
@@ -769,33 +767,120 @@
 
           <p class="add-navi-details"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
 
-          <p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Datenfeld stehen).</p>
+          <p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Feld <a href="#karteikarte-metaImportdaten"><i>Importdaten</i></a> stehen).</p>
+
+          <p class="add-navi-details"><b>Importdatum:</b> Datum, zu dem zuletzt ein automatischer <a href="#karteikarte-importfunktion">Import</a> der Karteikartendaten vorgenommen wurde</p>
+
+          <p class="add-navi-details"><b>Import-URL:</b> URL, von der die Daten heruntergeladen wurden</p>
+
+          <p class="add-navi-details"><b>Import von Seite:</b> Seite aus den Importdaten, ab der der Inhalt importiert wurde</p>
+
+          <p class="info">Diese Angaben sind nur für Daten wichtig, die aus <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> importiert wurden. <q>Seite</q> bezieht sich dabei auf das Element <code class="quelltext">&lt;pb&gt;</code>.</p>
+
+          <p class="add-navi-details"><b>Import bis Seite:</b> Seite aus den Importdaten, bis zu deren Anfang der Inhalt importiert wurde</p>
 
           <p class="add-navi-details" id="karteikarte-metaImportdaten"><b>Importdaten:</b> Rohdaten, aus denen heraus der Beleg ursprünglich importiert wurde</p>
 
-          <p class="info">Bei diesen Rohdaten kann es sich um <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Code handeln, um einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder um einen weitgehend unstrukturierten Belegtext (aus einem <a href="#karteikarte-derekoImport">DeReKo-Import</a>). Die Daten werden beim automatischen <a href="#karteikarte-importfunktion">Import</a> eines Belegs gespeichert.</p>
+          <div class="info">
+            <p>Bei diesen Rohdaten kann es sich um alles handeln, was mithilfe der <a href="#karteikarte-importfunktion">Importfunktion</a> eingelesen werden kann. Hier könnte also <abbr title="Extensible Markup Language" lang="en">XML</abbr>, <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>, ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder unstrukturiertert Plain-Text stehen.</p>
 
-          <p class="info">Mithilfe des Icons <img src="../img/pfeil-kreis.svg" width="20" height="20" alt=""> können Sie die Karte aus den Importdaten heraus neu befüllen lassen. Dabei werden ausschließlich die Rohdaten aus dem Datenfeld <i>Importdaten</i> genutzt. Bereits gefüllte Felder der Karteikarte werden überschrieben. (Es erscheint eine Warnmeldung.)</p>
+            <p>Über dem Feld finden Sie mehrere Icons:</p>
+
+            <p class="erklaerung-icon"><img src="../img/auge.svg" width="20" height="20" alt="">Ist in den Importdaten <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> gespeichert, können Sie mit diesem Icon die Anzeige des Inhalts von <code class="quelltext">&lt;teiHeader&gt;</code> ein- oder ausblenden.</p>
+
+            <p class="erklaerung-icon"><img src="../img/pfeil-kreis.svg" width="20" height="20" alt="">Mithilfe dieses Icons können Sie die Karte aus den gespeicherten Importdaten heraus neu befüllen lassen. Dabei werden ausschließlich die Rohdaten aus dem Datenfeld <i>Importdaten</i> genutzt. Bereits gefüllte Felder der Karteikarte werden überschrieben. (Es erscheint eine Warnmeldung.)</p>
+
+            <p class="erklaerung-icon"><img src="../img/kopieren.svg" width="20" height="20" alt="">Kopiert den Text aus den Importdaten in die Zwischenablage.</p>
+          </div>
 
           <h2 id="karteikarte-importfunktion">Importfunktion</h2>
 
-          <p>Belege können automatisch aus dem <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr></a>, dem <a href="#karteikarte-dwdsImport"><abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr></a> oder dem <a href="#karteikarte-derekoImport"><abbr title="Deutschen Referenzkorpus">DeReKo</abbr></a> importiert werden. Ferner besteht die Möglichkeit Titeldaten in bestimmten <a href="#karteikarte-xmlImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr></a>- oder im <a href="#karteikarte-bibtexImport" class="bibtex"><span>Bib</span>T<span>E</span>X</a>-Format in eine Karteikarte zu laden. Für all diese Funktionen gibt es in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> unter dem Titel <i>Import</i> entsprechende Formulare. Bei den Textfeldern und Checkboxes in diesen Formularen handelt es sich <em>nicht</em> um Datenfelder. Sie werden beim Speichern der Karteikarte somit nicht berücksichtigt.</p>
+          <p>Karteikarten können aus zahlreichen Quellen automatisch befüllt werden. Wenn Sie Daten aus einer Quelle haben, die die Importfunktion kennt, müssen Sie sich nur noch Gedanken darüber machen, auf welchem Weg die Daten in das Programm kommen sollen: via URL, aus einer Datei heraus oder direkt aus der Zwischenablage.</p>
 
-          <p>Beim Öffnen der Karteikarte werden die Importformulare automatisch umgeschaltete:</p>
+          <p>Beim Öffnen einer neuen Karteikarte scannt <i class="app-name"></i> automatisch die <b>Zwischenablage</b> und stellt das Importformular so ein, dass Sie nur noch auf <kbd>⏎</kbd> drücken müssen, um die Karte zu befüllen. Dies setzt natürlich voraus, dass das Format der in der Zwischenablage liegenden Daten bekannt ist. Befindet sich dort die URL aus einer der App bekannten Importquelle, wird die URL-Ansicht ausgewählt. Befindet sich in ihr ein Dateipfad (den sie aus Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> in die Zwischenablage geholt haben), wird die Datei- und für andere Daten die Zwischenablagen-Ansicht eingestellt.</p>
 
-          <ul>
-            <li>Befindet sich in der <b>Zwischenablage</b> Ihres Computers eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> des <abbr title="Deutschen Textarchivs">DTA</abbr>, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr>, ein bibliographisches <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird das Importformular beim Öffnen einer neuen, leeren Karteikarte automatisch umgeschaltet und ein passendes Formularelement fokussiert, sodass Sie nur noch <kbd>⏎</kbd> drücken müssen, um den Import zu starten.</li>
+          <p>Die folgenden <b>Datentypen</b> können automatisch importiert werden. Details zu den einzelnen Importwegen und Dateitypen werden weiter unten beschrieben.</p>
 
-            <li>
-              <p>Wurde eine <b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-, <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-, <abbr title="Extensible Markup Language" lang="en">XML</abbr>- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei</b> geladen, bleibt diese mit dem Programm verknüpft. Befindet sich in der Zwischenablage kein Datensatz, der importiert werden könnte, wird beim Öffnen einer neuen Karteikarte <em>die</em> Importfunktion angezeigt, die zu der mit <i class="app-name"></i> verknüpften Datei passt. Dieses Verhalten ist besonders dann hilfreich, wenn Sie eine Datei mit mehreren Datensätzen geladen haben, die Sie nach und nach in verschiedene Karteikarten schreiben möchten.</p>
+          <div class="info">
+            <p><i>Importweg URL</i></p>
 
-              <p>Die Verknüpfung einer Datei mit dem Programm kann wieder aufgehoben werden. Klicken Sie dazu im Importformular auf <i>Datei</i> und schließen den sich öffnenden Dateidialog direkt wieder, ohne eine Datei auszuwählen.</p>
-            </li>
-          </ul>
+            <ul>
+              <li><a href="https://www.deutschestextarchiv.de/">Deutsches Textarchiv</a> (DTA)</li>
 
-          <p class="add-navi-details" id="karteikarte-dtaImport"><b><abbr title="Deutsches Textarchiv">DTA</abbr>-Import:</b> In das erste, längere Textfeld muss eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingefügt werden, die eine Seite im <abbr title="Deutschen Textarchiv">DTA</abbr> referenziert, also <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code class="quelltext long">https://www.deutschestextarchiv.de/book/view/gutzkow_wally_1835?p=35</code>. Anstoßen lässt sich der Import, indem man <kbd>⏎</kbd> drückt oder den Button <i>Importieren</i> anklickt. Danach werden die Textfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus</i> und <i>Textsorte</i> automatisch ausgefüllt.</p>
+              <li><a href="https://dingler.bbaw.de/">Polytechnisches Journal</a> (Dingler Online)</li>
 
-          <p>Über das nebenstehende, zweite Datenfeld, in dem eine Ziffer steht, kann gesteuert werden, wie viel Text importiert werden soll. Die Ziffer steht für die Seitengrenze, bis zu der der Belegtext importiert wird. Ein Beispiel: Gibt man eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> ein, die (wie im obigen Fall) auf Image <abbr title="Nummer">Nr.</abbr>&nbsp;35 eines Textes verweist und steht im Ziffernfeld <q>36</q>, wird nur die zu Image <abbr title="Nummer">Nr.</abbr>&nbsp;35 gehörende Seite importiert. Denn <q>36</q> markiert die Seitengrenze, bis zu der importiert werden soll. Sollen sowohl die auf Image 35 als auch auf 36 zu findenden Seiten importiert werden, muss im Ziffernfeld <q>37</q> stehen. Beim Einfügen der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> wird automatisch die Zahl des folgenden Images in das Ziffernfeld eingetragen. Standardmäßig wird also eine Seite importiert. (Image- und Seitennummer weichen <abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> voneinander ab; die in der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> stehende Ziffer ist die Image-Nummer.)</p>
+              <li><a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitale Bibliothek</a> (WDB)</li>
+            </ul>
+
+            <p><i>Importweg Datei/Zwischenablage</i></p>
+
+            <div class="eingerueckt">
+              <p><i><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+
+              <ul>
+                <li>DTA</li>
+
+                <li>Dingler Online</li>
+
+                <li>WDB</li>
+
+                <li>jede in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Datei</li>
+              </ul>
+
+              <p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+
+              <ul>
+                <li>Belegsnippet aus den Korpora des <a href="https://www.dwds.de/r">Digitalen Wörterbuchs der deutschen Sprache</a> (DWDS)</li>
+
+                <li><a href="#xml" class="link-dokumentation">Belegsnippet</a> von <a href="https://wortgeschichten.zdl.org">Wortgeschichte digital</a> (WGd)</li>
+
+                <li><a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema"><abbr title="Metadata Object Description Schema">MODS</abbr></a> (nur Titeldaten)</li>
+
+                <li><a href="#xml-fundstelle" class="link-dokumentation">Fundstellen-Snippet</a> von <abbr title="Wortgeschichte digital">WGd</abbr> (nur Titeldaten)</li>
+              </ul>
+
+              <p><i><abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i></p>
+
+              <ul>
+                <li>Belegsammlung aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></li>
+              </ul>
+
+              <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span></i></p>
+
+              <ul>
+                <li>jede Quelle (nur Titeldaten)</li>
+              </ul>
+
+              <p><i>Sonstiges</i></p>
+
+              <ul>
+                <li>Belegsammlung aus <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/">COSMAS II</a> (<abbr title="Deutschen Referenzkorpus">DeReKo</abbr>)</li>
+
+                <li><abbr title="Pica-Produktionsnummer">PPN</abbr> (<abbr title="Metadata Object Description Schema">MODS</abbr>-Download aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a>; nur Titeldaten)</li>
+
+                <li><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (nur Beleg)</li>
+
+                <li>jeder unstrukturierte Plain-Text (nur Beleg)</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="add-navi-details" id="karteikarte-teiImport"><b><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import:</b> Am bequemsten funktioniert der Import aus dem <a href="https://www.deutschestextarchiv.de/"><abbr title="Deutsches Textarchiv">DTA</abbr></a> und aus <a href="https://dingler.bbaw.de/">Dingler Online</a>. Geben Sie eine URL aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> in das Importfeld ein, wird automatisch ermittelt, um welche Faksimile-Seite des Werks es sich handelt. Die Felder für den Seitenimport werden dann genau so eingestellt, dass exakt die Seite als Beleg importiert wird, auf die die URL zeigt. Möchten Sie mehrere Seiten importieren, müssen Sie im zweiten Nummernfeld (<i>bis Seite</i>) die Seite angeben, bis zu deren Beginn der Text importiert werden soll.</p>
+
+          <figure class="right" title="zum Vergrößern anklicken">
+            <img src="../img/win/karteikarte-importfunktion-dta.png" alt="">
+            <figcaption>der Import aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> funktioniert über die URL der Textseite</figcaption>
+          </figure>
+
+          <p>Für die Texte aus Dingler Online gibt es keine seitengenauen Links. Lassen Sie im ersten Nummernfeld die <code class="quelltext">0</code> stehen, wird der gesamte Text importiert. (Dies gilt im Übrigen für jeden Import aus einer in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Quelle.) Geben Sie hingegen eine Nummer ein, sucht das Programm in der heruntergeladenen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei zunächst, ob es in dem Text eine Seite findet, die im physischen Original genau diese Nummer hatte. Ist dem nicht der Fall, greift es auf verschiedene Fallback-Lösungen zurück. Prinzipiell sind die Texte aus Dingler Online jedoch nicht sonderlich lang, sodass <i class="app-name"></i> gut mit einem komplett importierten Text zurechtkommt. Sie können nach dem Import dann die <a href="#karteikarte-kuerzenBeleg">automatische Kürzungsfunktion nutzen</a>, die alle Absätze löscht, in denen keines Ihrer <a href="#menueKartei-lemmata">Karteiwörter</a> auftaucht. Alternativ könnten Sie im gerade importierten Text durch die <a href="karteikarte-leseansicht">Leseansicht</a> scrollen und nach denjenigen Seiten suchen, die Sie interessieren. Die Seitenumbrüche werden fett hervorgehoben. Der Beginn von Seite 25 wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> so markiert: <code class="quelltext">[:25:]</code>. Sobald Sie wissen, welche Seiten Sie interessieren, können Sie den Import in derselben Karteikarte noch einmal ausführen und dazu die passenden Seitennummern eingeben. Die Datei wird im Hintergrund in einem Cache gespeichert, muss dafür also nicht noch einmal heruntergeladen werden.</p>
+
+          <p>Im Falle von Dingler Online und dem <abbr title="Deutsches Textarchiv">DTA</abbr> können Sie sowohl eine Artikel- <abbr title="beziehungsweise">bzw.</abbr> Textseiten-URL eingeben als auch eine URL, die direkt zur <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei führt. Im Falle von <a href="https://www.hab.de/digitale-editionen/"><abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr></a> müssen Sie zwingend die URL zur XML-Datei eingeben. Wie bei Dingler Online kann auch bei <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Texten die passende Seite nicht automatisch ermittelt werden. Da die Editionen in vielen Fällen sehr lang sind, müssten Sie vorher wissen, welche Seiten oder Blätter Sie importieren möchten.</p>
+
+          <p>Geben Sie für den Import keine Startseite an, lassen Sie das erste Nummernfeld also auf <code class="quelltext">0</code> stehen, wird zwar prinzipiell der gesamte Text importiert. Dies gilt aber nur mit Einschränkungen. Ist die Datei mehr als 400&nbsp;KB groß, wird der Import rundweg abgelehnt. Bei einer Größe von über 200&nbsp;KB werden Sie gewarnt, dass der Import Probleme bereiten könnte. Die gilt auch für den Fall, dass Sie 10 Seiten oder mehr importieren möchten. Der Import von 30 Seiten oder mehr wird gleich ganz unterbunden.</p>
+
+          <p>Aus all diesen Quellen (<abbr title="Deutsches Textarchiv">DTA</abbr>, Dingler Online, <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>) können Sie den Import nicht nur via URL, sondern auch über eine heruntergeladene <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei anstoßen. Wechseln Sie dazu einfach in die Ansicht <i>Datei</i>. Hier gibt es einen Button, der einen Dateidialog öffnet. Noch schneller geht es für Sie unter Umständen, indem Sie die Datei in Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> kopieren. Fokussieren Sie das Importfeld, wird automatisch der kopierte Dateipfad eingefügt. Sobald Sie <kbd>⏎</kbd> oder den Button <i>Importieren</i> drücken, wird die Datei eingelesen. Auch in diesem Fall wird die Eingaben in den Nummernfeldern, mit denen Sie steuern können, welche Seiten importiert werden sollen, beachtet.</p>
+
+          <p>Der Vorteil eines Dateiimports ist, dass Sie sich bei Ihrer Arbeit nicht auf die Quellen, aus denen heraus ein URL-Import möglich ist, beschränken müssen. Auf diese Weise können Sie jedes in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Dokument in <i class="app-name"></i> importieren, egal aus welcher Quelle es stammt. Das ganze funktioniert übrigens genauso gut, wenn Sie die Datei öffnen und das komplette <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> in die Zwischenablage kopieren. Über die Formularansicht <i>Zwischenablage</i> lassen sich die Daten dann so importieren, als wäre sie aus einer Datei eingelesen worden.</p>
 
           <p class="add-navi-details" id="karteikarte-dwdsImport"><b><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Import:</b> Aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> können entweder einzelne Belege (via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet) oder gleich ganze Belegreihen (aus einer exportierten <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Datei) importiert werden.</p>
 
@@ -809,21 +894,27 @@
           <ol>
             <li>Laden Sie sich die Datei mit den Korpusergebnissen im <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Format herunter.</li>
 
-            <li>Klicken Sie im Import-Formular der <a href="#karteikarte-formularansicht">Karteikartenformular</a> auf <i>DWDS</i> und dann auf den Button <i>Datei</i>.</li>
+            <li>Wechseln Sie im Importformular der Karteikarte in die Datei-Ansicht und klicken Sie auf den Button <i>Datei</i>.</li>
 
             <li>Suchen Sie im Dateisystemdialog die heruntergeladene Datei.</li>
+
+            <li>Klicken Sie auf den Button <i>Importieren</i>.</li>
           </ol>
 
-          <p>Die Datei ist nun mit der App verknüpft. Enthält die Datei nur einen Beleg, wird der Import sofort gestartet. Enthält sie mehrere Belege öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
+          <p>Alternativ können Sie die Datei auch in Ihrem Dateimanager kopieren. <i class="app-name"></i> erkennt dann den Dateipfad und liest die Datei nach dem Klick auf <i>Importieren</i> ein. Prinzipiell könnten Sie die Datei auch öffnen und den gesamten Inhalt in die Zwischenablage kopieren. Wechseln Sie zur Formularansicht <i>Zwischenablage</i>, erkennt <i class="app-name"></i>, dass in der Zwischenablage <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Daten aus dem <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr> liegen und wird sie nach einem Klick auf <i>Importieren</i> problemlos einlesen.</p>
+
+          <p>Der Inhalt dieser Datei wird nun in der App vorgehalten, bis Sie Daten aus einer anderen Datei importieren. (Auch wenn die Daten aus der Zwischenablage stammen, verhält sich die App so, als hätte sie diese aus einer Datei eingelesen.) Enthält die Datei nur einen Beleg, wird der Import ohne Nachfrage gestartet. Enthält sie jedoch mehrere Belege, öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
+
+          <p>Öffnen Sie eine neue Karteikarte wird automatisch in die Datei-Ansicht gewechselt und der Dateipfad in das Importfeld eingetragen. Klicken Sie auf <i>Importieren</i>, wird erneut das Importfenster geöffnet und Sie können einen weiteren Beleg einfügen. Haben Sie die Daten über die Zwischenablage einlesen lassen, also indem Sie die Datei geöffnet und ihren Inhalt kopiert haben, ist dies allerdings nur solange möglich, solange in der Zwischenablage genau diese Daten liegen. Ändern Sie den Inhalt der Zwischenablage haben Sie keinen Zugriff mehr auf die zuvor eingelesenen Belege.</p>
 
           <figure class="right" title="zum Vergrößern anklicken">
             <img src="../img/win/karteikarte-importfunktion-dwds-snippet.png" alt="">
             <figcaption>Kopier-Icon in der Korporasuche des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></figcaption>
           </figure>
 
-          <p>Besonders bei sehr umfangreichen Ergebnislisten oder dann, wenn Sie nur wenige Belege aus den Ergebnissen importieren möchten, könnte es komfortabler sein, nicht erst eine umfangreiche Belegreihe herunterzuladen, sondern nur ausgewählte Belege zu exportieren. Für solche Fälle steht für jeden der angezeigten Belege auf der Ergebnisseite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet zur Verfügung, das durch Klick auf ein Kopier-Icon in die Zwischenablage Ihres Rechners geschoben werden kann. Liegt in der Zwischenablage ein passendes Snippet, wird <i class="app-name"></i> dies erkennen und die Karteikarte nach dem Klick auf den Button <i>Importieren</i> mit den in ihm zu findenden Daten füllen.</p>
+          <p>Bei sehr umfangreichen Ergebnislisten und immer dann, wenn Sie nur wenige Belege aus den Ergebnissen importieren möchten, könnte es komfortabler sein, nicht erst eine umfangreiche Belegreihe herunterzuladen, sondern nur ausgewählte Belege aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> zu importieren. Für solche Fälle steht für jeden der angezeigten Belege auf der Ergebnisseite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet zur Verfügung, das durch Klick auf ein Kopier-Icon in die Zwischenablage Ihres Rechners geschoben werden kann. Liegt in der Zwischenablage ein passendes Snippet, wird <i class="app-name"></i> dies erkennen und in der Zwischenablagen-Ansicht anzeigen. Klicken Sie auf <i>Importieren</i> werden die im Snippet enthaltenen Daten in die Karteikarte eingetragen.</p>
 
-          <p>Beim Importieren eines Belegs aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird in das <i>Notizen</i>-Feld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> eingetragen, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> leichter wiederfinden, wenn auch nicht exakt referenzieren lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung ein Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
+          <p>Beim Importieren eines Belegs aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird in das <i>Notizen</i>-Feld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> geschrieben, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> leichter wiederfinden, wenn auch nicht exakt referenzieren lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung ein Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
 
           <p class="add-navi-details" id="karteikarte-derekoImport"><b><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import:</b> Aus der vom <i><abbr title="Leibniz-Institut für deutsche Sprache">IDS</abbr> Mannheim</i> zur Verfügung gestellten Webanwendung <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/"><abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II</a> können ausgewählte Belege in eine Textdatei <b>exportiert</b> werden:</p>
 
@@ -878,9 +969,11 @@
           <ol>
             <li>Öffnen Sie eine neue Karteikarte (<kbd>Strg</kbd> + <kbd>N</kbd>).</li>
 
-            <li>Wählen Sie <i>Import &gt; <abbr title="Deutsches Referenzkorpus">DeReKo</abbr></i>.</li>
+            <li>Wechseln Sie in die Datei-Ansicht.</li>
 
             <li>Klicken Sie auf den Button <i>Datei</i> und suchen Sie die aus <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II heruntergeladene Datei.</li>
+
+            <li>Klicken Sie auf den Button <i>Importieren</i>.</li>
           </ol>
 
           <figure class="right" title="zum Vergrößern anklicken">
@@ -888,30 +981,26 @@
             <figcaption>Importfenster mit allen geladenen Datensätzen</figcaption>
           </figure>
 
-          <p id="karteikarte-importfenster">Befindet sich in der ausgewählten Datei nur ein Beleg, wird dieser direkt importiert. Enthält sie mehr als einen, öffnet sich automatisch ein <b>Importfenster</b>. Im Fenster sehen Sie Angaben zu <i>Datum</i> und <i>Autor</i> des Belegs sowie eine knappe Vorschau des <i>Belegtextes</i>. (Das Programm versucht den Vorschautext um das Karteiwort herum aufzubauen; im nebenstehenden Screenshot ist dies <i>Luxus</i>.) Zum Füllen der aktuellen Karteikarte mit einem der Belege aus der Liste, müssen Sie diesen einfach nur anklicken. Das Importfenster schließt sich und in der Karte werden alle Datenfelder ausgefüllt, zu denen Belegdaten gefunden wurden. Dies sind im Einzelnen <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i>. Welche Felder genau gefüllt werden, hängt freilich davon ab, welche Daten aus den Belegen extrahiert werden konnten. Da die Exportdaten von <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II keine strukturierte, will sagen: von Computern gut lesbare Form haben, könnte es sein, dass gewisse Daten zwar vorhanden sind, von den Algorithmen der App aber nicht erkannt wurden. In solchen Fällen müssen Sie diese <abbr title="gegebenenfalls">ggf.</abbr> händisch einpflegen. Es gibt in den Exportdaten zwar keine eigene Textsortenmarkierung, gelegentlich findet sich im Zitiertitel aber der Kommentar <q>[Tageszeitung]</q>. In solchen Fällen wird das Datenfeld <i>Textsorte</i> mit <q>Zeitung: Tageszeitung</q> gefüllt.</p>
+          <p id="karteikarte-importfenster">Befindet sich in der ausgewählten Datei nur ein Beleg, wird dieser direkt importiert. Enthält sie mehr als einen, öffnet sich ein <b>Importfenster</b>. Im Fenster sehen Sie Angaben zu <i>Datum</i> und <i>Autor</i> des Belegs sowie eine knappe Vorschau des <i>Belegtextes</i>. (Das Programm versucht den Vorschautext um das Karteiwort herum aufzubauen; im nebenstehenden Screenshot ist dies <i>Luxus</i>.) Zum Füllen der aktuellen Karteikarte mit einem der Belege aus der Liste, müssen Sie diesen einfach nur anklicken. Das Importfenster schließt sich und in der Karte werden alle Datenfelder ausgefüllt, zu denen Belegdaten gefunden wurden. Dies sind im Einzelnen <i>Datum, Autor, Beleg, Quelle, Korpus, Textsorte</i> und <i>Notizen</i>. Welche Felder genau gefüllt werden, hängt freilich davon ab, welche Daten aus den Belegen extrahiert werden konnten. Da die Exportdaten von <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II keine strukturierte, will sagen: von Computern gut lesbare Form haben, könnte es sein, dass gewisse Daten zwar vorhanden sind, von den Algorithmen der App aber nicht erkannt wurden. In solchen Fällen müssen Sie diese <abbr title="gegebenenfalls">ggf.</abbr> händisch einpflegen. Es gibt in den Exportdaten zwar keine eigene Textsortenmarkierung, gelegentlich findet sich im Zitiertitel aber der Kommentar <q>[Tageszeitung]</q>. In solchen Fällen wird das Datenfeld <i>Textsorte</i> mit <q>Zeitung: Tageszeitung</q> gefüllt.</p>
 
-          <p>Das Importfenster kann durch Klick auf den Button <i>Importieren</i> jederzeit wieder geöffnet werden.</p>
+          <p>Die Dateidaten werden im Hintergrund so lange vorgehalten, bis Sie eine andere Datei einlesen. Öffnen Sie eine neue Karteikarte, wechselt die App automatisch in die Datei-Ansicht und trägt den Dateipfad in das Importfeld ein. Das Importfenster können Sie dann durch Klick auf den Button <i>Importieren</i> erneut öffnen, um die neue Karteikarte mit einem weiteren Beleg zu füllen.</p>
 
-          <p>Wurde eine Datei mit Belegen des <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> einmal geladen, <b>bleibt</b> diese solange <b>mit der App verknüpft</b>, bis Sie eine andere Importdatei auswählen oder <i class="app-name"></i> beenden. Sie können also nach dem Import eines Beleges aus einer Belegedatei die aktuelle Karteikarte speichern, eine neue Karteikarte öffnen, auf den Button <i>Importieren</i> klicken und den nächsten Beleg aus der <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Datei importieren – und zwar ohne dass Sie die Datei neu laden müssten.</p>
+          <p>Wurde ein Beleg importiert, wird dieser im Importfenster durch den Haken <img src="../img/check-gruen.svg" width="24" height="24" alt=""> gekennzeichnet. <i class="app-name"></i> merkt sich, welche Belege zum Importieren ausgewählt wurden und stellt die Markierung bei jedem Aufruf des Importfensters wieder her. Sie können die Markierung auch manuell umschalten, indem Sie auf den Haken oder in dem Bereich vor einem Beleg klicken, in dem der Haken für gewöhnlich erscheint. (Dies dient für Fälle, in denen Sie versehentlich einen Beleg zum Importieren ausgewählt, die Karteikarte dann aber nicht mit diesem Beleg gespeichert haben.)</p>
 
-          <p>Wurde ein Beleg importiert, wird dieser im Importfenster durch den <b>Haken</b> <img src="../img/check-gruen.svg" width="24" height="24" alt=""> gekennzeichnet. <i class="app-name"></i> merkt sich, welche Belege zum Importieren ausgewählt wurden und stellt die Markierung bei jedem Aufruf des Importfensters wieder her. Sie können die Markierung auch manuell umschalten, indem Sie auf den Haken oder in dem Bereich vor einem Beleg klicken, in dem der Haken erscheint. (Dies dient für Fälle, in denen Sie versehentlich einen Beleg zum Importieren ausgewählt, die Karteikarte dann aber nicht mit diesem Beleg gespeichert haben.)</p>
+          <p>Für Dateien aus <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II gilt übrigens dasselbe wie für die <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Dateien vom <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr>: Sie können die Datei mit den Belgen auch öffnen und ihren kompletten Inhalt kopieren. Danach lassen sich die Belegdaten über die Zwischenablage genauso einfügen, als wäre die Datei direkt von der Festplatte gelesen worden.</p>
 
-          <p id="karteikarte-dateikodierung">Die Checkbox <b>Latin-1</b> vor dem Button <i>Datei</i> wird beim Aktivieren des <abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Formulars automatisch abgehakt. Die in den Exportdateien von <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II zu findenden Belegtexte sind leider nicht als UTF-8 kodiert, was immer dann zum Problem werden könnte, wenn ein Text <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Umlaute enthält. Darum muss dem Programm vor dem Öffnen der Datei mitgeteilt werden, dass es beim Einlesen die Zeichenkodierung <a href="https://de.wikipedia.org/wiki/ISO_8859-1">ISO&nbsp;8859-1</a> (auch Latin-1 genannt) verwenden soll. Latin-1 ist eine Kodierung, die für westeuropäische Sprachen typische Buchstaben umfasst.</p>
+          <p class="add-navi-details" id="karteikarte-modsImport"><b><abbr title="Metadata Object Description Schema">MODS</abbr>- und Fundstellen-Import:</b> Sie haben auch die Möglichkeit, Karteikarten automatisch mit bibliographische Daten ohne Belegtext zu befüllen. Neben dem <a href="#karteikarte-bibtexImport"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import</a> erkennt die App zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten aus Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
 
-          <p class="add-navi-details" id="karteikarte-xmlImport"><b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import:</b> Der Import von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien ist zur Zeit nur für bibliographische Daten eingerichtet. Akzeptiert werden zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien mit Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
+          <p>Keines dieser Formate enthält Belegtexte. Es geht bei diesen Importformaten also nur darum, dass Sie bibliographische Angaben möglichst reibungslos in die Karteikarte bekommen, wenn Sie Belege händisch eingepflegt müssen, die in digitalen Korpora (noch) nicht zur Verfügung stehen. Da in den Quelldaten, die vearbeitet werden können, keine Belegtexte zu finden sind, wird das Datenfeld <i>Beleg</i> auch niemals überschrieben. Sollte Ihr Workflow also so aussehen, dass Sie zunächst die Belegstelle exzerpieren, können Sie die Titeldaten somit problemlos im Nachhinein aus einer der Quellen importieren, ohne den Belegtext zu verlieren.</p>
 
-          <p>Weder das eine noch das andere Format enthält Belegtexte. Diese Importfunktion dient somit primär dazu, bibliographische Daten möglichst reibungslos in die Karteikarte zu bekommen, wenn Sie Belege händisch eingepflegt müssen, weil diese in digitalen Korpora (noch) nicht zur Verfügung stehen. Da in den <abbr title="Extensible Markup Language" lang="en">XML</abbr>, die vearbeitet werden können, keine Belegtexte enthalten sind, wird das Datenfeld <i>Beleg</i> auch niemals überschrieben. Sollte Ihr Workflow so aussehen, dass Sie zunächst die Belegstelle exzerpieren, können Sie die Titeldaten der <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien somit problemlos im Nachhinein importieren, ohne den Belegtext zu verlieren.</p>
-
-          <p>Ansonsten funktioniert der Umgang mit solchen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien genauso wie der mit <a href="#karteikarte-derekoImport">DeReKo-Dateien</a>. Im Unterschied dazu können die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten allerdings auch aus der <b>Zwischenablage</b> Ihres Rechners eingelesen werden, falls dieser Weg für Sie besser zu handhaben ist.</p>
+          <p>Ansonsten funktioniert der Umgang mit diesen Daten genauso wie der mit allen anderen: Sie können die Daten sowohl aus einer Datei als auch aus der Zwischenablage einlesen..</p>
 
           <figure class="right" title="zum Vergrößern anklicken">
             <img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
             <figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
           </figure>
 
-          <p>Der bequemste Weg, sich zuverlässige bibliographische Daten zu einem Titel in die Karteikarte zu laden, ist freilich ein Import via <b><abbr title="Pica-Produktionsnummer">PPN</abbr></b>. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr> zeigt das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Formular <q>–&nbsp;PPN in Zwischenablage&nbsp;–</q> an. Klicken Sie auf <i>Importieren</i> wird im Hintergrund ein Datensatz aus dem <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> heruntergeladen und analysiert. Danach wird die Karteikarte mit den Titeldaten gefüllt. Die <abbr title="Pica-Produktionsnummern">PPN</abbr> werden in der Titelanzeige des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> direkt in der obersten Zeile angezeigt (<abbr title="siehe">s.</abbr> Screenshot).</p>
-
-          <p>Der <abbr title="Pica-Produktionsnummer">PPN</abbr>-Import über das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Formular ist dem aus dem <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Formular, wo er genauso möglich ist, vorzuziehen. Die heruntergeladenen MODS-Dokumente enthalten häufig deutlich differenziertere und somit auch zuverlässigere Titeldaten als die <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien, die über die API des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> angeboten werden.</p>
+          <p class="add-navi-details" id="karteikarte-ppnImport"><b><abbr title="Pica-Produktionsnummer">PPN</abbr>-Import:</b> Der bequemste Weg, sich zuverlässige bibliographische Daten zu einem Titel in die Karteikarte zu laden, ist freilich ein Import via <abbr title="Pica-Produktionsnummer">PPN</abbr>. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird dies im Importfeld der Zwischenablagen-Ansicht angezeigt. Klicken Sie auf <i>Importieren</i> wird im Hintergrund ein Datensatz im <abbr title="Metadata Object Description Schema">MODS</abbr>-Format aus dem <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> heruntergeladen und analysiert. Danach wird die Karteikarte mit den Titeldaten gefüllt. Die <abbr title="Pica-Produktionsnummern">PPN</abbr> werden in der Titelanzeige des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> direkt in der obersten Zeile angezeigt (<abbr title="siehe">s.</abbr> Screenshot).</p>
 
           <p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor, Quelle, URL</i> und <i>Aufrufdatum</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
 
@@ -929,7 +1018,7 @@
             </figure>
           </div>
 
-          <p>Die Titeldatensätze von <i>GoogleBooks</i> sind gelinde gesagt verbesserungsbedürftig. Glücklicherweise wird ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Download auch von größeren <b>Bibliothekskatalogen</b> wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=5/TTL=1/">GVK</a> oder dem <a href="https://kxp.k10plus.de/DB=1.28/SET=1/TTL=1/">VD17</a> angeboten, in denen sich qualitativ ausgesprochen gute Datensätze finden. Diese lassen sich über die Funktion <i>Speichern/Drucken</i> in der Kopfzeile der Titelaufnahmen aufrufen. Auf der sich daraufhin öffnenden Seite wählen Sie als <i>Format</i> <q>Literaturverwaltung: <span class="bibtex"><span>Bib</span>T<span>E</span>X</span></q>. Nun können Sie den Datensatz speichern oder eine Druckansicht öffnen, um ihn von dort in die Zwischenablage zu kopieren. (Die Funktion hinter dem Button <i>Zwischenablage</i> tut ihren Dienst leider nicht unter allen Umständen.) Außerdem ist es prinzipiell möglich, gleich mehrere Datensätze in einem Zug zu exportieren. <i class="app-name"></i> wird für den Import dann dasselbe <a href="#karteikarte-importfenster">Importfenster</a> anzeigen, das auch für den <a href="#karteikarte-derekoImport"><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import</a> verwendet wird.</p>
+          <p>Die Titeldatensätze von <i>GoogleBooks</i> sind gelinde gesagt verbesserungsbedürftig. Glücklicherweise wird ein <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Download auch von größeren <b>Bibliothekskatalogen</b> wie dem <a href="https://kxp.k10plus.de/DB=2.1/SET=5/TTL=1/">GVK</a> oder dem <a href="https://kxp.k10plus.de/DB=1.28/SET=1/TTL=1/">VD17</a> angeboten, in denen sich qualitativ ausgesprochen gute Datensätze finden. Diese lassen sich über die Funktion <i>Speichern/Drucken</i> in der Kopfzeile der Titelaufnahmen aufrufen. Auf der sich daraufhin öffnenden Seite wählen Sie als <i>Format</i> <q>Literaturverwaltung: <span class="bibtex"><span>Bib</span>T<span>E</span>X</span></q>. Nun können Sie den Datensatz speichern oder eine Druckansicht öffnen, um ihn von dort in die Zwischenablage zu kopieren. (Die Funktion hinter dem Button <i>Zwischenablage</i> tut ihren Dienst leider nicht unter allen Umständen.) Außerdem ist es prinzipiell möglich, gleich mehrere Datensätze in einem Zug zu exportieren. <i class="app-name"></i> wird für den Import dann dasselbe <a href="#karteikarte-importfenster">Importfenster</a> anzeigen, das <abbr title="unter anderem">u.&nbsp;a.</abbr> für den <a href="#karteikarte-derekoImport"><abbr title="Deutsches Referenzkorpus">DeReKo</abbr>-Import</a> verwendet wird.</p>
 
           <div class="bilder">
             <figure title="zum Vergrößern anklicken">
@@ -943,35 +1032,13 @@
             </figure>
           </div>
 
-          <p>Der <b>Import</b> von <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen geht prinzipiell genauso, wie der Import von <abbr title="Deutschen Referenzkorpus">DeReKo</abbr>-Dateien:</p>
+          <p>Der <b>Import</b> von <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen geht wie der von allen anderen Datensätzen auch: über eine Datei, die Sie auswählen oder kopieren können, oder direkt aus der Zwischenablage.</p>
 
-          <ol>
-            <li>Öffnen Sie eine neue Karteikarte (<kbd>Strg</kbd> + <kbd>N</kbd>).</li>
+          <p class="add-navi-details" id="karteikarte-htmlImport"><b><abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Import:</b> Im Grunde können Sie aus jeder beliebigen Plain-Text-Datei Daten importieren. Wenn die Daten nicht strukturiert sind oder die Strukturierung dem Programm unbekannt ist, können diesen Daten allerdings auch nicht strukturiert eingelesen und zielgenau auf die Datenfelder der Karteikarte verteilt werden. Importieren Sie Daten aus einer Datei, deren Struktur der App nicht bekannt ist, geht sie davon aus, dass sich in ihr einfach nur Belegtext befindet. Dieser wird dann in das Belegfeld eingefügt. Dasselbe gilt für unbekannte Daten in der Zwischenablage.</p>
 
-            <li>Wählen Sie <i>Import &gt; <span class="bibtex"><span>Bib</span>T<span>E</span>X</span></i>.</li>
+          <p>Die Möglichkeit des Imports von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Daten ist aber durchaus interessant, wenn Sie Belegtext von einer Webseite kopiert haben. Die Browser schreiben die Daten nämlich in solchen Fällen in zwei verschiedenen Varianten in die Zwischenablage: zum einen als Text <em>ohne</em> <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags und zum anderen als Text <em>mit</em> <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags. Wird in der Zwischenablage Text im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format gefunden, wird dieser nach Klick auf den Button <i>Importieren</i> bereingt und in das Feld <i>Beleg</i> eingefügt. Absätze, Überschriften und auch einige einfache Textauszeichnungen wie Unterstreichungen, Kursivierungen oder Fettung bleiben dabei erhalten. Links werden aus Sicherheitsgründen gelöscht.</p>
 
-            <li>Klicken Sie auf den Button <i>Datei</i> und suchen Sie die zuvor heruntergeladene <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei.</li>
-          </ol>
-
-          <p>Die Checkbox <b>Latin-1</b> müssen Sie nur aktivieren, wenn Sie den Datensatz aus einer Quelle bezogen haben, die diese im Prinzip defiziente Kodierung verwendet. <abbr title="Vergleiche">Vgl.</abbr> das oben Gesagte <a href="#karteikarte-dateikodierung">zum Thema Dateikodierung</a>.</p>
-
-          <figure class="right" title="zum Vergrößern anklicken">
-            <img src="../img/win/karteikarte-importfunktion-bibtex-zwischenablage.png" alt="">
-            <figcaption><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>: Import aus der Zwischenablage</figcaption>
-          </figure>
-
-          <p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten können auch aus der <b>Zwischenablage</b> Ihres Computers importiert werden. Öffnen Sie eine neue Karteikarte überprüft die App, ob sie von dort einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz beziehen könnte. Ist dem der Fall, schaltet sie das Importformular automatisch auf <i class="bibtex"><span>Bib</span>T<span>E</span>X</i> um. An der Stelle, wo sonst der Dateiname erscheint, steht nun <q>–&nbsp;Zwischenablage&nbsp;–</q>.</p>
-
-          <p>Sollten Sie die Karteikarte bereits geöffnet haben, bevor Sie einen <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz in die Zwischenablage kopiert haben, wird die Anzeige zwar nicht automatisch umgestellt. Klicken Sie auf den Button <i>Importieren</i>, überprüft die App allerdings, ob sie in der Zwischenablage fündig wird.</p>
-
-          <figure class="right" title="zum Vergrößern anklicken">
-            <img src="../img/win/menueRedaktion-literatur-ppn.png" alt="">
-            <figcaption><abbr title="Pica-Produktionsnummer">PPN</abbr> in einer Titelanzeige des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr></figcaption>
-          </figure>
-
-          <p>Die bequemste Möglichkeit, einzelne Titeldaten zu importieren, geht freilich via <b><abbr title="Pica-Produktionsnummer">PPN</abbr></b>. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr> zeigt das <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Formular <q>–&nbsp;PPN in Zwischenablage&nbsp;–</q> an. Klicken Sie auf <i>Importieren</i> wird im Hintergrund ein Datensatz aus dem <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> heruntergeladen und analysiert. Danach wird die Karteikarte mit den Titeldaten gefüllt. Die <abbr title="Pica-Produktionsnummern">PPN</abbr> werden in der Titelanzeige des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> direkt in der obersten Zeile angezeigt (<abbr title="siehe">s.</abbr> Screenshot). Allerdings ist es empfehlenswerter, für den Import via <abbr title="Pica-Produktionsnummer">PPN</abbr> die <a href="#karteikarte-xmlImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Funktion</a> zu nutzen, da die mit ihr heruntergeladenen Datensätze in aller Regel eine deutlich bessere Qualität haben.</p>
-
-          <p>Da <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätze <em>niemals</em> einen <b>Belegtext</b> enthalten können, wird dieses Datenfeld auch <em>niemals</em> überschrieben. Ist Ihr Workflow so, dass Sie zunächst einen Beleg einpflegen (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> indem Sie eine Passage aus einem Volldigitalisat von <i>GoogleBooks</i> abtippen), können Sie die Titeldaten problemlos im Nachhinein aus einer <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datei importieren – und zwar ohne befürchten zu müssen, dass der Belegtext verlorengeht.</p>
+          <p>All dies funktioniert auch, wenn die Daten in einer Datei liegen. Haben Sie die HTML-Daten in der Zwischenablage, müssen Sie tatsächlich nicht unbedingt die Import-Funktion benutzen. Beim Einfügen in Beleg-Feld via <kbd>Strg</kbd>&nbsp;+ <kbd>V</kbd> wird derselbe Bereinigungsprozess angestoßen, wie derjenigen, der beim Einfügen über das Importformular erfolgt.</p>
 
           <h2 id="karteikarte-leseansicht">Leseansicht</h2>
 
@@ -1343,7 +1410,7 @@
 
           <p class="erklaerung-icon" id="belegliste-trennzeichen"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Silbentrennung im Belegtext ein- oder ausblenden</p>
 
-          <p class="info">Die Funktion dient zum Ein- oder Ausblenden von Silbentrennungen, die beim <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> des Belegs nicht aufgehoben, sondern durch eine standardisierte Markierung ersetzt wurden (<q>[¬]</q>). Betroffen sind von der Funktion darüber hinaus Angaben zum Seitenumbruch: <q>␣[:SEITENZAHL:]␣</q>. Mehr dazu im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>, wo <a href="#karteikarte-trennung">detaillierte Erläuterungen zur Funktion</a> zu finden sind.</p>
+          <p class="info">Die Funktion dient zum Ein- oder Ausblenden von Silbentrennungen, die beim <a href="#karteikarte-teiImport"><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import</a> des Belegs nicht aufgehoben, sondern durch eine standardisierte Markierung ersetzt wurden (<q>[¬]</q>). Betroffen sind von der Funktion darüber hinaus Angaben zum Seitenumbruch: <q>␣[:SEITENZAHL:]␣</q>. Mehr dazu im <a href="#karteikarte"><abbr title="Kapitel">Kap.</abbr> <i>Karteikarte</i></a>, wo <a href="#karteikarte-trennung">detaillierte Erläuterungen zur Funktion</a> zu finden sind.</p>
 
           <p class="erklaerung-icon" id="belegliste-karteiwortHervorheben"><img src="../img/text-fett.svg" width="24" height="24" alt="">Karteiwort im Belegtext hervorheben</p>
 
@@ -1534,7 +1601,7 @@
           <p id="belegliste-kopierenAuswahl">Wenn Sie möchten, können Sie nur einen <b>Teil des Belegtextes kopieren</b>: den gewünschten Text mit der Maus markieren, Rechtsklick, <i>Text in Zwischenablage &gt; Textauswahl</i>. Haben Sie Text markiert und klicken auf das nebenstehende Icon <img src="../img/kopieren.svg" width="24" height="24" alt="">, wird ebenfalls nur die markierte Passage in die Zwischenablage geschoben. In beiden Fällen wird die Quellenangabe automatisch ergänzt; in beiden Fällen wird der Text so kopiert, wie er in der Anzeige sichtbar ist. Wurden <a href="#belegliste-trennzeichen">Trennzeichen und Seitenumbrüche</a> ausgeblendet, fehlen sie auch im kopierten Text.</p>
 
           <div class="info">
-            <p id="belegliste-bereinigen">Weswegen eine <b>Bereinigung der Textformate</b> nötig sein kann: In <i class="app-name"></i> importierte Texte werden, der besseren Lesbarkeit am Bildschirm wegen, durchgehend mit einer Antiquaschrift dargestellt. Tauchen in aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten historischen Texten, die in Fraktur gesetzt sind, Passagen in Antiqua auf, werden diese in der Programmansicht durch eine Serifenschrift dargestellt. Beim Kopieren via Rechtsklick wird aus der Serife wieder eine Antiqua. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm wie <i>LibreOffice Writer</i> oder <i>Microsoft Word</i> ein und haben Sie dort zuvor eine Serifenschrift (wie <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <span lang="en">Times New Roman</span>) eingestellt, erscheinen die Textteile, die im Originaltext Fraktur waren, als Serife und die, die in Antiqua gesetzt waren, als Antiqua.</p>
+            <p id="belegliste-bereinigen">Weswegen eine <b>Bereinigung der Textformate</b> nötig sein kann: In <i class="app-name"></i> importierte Texte werden, der besseren Lesbarkeit am Bildschirm wegen, durchgehend mit einer Antiquaschrift dargestellt. Tauchen in aus einem <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Dokument importierten historischen Texten, die in Fraktur gesetzt sind, Passagen in Antiqua auf, werden diese in der Programmansicht durch eine Serifenschrift dargestellt. Beim Kopieren via Rechtsklick wird aus der Serife wieder eine Antiqua. Fügen Sie den kopierten Text dann in ein Textverarbeitungsprogramm wie <i>LibreOffice Writer</i> oder <i>Microsoft Word</i> ein und haben Sie dort zuvor eine Serifenschrift (wie <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <span lang="en">Times New Roman</span>) eingestellt, erscheinen die Textteile, die im Originaltext Fraktur waren, als Serife und die, die in Antiqua gesetzt waren, als Antiqua.</p>
 
             <p>Das Kopieren via Rechtsklick funktioniert nicht nur im Belegtext, sondern in allen Elementen, die in der Detailansicht angezeigt werden. Für die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> gilt in Sachen Kopieren übrigens dasselbe wie für die Detailansicht der Belegliste: Auch hier sollten Sie zum Kopieren das Kopier-Icon oder das Rechtsklickmenü verwenden.</p>
           </div>
@@ -1951,7 +2018,7 @@ Mustermann, Erika
           <div class="info">
             <p><i>Standard:</i> 10</p>
 
-            <p><a href="#karteikarte">Karteikarten</a> können mit Texten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Die Funktion <a href="#menueKartei-formvarianten"><i>Kartei&nbsp;&gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten – ebenfalls aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>. Und im <a href="#menueHilfe-updates">Update-Fenster</a> kann auf GitHub nach neuen Releases von <i class="app-name"></i> gesucht werden.</p>
+            <p><a href="#karteikarte">Karteikarten</a> können mit Texten aus verschiedenen <a href="#karteikarte-importfunktion">Importquellen</a> automatisch gefüllt werden, wenn man eine entsprechende <abbr title="Uniform Resource Locator" lang="en">URL</abbr> angibt. Die Funktion <a href="#menueKartei-formvarianten"><i>Kartei&nbsp;&gt; Formvarianten</i></a> lädt beim Erstellen einer Kartei automatisch eine Liste an Formvarianten aus dem <abbr title="Deutsche Textarchiv">DTA</abbr>. Und im <a href="#menueHilfe-updates">Update-Fenster</a> kann auf GitHub nach neuen Releases von <i class="app-name"></i> gesucht werden.</p>
 
             <p>In allen Fällen sendet die App intern eine Anfrage an die entsprechende Internet-Ressource. Erhält sie nach der hier eingegebenen Zeitspanne keine Antwort, wird die Anfrage mit einem Timeout-Fehler abgebrochen und ein Dialogfenster geöffnet, das über diesen Fehler informiert. Arbeiten Sie in einer Umgebung mit schlechter Internetverbindung (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> im Zug), könnte es hilfreich sein, diesen Wert ein bisschen anzuheben. Die App wartet dann entsprechend länger, ehe sie die Anfrage als gescheitert bewertet.</p>
           </div>
@@ -2458,7 +2525,7 @@ Mustermann, Erika
 
             <p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
 
-            <p>Beim <abbr title="Deutsches Textarchiv">DTA</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-dtaImport">importieren Sie eine Seite mehr</a>.</p>
+            <p>Beim <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-teiImport">importieren Sie eine Seite mehr</a>.</p>
 
             <p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
 
@@ -2478,7 +2545,7 @@ Mustermann, Erika
           <div class="info">
             <p><i>Standard:</i> nicht aktiviert</p>
 
-            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet oder eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
+            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, eine <abbr title="Pica-Produktionsnummer">PPN</abbr> oder dergleichen, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
 
             <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
           </div>
@@ -2698,7 +2765,7 @@ Mustermann, Erika
 
               <p><a href="#menueBelege-einfuegen">Einfügen-Fenster</a> offen: Belege einfügen</p>
 
-              <p>Fokus in einem der Textfelder der <a href="#karteikarte">Karteikarte</a> für den <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Import starten</p>
+              <p>Fokus in einem der Textfelder der <a href="#karteikarte">Karteikarte</a> für die <a href="#karteikarte-importfunktion">Importfunktion</a>: Import starten</p>
 
               <p>Textfeld im <a href="#bedeutungsgeruest">Bedeutungsgerüst</a> fokussiert: Änderungen speichern</p>
 
@@ -3506,7 +3573,7 @@ Mustermann, Erika
             <td>
               <p><a href="#karteikarte-dropdown">Dropdown-Menü</a> offen: ausgewählten Textvorschlag einfügen</p>
 
-              <p>Fokus in einem der Textfelder für den <a href="#karteikarte-dtaImport"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Import starten</p>
+              <p>Fokus in einem der Textfelder für den der <a href="#karteikarte-importfunktion">Importfunktion</a>: Import starten</p>
             </td>
           </tr><tr>
             <td>&nbsp;</td><td>&nbsp;</td>
@@ -4963,7 +5030,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
             </figure>
 
             <ul>
-              <li><i><abbr title="Deutsches Textarchiv">DTA</abbr>:</i> Liegt in der Zwischenablage eine Internetadresse des <a href="https://www.deutschestextarchiv.de/" title="Deutsches Textarchiv">DTA</a>, in der sich eine Titel-ID befindet, können die dort im TEI-Header hinterlegten Titeldaten importiert werden. Ob die URL auf die Überblicksseite oder die Textseite eines Werks zeigt, ist dabei unerheblich.</li>
+              <li><i><abbr title="Deutsches Textarchiv">DTA</abbr>:</i> Liegt in der Zwischenablage eine Internetadresse des <a href="https://www.deutschestextarchiv.de/" title="Deutsches Textarchiv">DTA</a>, in der sich eine Titel-ID befindet, können die dort im <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Header hinterlegten Titeldaten importiert werden. Ob die URL auf die Überblicksseite oder die Textseite eines Werks zeigt, ist dabei unerheblich.</li>
 
               <li>
                 <p><i><abbr title="Pica-Produktionsnummer">PPN</abbr>/<abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Ein in <abbr title="Extensible Markup Language" lang="en">XML</abbr> kodierter Datensatz kann immer dann importiert werden, wenn in der Zwischenablage eines der folgenden Dinge zu finden ist:</p>
