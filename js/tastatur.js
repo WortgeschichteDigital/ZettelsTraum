@@ -118,8 +118,7 @@ const tastatur = {
     // Key "F3"
     if ((!m || m === "Shift") && evt.key === "F3") {
       if (!overlayId &&
-          (helfer.hauptfunktion === "liste" ||
-          helfer.belegOffen() && beleg.leseansicht)) {
+          (helfer.hauptfunktion === "liste" || helfer.belegOffen())) {
         suchleiste.f3(evt);
       }
       return;
@@ -174,7 +173,7 @@ const tastatur = {
           beleg.leseToggle(true);
         }
       } else if (m === "Ctrl+Shift" && evt.code === "KeyD") {
-        beleg.toolsQuelleDTALink();
+        beleg.toolsQuelleURL();
       }
       return;
     }

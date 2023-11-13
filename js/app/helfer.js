@@ -495,23 +495,21 @@ const helfer = {
     }
     // Annotierungen endgültig löschen
     helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");
-    // DTA-Klassen umwandeln
+    // TEI-Klassen umwandeln
     const styles = {
-      "dta-antiqua": "font-family: sans-serif",
-      "dta-blau": "color: blue",
-      "dta-doppelt": "text-decoration: underline double",
-      "dta-gesperrt": "letter-spacing: 4px",
-      "dta-groesser": "font-size: 20px",
-      "dta-initiale": "font-size: 24px",
-      "dta-kapitaelchen": "font-variant: small-caps",
-      "dta-rot": "color: red",
+      "tei-antiqua": "font-family: sans-serif",
+      "tei-doppelt": "text-decoration: underline double",
+      "tei-gesperrt": "letter-spacing: 4px",
+      "tei-groesser": "font-size: 20px",
+      "tei-initiale": "font-size: 24px",
+      "tei-kapitaelchen": "font-variant: small-caps",
     };
     for (const style of Object.keys(styles)) {
       stylesAnpassen(style);
     }
     // Ergebnis der Bereinigung zurückggeben
     return cont.innerHTML;
-    // Ersetzungsfunktion für die DTA-Layout-Container
+    // Ersetzungsfunktion für die TEI-Layout-Container
     function stylesAnpassen (style) {
       cont.querySelectorAll(`.${style}`).forEach(i => {
         i.setAttribute("style", styles[style]);
@@ -1141,6 +1139,32 @@ const helfer = {
     }, 1000);
   },
 
+  // Ende des Scrollens detektieren
+  // (da scrollend nicht feuert, wenn nich gescrollt wird,
+  // ist so eine Funktion weiterhin nötig
+  //   obj = node
+  //     (das Element, das gescrollt wird)
+  async scrollEnd (obj = window) {
+    await new Promise(resolve => {
+      let scrolling = false;
+      function scrollDetected () {
+        scrolling = true;
+      }
+      function scrollEnd () {
+        obj.removeEventListener("scroll", scrollDetected);
+        obj.removeEventListener("scrollend", scrollEnd);
+        resolve(true);
+      }
+      obj.addEventListener("scroll", scrollDetected);
+      obj.addEventListener("scrollend", scrollEnd);
+      setTimeout(() => {
+        if (!scrolling) {
+          scrollEnd();
+        }
+      }, 50);
+    });
+  },
+
   // Sperr-Overlay erzeugen
   //   cont = Element
   //     (Container, in den das Overlay eingehängt werden soll)
@@ -1186,11 +1210,27 @@ const helfer = {
       }
       let url = this.getAttribute("href");
       // URL ggf. aufbereiten
-      if (!/^http/.test(url)) {
+      if (!/^(http|mailto)/.test(url)) {
         url = `https://${url}`;
       }
+      // sicherstellen, dass eine valide URL und kein Schadcode an openExternal() übergeben wird
+      let validURL;
+      try {
+        validURL = new URL(url).href;
+      } catch (err) {
+        if (typeof dialog !== "undefined") {
+          // in Nebenfenstern steht dialog.js nicht zur Verfügung;
+          // dort gibt es aber auch keine nutzergenerierten Links,
+          // die an diese Funktion geschickt werden
+          dialog.oeffnen({
+            typ: "alert",
+            text: `Der Link wird nicht geöffnet, weil es sich bei ihm nicht um eine valide URL handelt.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${err.name}: ${err.message}</p>`,
+          });
+        }
+        return;
+      }
       // URL im Browser öffnen
-      modules.shell.openExternal(url);
+      modules.shell.openExternal(validURL);
     });
   },
 

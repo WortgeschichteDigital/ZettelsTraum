@@ -8,11 +8,15 @@
       ;
       script-src
         'self'
-        'sha256-ifg7ZWJQ70RfFLzs0CeT4nQG4KUEdF/eYPtLRCAUcHQ='
       ;
       connect-src
-        https://www.deutschestextarchiv.de
-        https://github.com/WortgeschichteDigital/ZettelsTraum/
+        https://dingler.bbaw.de/xml/articles/
+        https://www.deutschestextarchiv.de/api/tei_header/
+        https://www.deutschestextarchiv.de/book/download_xml/
+        https://www.deutschestextarchiv.de/demo/cab/query
+        https://github.com/WortgeschichteDigital/ZettelsTraum/releases.atom
+        https://diglib.hab.de/edoc/
+        https://diglib.hab.de/mss/
         https://unapi.k10plus.de/
       ;
     ">
@@ -58,17 +62,13 @@
     <link rel="stylesheet" href="css/app/start.css">
     <link rel="stylesheet" href="css/app/drucken.css" media="print">
 
-    <script type="module">
-      import konversion from "./js/app/konversion.mjs";
-      window.konversion = konversion;
-    </script>
+    <script src="js/app/init-app.mjs" type="module"></script>
 
     <script src="js/helferXml.js"></script>
     <script src="js/suchleiste.js"></script>
     <script src="js/tastatur.js"></script>
     <script src="js/tooltip.js"></script>
 
-    <script src="js/app/init-app.js"></script>
     <script src="js/app/anhaenge.js"></script>
     <script src="js/app/annotieren.js"></script>
     <script src="js/app/bearbeiterin.js"></script>
@@ -80,13 +80,20 @@
     <script src="js/app/beleg.js"></script>
     <script src="js/app/belegKlammern.js"></script>
     <script src="js/app/belegeTaggen.js"></script>
-    <script src="js/app/belegImport.js"></script>
     <script src="js/app/cli.js"></script>
     <script src="js/app/dialog.js"></script>
     <script src="js/app/drucken.js"></script>
     <script src="js/app/erinnerungen.js"></script>
     <script src="js/app/filter.js"></script>
     <script src="js/app/helfer.js"></script>
+    <script src="js/app/importBibtex.js"></script>
+    <script src="js/app/importDereko.js"></script>
+    <script src="js/app/importDWDS.js"></script>
+    <script src="js/app/importLit.js"></script>
+    <script src="js/app/importShared.js"></script>
+    <script src="js/app/importTEI.js"></script>
+    <script src="js/app/importURL.js"></script>
+    <script src="js/app/importWGd.js"></script>
     <script src="js/app/io.js"></script>
     <script src="js/app/kartei.js"></script>
     <script src="js/app/karteisuche.js"></script>
@@ -221,7 +228,7 @@
                 ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m7 4 5 5 5-5h-10zm-3 6v4h16v-4h-16zm8 5-5 5h10l-5-5z"/></svg></a
               ><a href="#" class="icon-leseansicht aus navi-link" id="beleg-link-trennung"
                 ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g><path d="m4 4v16h6v-2h-4v-12h4v-2h-4z"/><path d="m20 4v16h-6v-2h4v-12h-4v-2h4z"/><path d="m8 10v2h6v2h2v-2-2h-8z"/></g></svg></a
-              ><a href="#" class="icon-leseansicht aus navi-link" id="beleg-link-suchleiste" title="Suchleiste öffnen (F3)"
+              ><a href="#" class="navi-link" id="beleg-link-suchleiste" title="Suchleiste öffnen (F3)"
                 ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m10.5 5a5.5 5.5 0 0 0-5.5 5.5 5.5 5.5 0 0 0 5.5 5.5 5.5 5.5 0 0 0 3.1172-0.96875l3.6621 3.6621a1 1 0 0 0 0.7207 0.30664 1 1 0 0 0 1-1 1 1 0 0 0-0.30273-0.7168l-3.6699-3.6699a5.5 5.5 0 0 0 0.97266-3.1133 5.5 5.5 0 0 0-5.5-5.5zm0 2a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5zm-7.5 10v4h2 7.4316 8.5684v-4h-1.3379c0.44598 0.76574 0.34692 1.7566-0.31055 2.4141-0.78347 0.78348-2.0447 0.78348-2.8281 0l-2.1211-2.1211c-0.091249-0.091249-0.17024-0.19026-0.24024-0.29297h-1.7305-7.4316-2zm2 1h7.4316v2h-7.4316v-2z"/></svg></a
             ></span
             ><span class="beleg-opt-block"
@@ -255,30 +262,27 @@
         </tr><tr class="beleg-form">
           <td colspan="2"><hr class="flach"></td>
         </tr><tr class="beleg-form">
-          <th colspan="2">Import<input type="radio" name="beleg-import" id="beleg-import-dta" checked
-            ><label for="beleg-import-dta">DTA</label
-            ><input type="radio" name="beleg-import" id="beleg-import-dwds"
-            ><label for="beleg-import-dwds">DWDS</label
-            ><input type="radio" name="beleg-import" id="beleg-import-dereko"
-            ><label for="beleg-import-dereko">DeReKo</label
-            ><input type="radio" name="beleg-import" id="beleg-import-xml"
-            ><label for="beleg-import-xml">XML</label
-            ><input type="radio" name="beleg-import" id="beleg-import-bibtex"
-            ><label for="beleg-import-bibtex" class="bibtex"><span>Bib</span>T<span>E</span>X</label
+          <th colspan="2">Import<input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-url" checked
+            ><label for="beleg-import-quelle-url">URL</label
+            ><input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-datei"
+            ><label for="beleg-import-quelle-datei">Datei</label
+            ><input type="radio" name="beleg-import-quelle" id="beleg-import-quelle-zwischenablage"
+            ><label for="beleg-import-quelle-zwischenablage">Zwischenablage</label
+            ><a href="#" class="icon-link icon-kreis-fragezeichen link-handbuch" id="beleg-import-hilfe" data-handbuch="karteikarte-importfunktion" tabindex="-1" title="Aus welchen Quellen können Daten importiert werden?">&nbsp;</a
           ></th>
-        </tr><tr class="beleg-form" id="beleg-form-dta">
-          <td colspan="2"><input type="text" value="" id="beleg-dta" tabindex="0"
-            ><input type="number" value="2" min="0" max="9999" id="beleg-dta-bis" tabindex="0"
-            ><input type="button" value="Importieren" id="beleg-dta-button" tabindex="0"></td>
-        </tr><tr class="beleg-form aus" id="beleg-form-datei">
-          <td colspan="2"
-            ><span id="beleg-datei-name" dir="rtl" class="leer">keine Datei geladen</span
-            ><input type="checkbox" id="beleg-datei-latin1" tabindex="0"><label for="beleg-datei-latin1">Latin-1</label
-            ><input type="button" value="Datei" id="beleg-datei-oeffnen" tabindex="0"
-            ><input type="button" value="Importieren" id="beleg-datei-importieren" tabindex="0"
-            ></td>
         </tr><tr class="beleg-form">
-          <td colspan="2"><hr></td>
+          <td colspan="2" id="beleg-import"><p
+            ><input type="text" value="" placeholder="URL" id="beleg-import-feld" tabindex="0"
+            ><input type="number" value="0" min="0" max="9999" id="beleg-import-von" tabindex="0" title="&lt;i&gt;TEI-Import:&lt;/i&gt; von Seite"
+            ><input type="number" value="0" min="0" max="9999" id="beleg-import-bis" tabindex="0" title="&lt;i&gt;TEI-Import:&lt;/i&gt; bis Seite"
+          ></p><p
+            >&nbsp;<span
+              ><input type="button" value="Datei" id="beleg-import-datei" tabindex="0" class="aus"
+              ><input type="button" value="Importieren" id="beleg-import-start" tabindex="0"
+            ></span
+          ></p></td>
+        </tr><tr class="beleg-form">
+          <td colspan="2"><hr class="flach"></td>
         </tr><tr>
           <th><label for="beleg-da">Datum</label
             ><span class="text-tools"
@@ -379,7 +383,7 @@
             ><span class="beleg-ul-ud"
               ><label for="beleg-ul">URL</label
               ><span class="text-tools-quelle"
-                ><a href="#" class="icon-link icon-link-link icon-tools" title="DTA-Link in Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
+                ><a href="#" class="icon-link icon-link-link icon-tools" title="URL in Import-Formular laden (Strg + Umsch + D)" tabindex="-1">&nbsp;</a
               ></span
               ><span class="text-tools"
                 ><a href="#" class="icon-link icon-tools-kopieren" title="Text kopieren" tabindex="-1">&nbsp;</a
@@ -440,6 +444,8 @@
             <div id="beleg-an" data-anhaenge="beleg"></div>
           </td>
         </tr><tr class="beleg-form">
+          <td colspan="2"><hr></td>
+        </tr><tr class="beleg-form">
           <th colspan="2" id="beleg-meta">Metadaten<span class="text-tools"
             ><a href="#" class="icon-link icon-tools-meta-plus" id="beleg-meta-toggle" title="Metadaten anzeigen" tabindex="-1">&nbsp;</a
             ></span></th>
@@ -450,12 +456,28 @@
           <td id="beleg-dc"></td>
           <td id="beleg-dm"></td>
         </tr><tr class="beleg-form meta aus">
-          <th colspan="2">Importtyp</th>
+          <th>Importtyp</th>
+          <th>Importdatum</th>
         </tr><tr class="beleg-form meta aus">
-          <td colspan="2" id="beleg-bi"></td>
+          <td id="beleg-bi"></td>
+          <td id="beleg-di"></td>
+        </tr><tr class="beleg-form meta aus">
+          <th colspan="2">Import-URL<span class="text-tools"
+            ><a href="#" class="icon-link icon-tools-kopieren icon-tools" id="beleg-meta-copy-ui" title="Import-URL in die Zwischenablage kopieren" tabindex="-1">&nbsp;</a
+            ></span></th>
+        </tr><tr class="beleg-form meta aus">
+          <td colspan="2" id="beleg-ui"></td>
+        </tr><tr class="beleg-form meta aus">
+          <th>Import von Seite</th>
+          <th>Import bis Seite</th>
+        </tr><tr class="beleg-form meta aus">
+          <td id="beleg-bv"></td>
+          <td id="beleg-bb"></td>
         </tr><tr class="beleg-form meta aus">
           <th colspan="2">Importdaten<span class="text-tools"
+            ><a href="#" class="icon-link icon-tools-header-aus icon-tools" id="beleg-meta-header" title="&amp;lt;teiHeader&amp;gt; in den Importdaten einblenden" tabindex="-1">&nbsp;</a
             ><a href="#" class="icon-link icon-pfeil-kreis icon-tools" id="beleg-meta-reimport" title="Beleg aus den Importdaten erneut importieren" tabindex="-1">&nbsp;</a
+            ><a href="#" class="icon-link icon-tools-kopieren icon-tools" id="beleg-meta-copy-bx" title="Importdaten in die Zwischenablage kopieren" tabindex="-1">&nbsp;</a
             ></span></th>
         </tr><tr class="beleg-form meta aus">
           <td colspan="2" id="beleg-bx"></td>
@@ -838,9 +860,9 @@
               ><label for="einstellung-immer-ergaenzen">Textfelder beim Einfügen von Text via Icon, Menüeintrag oder Bedeutungsdefinition ohne Nachfrage ergänzen</label></p>
             <h3>Import</h3>
             <p><input type="checkbox" id="einstellung-url-eintragen"
-              ><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> aus der Zwischenablage automatisch in das <abbr title="Deutsches Textarchiv">DTA</abbr>-Import-Feld eintragen</label></p>
-            <p><input type="checkbox" id="einstellung-dta-bevorzugen"
-              ><label for="einstellung-dta-bevorzugen">aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammende <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importieren</label></p>
+              ><label for="einstellung-url-eintragen"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</label></p>
+            <p><input type="checkbox" id="einstellung-karteikarte-original-bevorzugen"
+              ><label for="einstellung-karteikarte-original-bevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</label></p>
             <p><input type="checkbox" id="einstellung-notizen-zeitung"
               ><label for="einstellung-notizen-zeitung">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</label></p>
             <p><input type="checkbox" id="einstellung-wort-check"
@@ -1372,7 +1394,7 @@
               ><a href="#" title="Titelaufnahme an XML-Fenster" class="icon-link icon-xml" id="red-lit-eingabe-ti-xml-fenster">&nbsp;</a
               ><span id="red-lit-eingabe-ti-import"
                 ><a href="#" title="DTA-Import" id="red-lit-eingabe-ti-dta">DTA</a
-                > · <a href="#" title="XML-Import" id="red-lit-eingabe-ti-xml">XML</a
+                > · <a href="#" title="PPN- und XML-Import" id="red-lit-eingabe-ti-xml">PPN/XML</a
                 > · <a href="#" title="BibTeX-Import" class="bibtex" id="red-lit-eingabe-ti-bibtex"><span>Bib</span>T<span>E</span>X</a
               ></span
             ></th>

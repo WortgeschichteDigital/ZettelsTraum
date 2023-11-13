@@ -43,9 +43,9 @@ window.addEventListener("load", async () => {
   // ÄNDERUNGSNOTIZ
   document.querySelector("#md-re-no").value = "Erstpublikation";
 
-  // INDENT.XSL LADEN
+  // XML-INDENT.XSL LADEN
   await helfer.resourcesLoad({
-    file: "indent.xsl",
+    file: "xml-indent.xsl",
     targetObj: helferXml,
     targetKey: "indentXsl",
   });

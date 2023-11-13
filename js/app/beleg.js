@@ -81,14 +81,17 @@ const beleg = {
     const karte = {
       an: [], // Anhänge
       au: "", // Autor
+      bb: "", // Seite, bis zu der das XML aus einer Datei importiert wurde
       bd: [], // Bedeutung
       be: 0, // Bewertung (Markierung)
       bi: "", // Importtyp (bezieht sich auf die Daten in bx)
       bl: "", // Wortbildung
       bs: "", // Beleg
+      bv: "", // Seite, von der an das XML aus einer Datei importiert wurde
       bx: "", // Beleg-XML
       da: "", // Belegdatum
       dc: new Date().toISOString(), // Datum Karteikarten-Erstellung
+      di: "", // Importdatum
       dm: "", // Datum Karteikarten-Änderung
       kr: "", // Korpus
       no: "", // Notizen
@@ -142,7 +145,6 @@ const beleg = {
   //     (Formular wird direkt nach einem Import gefüllt)
   async formular (neu, imp = false) {
     // regulären Ausdruck für Sprung zum Wort zurücksetzen
-    beleg.ctrlSpringenFormReg.again = false;
     beleg.ctrlSpringenFormReset();
 
     // Beleg-Titel eintragen
@@ -158,9 +160,9 @@ const beleg = {
     for (let i = 0, len = felder.length; i < len; i++) {
       const feld = felder[i];
       const name = feld.id.replace(/^beleg-/, "");
-      if (name === "dta") {
+      if (name === "import-feld") {
         feld.value = "";
-      } else if (name === "dta-bis") {
+      } else if (/^import-(von|bis)$/.test(name)) {
         feld.value = "0";
       } else if (feld.classList.contains("beleg-form-data")) {
         feld.value = beleg.data[name];
@@ -205,34 +207,25 @@ const beleg = {
     // automatisch ausgeführt, wenn man Enter gedrückt hat)
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     if (neu && !beleg.leseansicht) {
-      // Was ist in der Zwischenablage?
-      const cb = modules.clipboard.readText().trim();
-      const ppnCp = belegImport.PPNCheck({ ppn: cb });
-      const dwds = belegImport.DWDSXMLCheck(cb);
-      const xml = belegImport.XMLCheck({ xmlStr: cb });
-      const bibtexCp = belegImport.BibTeXCheck(cb);
-      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) { // DTA-URL
-        beleg.formularImport("dta");
-      } else if (dwds) { // DWDS-Snippet
-        belegImport.DWDS(dwds, "– Zwischenablage –", false);
-        beleg.formularImport("dwds");
-      } else if (xml) {
-        belegImport.XML(cb, "– Zwischenablage –", false);
-        beleg.formularImport("xml");
-      } else if (bibtexCp) {
-        belegImport.BibTeX(cb, "– Zwischenablage –", false);
-        beleg.formularImport("bibtex");
-      } else if (ppnCp) {
-        belegImport.PPNAnzeigeKarteikarte({ typ: "xml" });
-      } else if (belegImport.Datei.data.length) {
-        beleg.formularImport(belegImport.Datei.typ);
-      } else {
-        let feld = document.querySelector("#beleg-da");
-        if (optionen.data.einstellungen["karteikarte-fokus-beleg"]) {
-          feld = document.querySelector("#beleg-bs");
-        }
-        feld.focus();
+      // Zwischenablage auswerten
+      let cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
+
+      // keine bekannten Daten in der Zwischenablage => Dateidaten vorhanden?
+      if (!cb &&
+          importShared.fileData.data.length > 1 &&
+          importShared.fileData.path) {
+        cb = importShared.detectType("file://" + importShared.fileData.path, "");
       }
+
+      // immer noch keine bekannten Daten in der Zwischenablage => Fokus setzen
+      if (!cb) {
+        const feld = optionen.data.einstellungen["karteikarte-fokus-beleg"] ? "beleg-bs" : "beleg-da";
+        document.getElementById(feld).focus();
+        return;
+      }
+
+      // Import-Formular gemäß der Daten in der Zwischenablage umstellen und füllen
+      beleg.formularImport({ src: cb.formView, typeData: cb });
     }
   },
 
@@ -449,83 +442,103 @@ const beleg = {
   //     (Radio-Button zum Umschalten des Import-Formulars)
   formularImportListener (radio) {
     radio.addEventListener("change", function () {
-      const src = this.id.replace(/.+-/, "");
-      beleg.formularImport(src);
+      const src = this.id.replace("beleg-import-quelle-", "");
+      beleg.formularImport({ src, fokus: false });
     });
   },
 
   // zwischen den Import-Formularen hin- und herschalten
-  //   src = String
-  //     (ID der Quelle, aus der importiert werden soll: dta | dwds | dereko | xml | bibtex)
-  formularImport (src) {
-    // ggf. src umstellen
-    src = src === "ppn" ? "xml" : src;
-    // Checkbox für ISO 8859-15 umstellen
-    const latin1 = document.getElementById("beleg-datei-latin1");
-    if (src === "dereko") {
-      latin1.checked = true;
-    } else {
-      latin1.checked = false;
-    }
+  //   src = string
+  //     (ID der Quelle, aus der importiert werden soll: url | datei | zwischenablage)
+  //   fokus = false | undefined
+  //     (Automatisch Fokus ins Formular setzen)
+  //   typeData = object | undefined
+  //     (Analyseergebnis, das von importShared.detectType() zurückgegeben wird)
+  //   autoFill = false | undefined
+  //     (Import-Feld automatisch mit übergebenen oder Daten aus der Zwischenablage füllen)
+  formularImport ({ src, fokus = true, typeData = null, autoFill = true }) {
     // Radio-Buttons umstellen
     // (weil Wechsel nicht nur auf Klick, sondern auch automatisch geschieht)
-    const radios = [ "beleg-import-dta", "beleg-import-dwds", "beleg-import-dereko", "beleg-import-xml", "beleg-import-bibtex" ];
-    for (const r of radios) {
-      const radio = document.getElementById(r);
-      if (r.includes(src)) {
-        radio.checked = true;
-      } else {
-        radio.checked = false;
-      }
+    const radio = document.getElementById("beleg-import-quelle-" + src);
+    if (!radio.checked) {
+      document.getElementsByName("beleg-import-quelle").forEach(i => {
+        if (i === radio) {
+          i.checked = true;
+        } else {
+          i.checked = false;
+        }
+      });
     }
-    // Formular umstellen
-    const forms = [ "beleg-form-dta", "beleg-form-datei" ];
-    let formsZiel = src;
-    if (/^(dwds|dereko|xml|bibtex)/.test(src)) {
-      formsZiel = "datei";
-    }
-    let eleAktiv = null;
-    for (const f of forms) {
-      const ele = document.getElementById(f);
-      if (f.includes(formsZiel)) {
-        ele.classList.remove("aus");
-        eleAktiv = ele;
-      } else {
-        ele.classList.add("aus");
-      }
-    }
-    // Fokus setzen
-    if (/^(dwds|dereko|xml|bibtex)$/.test(src)) {
-      const inputs = eleAktiv.querySelectorAll("input");
-      if (src === belegImport.Datei.typ &&
-          belegImport.Datei.data.length ||
-         belegImport.Datei.typ === "ppn") {
-        inputs[inputs.length - 1].focus();
-      } else {
-        inputs[inputs.length - 2].focus();
-      }
-      // ggf. Dateiname eintragen
-      beleg.formularImportDatei(src);
-    } else {
-      eleAktiv.querySelector("input").focus();
-    }
-  },
 
-  // ggf. Dateiname eintragen
-  //   src = String
-  //     (ID der Quelle, aus der importiert werden soll: dwds | dereko | xml | bibtex)
-  formularImportDatei (src) {
-    const name = document.getElementById("beleg-datei-name");
-    if (src === "dwds" && belegImport.Datei.typ === "dwds" ||
-        src === "dereko" && belegImport.Datei.typ === "dereko" ||
-        src === "xml" && belegImport.Datei.typ === "xml" ||
-        src === "bibtex" && belegImport.Datei.typ === "bibtex" ||
-        /^(xml|bibtex)$/.test(src) && belegImport.Datei.typ === "ppn") {
-      name.textContent = `\u200E${belegImport.Datei.pfad}\u200E`; // vgl. meta.oeffnen()
-      name.classList.remove("leer");
+    // Formular zurücksetzen
+    const feld = document.getElementById("beleg-import-feld");
+    const von = document.getElementById("beleg-import-von");
+    const bis = document.getElementById("beleg-import-bis");
+    if (autoFill) {
+      feld.value = "";
+      von.value = "0";
+      bis.value = "0";
+    }
+
+    // Formular umstellen
+    const placeholders = {
+      url: "URL",
+      datei: "Dateipfad",
+      zwischenablage: "Zwischenablage",
+    };
+    feld.setAttribute("placeholder", placeholders[src]);
+    if (src === "zwischenablage") {
+      feld.readOnly = true;
     } else {
-      name.textContent = "keine Datei geladen";
-      name.classList.add("leer");
+      feld.readOnly = false;
+    }
+    const datei = document.getElementById("beleg-import-datei");
+    if (src === "datei") {
+      datei.classList.remove("aus");
+    } else {
+      datei.classList.add("aus");
+    }
+
+    // Textfeld entsprechend der Zwischenablage füllen
+    if (autoFill) {
+      const cb = typeData || importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
+      if (optionen.data.einstellungen["url-eintragen"] &&
+          (src === "url" && cb?.type === "url" ||
+          src === "datei" && cb?.type === "file")) {
+        feld.value = cb.data.firstLine;
+        feld.dispatchEvent(new Event("input"));
+      } else if (src === "zwischenablage" && cb?.formView === "zwischenablage") {
+        feld.value = "Zwischenablage: " + cb.formText;
+      } else if (src === "datei" &&
+          importShared.fileData.data.length > 1 &&
+          importShared.fileData.path) {
+        feld.value = "file://" + importShared.fileData.path;
+      }
+    } else {
+      feld.dispatchEvent(new Event("input"));
+    }
+
+    // Fokus setzen
+    if (!fokus) {
+      return;
+    }
+    const start = document.getElementById("beleg-import-start");
+    if (!feld.value && src !== "zwischenablage") {
+      feld.focus();
+    } else if (src === "url") {
+      if (von.value === "0") {
+        von.select();
+      } else {
+        bis.select();
+      }
+    } else if (src === "datei") {
+      if (importShared.isFilePath(feld.value)) {
+        von.select();
+      } else {
+        datei.focus();
+      }
+    } else {
+      start.focus();
     }
   },
 
@@ -551,46 +564,58 @@ const beleg = {
     });
   },
 
-  // Events in DTA-Feldern
-  formularEvtDTA () {
+  // Events in Feldern des Import-Formulars
+  formularEvtImport () {
     // Import anstoßen
-    document.querySelectorAll("#beleg-dta, #beleg-dta-bis").forEach(input => {
+    document.querySelectorAll("#beleg-import-feld, #beleg-import-von, #beleg-import-bis").forEach(input => {
       input.addEventListener("keydown", evt => {
         if (evt.key === "Enter") {
-          belegImport.DTA();
+          importShared.startImport();
         }
       });
     });
 
-    // Wert von Bis-Feld automatisch ermitteln
-    const dta = document.getElementById("beleg-dta");
-    dta.addEventListener("input", function () {
-      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(this.value)) {
-        const fak = belegImport.DTAGetFak(this.value, "");
-        if (fak) {
-          this.nextSibling.value = parseInt(fak, 10) + 1;
+    // Werte vom Von- und vom Bis-Feld automatisch ermitteln
+    const feld = document.getElementById("beleg-import-feld");
+    feld.addEventListener("input", function () {
+      let parsedURL;
+      try {
+        parsedURL = new URL(this.value.trim());
+      } catch {
+        return;
+      }
+      if (parsedURL.origin === "https://www.deutschestextarchiv.de" &&
+          document.getElementById("beleg-import-quelle-url").checked) {
+        const page = importTEI.dtaGetPageNo(parsedURL);
+        const von = this.nextSibling;
+        const bis = von.nextSibling;
+        if (von.value === "0") {
+          von.value = page;
+        }
+        if (bis.value === "0") {
+          bis.value = page + 1;
         }
       }
     });
 
-    // URL automatisch pasten
-    dta.addEventListener("focus", function () {
-      if (this.value || !optionen.data.einstellungen["url-eintragen"]) {
+    // URL oder File-Protokoll automatisch pasten
+    feld.addEventListener("focus", function () {
+      if (this.value || this.readOnly || !optionen.data.einstellungen["url-eintragen"]) {
         return;
       }
-      const cb = modules.clipboard.readText();
-      if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(cb)) {
-        setTimeout(function () {
+      const cb = importShared.detectType(modules.clipboard.readText(), modules.clipboard.readHTML());
+      if (cb?.type === "file" || cb?.type === "url") {
+        setTimeout(() => {
           // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
           // man muss dem Fokus-Wechsel ein bisschen Zeit geben
-          if (document.activeElement.id !== "beleg-dta") {
-            // ist eine URL in der Zwischenablage, fokussiert man das DTA-Feld und löscht den Inhalt,
+          if (document.activeElement.id !== "beleg-import-feld") {
+            // ist eine URL in der Zwischenablage, fokussiert man das Import-Feld und löscht den Inhalt,
             // defokussiert man das Programm und fokussiert es dann wieder, indem man direkt
             // auf ein anderes Textfeld klickt, würde dieses Textfeld gefüllt werden
             return;
           }
-          document.execCommand("paste");
-        }, 5);
+          beleg.formularImport({ src: cb.formView, typeData: cb });
+        }, 10);
       }
     });
   },
@@ -857,12 +882,10 @@ const beleg = {
         beleg.aktionAbbrechen();
       } else if (aktion === "loeschen") {
         beleg.aktionLoeschen();
-      } else if (aktion === "dta-button") {
-        belegImport.DTA();
-      } else if (aktion === "datei-oeffnen") {
-        belegImport.DateiOeffnen();
-      } else if (aktion === "datei-importieren") {
-        belegImport.DateiImport();
+      } else if (aktion === "import-start") {
+        importShared.startImport();
+      } else if (aktion === "import-datei") {
+        importShared.fileSelect();
       }
     });
   },
@@ -1025,7 +1048,9 @@ const beleg = {
   // ist es nicht im Blick => in den Blick scrollen
   //   ele = Element
   //     (das Element, das selektiert werden soll)
-  selectFormEle (ele) {
+  //   select = true | undefined
+  //     (wird auch genutzt, um zum Element zu scrollen, ohne es zu selektieren)
+  selectFormEle (ele, select = true) {
     const hBody = document.querySelector("body > header").offsetHeight;
     const hKarte = document.querySelector("#beleg > header").offsetHeight;
     const hTitle = document.querySelector("#beleg-titel").offsetHeight;
@@ -1043,7 +1068,9 @@ const beleg = {
         behavior: "smooth",
       });
     }
-    ele.select();
+    if (select) {
+      ele.select();
+    }
   },
 
   // visualisiert, dass in einem Elementfeld ein Fehler aufgetreten ist
@@ -1202,6 +1229,10 @@ const beleg = {
       evt.preventDefault();
       if (this.id === "beleg-meta-toggle") {
         beleg.metadatenToggle(true);
+      } else if (/beleg-meta-copy/.test(this.id)) {
+        beleg.metadatenCopy(this.id);
+      } else if (this.id === "beleg-meta-header") {
+        beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
         beleg.metadatenReimport();
       } else if (this.classList.contains("icon-tools-kopieren")) {
@@ -1211,7 +1242,7 @@ const beleg = {
       } else if (this.classList.contains("icon-uhr")) {
         beleg.toolsAufrufdatum();
       } else if (this.parentNode.classList.contains("text-tools-beleg") ||
-        this.parentNode.classList.contains("text-tools-bedeutung")) {
+          this.parentNode.classList.contains("text-tools-bedeutung")) {
         beleg.toolsText(this);
       } else if (this.parentNode.classList.contains("text-tools-quelle")) {
         beleg.toolsQuelle(this);
@@ -1540,29 +1571,9 @@ const beleg = {
     }
   },
 
-  // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
-  //   html = String
-  //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
-  //   minimum = true | undefined
-  //     (nur ein absolutes Minimum an Tags bleibt erhalten)
-  toolsEinfuegenHtml (html, minimum = false) {
-    // wenn <body> => splitten
-    const body = html.split(/<body.*?>/);
-    if (body.length > 1) {
-      html = body[1];
-    }
-    // Style-Block(s) und Kommentare entfernen
-    html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
-    html = html.replace(/<!--.+?-->/gs, "");
-    // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
-    html = html.replace(/<([a-zA-Z0-9]+) .+?>/g, function (m, p1) {
-      return `<${p1}>`;
-    });
-    // HTML in temporären Container schieben
-    const container = document.createElement("div");
-    container.innerHTML = html;
-    // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
-    let inline_keep = [
+  // Tags, die beim Einfügen von HTML-Text erhalten bleiben sollen
+  toolsEinfuegenHtmlTags: {
+    inline_keep: [
       "B",
       "BR",
       "CITE",
@@ -1578,37 +1589,66 @@ const beleg = {
       "SUP",
       "U",
       "VAR",
-    ];
-    let speziell = {
+    ],
+    speziell: {
       BIG: { // obsolete!
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H1: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H2: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H3: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H4: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H5: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
       H6: {
         ele: "span",
-        class: "dta-groesser",
+        class: "tei-groesser",
       },
-    };
+    },
+  },
+
+  // Bereitet HTML-Text zum Einfügen in das Beleg-Formular auf
+  //   html = String
+  //     (Text mit HTML-Tags, der aufbereitet und dann eingefügt werden soll)
+  //   minimum = true | undefined
+  //     (nur ein absolutes Minimum an Tags bleibt erhalten)
+  toolsEinfuegenHtml (html, minimum = false) {
+    // wenn <body> => splitten
+    const body = html.split(/<body.*?>/);
+    if (body.length > 1) {
+      html = body[1];
+    }
+
+    // Style-Block(s) und Kommentare entfernen
+    html = html.replace(/<style.*?>(.|\n)+?<\/style>/g, "");
+    html = html.replace(/<!--.+?-->/gs, "");
+
+    // Inline-Styles löschen (widerspricht sonst der Content-Security-Policy)
+    html = html.replace(/<\??([a-zA-Z0-9_-]+) [^>]+>/g, (...args) => `<${args[1]}>`);
+
+    // HTML in temporären Container schieben
+    const container = document.createElement("div");
+    container.innerHTML = html;
+
+    // Inline-Tags, die erhalten bleiben bzw. ersetzt werden sollen
+    let inline_keep = [ ...beleg.toolsEinfuegenHtmlTags.inline_keep ];
+    let speziell = structuredClone(beleg.toolsEinfuegenHtmlTags.speziell);
+
     // ggf. Anzahl der Tags reduzieren, die erhalten bleiben sollen
     if (minimum) {
       inline_keep = [
@@ -1618,11 +1658,11 @@ const beleg = {
       ];
       speziell = {};
     }
+
     // Text extrahieren
     let text = "";
-    container.childNodes.forEach(function (i) {
-      ana(i, false);
-    });
+    container.childNodes.forEach(i => ana(i, false));
+
     // erhaltene Inline-Auszeichnungen korrigieren
     Object.keys(speziell).forEach(tag => {
       const reg = new RegExp(`\\[#(${tag})\\](.+?)\\[\\/${tag}\\]`, "g");
@@ -1644,10 +1684,13 @@ const beleg = {
     text = text.replace(/<br><\/br>/g, "<br>");
     text = text.replace(/\n\r?<br>/g, "<br>");
     text = text.replace(/<br>(?!\n)/g, "<br>\n");
+
     // viele Absätze am Stück bereinigen
     text = text.replace(/\n{3,}/g, "\n\n");
+
     // gereinigtes HTML zurückgeben
     return helfer.textTrim(text, true);
+
     // rekursive Analyse der Tags
     //   ele = Element
     //     (Knoten im XML-Baum)
@@ -1680,9 +1723,7 @@ const beleg = {
             preformatted = true;
           }
         }
-        ele.childNodes.forEach(function (i) {
-          ana(i, preformatted);
-        });
+        ele.childNodes.forEach(i => ana(i, preformatted));
       }
     }
   },
@@ -1707,7 +1748,7 @@ const beleg = {
     // Tags ermitteln
     const tags = {
       antiqua: {
-        start: '<span class="dta-antiqua">',
+        start: '<span class="tei-antiqua">',
         ende: "</span>",
       },
       autorenzusatz: {
@@ -1723,7 +1764,7 @@ const beleg = {
         ende: "",
       },
       caps: {
-        start: '<span class="dta-kapitaelchen">',
+        start: '<span class="tei-kapitaelchen">',
         ende: "</span>",
       },
       italic: {
@@ -1739,11 +1780,11 @@ const beleg = {
         ende: "</mark>",
       },
       size: {
-        start: '<span class="dta-groesser">',
+        start: '<span class="tei-groesser">',
         ende: "</span>",
       },
       spacing: {
-        start: '<span class="dta-gesperrt">',
+        start: '<span class="tei-gesperrt">',
         ende: "</span>",
       },
       streichung: {
@@ -1869,7 +1910,7 @@ const beleg = {
     if (link.classList.contains("icon-pfeil-kreis")) {
       beleg.toolsQuelleLaden();
     } else if (link.classList.contains("icon-link-link")) {
-      beleg.toolsQuelleDTALink();
+      beleg.toolsQuelleURL();
     }
   },
 
@@ -1884,352 +1925,198 @@ const beleg = {
   // Inhalt des Quelle-Felds neu laden
   //   shortcut = true | undefined
   async toolsQuelleLaden (shortcut = false) {
-    // Zwischenspeicher für Änderungen
+    // keine Quelle gefunden
+    if (!beleg.data.bx || !beleg.data.bi) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+        callback: () => document.getElementById("beleg-qu").focus(),
+      });
+      return;
+    }
+
+    // Variablen vorbereiten
     const aenderungen = {};
-    // Titelinfos aus bx laden
-    const bx = beleg.bxTyp({ bx: beleg.data.bx });
-    if (bx.typ) {
-      let titel = "";
-      if (bx.typ === "bibtex") {
-        const bibtex = belegImport.BibTeXLesen(bx.daten, true);
-        if (bibtex.length) {
-          titel = bibtex[0].ds.qu;
-        }
-      } else if (bx.typ === "dereko") {
-        const reg = new RegExp(`^(${belegImport.DeReKoId})(.+)`);
-        titel = bx.daten.match(reg)[2] + ".";
-      } else if (bx.typ === "xml-dwds") {
-        const dwds = belegImport.DWDSLesenXML({
-          clipboard: "",
-          xml: bx.daten,
-          returnResult: true,
-        });
-        let url = liste.linksErkennen(dwds.qu);
-        if (/href="/.test(url)) {
-          url = url.match(/href="(.+?)"/)[1];
-        }
-        let direktAusDTA = false;
-        if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(url)) {
-          direktAusDTA = await new Promise(resolve => {
-            dialog.oeffnen({
-              typ: "confirm",
-              text: "Die Karteikarte wurde aus einem DWDS-Snippet gefüllt, der Beleg stammt allerdings aus dem DTA.\nSoll der Zitiertitel direkt aus dem DTA geladen werden?",
-              callback: () => {
-                if (dialog.antwort) {
-                  resolve(true);
-                } else {
-                  resolve(false);
-                }
-              },
-            });
-          });
-        }
-        if (direktAusDTA) {
-          titel = await beleg.toolsQuelleLadenDTA({ url });
-          if (titel) {
-            aenderungen.Autor = {
-              key: "au",
-              ori: beleg.data.au,
-              neu: belegImport.DTAData.autor.join("/"),
-            };
-            if (!aenderungen.Autor.neu) {
-              aenderungen.Autor.neu = "N.\u00A0N.";
-            }
-          }
-        } else if (dwds.qu) {
-          if (beleg.data.au &&
-              !/^(N\.\s?N\.|Name|Nn|o\.\s?A\.|unknown|unkown)/.test(beleg.data.au)) {
-            // für den Fall, dass der Autor manuell nachgetragen wurde
-            dwds.qu = dwds.qu.replace(/^N\.\sN\./, beleg.data.au);
-            dwds.au = beleg.data.au;
-          }
-          aenderungen.Autor = {
-            key: "au",
-            ori: beleg.data.au,
-            neu: dwds.au,
-          };
-          titel = dwds.qu;
-        }
-      } else if (bx.typ === "xml-fundstelle") {
-        const daten = redLit.eingabeXMLFundstelle({ xmlDoc: bx.daten, xmlStr: "" });
-        titel = daten.ds.qu;
-      } else if (bx.typ === "xml-mods") {
-        const daten = redLit.eingabeXMLMODS({ xmlDoc: bx.daten, xmlStr: "" });
-        titel = daten.ds.qu;
-      }
-      if (titel) {
-        aenderungen.Quelle = {
-          key: "qu",
-          ori: beleg.data.qu,
-          neu: titel,
-        };
-        ausfuellen();
-      } else if (titel === "") {
-        // "titel" könnte "false" sein, wenn die Anfrage an das DTA gescheitert ist;
-        // in diesem Fall kommt eine Fehlermeldung von der Fetch-Funktion
-        lesefehler();
-      }
-      return;
+    let titel = "";
+    let xmlDoc;
+    if (/^(tei|xml)/.test(beleg.data.bi)) {
+      xmlDoc = helferXml.parseXML(beleg.data.bx);
     }
-    // wenn Korpus "DWDS" => mit dem Text arbeiten, der im Quelle-Feld steht
-    if (/^DWDS/.test(beleg.data.kr)) {
-      const quelle = beleg.data.qu.split("\n");
-      const data = {
-        au: beleg.data.au,
-        da: beleg.data.da,
-        qu: quelle[0],
-      };
-      // versuchen, relativ wild in das Quelle-Feld
-      // kopierte Daten zu Titel und Autor auszulesen
-      const titeldaten = {};
-      const autor = /, Autor: (?<Autor>.+?), Titel:/.exec(data.qu);
-      const titel = /, Titel: (?<Titel>.+?)(?<Ende>$|, S)/.exec(data.qu);
-      if (autor) {
-        data.au = autor.groups.Autor;
-        data.qu = data.qu.replace(/, Autor: .+?, Titel:/, ", Titel:");
-      }
-      if (titel) {
-        titeldaten.titel = titel.groups.Titel;
-        const reg = new RegExp(", Titel: .+" + titel.groups.Ende);
-        data.qu = data.qu.replace(reg, titel.groups.Ende);
-      }
-      // Autor und Quelle nachbearbeiten
-      data.au = belegImport.DWDSKorrekturen({
-        typ: "au",
-        txt: data.au,
+
+    // Titelinfos abhängig vom Importtyp ermitteln
+    if (beleg.data.bi === "bibtex") {
+      // BIBTEX
+      const bibtex = await importBibtex.startImport({
+        content: beleg.data.bx,
+        returnTitle: true,
       });
-      belegImport.DWDSKorrekturen({
-        typ: "qu",
-        txt: data.qu,
-        data,
-        titeldaten,
+      if (bibtex.length) {
+        titel = bibtex[0].ds.qu;
+      }
+    } else if (beleg.data.bi === "plain-dereko") {
+      // PLAIN-DEREKO
+      const reg = new RegExp(`^(${importDereko.idForm})(.+)`);
+      titel = beleg.data.bx.match(reg)[2] + ".";
+    } else if (/^tei/.test(beleg.data.bi) && xmlDoc) {
+      // TEI
+      importTEI.data.cit = importTEI.citObject();
+      importTEI.citFill(xmlDoc);
+      importTEI.data.cit.spalte = /, Sp\.\s/.test(beleg.data.qu);
+      titel = importTEI.makeQu();
+    } else if (beleg.data.bi === "xml-dwds" && xmlDoc) {
+      // XML-DWDS
+      const dwds = await importDWDS.startImportXML({
+        xmlDoc,
+        xmlStr: "",
+        returnResult: true,
       });
-      // Änderungen ermitteln
-      aenderungen.Autor = {
-        key: "au",
-        ori: beleg.data.au,
-        neu: data.au,
-      };
-      quelle[0] = data.qu;
-      aenderungen.Quelle = {
-        key: "qu",
-        ori: beleg.data.qu,
-        neu: quelle.join("\n"),
-      };
-      // fragen, ob Änderungen übernommen werden sollen
-      ausfuellen();
-      return;
-    }
-    // Titelinfos aus dem DTA herunterladen
-    if (/^https?:\/\/www\.deutschestextarchiv\.de\//.test(beleg.data.ul)) {
-      const titel = await beleg.toolsQuelleLadenDTA({ url: beleg.data.ul });
-      if (titel) {
+      if (dwds.qu) {
+        if (beleg.data.au && !importDWDS.platzhalterName.test(beleg.data.au)) {
+          // für den Fall, dass der Autor manuell nachgetragen wurde
+          dwds.qu = dwds.qu.replace(/^N\.\sN\./, beleg.data.au);
+          dwds.au = beleg.data.au;
+        }
         aenderungen.Autor = {
           key: "au",
           ori: beleg.data.au,
-          neu: belegImport.DTAData.autor.join("/"),
+          neu: dwds.au,
         };
-        if (!aenderungen.Autor.neu) {
-          aenderungen.Autor.neu = "N.\u00A0N.";
-        }
-        aenderungen.Quelle = {
-          key: "qu",
-          ori: beleg.data.qu,
-          neu: titel,
-        };
-        ausfuellen();
-      } else if (titel === "") {
-        lesefehler();
+        titel = dwds.qu;
+      }
+    } else if (beleg.data.bi === "xml-fundstelle" && xmlDoc) {
+      // XML-FUNDSTELLE
+      const daten = redLit.eingabeXMLFundstelle({
+        xmlDoc,
+        xmlStr: "",
+      });
+      titel = daten.ds.qu;
+    } else if (beleg.data.bi === "xml-mods" && xmlDoc) {
+      // XML-MODS
+      const daten = redLit.eingabeXMLMODS({
+        xmlDoc,
+        xmlStr: "",
+      });
+      titel = daten.ds.qu;
+    } else if (beleg.data.bi === "xml-wgd" && xmlDoc) {
+      // XML-WGD
+      titel = xmlDoc.querySelector("Fundstelle unstrukturiert")?.firstChild?.textContent || "";
+    }
+
+    // keine Titeldaten gefunden
+    if (!titel) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Beim Einlesen der Titeldaten ist etwas schiefgegangen.",
+      });
+      return;
+    }
+
+    // Titeldaten gefunden
+    aenderungen.Quelle = {
+      key: "qu",
+      ori: beleg.data.qu,
+      neu: titel,
+    };
+
+    // Änderungen ermitteln
+    const txt = [];
+    for (const [ k, v ] of Object.entries(aenderungen)) {
+      const [ ori ] = v.ori.split("\n");
+      const [ neu ] = v.neu.split("\n");
+      if (ori === neu) {
+        continue;
+      }
+      let val = `<strong>${k}</strong><br>`;
+      val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>${"\u00A0".repeat(5)}→<br>${v.neu}`;
+      txt.push(val);
+    }
+
+    // abbrechen, weil keine Änderungen gefunden wurden
+    const quelle = document.getElementById("beleg-qu");
+    if (!txt.length) {
+      if (!shortcut) {
+        quelle.focus();
+      } else {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Keine Änderungen nötig.",
+        });
       }
       return;
     }
-    // keine Quelle gefunden
-    dialog.oeffnen({
-      typ: "alert",
-      text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
-    });
-    // Quellenfeld ausfüllen (wenn gewünscht)
-    function ausfuellen () {
-      // Änderungen ermitteln
-      const txt = [];
-      for (const [ k, v ] of Object.entries(aenderungen)) {
-        const ori = v.ori.split(/\n+https?:/)[0];
-        const neu = v.neu.split(/\n+https?:/)[0];
-        if (ori === neu) {
-          continue;
-        }
-        let val = `<strong>${k}</strong><br>`;
-        val += `${v.ori ? v.ori : "<i>kein Autor</i>"}<br>${"\u00A0".repeat(5)}→<br>${v.neu}`;
-        txt.push(val);
-      }
-      // abbrechen, weil keine Änderungen gefunden wurden
-      const quelle = document.getElementById("beleg-qu");
-      if (!txt.length) {
-        if (!shortcut) {
-          quelle.focus();
-        } else {
-          dialog.oeffnen({
-            typ: "alert",
-            text: "Keine Änderungen nötig.",
-          });
-        }
-        return;
-      }
-      // nachfragen, ob Änderungen übernommen werden sollen
-      let numerus = "Soll die folgende Änderung";
-      if (txt.length > 1) {
-        numerus = "Sollen die folgenden Änderungen";
-      }
+
+    // nachfragen, ob Änderungen übernommen werden sollen
+    let numerus = "Soll die folgende Änderung";
+    if (txt.length > 1) {
+      numerus = "Sollen die folgenden Änderungen";
+    }
+    const result = await new Promise(resolve => {
       dialog.oeffnen({
         typ: "confirm",
         text: `${numerus} vorgenommen werden?\n${txt.join("\n")}`,
         callback: () => {
-          if (dialog.antwort) {
-            for (const v of Object.values(aenderungen)) {
-              beleg.data[v.key] = v.neu;
-              document.getElementById(`beleg-${v.key}`).value = v.neu;
-              if (v.key === "qu") {
-                helfer.textareaGrow(quelle);
-              }
-            }
-            beleg.belegGeaendert(true);
-            beleg.aktionSpeichern();
-          } else if (!shortcut) {
-            quelle.focus();
-          }
           setTimeout(() => {
             document.querySelector("#dialog > div").classList.remove("breit");
           }, 200);
+          resolve(dialog.antwort);
         },
       });
       document.querySelector("#dialog > div").classList.add("breit");
       document.querySelectorAll("#dialog-text p").forEach(p => p.classList.add("force-wrap"));
-    }
-    // generische Fehlermeldung
-    function lesefehler () {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Beim Einlesen der Titeldaten ist etwas schiefgelaufen.",
-      });
-    }
-  },
-
-  // Zitiertitelanfrage an das DTA
-  //   url = String
-  //     (DTA-Link)
-  async toolsQuelleLadenDTA ({ url }) {
-    const quelle = document.getElementById("beleg-qu");
-    // Seitenangabe auslesen
-    const mHier = /, hier (?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
-    const mSeiten = /(?<typ>, Sp?\.)\s(?<seiten>[^\s]+)( |\.)/.exec(quelle.value);
-    const seitenData = {
-      seite: "",
-      seite_zuletzt: "",
-      spalte: false,
-    };
-    let seiten;
-    if (mHier) {
-      seiten = mHier.groups.seiten;
-    } else if (mSeiten) {
-      seiten = mSeiten.groups.seiten;
-      if (mSeiten.groups.typ === ", Sp.") {
-        seitenData.spalte = true;
-      }
-    }
-    if (seiten) {
-      const seitenSp = seiten.split(/[-–]/);
-      seitenData.seite = seitenSp[0];
-      if (seitenSp[1]) {
-        seitenData.seite_zuletzt = seitenSp[1];
-      }
-    }
-    // TEI-Header herunterladen
-    const fetchOk = await redLit.eingabeDTAFetch({
-      url,
-      fokusId: "beleg-qu",
-      seitenData,
     });
-    // Rückgabewerte
-    if (fetchOk) {
-      return belegImport.DTAQuelle();
-    }
-    return false;
-  },
 
-  // Typ der Daten im bx-Datensatz ermitteln
-  //   bx = String
-  //     (Datensatz, der überprüft werden soll)
-  bxTyp ({ bx }) {
-    // keine Daten vorhanden
-    if (!bx) {
-      return {
-        typ: "",
-        daten: "",
-      };
-    }
-    // BibTeX-Daten
-    if (belegImport.BibTeXCheck(bx)) {
-      return {
-        typ: "bibtex",
-        daten: bx,
-      };
-    }
-    // DeReKo-Daten
-    const reg = new RegExp(`^${belegImport.DeReKoId}`);
-    if (reg.test(bx)) {
-      return {
-        typ: "dereko",
-        daten: bx,
-      };
-    }
-    // XML-Daten
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(bx.replace(/ xmlns=".+?"/, ""), "text/xml");
-    if (!xmlDoc.querySelector("parsererror")) {
-      const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null).iterateNext();
-      let typ = "";
-      if (evaluator("//teiHeader/sourceDesc/biblFull")) {
-        typ = "xml-dta";
-      } else if (evaluator("/Beleg/Fundstelle")) {
-        typ = "xml-dwds";
-      } else if (evaluator("/Fundstelle")) {
-        typ = "xml-fundstelle";
-      } else if (evaluator("/mods/titleInfo")) {
-        typ = "xml-mods";
-      } else {
-        typ = "";
+    // Änderungen übernehmen oder einfach nur das Quelle-Feld fokussieren
+    if (result) {
+      for (const v of Object.values(aenderungen)) {
+        beleg.data[v.key] = v.neu;
+        document.getElementById(`beleg-${v.key}`).value = v.neu;
+        if (v.key === "qu") {
+          helfer.textareaGrow(quelle);
+        }
       }
-      return {
-        typ,
-        daten: xmlDoc,
-      };
+      beleg.belegGeaendert(true);
+      beleg.aktionSpeichern();
+    } else if (!shortcut) {
+      quelle.focus();
     }
-    // Datenformat unbekannt
-    return {
-      typ: "",
-      daten: "",
-    };
   },
 
-  // DTA-Link aus dem Quelle-Feld in das Importformular holen
-  toolsQuelleDTALink () {
-    if (!/https?:\/\/www\.deutschestextarchiv\.de\/[^\s]+/.test(beleg.data.ul)) {
+  // Link aus dem URL-Feld in das Importformular laden
+  toolsQuelleURL () {
+    // URL vorhanden?
+    if (!beleg.data.ul) {
       dialog.oeffnen({
         typ: "alert",
-        text: "Kein DTA-Link gefunden.",
+        text: "Keine URL gefunden.",
       });
       return;
     }
+
+    // URL bekannt?
+    const validURL = importShared.isKnownURL(beleg.data.ul);
+    if (!validURL) {
+      const text = validURL === null ? "Die URL ist nicht valide." : "Bei der URL handelt es sich nicht um eine bekannte Importquelle.";
+      dialog.oeffnen({
+        typ: "alert",
+        text,
+      });
+      return;
+    }
+
+    // nach oben scrollen und Formular umstellen
     window.scrollTo({
       left: 0,
       top: 0,
       behavior: "smooth",
     });
-    document.querySelector("#beleg-import-dta").click();
-    const dta = document.querySelector("#beleg-dta");
-    dta.value = beleg.data.ul;
-    dta.dispatchEvent(new Event("input"));
-    document.querySelector("#beleg-dta-bis").select();
+
+    // Formular füllen
+    document.querySelector("#beleg-import-feld").value = beleg.data.ul;
+    if (beleg.data.bb && beleg.data.bv) {
+      document.querySelector("#beleg-import-von").value = beleg.data.bv;
+      document.querySelector("#beleg-import-bis").value = beleg.data.bb;
+    }
+    beleg.formularImport({ src: "url", autoFill: false });
   },
 
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
@@ -2254,7 +2141,7 @@ const beleg = {
         kurz.push(text[i]);
         kurzZuletzt = i;
       } else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) { // Kürzungszeichen
-        kurz.push("[[…]]" + seitenumbruch(text[i]));
+        kurz.push('<span class="klammer-loeschung">…</span>' + seitenumbruch(text[i]));
       } else {
         const su = seitenumbruch(text[i]);
         if (su) {
@@ -2269,7 +2156,7 @@ const beleg = {
       }
       return "";
     }
-    if (/\[\[…\]\]/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
+    if (/<span class="klammer-loeschung">…<\/span>/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
       kurz.pop();
     }
     // gekürzten Text übernehmen
@@ -2686,14 +2573,27 @@ const beleg = {
     }, 1000);
   },
 
-  // regulärer Ausdruck für den Sprung im Beleg-Formular
+  // Springen im <textarea> des Belegtexts: Datenobjekt
   ctrlSpringenFormReg: {
+    // nur Sprung-Icon
+    // (RegExp mit allen Karteiwörtern)
     reg: null,
+    // nur Sprung-Icon
+    // (direkt noch einmal suchen)
     again: false,
+    // nur Suchleiste
+    // (alle Treffer im Belegtext)
+    //   index = number (Index des Treffers)
+    //   len = number (Zeichenlänge des Treffers)
+    matches: [],
+    // nur Sucheleiste
+    // (letzter Match, zu dem gesprungen wurde)
+    lastMatch: -1,
   },
 
-  // regulären Ausdruck für den Sprung im Beleg-Formular zurücksetzen
+  // Springen im <textarea> des Belegtexts: regulären Ausdruck zurücksetzen (nur Sprung-Icon)
   ctrlSpringenFormReset () {
+    // RegExp ermitteln
     const regs = [];
     for (const i of helfer.formVariRegExpRegs) {
       if (!data.fv[i.wort].tr) {
@@ -2703,29 +2603,42 @@ const beleg = {
       }
     }
     beleg.ctrlSpringenFormReg.reg = new RegExp(regs.join("|"), "gi");
+    beleg.ctrlSpringenFormReg.again = false;
   },
 
-  // <textarea> mit dem Belegtext zum Wort scrollen
-  ctrlSpringenForm (evt) {
-    if (evt) {
-      evt.preventDefault();
+  // Springen im <textarea> des Belegtexts: Matches ermitteln (nur Suchleiste)
+  //   reg = RegExp
+  ctrlSpringenFormMatches (reg) {
+    const matches = beleg.ctrlSpringenFormReg.matches;
+    matches.length = 0;
+    beleg.ctrlSpringenFormReg.again = false;
+
+    const bs = document.getElementById("beleg-bs");
+    for (const m of bs.value.matchAll(reg)) {
+      matches.push({
+        index: m.index,
+        len: m[0].length,
+      });
     }
+
+    beleg.ctrlSpringenFormReg.lastMatch = -1;
+  },
+
+  // Springen im <textarea> des Belegtexts: durch die Treffer springen (nur Sprung-Icon)
+  ctrlSpringenForm (evt) {
+    evt?.preventDefault();
     const textarea = document.getElementById("beleg-bs");
     const val = textarea.value;
     const search = beleg.ctrlSpringenFormReg.reg.exec(val);
-    if (search) { // Wort gefunden
+    if (search) {
+      // Wort gefunden
       beleg.ctrlSpringenFormReg.again = false;
-      const ende = search.index + search[0].length;
-      textarea.scrollTop = 0;
-      textarea.value = val.substring(0, ende);
-      textarea.scrollTop = ende;
-      textarea.value = val;
-      if (textarea.scrollTop > 0) {
-        textarea.scrollTop += 120;
-      }
-      textarea.setSelectionRange(search.index, ende);
-      textarea.focus();
-    } else if (beleg.ctrlSpringenFormReg.again) { // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
+      beleg.ctrlSpringenFormHighlight({
+        index: search.index,
+        len: search[0].length,
+      });
+    } else if (beleg.ctrlSpringenFormReg.again) {
+      // Wort zum wiederholten Mal nicht gefunden => Wort nicht im Belegtext (oder nicht auffindbar)
       beleg.ctrlSpringenFormReg.again = false;
       dialog.oeffnen({
         typ: "alert",
@@ -2736,10 +2649,29 @@ const beleg = {
           textarea.focus();
         },
       });
-    } else { // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
+    } else {
+      // Wort nicht gefunden => entweder nicht im Belegtext oder nicht von Index 0 aus gesucht => noch einmal suchen
       beleg.ctrlSpringenFormReg.again = true;
       beleg.ctrlSpringenForm(evt);
     }
+  },
+
+  // Springen im <textarea> des Belegtexts: zum Suchtreffer scrollen
+  //   index = number
+  //   len = number
+  ctrlSpringenFormHighlight ({ index, len }) {
+    const bs = document.getElementById("beleg-bs");
+    const val = bs.value;
+    const ende = index + len;
+    bs.scrollTop = 0;
+    bs.value = val.substring(0, ende);
+    bs.scrollTop = ende;
+    bs.value = val;
+    if (bs.scrollTop > 0) {
+      bs.scrollTop += 120;
+    }
+    bs.setSelectionRange(index, ende);
+    bs.focus();
   },
 
   // Kopiert den aktuellen Beleg in die Zwischenablage,
@@ -3004,7 +2936,7 @@ const beleg = {
 
   // Metadaten: füllen oder auffrischen
   metadaten () {
-    const felder = [ "dc", "dm", "bi", "bx" ];
+    const felder = [ "dc", "dm", "bi", "di", "bv", "bb", "bx", "ui" ];
     for (const feld of felder) {
       const cont = document.querySelector(`#beleg-${feld}`);
       cont.replaceChildren();
@@ -3012,13 +2944,25 @@ const beleg = {
         // Importdaten
         const pre = document.createElement("pre");
         cont.appendChild(pre);
-        if (/^<.+>/.test(beleg.data.bx)) {
+        if (/^(tei|xml)/.test(beleg.data.bi)) {
+          let bx = beleg.data.bx;
+          if (!optionen.data.beleg.header) {
+            bx = bx.replace(/<teiHeader([^>]*)>.+?<\/teiHeader>/s, (...args) => `<teiHeader${args[1]}>[ausgeblendet]</teiHeader>`);
+          }
+          let xmlDoc = helferXml.parseXML(bx);
+          xmlDoc = helferXml.indent(xmlDoc);
+          const xmlStr = new XMLSerializer().serializeToString(xmlDoc);
           const pretty = helferXml.prettyPrint({
-            xmlStr: beleg.data[feld],
+            xmlStr,
+          });
+          pre.innerHTML = pretty;
+        } else if (/<[^>]+>/.test(beleg.data.bx)) {
+          const pretty = helferXml.prettyPrint({
+            xmlStr: beleg.data.bx,
           });
           pre.innerHTML = pretty;
         } else {
-          pre.textContent = beleg.data[feld];
+          pre.textContent = beleg.data.bx;
         }
       } else {
         // weitere Datenfelder
@@ -3034,7 +2978,7 @@ const beleg = {
   },
 
   // Metadaten: Anzeige umschalten
-  //   optionenSpeichern = Booleand
+  //   optionenSpeichern = Boolean
   metadatenToggle (optionenSpeichern) {
     // Icon umstellen
     const link = document.querySelector("#beleg-meta-toggle");
@@ -3065,6 +3009,32 @@ const beleg = {
     }
   },
 
+  // Metadaten: Anzeige von <teiHeader> umstellen
+  //   optionenSpeichern = Boolean
+  metadatenHeaderToggle (optionenSpeichern) {
+    // Optionen auffrischen
+    optionen.data.beleg.header = !optionen.data.beleg.header;
+    if (optionenSpeichern) {
+      optionen.speichern();
+    }
+
+    // Icon umstellen
+    const link = document.querySelector("#beleg-meta-header");
+    if (optionen.data.beleg.header) {
+      link.classList.add("icon-tools-header-aus");
+      link.classList.remove("icon-tools-header-an");
+      link.title = "&lt;teiHeader&gt; in den Importdaten ausblenden";
+    } else {
+      link.classList.remove("icon-tools-header-aus");
+      link.classList.add("icon-tools-header-an");
+      link.title = "&lt;teiHeader&gt; in den Importdaten einblenden";
+    }
+    tooltip.init(link.parentNode);
+
+    // Anzeige der Metadaten auffrischen
+    beleg.metadaten();
+  },
+
   // Metadaten: Daten aus bx erneut importieren
   metadatenReimport () {
     // keine Daten vorhanden
@@ -3076,46 +3046,46 @@ const beleg = {
       return;
     }
 
-    // Importtyp ermitteln
-    let bi = beleg.data.bi || "";
-    if (!bi) {
-      if (/@[a-z]+{/.test(beleg.data.bx)) {
-        bi = "bibtex";
-      } else if (/^<Beleg>/.test(beleg.data.bx)) {
-        bi = "dwds";
-      } else if (/^<Fundstelle /.test(beleg.data.bx)) {
-        bi = "xml-fundstelle";
-      } else if (/<mods /.test(beleg.data.bx)) {
-        bi = "xml-mods";
-      } else if (!/<.+>/.test(beleg.data.bx)) {
-        bi = "dereko";
-      }
+    // Daten in Zwischenablage kopieren
+    let bx = beleg.data.bx;
+    if (beleg.data.bi === "plain-dereko") {
+      // die Daten aus dem DeReKo sind schlecht strukturiert und
+      // müssen darum neu zusammengebaut werden
+      bx = "© Leibniz-Institut für Deutsche Sprache, Mannheim\n\n" + beleg.data.no + "\n".repeat(3);
+      bx += `Belege ()\n${"_".repeat(10)}\n\n` + beleg.data.bx;
     }
-    if (!bi) {
+    modules.clipboard.writeText(bx);
+    beleg.formularImport({
+      src: "zwischenablage",
+    });
+
+    // Reimport starten
+    importShared.startImport();
+  },
+
+  // Metadaten: Importdaten in die Zwischenablage kopieren
+  //   id = string
+  metadatenCopy (id) {
+    // Feld ermitteln
+    const field = id.replace(/.+-/, "");
+
+    // keine Importdaten vorhanden
+    if (!beleg.data[field]) {
+      const fieldMap = {
+        bx: "Importdaten",
+        ui: "Import-URL",
+      };
       dialog.oeffnen({
-        typ: "alert",
-        text: "Der Importtyp konnte nicht ermittelt werden.",
+        type: "alert",
+        text: `Keine ${fieldMap[field]} gespeichert.`,
       });
       return;
     }
 
-    // Import neu anstoßen
-    if (bi === "bibtex") {
-      document.querySelector("#beleg-import-bibtex").click();
-      belegImport.BibTeX(beleg.data.bx, "");
-    } else if (bi === "dereko") {
-      document.querySelector("#beleg-import-dereko").click();
-      belegImport.DeReKo(beleg.data.bx, "", true);
-    } else if (bi === "dwds") {
-      document.querySelector("#beleg-import-dwds").click();
-      const obj = {
-        clipboard: beleg.data.bx,
-        xml: new DOMParser().parseFromString(beleg.data.bx, "text/xml"),
-      };
-      belegImport.DWDS(obj, "");
-    } else if (/^xml/.test(bi)) {
-      document.querySelector("#beleg-import-xml").click();
-      belegImport.XML(beleg.data.bx, "");
-    }
+    // Daten kopieren
+    modules.clipboard.writeText(beleg.data[field]);
+
+    // Feedback geben
+    helfer.animation("zwischenablage");
   },
 };

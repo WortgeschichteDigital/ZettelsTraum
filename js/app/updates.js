@@ -23,14 +23,13 @@ const updates = {
       return;
     }
     // RSS-Feed auswerten
-    const parser = new DOMParser();
-    const rss = parser.parseFromString(feedback.text, "text/xml");
+    const rss = helferXml.parseXML(feedback.text);
     // RSS-Feed war offenbar nicht wohlgeformt;
-    // (nach rss.querySelector("parsererror") kann nicht geschaut werden, weil
+    // (auf rss.querySelector("parsererror") kann man sich nicht verlassen, weil
     // GitHub mitunter nicht wohlgeformtes XML ausliefert; in solchen Fällen sind
     // aber dennoch korrekte Entries vorhanden)
-    const entries = rss.querySelectorAll("entry");
-    if (!entries.length) {
+    const entries = rss?.querySelectorAll("entry");
+    if (!entries?.length) {
       updates.animation(auto, false);
       updates.fehler(auto, "RSS-Feed nicht wohlgeformt", true);
       return;

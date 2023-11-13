@@ -28,6 +28,8 @@ const optionen = {
       trennung: true,
       // Anzeige Metadatenfelder
       meta: false,
+      // Anzeige von <teiHeader> umstellen
+      header: false,
     },
     // Filterleiste
     filter: {
@@ -92,7 +94,7 @@ const optionen = {
       bearbeiterin: "",
       // Sprache der Fenster-Menüs
       sprache: "de",
-      // Timeout für Anfrage an das DTA in Sekunden
+      // Timeout für Internet-Anfragen
       // (einfacher als String, wird bei Bedarf in Number konvertiert)
       timeout: "10",
       // Karteien unter zuletzt verwendet
@@ -189,10 +191,11 @@ const optionen = {
       // Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
       // ausgewählt wurde (betrifft Bedeutung und Textsorte)
       "immer-ergaenzen": false,
-      // beim Fokussieren des DTA-Import-Feldes automatisch die URL aus dem Clipboard eintragen
+      // beim Fokussieren des Import-Feldes automatisch den Inhalt der Zwischenablage parsen
+      // ("url" aus historischen Gründen, weil früher nur eine DTA-URL eingetragen wurde)
       "url-eintragen": true,
-      // DWDS-Snippets, die aus dem DTA stammen, ohne Nachfrage direkt aus dem DTA importieren
-      "dta-bevorzugen": false,
+      // DWDS-Snippets, die auf eine bekannte Online-Ressource zurückgehen, ohne Nachfrage direkt aus der Ressource importieren
+      "karteikarte-original-bevorzugen": false,
       // bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
       "notizen-zeitung": false,
       // nach Text-Import überprüfen, ob das Karteiwort im Belegtext gefunden werden kann
@@ -501,6 +504,8 @@ const optionen = {
       optionen.data.beleg.meta = !optionen.data.beleg.meta;
       beleg.metadatenToggle(false);
     }
+    optionen.data.beleg.header = !optionen.data.beleg.header;
+    beleg.metadatenHeaderToggle(false);
   },
 
   // Icons für die Detail-Anzeige im Kopf der Belegliste ggf. immer sichtbar (Listener)
@@ -928,11 +933,10 @@ const optionen = {
   //   content = String
   //     (Inhalt der geladenen Tag-Datei)
   tagsParsen (content) {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(content, "text/xml");
+    const xml = helferXml.parseXML(content);
     const typ = xml.documentElement.nodeName;
-    // <parsererror>
-    if (xml.querySelector("parsererror")) {
+    // parser error
+    if (!xml) {
       optionen.tagsFehlerMeldungen[typ] = '<abbr title="Extensible Markup Language">XML</span>-Datei korrupt';
       return [ null, typ ];
     }

@@ -131,6 +131,18 @@ mark.wort-kein-ende {
   border-bottom-right-radius: 0;
 }
 
+sup,
+sub {
+  position: relative;
+  vertical-align: unset;
+  font-size: .8em;
+  top: .25em;
+}
+
+sup {
+  top: -.45em;
+}
+
 .wortFarbe0 {
   background-color: var(--palette0) !important;
 }
@@ -471,7 +483,7 @@ textarea:focus {
   padding: 5px;
   width: 200px;
   background-color: #fff;
-  /* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .dta-* */
+  /* die folgenden Styles sind nötig, damit Textauszeichnungen oberhalb des <mark> nicht vererbt werden; s. u. die Styles .tei-* */
   font: 14px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
   font-style: normal;
   font-variant: normal;
@@ -622,37 +634,29 @@ textarea:focus {
 }
 
 
-/* DTA-AUSZEICHNUNGEN IN XML-DOKUMENTEN --------- */
+/* SPEZIELLE TEXTAUSZEICHNUNGEN FÜR BELEGE ------ */
 
-.dta-antiqua {
+.tei-antiqua {
   font-family: "Noto Serif", serif;
   font-size: 110%;
 }
 
-.dta-blau {
-  color: blue;
-}
-
-.dta-doppelt {
+.tei-doppelt {
   text-decoration: underline double;
 }
 
-.dta-gesperrt {
+.tei-gesperrt {
   letter-spacing: .125em;
 }
 
-.dta-groesser {
+.tei-groesser {
   font-size: larger;
 }
 
-.dta-initiale {
+.tei-initiale {
   font-size: 150%;
 }
 
-.dta-kapitaelchen {
+.tei-kapitaelchen {
   font-variant: small-caps;
-}
-
-.dta-rot {
-  color: red;
 }

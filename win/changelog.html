@@ -55,7 +55,9 @@
         <ul>
           <li><a href="#menueRedaktion-metadaten" class="link-handbuch">Redaktionsmetadaten</a>: Das Feld für Nebenlemmata wurde entfernt. Nutzen Sie stattdessen das neue <a href="#menueKartei-lemmata" class="link-handbuch">Dialogfenster für Lemmata</a>, in dem sowohl Haupt- als auch Nebenlemmata eingetragen werden können.</li>
 
-          <li>Redaktionsmetadaten: Das Feld <i>behandelt mit</i> wurde entfernt. Nutzen Sie imm Lemmata-Fenster stattdessen die Funktion <i>ergänzende Kartei für</i>.</li>
+          <li>Redaktionsmetadaten: Das Feld <i>behandelt mit</i> wurde entfernt. Nutzen Sie im Lemmata-Fenster stattdessen die Funktion <i>ergänzende Kartei für</i>.</li>
+
+          <li><a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>: Die Möglichkeit, über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> in der Zwischenablage GVK-Titeldaten im <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format <a href="#menueRedaktion-literaturTitelaufnahmeImport" class="link-handbuch">zu importieren</a>, wurde entfernt. Nutzen Sie stattdessen den zuverlässigeren Import über die Funktion <i><abbr title="Pica-Produktionsnummer">PPN</abbr>/<abbr title="Extensible Markup Language" lang="en">XML</abbr></i>.</li>
 
           <li>Die Tag-Dateien für Gebrauchszeiträume und Register wurden bereinigt. Die Werte <i>historisch, veraltend</i> und <i>veraltet</i> wurden entfernt.</li>
         </ul>
@@ -66,6 +68,18 @@
           <li><a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Fenster</a>: Es gab bisher keine Möglichkeit, die in einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei behandelten Wörter und ihre Schreibvarianten, strukturiert in einer einheitlichen Oberfläche zu verwalten. Die verstreuten, unstrukturierten Datenfelder, in denen Lemmata notiert wurden, sind alle in das neue Lemmata-Fenster aufgegangen. Das Dialogfenster wird auch für das Erstellen einer neuen Kartei genutzt. Zu Details <abbr title="siehe">s.</abbr> den verlinkten Handbuch-Abschnitt.</li>
 
           <li><a href="#filter" class="link-handbuch">Filter</a>: Mit dem neuen <a href="#filter-lemmata" class="link-handbuch">Lemmata-Filter</a> können die Belege danach gefiltert werden, ob ein bestimmtes Lemma in ihnen auftaucht oder nicht. Dieser Filter ist besonders für Karteien gedacht, in denen Belege zu mehreren Lemmata zugleich gesammelt werden.</li>
+
+          <li>
+            <p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die <a href="#karteikarte-importfunktion" class="link-handbuch">Importfunktion</a> wurde grundlegen überarbeitet und erweitert.</p>
+
+            <p>Die wichtigste Neuerung ist, dass nun <em>alle</em> in <a href="https://tei-c.org/"><abbr title="Text Encoding Initiative" lang="en">TEI</abbr></a> kodierten <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien importiert werden können. Es ist also ganz gleich, welcher Anbieter Daten mit interessanten Textbelegen bereitstellt – solange sie in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodiert sind, können sie mit <i class="app-name"></i> in guter bis sehr guter Qualität eingelesen werden.</p>
+
+            <p>Darüber hinaus können nun alle Datentypen, die importiert werden können, sowohl aus einer Datei als auch aus der Zwischenablage ausgelesen werden. Die App erkennt automatisch, um was für Daten es sich handelt. Aus diesem Grund konnte das Formular auch vereinfacht werden: Sie müssen nur noch die Importquelle (<i>URL, Datei, Zwischenablage</i>) auswählen, nicht mehr den Datentyp. Liegen in der Zwischenablage Daten, die die App erkennt, stellt sie beim Öffnen einer neuen Karteikarte das Importformular wie gehabt automatisch um.</p>
+
+            <p>Die Importmöglichkeit via URL ist erhalten geblieben. Neben Texten aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> können nun allerdings auch die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien des <a href="https://dingler.bbaw.de/">Polytechnischen Journals</a> und die Editionen der <a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitalen Bibliothek</a> (WDB) direkt importiert werden. Neu ist, dass Direktlinks zu den XML-Dateien nun auch akzeptiert werden. (<abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Dateien können <em>nur</em> via Direktlink importiert werden.) In diesem Zuge wurde der schon lange zur Verfügung stehende Textimport aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> erheblich verbessert.</p>
+
+            <p>Es gibt auch noch andere Datentypen, die importiert werden können (<abbr title="siehe">s.</abbr> zu Details den <a href="#karteikarte-importfunktion" class="link-handbuch">entsprechenden Handbuchabschnitt</a>). Grundsätzlich können mit der Importfunktion fortan aber beliebige Textdaten eingelesen werden. Wenn das Format nicht bekannt ist, bereinigt <i class="app-name"></i> die Daten um die meisten <abbr title="Extensible Markup Language" lang="en">XML</abbr>- und <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags (nur eine Auswahl bekannter Tags bleibt erhalten) und fügt sie in das Belegfeld ein.</p>
+          </li>
 
           <li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die Checkboxes im Kopf der Karteikarte, mit denen ein Beleg eine bestimmte Eigenschaft (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <i>Buchung</i>) zugewiesen werden konnte, wurden durch ein <a href="#karteikarte-tags" class="link-handbuch">Tagging-System</a> ersetzt. Dieses ermöglicht es nun, neben einer Liste vordefinierter Tags, selbstdefinierte Tags zu vergeben. Die alte Ansicht kann durch das <a href="#einstellungen-karteikarteTagging" class="link-handbuch">Deaktivieren einer Option</a> wiederhergestellt werden.</li>
 
@@ -85,6 +99,8 @@
             <p>Diese Änderung behebt zugleich einige Fehler, die immer dann auftraten, wenn Bedeutungsparaphrasen Doppelpunkte enthielten.</p>
           </li>
 
+          <li>Karteikarte: Die <a href="#belegliste-suchleiste" class="link-handbuch">Suchleiste</a> kann nun auch in der Formularansicht genutzt werden. Mit ihrer Hilfe können die <a href="#karteikarte-metaImportdaten" class="link-handbuch">Importdaten</a> und das <a href="#karteikarte-beleg" class="link-handbuch">Beleg-Feld</a> durchsucht werden.</li>
+
           <li>Karteikarte: Beim <a href="#karteikarte-dwdsImport" class="link-handbuch">Import eines DWDS-Belegs</a> versucht die App nun, das Suchwort für den automatisch generierten Link in die DWDS-Korpora so auszuwählen, dass es zum Beleg passt.</li>
 
           <li><a href="#belegliste-annotierenBeleg" class="link-handbuch">Annotierungsfunktion</a>: Im Popup-Fenster gibt es ein neues Löschen-Icon (<img src="../img/muelleimer.svg" width="24" height="24" alt="">), mit eine Annotierung mit einem Klick entfernt werden kann.</li>
@@ -96,6 +112,8 @@
           <li><a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a>: Verbesserung des Auto-Taggers.</li>
 
           <li>Die Werte in der Tag-Datei für Standardvarietäten wurden in <i>Deutschland, Österreich</i> und <i>Schweiz</i> geändert.</li>
+
+          <li>Die Sicherheit der App wurden in einigen Punkten verbessert.</li>
 
           <li><a href="#verschiedenes-cli" class="link-dokumentation">CLI</a>: Der Pfad zu einer übergebenen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien oder der in einem CLI-Kommando muss nicht mehr zwingend absolut sein. Relative Pfadangaben werden nun aufgelöst.</li>
         </ul>
@@ -963,7 +981,7 @@
         <h3>Neue Funktionen</h3>
 
         <ul>
-          <li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL kann nun <a href="#karteikarte-quelleDTALink" class="link-handbuch">mit einem Klick oder via Tastaturkürzel</a> aus dem Quelle-Feld ins Importformular geladen werden.</li>
+          <li><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL kann nun <a href="#karteikarte-quelleURL" class="link-handbuch">mit einem Klick oder via Tastaturkürzel</a> aus dem Quelle-Feld ins Importformular geladen werden.</li>
         </ul>
 
         <h3>Verbesserungen</h3>
@@ -1031,7 +1049,7 @@
         <h3>Verbesserungen</h3>
 
         <ul>
-          <li><a href="#karteikarte-xmlImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import</a>: Verbesserung des Imports von MODS-Titeldaten.</li>
+          <li><a href="#karteikarte-modsImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import</a>: Verbesserung des Imports von MODS-Titeldaten.</li>
         </ul>
 
         <h3>Updates</h3>
@@ -2356,7 +2374,7 @@
         <h3>Verbesserungen</h3>
 
         <ul>
-          <li><a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a>: Das Importieren versifizierter Texte wurde verbessert.</li>
+          <li><a href="#karteikarte-teiImport" class="link-handbuch"><abbr title="Deutsches Textarchiv">DTA</abbr>-Import</a>: Das Importieren versifizierter Texte wurde verbessert.</li>
         </ul>
 
         <h3>Updates</h3>
@@ -2570,7 +2588,7 @@
         <ul>
           <li>Die App verfügt nun über eine einfach gehaltene <a href="#menueRedaktion-literatur" class="link-handbuch">Literaturdatenbank</a>, die speziell für kollaboratives Arbeiten und schnelles Befüllen eingerichtet wurde. Titelaufnahmen lassen sich nicht nur händisch, sondern auch via <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatz, einen <abbr title="Deutsches Textarchiv">DTA</abbr>-Link oder über eine <abbr title="Pica-Produktionsnummer">PPN</abbr> anlegen, mit deren Hilfe ein Datensatz des <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> importiert wird (im MODS- oder <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format). Die komplette Datenbank kann in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-, auf Wunsch auch in ein unstrukturiertes Textformat exportiert werden. Beide Funktionen stehen auch für das Kopieren einzelner Titelaufnahmen zur Verfügung. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#menueRedaktion-literatur" class="link-handbuch">Handbuchabschnitt</a>.</li>
 
-          <li><a href="#karteikarte-xmlImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import</a>: Die Karteikarte wurde um die Funktion ergänzt, bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datensätze auszulesen. Die Datensätze können aus Dateien geladen oder auch direkt aus der Zwischenablage eingelesen werden. Ferner besteht die Möglichkeit, sie via <abbr title="Pica-Produktionsnummer">PPN</abbr> zu ermitteln. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, werden die Titeldaten aus dem <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> heruntergeladen. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#karteikarte-xmlImport" class="link-handbuch">Handbuchabschnitt</a>.</li>
+          <li><a href="#karteikarte-modsImport" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Import</a>: Die Karteikarte wurde um die Funktion ergänzt, bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datensätze auszulesen. Die Datensätze können aus Dateien geladen oder auch direkt aus der Zwischenablage eingelesen werden. Ferner besteht die Möglichkeit, sie via <abbr title="Pica-Produktionsnummer">PPN</abbr> zu ermitteln. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, werden die Titeldaten aus dem <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> heruntergeladen. <abbr title="Vergleiche">Vgl.</abbr> zu Details den entsprechenden <a href="#karteikarte-modsImport" class="link-handbuch">Handbuchabschnitt</a>.</li>
 
           <li><a href="#karteikarte-bibtexImport" class="link-handbuch"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import</a>: Die Karteikarte kann nun auch mit <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensätzen gefüllt werden, die via <abbr title="Pica-Produktionsnummer">PPN</abbr> ermittelt werden. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, werden die Titeldaten aus dem <abbr title="Gemeinsamen Verbundkatalogs">GVK</abbr> heruntergeladen.</li>
 
@@ -2676,7 +2694,7 @@
           <li>
             <p><a href="#karteikarte-importfunktion" class="link-handbuch">Importfunktionen</a> der <a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Wird der Import eines <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets angestoßen, das aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> stammt, fragt die App nun nach, ob der Beleg nicht lieber direkt aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importiert werden sollte.</p>
 
-            <p>Mithilfe einer <a href="#einstellungen-karteikarteDtaBevorzugen" class="link-handbuch">neuen Einstellung</a> kann die Nachfrage abgestellt werden. Der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import wird dann immer angestoßen.</p>
+            <p>Mithilfe einer <a href="#einstellungen-karteikarteOriginalBevorzugen" class="link-handbuch">neuen Einstellung</a> kann die Nachfrage abgestellt werden. Der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import wird dann immer angestoßen.</p>
           </li>
 
           <li><a href="#menueApp-karteisuche" class="link-handbuch">Karteisuche</a>: Für die Karteisuche wurde ein Zwischenspeicher implementiert. Auf diese Weise können wiederholte Suchen in einem langsamen Netzwerkordner immens beschleunigt werden: Selbst wenn die erste Suche mehrere Minuten dauern sollte, werden die Ergebnisse der folgenden nach weniger als einer Sekunde angezeigt. <abbr title="Vergleiche">Vgl.</abbr> <a href="#menueApp-karteisucheCache" class="link-handbuch">zu Details den erläuternden Absatz im Handbuch</a>.</li>
@@ -3015,7 +3033,7 @@
 
           <li><a href="#karteikarte-dropdown" class="link-handbuch">Dropdown-Menü</a>: Ist in einem geöffneten Dropdown-Menü noch kein Eintrag ausgewählt, wird fortan beim Drücken von Enter auch kein Eintrag in das zugehörige Textfeld mehr übernommen. Das vorherige Verhalten (der erste Eintrag in der angebotenen Liste wurde übernommen) war zwar kein Fehler, hat sich aber als dysfunktional herausgestellt.</li>
 
-          <li><a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Das Aufrufdatum, also das aktuelle Tagesdatum, wird nun automatisch hinter der <abbr title="Deutschen Textarchiv">DTA</abbr>-<abbr title="Uniform Resource Locator" lang="en">URL</abbr> notiert, und zwar in einem Format, das direkt für den Export von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets verwendet werden kann.</li>
+          <li><a href="#karteikarte-teiImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a>: Das Aufrufdatum, also das aktuelle Tagesdatum, wird nun automatisch hinter der <abbr title="Deutschen Textarchiv">DTA</abbr>-<abbr title="Uniform Resource Locator" lang="en">URL</abbr> notiert, und zwar in einem Format, das direkt für den Export von <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets verwendet werden kann.</li>
 
           <li>Für den <a href="#belegliste-xmlZwischenablageBelegschnitt" class="link-handbuch">Export eines XML-Snippets</a> wird fortan als Fallback das Erstellungsdatum der Karteikarte genutzt, sollte eine Online-Quelle vorliegen, aber kein Aufrufdatum gefunden werden.</li>
 
@@ -3094,7 +3112,7 @@
 
           <li>leere Absätze beim Kopieren der Quellenangabe vermeiden</li>
 
-          <li>Seitenangaben beim <a href="#karteikarte-dtaImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> waren mitunter falsch</li>
+          <li>Seitenangaben beim <a href="#karteikarte-teiImport" class="link-handbuch"><abbr title="Deutschen Textarchiv">DTA</abbr>-Import</a> waren mitunter falsch</li>
 
           <li>falsches Rechtsklickmenü bei Klick auf Anhang in <a href="#menueKartei-anhaenge" class="link-handbuch"><i>Kartei &gt; Anhänge</i></a></li>
 

@@ -481,8 +481,7 @@ const redLit = {
         content += redLit.dbExportierenSnippetXML(i);
       }
       content += "</Literaturliste></WGD>";
-      const parser = new DOMParser();
-      let xmlDoc = parser.parseFromString(content, "text/xml");
+      let xmlDoc = helferXml.parseXML(content);
       xmlDoc = helferXml.indent(xmlDoc);
       content = new XMLSerializer().serializeToString(xmlDoc);
       // Fixes
@@ -2239,7 +2238,7 @@ const redLit = {
     }
     // Titel-Feld ausfüllen
     const ti = document.getElementById("red-lit-eingabe-ti");
-    ti.value = belegImport.DTAQuelle();
+    ti.value = importTEI.makeQu();
     ti.dispatchEvent(new KeyboardEvent("input"));
     // URL-Feld ausfüllen
     const ul = document.getElementById("red-lit-eingabe-ul");
@@ -2259,7 +2258,7 @@ const redLit = {
   //     die Quellenangabe der Karteikarte neu geladen werden soll)
   async eingabeDTAFetch ({ url, fokusId, seitenData = {} }) {
     // Titel-ID ermitteln
-    const titelId = belegImport.DTAGetTitelId(url);
+    const titelId = importTEI.dtaGetTitleId(url);
     if (!titelId) {
       await new Promise(meldung => {
         dialog.oeffnen({
@@ -2303,9 +2302,8 @@ const redLit = {
       return "";
     }
     // Titeldaten ermitteln
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(feedback.text, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(feedback.text);
+    if (!xmlDoc) {
       await new Promise(meldung => {
         dialog.oeffnen({
           typ: "alert",
@@ -2318,14 +2316,13 @@ const redLit = {
       });
       return "";
     }
-    belegImport.DTAResetData();
-    if (seitenData.seite) {
-      belegImport.DTAData.seite = seitenData.seite;
-      belegImport.DTAData.seite_zuletzt = seitenData.seite_zuletzt;
-      belegImport.DTAData.spalte = seitenData.spalte;
+    importTEI.data.cit = importTEI.citObject();
+    if (seitenData.seiteStart) {
+      importTEI.data.cit.seiteStart = seitenData.seiteStart;
+      importTEI.data.cit.seiteEnde = seitenData.seiteEnde;
+      importTEI.data.cit.spalte = seitenData.spalte;
     }
-    belegImport.DTAData.url = url;
-    belegImport.DTAMeta(xmlDoc);
+    importTEI.citFill(xmlDoc);
     return titelId;
   },
 
@@ -2334,7 +2331,7 @@ const redLit = {
     // PPN-Feld auslesen
     const pn = document.getElementById("red-lit-eingabe-pn");
     let ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ ppn })) {
+    if (!importShared.isPPN(ppn)) {
       ppn = "";
     }
     // Formular leeren
@@ -2343,13 +2340,13 @@ const redLit = {
     // XML-Daten suchen
     const cb = modules.clipboard.readText().trim();
     let xmlDaten = redLit.eingabeXMLCheck({ xmlStr: cb });
-    if (belegImport.PPNCheck({ ppn: cb })) {
+    if (importShared.isPPN(cb)) {
       ppn = cb;
     } else if (xmlDaten) {
       ppn = "";
     }
     if (ppn) {
-      xmlDaten = await belegImport.PPNXML({
+      xmlDaten = await redLit.eingabeXMLPPN({
         ppn,
         fokus: "red-lit-eingabe-ti-xml",
       });
@@ -2404,12 +2401,9 @@ const redLit = {
     if (!/^<(Fundstelle|mods|\?xml)/.test(xmlStr)) {
       return false;
     }
-    // Namespace-Attribut entfernen; das macht nur Problem mit evaluate()
-    xmlStr = xmlStr.replace(/xmlns=".+?"/, "");
     // XML nicht wohlgeformt
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlStr, "text/xml");
-    if (xmlDoc.querySelector("parsererror")) {
+    const xmlDoc = helferXml.parseXML(xmlStr);
+    if (!xmlDoc) {
       return false;
     }
     // Fundstellen-Snippet
@@ -2424,11 +2418,60 @@ const redLit = {
     return false;
   },
 
+  // PPN-Download: XML-Datensatz herunterladen
+  //   ppn = String
+  //     (die PPN, deren Datensatz heruntergeladen werden soll)
+  //   fokus = String | undefined
+  //     (ID des Elements, das ggf. fokussiert werden soll)
+  //   returnXmlStr
+  async eingabeXMLPPN ({ ppn, fokus = "", returnXmlStr = false }) {
+    // MODS-Dokument herunterladen
+    const feedback = await helfer.fetchURL(`https://unapi.k10plus.de/?id=gvk:ppn:${ppn}&format=mods`);
+    const result = new Promise(resolve => {
+      // Fehler: Dokument konnte nicht korrekt heruntergeladen werden
+      if (feedback.fehler) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: `Der Download des XML-Dokuments mit den Titeldaten ist gescheitert.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${feedback.fehler}</p>`,
+          callback: () => {
+            if (fokus) {
+              document.getElementById(fokus).focus();
+            }
+            resolve("");
+          },
+        });
+        return;
+      }
+      // ggf. XML-String direkt zurückgeben
+      if (returnXmlStr) {
+        resolve(feedback.text);
+        return;
+      }
+      // Daten parsen
+      const xmlDaten = redLit.eingabeXMLCheck({ xmlStr: feedback.text });
+      if (!xmlDaten) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Bei den aus dem GVK heruntergeladenen Daten handelt es sich nicht um ein XML-Dokument, dessen Titeldaten ausgelesen werden könnten.",
+          callback: () => {
+            if (fokus) {
+              document.getElementById(fokus).focus();
+            }
+            resolve("");
+          },
+        });
+        return;
+      }
+      resolve(xmlDaten);
+    });
+    return result;
+  },
+
   // Eingabeformular: einen leeren Datensatz zur Verfügung stellen
   // (der Datensatz muss so strukturiert sein, dass man ihn auch zum
   // Import in eine Karteikarte nutzen kann)
   eingabeXMLDatensatz () {
-    const data = belegImport.DateiDatensatz();
+    const data = importShared.importObject();
     data.td = {
       si: "", // Sigle
       id: "", // ID
@@ -2523,6 +2566,8 @@ const redLit = {
       data.ds.au = td.autor.join("/");
     } else if (td.hrsg.length) {
       data.ds.au = `${td.hrsg.join("/")} (Hrsg.)`;
+    } else {
+      data.ds.au = "N.\u00A0N.";
     }
     data.ds.bi = "xml-mods";
     data.ds.bx = xmlStr;
@@ -2532,11 +2577,11 @@ const redLit = {
     } else if (td.url.some(i => /books\.google/.test(i))) {
       data.ds.kr = "GoogleBooks";
     }
-    data.ds.qu = belegImport.makeTitle(td);
+    data.ds.qu = importShared.makeTitle(td);
     data.ds.ul = td.url[0] || "";
     data.ds.ud = data.ds.ul ? new Date().toISOString().split("T")[0] : "";
     // Datensatz für Literaturdatenbank ausfüllen
-    data.td.ti = belegImport.makeTitle(td);
+    data.td.ti = importShared.makeTitle(td);
     data.td.ul = td.url[0] || "";
     data.td.pn = td.ppn.join(", ");
     // Datensatz zurückgeben
@@ -2547,9 +2592,9 @@ const redLit = {
   //   xmlDoc = Document
   //     (das geparste XML-Snippet)
   eingabeXMLModsTd ({ xmlDoc }) {
-    const td = belegImport.makeTitleDataObject();
+    const td = importShared.makeTitleObject();
     // Helfer-Funktionen
-    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, null, XPathResult.ANY_TYPE, null);
+    const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, helferXml.nsResolver, XPathResult.ANY_TYPE, null);
     const pusher = (result, key) => {
       let item = result.iterateNext();
       if (Array.isArray(td[key])) {
@@ -2565,13 +2610,13 @@ const redLit = {
       }
     };
     // Autor
-    const autor = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'aut')]");
+    const autor = evaluator("//m:name[@type='personal']/m:namePart[not(@*)][contains(following-sibling::role/m:roleTerm[@type='code'],'aut')]");
     pusher(autor, "autor");
     // Herausgeber
-    const hrsg = evaluator("//name[@type='personal']/namePart[not(@*)][contains(following-sibling::role/roleTerm[@type='code'],'edt')]");
+    const hrsg = evaluator("//m:name[@type='personal']/m:namePart[not(@*)][contains(following-sibling::role/m:roleTerm[@type='code'],'edt')]");
     pusher(hrsg, "hrsg");
     // Titel
-    const titel = evaluator("/mods/titleInfo[not(@*)]/title");
+    const titel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:title");
     pusher(titel, "titel");
     // Korrektur: Großschreibung
     gross({
@@ -2579,13 +2624,13 @@ const redLit = {
       start: 1,
     });
     // Titel-Vorsatz
-    const titelVorsatz = evaluator("/mods/titleInfo[not(@*)]/nonSort");
+    const titelVorsatz = evaluator("/m:mods/m:titleInfo[not(@*)]/m:nonSort");
     let item = titelVorsatz.iterateNext();
     if (item) {
       td.titel[0] = helfer.textTrim(item.textContent + td.titel[0], true);
     }
     // Untertitel
-    const untertitel = evaluator("/mods/titleInfo[not(@*)]/subTitle");
+    const untertitel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:subTitle");
     pusher(untertitel, "untertitel");
     // Korrektur: Großschreibung
     gross({
@@ -2593,7 +2638,7 @@ const redLit = {
       start: 0,
     });
     // Zeitschrift/Sammelband
-    const inTitel = evaluator("//relatedItem[@type='host']//title");
+    const inTitel = evaluator("//m:relatedItem[@type='host']//m:title");
     pusher(inTitel, "inTitel");
     // Korrektur: Großschreibung
     gross({
@@ -2601,33 +2646,33 @@ const redLit = {
       start: 0,
     });
     // Band
-    const band = evaluator("/mods/titleInfo[not(@*)]/partNumber");
+    const band = evaluator("/m:mods/m:titleInfo[not(@*)]/m:partNumber");
     pusher(band, "band");
     // Bandtitel
-    const bandtitel = evaluator("/mods/titleInfo[not(@*)]/partName");
+    const bandtitel = evaluator("/m:mods/m:titleInfo[not(@*)]/m:partName");
     pusher(bandtitel, "bandtitel");
     // Auflage
-    const auflage = evaluator("/mods/originInfo[not(@*)]//edition");
+    const auflage = evaluator("/m:mods/m:originInfo[not(@*)]//m:edition");
     pusher(auflage, "auflage");
     // Qualifikationsschrift
-    const quali = evaluator("/mods/note[@type='thesis']");
+    const quali = evaluator("/m:mods/m:note[@type='thesis']");
     pusher(quali, "quali");
     // Ort
-    const ort = evaluator("/mods/originInfo[@eventType='publication']//placeTerm");
+    const ort = evaluator("/m:mods/m:originInfo[@eventType='publication']//m:placeTerm");
     pusher(ort, "ort");
     // Verlag
     let verlag;
     if (td.inTitel.length) {
-      verlag = evaluator("//relatedItem[@type='host']/originInfo/publisher");
+      verlag = evaluator("//m:relatedItem[@type='host']/m:originInfo/m:publisher");
     } else {
-      verlag = evaluator("/mods/originInfo[@eventType='publication']/publisher");
+      verlag = evaluator("/m:mods/m:originInfo[@eventType='publication']/m:publisher");
     }
     pusher(verlag, "verlag");
     // Jahr
-    const jahr = evaluator("/mods/originInfo[@eventType='publication']/dateIssued");
+    const jahr = evaluator("/m:mods/m:originInfo[@eventType='publication']/m:dateIssued");
     pusher(jahr, "jahr");
     // Jahrgang, Jahr, Heft, Seiten, Spalten
-    const inDetails = evaluator("//relatedItem[@type='host']/part/text");
+    const inDetails = evaluator("//m:relatedItem[@type='host']/m:part/m:text");
     item = inDetails.iterateNext();
     if (item) {
       const jahrgang = /(?<val>[0-9]+)\s?\(/.exec(item.textContent);
@@ -2651,14 +2696,14 @@ const redLit = {
       }
     }
     // Serie
-    const serie = evaluator("//relatedItem[@type='series']/titleInfo/title");
+    const serie = evaluator("//m:relatedItem[@type='series']/m:titleInfo/m:title");
     pusher(serie, "serie");
     // URL
-    const url = evaluator("//url[@displayLabel='Volltext']");
+    const url = evaluator("//m:url[@displayLabel='Volltext']");
     pusher(url, "url");
     td.url.sort(helfer.sortURL);
     // PPN
-    const ppn = evaluator("//recordIdentifier[@source='DE-627']");
+    const ppn = evaluator("//m:recordIdentifier[@source='DE-627']");
     pusher(ppn, "ppn");
     // Korrektur: Auflage ohne eckige Klammern
     td.auflage = td.auflage.replace(/^\[|\]$/g, "");
@@ -2701,44 +2746,26 @@ const redLit = {
 
   // Eingabeformular: BibTeX-Import aus der Zwischenablage
   async eingabeBibTeX () {
-    // PPN-Feld auslesen
-    const pn = document.getElementById("red-lit-eingabe-pn");
-    let ppn = pn.value.split(/[,\s]/)[0];
-    if (!belegImport.PPNCheck({ ppn })) {
-      ppn = "";
-    }
     // Formular leeren
     redLit.eingabeLeeren();
     redLit.eingabeStatus("add");
     // BibTeX-Daten suchen
-    const cb = modules.clipboard.readText().trim();
     let bibtexDaten = "";
-    if (belegImport.PPNCheck({ ppn: cb })) {
-      ppn = cb;
-    } else if (belegImport.BibTeXCheck(cb)) {
-      ppn = "";
+    const cb = modules.clipboard.readText().trim();
+    if (importShared.isBibtex(cb)) {
       bibtexDaten = cb;
-    }
-    if (ppn) {
-      bibtexDaten = await belegImport.PPNBibTeX({
-        ppn,
-        fokus: "red-lit-eingabe-ti-bibtex",
-      });
-      if (!bibtexDaten) {
-        return;
-      }
     }
     // kein BibTeX-Datensatz in Zwischenablage
     if (!bibtexDaten) {
       dialog.oeffnen({
         typ: "alert",
-        text: 'Weder im PPN-Feld noch in der Zwischenablage wurden <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten oder eine PPN gefunden.',
+        text: 'Es wurden keine <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten in der Zwischenablage gefunden.',
         callback: () => document.getElementById("red-lit-eingabe-ti-bibtex").focus(),
       });
       return;
     }
     // BibTeX-Datensatz einlesen
-    const titel = belegImport.BibTeXLesen(bibtexDaten, true);
+    const titel = await importBibtex.startImport({ content: bibtexDaten, returnTitle: true });
     // Einlesen ist fehlgeschlagen
     if (!titel) {
       dialog.oeffnen({
@@ -2762,13 +2789,13 @@ const redLit = {
     ti.value = quelle.normalize("NFC");
     ti.dispatchEvent(new KeyboardEvent("input"));
     // PPN
-    if (!ppn) {
+    const pn = document.getElementById("red-lit-eingabe-pn");
+    if (!pn.value) {
+      let ppn = "";
       const m = /^@[a-zA-Z]+\{(GBV-)?(?<ppn>.+?),/.exec(bibtexDaten);
-      if (m && belegImport.PPNCheck({ ppn: m.groups.ppn })) {
+      if (m && importShared.isPPN(m.groups.ppn)) {
         ppn = m.groups.ppn;
       }
-    }
-    if (!pn.value) {
       pn.value = ppn;
     }
     // Titel fokussieren
@@ -3040,7 +3067,7 @@ const redLit = {
       const korrekt = [];
       const fehlerhaft = [];
       for (const i of ppns) {
-        if (i && !belegImport.PPNCheck({ ppn: i })) {
+        if (i && !importShared.isPPN(i)) {
           fehlerhaft.push(i);
         } else if (i) {
           korrekt.push(i);
@@ -3862,9 +3889,8 @@ const redLit = {
     } else if (typ === "plain") {
       text = redLit.dbExportierenSnippetPlain(popup.titelaufnahme.ds);
     } else if (typ === "xml") {
-      const parser = new DOMParser();
       const snippet = redLit.dbExportierenSnippetXML(popup.titelaufnahme.ds);
-      let xmlDoc = parser.parseFromString(snippet, "text/xml");
+      let xmlDoc = helferXml.parseXML(snippet);
       xmlDoc = helferXml.indent(xmlDoc);
       text = new XMLSerializer().serializeToString(xmlDoc);
     } else if (typ === "sigle") {

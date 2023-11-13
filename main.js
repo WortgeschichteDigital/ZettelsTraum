@@ -1575,6 +1575,17 @@ if (cliCommandFound || !locked) {
     }, 3e4);
   });
 
+  // Sicherheit für Web-Contents erhöhen:
+  //   - Navigieren zu anderen Seiten als derjenigen,
+  //     die beim Öffnen des Fenster aus der main.js heraus
+  //     geladen wird, unterbinden.
+  //   - Erzeugen von Fenstern via window.open()
+  //     aus einem Web-Content heraus unterbinden.
+  app.on("web-contents-created", (evt, contents) => {
+    contents.on("will-navigate", evt => evt.preventDefault());
+    contents.setWindowOpenHandler(() => ({ action: "deny" }));
+  });
+
   // App beenden, wenn alle Fenster geschlossen worden sind
   app.on("window-all-closed", async () => {
     // Optionen schreiben
@@ -1989,6 +2000,32 @@ ipcMain.handle("ztj-cache-status-set", (evt, status) => {
 });
 
 ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
+
+
+// ***** DOWNLOAD-CACHE *****
+//   id = string
+//   text = string
+const downloads = [];
+
+ipcMain.handle("downloads-cache-save", (evt, data) => {
+  if (downloads.length > 40) {
+    downloads.pop();
+  }
+  downloads.unshift(data);
+});
+
+ipcMain.handle("downloads-cache-get", (evt, id) => {
+  const idx = downloads.findIndex(i => i.id === id);
+  if (idx === -1) {
+    return false;
+  }
+  const data = { ...downloads[idx] };
+  if (idx > 0) {
+    downloads.unshift(data);
+    downloads.splice(idx + 1, 1);
+  }
+  return data;
+});
 
 
 // ***** CLI *****

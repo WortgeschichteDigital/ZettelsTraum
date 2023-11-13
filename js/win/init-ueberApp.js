@@ -2,10 +2,18 @@
 
 // MODULE
 const modules = {
+  clipboard: require("electron").clipboard,
   ipc: require("electron").ipcRenderer,
+  shell: require("electron").shell,
 };
 
 window.addEventListener("load", async () => {
+  // MAIL-ADRESSE EINTRAGEN
+  const dekodiert = helfer.mailEntschluesseln("wvjkiovxidgbwvefekxfzutfpogspjep0eqspAceyhqf0eg");
+  const mail = document.getElementById("mail");
+  mail.href = `mailto:${dekodiert}`;
+  mail.textContent = dekodiert;
+
   // INIT
   await initWin.infos();
   initWin.ipcListener();
@@ -21,12 +29,6 @@ window.addEventListener("load", async () => {
 
   // PROGRAMM-VERSION EINTRAGEN
   document.getElementById("version").textContent = appInfo.version;
-
-  // MAIL-ADRESSE EINTRAGEN
-  const dekodiert = helfer.mailEntschluesseln("wvjkiovxidgbwvefekxfzutfpogspjep0eqspAceyhqf0eg");
-  const mail = document.getElementById("mail");
-  mail.href = `mailto:${dekodiert}`;
-  mail.textContent = dekodiert;
 
   // FENSTER FREISCHALTEN
   helfer.fensterGeladen();

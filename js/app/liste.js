@@ -1100,13 +1100,13 @@ const liste = {
   //   text = String
   //     (Belegtext, in dem die Klammern markiert werden sollen)
   belegKlammernHervorheben ({ text }) {
-    // DTA-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
+    // TEI-Import: Anmerkungen werden an der Stelle, an der der Anker ist,
     // in eckigen Klammern nachgestellt. Schließende Klammer nicht hervorheben!
     // Das macht Probleme, wenn innerhalb der Anmerkung andere Klammern sind.
-    text = text.replace(/\[Anmerkung:/g, '<span class="klammer-technisch">[Anmerkung:</span>');
-    // DTA-Import: Trenn- oder Bindestrich am Ende einer Zeile
+    text = text.replace(/\[Anmerkung(.{0,10}):/g, (...args) => `<span class="klammer-technisch">[Anmerkung${args[1]}:</span>`);
+    // TEI-Import: Trenn- oder Bindestrich am Ende einer Zeile
     text = text.replace(/\[¬\]/g, m => `<span class="klammer-technisch">${m}</span>`);
-    // DTA-Import: Spalten- oder Seitenumbruch
+    // TEI-Import: Spalten- oder Seitenumbruch
     text = text.replace(/\[:(.+?):\]/g, (m, p1) => `<span class="klammer-technisch">[:${p1}:]</span>`);
     // Ergebnis zurückgeben
     return text;

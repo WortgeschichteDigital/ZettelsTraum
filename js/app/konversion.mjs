@@ -629,10 +629,14 @@ const konversionen = {
       karte.bs = karte.bs.replace(/\{(.+?)\}/g, (m, p1) => `<span class="klammer-autorenzusatz">${p1}</span>`);
     }
 
-    // Datenfelder "ud" (Aufrufdatum) und "ul" (URL) in allen Karteikarten ergänzen;
-    // die neuen Datenfelder automatisch aus dem Quellefeld füllen, dann das Quellefeld bereinigen
+    // die folgenden Datenfelder in allen Karteikarten ergänzen:
+    //   - "ud" (Aufrufdatum)
+    //   - "ui" (Import-URL)
+    //   - "ul" (URL)
+    // "ud" und "ul" automatisch aus dem Quellefeld füllen, dann das Quellefeld bereinigen
     for (const karte of Object.values(data.ka)) {
       karte.ud = "";
+      karte.ui = "";
       karte.ul = "";
       const qu = karte.qu.split(/\n(.*)/s);
       if (qu.length > 1) {
@@ -668,6 +672,32 @@ const konversionen = {
       }
     }
 
+    // Bezeichnung veralteter Importtypen durch neue ersetzen;
+    // veraltete Layoutklassen ersetzen bzw. löschen;
+    // neue Datenfelder für den Import anlegen:
+    //   bb = Seite, bis zu der das XML aus einer Datei importiert wurde
+    //   bv = Seite, von der an das XML aus einer Datei importiert wurde
+    //   di = Importdatum
+    const biMap = {
+      dereko: "plain-dereko",
+      dwds: "xml-dwds",
+    };
+    for (const karte of Object.values(data.ka)) {
+      // Importtypen umbenennen
+      if (biMap[karte.bi]) {
+        karte.bi = biMap[karte.bi];
+      }
+
+      // Layoutklassen auffrischen
+      karte.bs = karte.bs.replace(/<span class="dta-(?:blau|rot)">(.+?)<\/span>/g, (...args) => args[1]);
+      karte.bs = karte.bs.replace(/\bdta-(antiqua|doppelt|fr|gesperrt|groesser|initiale|kapitaelchen)\b/g, (...args) => "tei-" + args[1]);
+
+      // neue Datenfelder
+      karte.bb = 0;
+      karte.bv = 0;
+      karte.di = "";
+    }
+
     // Versionsnummer hochzählen
     data.ve++;
 
@@ -679,8 +709,11 @@ const konversionen = {
 export default {
   // aktuelle Version des Dateiformats
   // *** WICHTIG! *** WICHTIG! *** WICHTIG! ***
-  //   1.) Beim Anlegen neuer Datenwerte Objekte in
-  //       kartei.erstellen() u. beleg.karteErstellen() ergänzen!
+  //   1.) Beim Anlegen neuer Datenwerte Objekte anpassen in
+  //         beleg.karteErstellen()
+  //         kartei.erstellen()
+  //         importShared.fillCard()
+  //         importShared.importObject()
   //   2.) Diese Versionsnummer hochzählen!
   version: 26,
 

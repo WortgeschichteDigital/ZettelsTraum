@@ -112,10 +112,6 @@
   width: auto;
 }
 
-#beleg th#beleg-meta {
-  padding-top: 30px;
-}
-
 #beleg td {
   position: relative;
   padding: 0 5px;
@@ -214,55 +210,42 @@
   width: 57px;
 }
 
-#beleg input[type="text"]#beleg-dta {
-  width: calc(100% - 12px - 79px - 145px); /* 64px Number-Feld, 145px Button */
+#beleg-import p {
+  position: relative;
 }
 
-#beleg-dta-button {
+#beleg-import p:last-child {
+  margin-bottom: 0;
+}
+
+#beleg-import span {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#beleg-import input[type="text"] {
+  width: calc(100% - 12px - 2 * 79px); /* 79px Number-Feld */
+}
+
+#beleg-import #beleg-import-start {
   margin-left: 10px;
-  width: 135px;
+  width: 148px;
 }
 
-#beleg-datei-importieren {
-  width: 135px;
+th:has(input[type="radio"]) {
+  position: relative;
 }
 
-#beleg-datei-oeffnen {
-  width: 85px;
+#beleg-import-hilfe {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  background-color: var(--iconHell);
 }
 
-#beleg-form-datei {
-  line-height: 30px;
-  text-align: right;
-}
-
-#beleg-datei-name {
-  display: inline-block;
-  vertical-align: bottom;
-  overflow: hidden;
-  width: calc(100% - 25px - 22px - 52px - 95px - 145px); /* margin, checkbox, label, button1, button2 */
-  max-width: calc(850px - 25px - 22px - 52px - 95px - 145px);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#beleg-datei-name.leer {
-  color: var(--textHell);
-  font-style: italic;
-}
-
-#beleg-form-datei label {
-  display: inline-block;
-  width: 52px;
-  text-align: left;
-}
-
-#beleg-form-datei input {
-  margin-left: 10px;
-}
-
-#beleg-form-datei input[type="checkbox"] {
-  margin-left: 25px;
+#beleg-import-hilfe:hover {
+  background-color: var(--text);
 }
 
 #beleg textarea {
@@ -406,6 +389,10 @@ span#beleg-bewertung {
   height: 24px;
 }
 
+#beleg .meta .text-tools a {
+  margin-left: 24px;
+}
+
 
 /* TEXT-TOOLS ----------------------------------- */
 
@@ -521,6 +508,16 @@ span#beleg-bewertung {
   mask-image: url(../../img/pinsel.svg);
 }
 
+.icon-tools-header-an {
+  -webkit-mask-image: url(../../img/auge.svg);
+  mask-image: url(../../img/auge.svg);
+}
+
+.icon-tools-header-aus {
+  -webkit-mask-image: url(../../img/auge-durchgestrichen.svg);
+  mask-image: url(../../img/auge-durchgestrichen.svg);
+}
+
 .icon-tools-heading {
   -webkit-mask-image: url(../../img/text-antiqua.svg);
   mask-image: url(../../img/text-antiqua.svg);
@@ -549,6 +546,16 @@ span#beleg-bewertung {
 .icon-tools-mark {
   -webkit-mask-image: url(../../img/text-markiert.svg);
   mask-image: url(../../img/text-markiert.svg);
+}
+
+.icon-tools-meta-plus {
+  -webkit-mask-image: url(../../img/plus.svg);
+  mask-image: url(../../img/plus.svg);
+}
+
+.icon-tools-meta-minus {
+  -webkit-mask-image: url(../../img/minus.svg);
+  mask-image: url(../../img/minus.svg);
 }
 
 .icon-tools-save {
@@ -589,16 +596,6 @@ span#beleg-bewertung {
 .icon-tools-underline {
   -webkit-mask-image: url(../../img/text-unterstrichen.svg);
   mask-image: url(../../img/text-unterstrichen.svg);
-}
-
-.icon-tools-meta-plus {
-  -webkit-mask-image: url(../../img/plus.svg);
-  mask-image: url(../../img/plus.svg);
-}
-
-.icon-tools-meta-minus {
-  -webkit-mask-image: url(../../img/minus.svg);
-  mask-image: url(../../img/minus.svg);
 }
 
 
