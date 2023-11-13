@@ -70,11 +70,11 @@
           <li><a href="#filter" class="link-handbuch">Filter</a>: Mit dem neuen <a href="#filter-lemmata" class="link-handbuch">Lemmata-Filter</a> können die Belege danach gefiltert werden, ob ein bestimmtes Lemma in ihnen auftaucht oder nicht. Dieser Filter ist besonders für Karteien gedacht, in denen Belege zu mehreren Lemmata zugleich gesammelt werden.</li>
 
           <li>
-            <p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die <a href="#karteikarte-importfunktion" class="link-handbuch">Importfunktion</a> wurde grundlegen überarbeitet und erweitert.</p>
+            <p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Die <a href="#karteikarte-importfunktion" class="link-handbuch">Importfunktion</a> wurde grundlegend überarbeitet und erweitert.</p>
 
             <p>Die wichtigste Neuerung ist, dass nun <em>alle</em> in <a href="https://tei-c.org/"><abbr title="Text Encoding Initiative" lang="en">TEI</abbr></a> kodierten <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien importiert werden können. Es ist also ganz gleich, welcher Anbieter Daten mit interessanten Textbelegen bereitstellt – solange sie in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodiert sind, können sie mit <i class="app-name"></i> in guter bis sehr guter Qualität eingelesen werden.</p>
 
-            <p>Darüber hinaus können nun alle Datentypen, die importiert werden können, sowohl aus einer Datei als auch aus der Zwischenablage ausgelesen werden. Die App erkennt automatisch, um was für Daten es sich handelt. Aus diesem Grund konnte das Formular auch vereinfacht werden: Sie müssen nur noch die Importquelle (<i>URL, Datei, Zwischenablage</i>) auswählen, nicht mehr den Datentyp. Liegen in der Zwischenablage Daten, die die App erkennt, stellt sie beim Öffnen einer neuen Karteikarte das Importformular wie gehabt automatisch um.</p>
+            <p>Darüber hinaus können nun alle Datentypen, die importiert werden können, sowohl aus einer Datei als auch aus der Zwischenablage ausgelesen werden. Die App erkennt automatisch, um was für Daten es sich handelt. Aus diesem Grund konnte das Formular auch vereinfacht werden: Sie müssen nur noch die Importquelle (URL, Datei, Zwischenablage) auswählen, nicht mehr den Datentyp. Liegen in der Zwischenablage Daten, die die App erkennt, stellt sie beim Öffnen einer neuen Karteikarte das Importformular wie gehabt automatisch um.</p>
 
             <p>Die Importmöglichkeit via URL ist erhalten geblieben. Neben Texten aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> können nun allerdings auch die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien des <a href="https://dingler.bbaw.de/">Polytechnischen Journals</a> und die Editionen der <a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitalen Bibliothek</a> (WDB) direkt importiert werden. Neu ist, dass Direktlinks zu den XML-Dateien nun auch akzeptiert werden. (<abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Dateien können <em>nur</em> via Direktlink importiert werden.) In diesem Zuge wurde der schon lange zur Verfügung stehende Textimport aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> erheblich verbessert.</p>
 
@@ -94,7 +94,7 @@
           <li>
             <p><a href="#karteikarte" class="link-handbuch">Karteikarte</a>: Das Ergänzen von Bedeutungen ist nun übersichtlicher gestaltet. Beim Fokussieren des Bedeutungsfeldes erscheint ein Dropdown-Menü neuen Stils, in dem alle (noch nicht hinzugefügten) Bedeutungen, die im <a href="#bedeutungsgeruest" class="link-handbuch">Bedeutungsgerüst</a> zu finden sind, mit Zählzeichen und Einrückungen zu sehen sind. Wurde eine Bedeutung hinzugefügt, wird sie über dem Bedeutungsfeld angezeigt, und zwar in dem Stil, der schon seit Langem für die Leseansicht genutzt wird.</p>
 
-            <p>Neue Bedeutungen können auch weiterhin direkt über das Bedeutungsfeld eingegeben werden (<kbd>Enter</kbd> drücken). Allerdings steht das Trennzeichen <code class="quelltext">:␣</code>, mit dem man die Hierarchieebene einer neuen Bedeutung angeben konnte, nun nicht mehr zur Verfügung. (Dafür können Bedeutungen nun problemlos Doppelpunkte enthalten.) Aus diesem Grund werden neuen Bedeutung immer als letzte an das Bedeutungsgerüst angehängt. In der Bedeutungsgerüst-Funktion können sie nachträglich an die passende Stelle geschoben werden.</p>
+            <p>Neue Bedeutungen können auch weiterhin direkt über das Bedeutungsfeld eingegeben werden (<kbd>⏎</kbd> drücken). Allerdings steht das Trennzeichen <code class="quelltext">:␣</code>, mit dem man die Hierarchieebene einer neuen Bedeutung angeben konnte, nun nicht mehr zur Verfügung. (Dafür können Bedeutungen nun problemlos Doppelpunkte enthalten.) Aus diesem Grund werden neuen Bedeutung immer als letzte an das Bedeutungsgerüst angehängt. In der Bedeutungsgerüst-Funktion können sie nachträglich an die passende Stelle geschoben werden.</p>
 
             <p>Diese Änderung behebt zugleich einige Fehler, die immer dann auftraten, wenn Bedeutungsparaphrasen Doppelpunkte enthielten.</p>
           </li>
@@ -113,9 +113,9 @@
 
           <li>Die Werte in der Tag-Datei für Standardvarietäten wurden in <i>Deutschland, Österreich</i> und <i>Schweiz</i> geändert.</li>
 
-          <li>Die Sicherheit der App wurden in einigen Punkten verbessert.</li>
+          <li>Die Sicherheit der App wurde in einigen Punkten verbessert.</li>
 
-          <li><a href="#verschiedenes-cli" class="link-dokumentation">CLI</a>: Der Pfad zu einer übergebenen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien oder der in einem CLI-Kommando muss nicht mehr zwingend absolut sein. Relative Pfadangaben werden nun aufgelöst.</li>
+          <li><a href="#verschiedenes-cli" class="link-dokumentation">CLI</a>: Der Pfad zu einer übergebenen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei oder der in einem CLI-Kommando muss nicht mehr zwingend absolut sein. Relative Pfadangaben werden nun korrekt aufgelöst.</li>
         </ul>
 
         <h3>Updates</h3>
@@ -126,10 +126,68 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>30 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
         <ul>
-          <li></li>
+          <li><code class="quelltext">&lt;sub&gt;</code> und <code class="quelltext">&lt;sup&gt;</code> im Belegtext führten zu einer unschönen Sprengung der Zeilendurchschüsse</li>
+
+          <li>wurde in der Karteikarte mit der Suchleiste gesucht, wurden die Treffer immer an den obersten Rand des sichtbaren Bereichs gescrollt, ohne dass darüber noch die benötigten Kontextzeilen zu sehen waren</li>
+
+          <li>in der Belegliste und in der Leseansicht der Karteikarte wurden beim Suchen mit der Suchleiste auch im Kürzungsplatzhalter Treffer markiert, wenn dort passender Text zu finden war</li>
+
+          <li>wurde aus dem XML-Fenster mit <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> markierter Text kopiert, wurden <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Stellvertreter für geschützte Leerzeichen im kopierten Text nicht ersetzt</li>
+
+          <li>an verschiedenen Stellen der App konnte das Scrollen in einem bestimmten Bereich dazu führen, dass auch der äußere Rahmen gescrollt wurde</li>
+
+          <li>beim Erstellen eines XML-Snippets wurde eine Korrektur von Streichungen, die mit Komma <abbr title="und so weiter">usw.</abbr> beginnen, nur auf die erste Streichung im Belegtext angewandt</li>
+
+          <li>wenn Belege aus einer aus den <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Korpora heruntergeladenen <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Datei importiert wurden, waren vor und nach dem Belegtext mitunter unnötige Leerzeilen</li>
+
+          <li>wurde das im geöffneten Bedeutungsgerüst-Fenster sichtbare Bedeutungsgerüst im Hauptfenster gelöscht, führte dies im Bedeutungsgerüst-Fenster zu einem Fehler, sodass überhaupt kein Gerüst mehr angezeigt wurde</li>
+
+          <li>Korrektur eines visuellen Fehlers in Handbuch und technischer Dokumentation</li>
+
+          <li>über dem Quellefeld der Karteikarte waren in der Leseansicht noch Icons sichtbar, die nur in der Formularansicht eine Funktion haben</li>
+
+          <li>in den Datenfeldern der Karteikarte funktionierte das Rückgängigmachen und Wiederherstellen von Texteingaben (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> via Tastaturkürzel <kbd>Strg</kbd>&nbsp;+ <kbd>Z</kbd>) nicht korrekt: Text konnte nur buchstabenweise rückgängig gemacht oder wiederhergestellt werden</li>
+
+          <li>wenn in der Belegliste die automatisch vorgenommene Kürzung einer Strophe (also eines Absatzes mit Versen) rückgängig gemacht wurde, wurde am Ende nicht die ganze Strophe, sondern nur ein Vers angezeigt</li>
+
+          <li>wurde in einem Beleg mit Versen eine Annotierung vorgenommen, führte dies dazu, dass am Ende jeder Vers aus einer Strophe, die nicht annotiert wurde, in einem eigenen Absatz stand</li>
+
+          <li>wurde in das Belegfeld Plain-Text eingefügt, wurden Zeilenumbrüche verändert, Leerzeichen am Anfang von Absätzen eingefügt <abbr title="und so weiter">usw.</abbr></li>
+
+          <li>ein Overscroll über dem Belegfeld führte dazu, dass die gesamte Karteikarte weiter nach unten gescrollt wurde</li>
+
+          <li>beim Einfügen von Text in das Belegfeld wurden <code class="quelltext">&lt;br&gt;</code> aus dem Original-HTML gestrichen</li>
+
+          <li>beim Einfügen von Text in das Belegfeld via Tastaturkürzel wurden HTML-Tags aus dem Original auch dann entfernt, wenn sie eigentlich stehen bleiben sollten</li>
+
+          <li>über die Sonderzeichen-Funktion wurden die Zeichen in der Unicodenormalform NFD eingefügt</li>
+
+          <li>die Unicodenormalform automatisch importierter Belege, Quellen- und Literaturtitel wurden nicht nach NFC normalisiert</li>
+
+          <li>die mithilfe des XML-Fensters erzeugten Dateien konnten einen Mix verschiedener Unicode Normalformen haben; fortan werden alle Zeichen nach NFC konvertiert</li>
+
+          <li>wenn der Versuch, eine Belegstelle zu annotieren, zu einer illegalen Verschachtelung führen würde, produzierte dies einen Programmfehler ohne Feedback</li>
+
+          <li>wenn in schneller Folge Elemente unter einem Tooltip verschwunden sind (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> durch rasches Wegklicken), ging der Tooltip nicht mehr weg</li>
+
+          <li>das Menübild für das Formvarianten-Fenster folgte nicht dem üblichen Icon-Layout</li>
+
+          <li>bei langen Wörtern oder Dateinamen ohne Leerzeichen und Bindestriche konnte der Text im Tooltip rechts überfließen</li>
+
+          <li>das Icon für einen Anhang im Kopfbereich der App war falsch, wenn die Datei eine Namenserweiterung in Großbuchstaben hat</li>
+
+          <li>viele Tastaturkürzel funktionierten mit <abbr title="zum Beispiel">z.&nbsp;B.</abbr> einem arabischen Keyboard-Layout nicht</li>
+
+          <li>die passende Sprache des Hauptmenüs wurde beim ersten Start der App zwar korrekt ausgesucht, aber nicht in den Einstellungen gespeichert, sodass beim zweiten Start immer die Sprache Deutsch ausgewählt wurde</li>
+
+          <li>in der oberen linken Ecke des Programmfensters flackerte ein Tooltip für 50&nbsp;ms auf, wenn das Zielelement bereits vor dem Einblenden des Tooltips wieder verschwunden war</li>
+
+          <li>das automatische Ergänzen der Karteianhänge schloss die von Windows automatisch erstellte Thumbnail-Datei Thumbs.db nicht aus</li>
+
+          <li>der Linux-Installer legte zwar einen MIME-Type für <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien an, konnte diesen aber nicht mit der App verknüpfen</li>
         </ul>
       </div>
 
