@@ -64,7 +64,7 @@ function makeConfig () {
         {
           from: "./resources",
           to: "./",
-          filter: [ "*.ztj", "*.xml", "filetype" ],
+          filter: [ "*.ztj", "*.xml", "*.xsl", "filetype" ],
         },
       ],
     },
