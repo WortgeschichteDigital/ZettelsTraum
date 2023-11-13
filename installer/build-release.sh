@@ -180,8 +180,8 @@ vorbereiten() {
       zeilenWeg 1
       echo -e "Version: \033[1;33m${version}\033[0m"
       # Version in package.json eintragen
-      local zeile="\t\"version\": \"${version}\","
-      sed -i "s/\t\"version\".*/${zeile}/" "package.json"
+      local zeile="  \"version\": \"${version}\","
+      sed -i "s/  \"version\".*/${zeile}/" "package.json"
       echo ""
       break
     fi

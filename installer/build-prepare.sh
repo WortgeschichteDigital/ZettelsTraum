@@ -118,8 +118,8 @@ prepareRelease() {
   sed -i "s|<main>|${versionen_block//$'\n'/\\n}|" "win/changelog.html"
 
   # Versionsnummer in der package.json hochzählen und als Beta-Version markieren
-  local versionZeile="\t\"version\": \"${versionStart}${versionPatch}-beta.1\","
-  sed -i "s/\t\"version\".*/${versionZeile}/" "package.json"
+  local versionZeile="  \"version\": \"${versionStart}${versionPatch}-beta.1\","
+  sed -i "s/  \"version\".*/${versionZeile}/" "package.json"
 
   # Commit erstellen
   git status
