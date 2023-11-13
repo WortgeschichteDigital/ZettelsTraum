@@ -1,488 +1,491 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
-@import url(../variablen.css);
+/* IMPORTS -------------------------------------- */
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
-
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
-
-/* Suchleiste ----------------------------------- */
 @import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../suchleiste.css);
+@import url(../tooltip.css);
+@import url(../variablen.css);
 @import url(../win/suchleiste-extra.css);
 
-/* Tooltip -------------------------------------- */
-@import url(../tooltip.css);
 
-/* Struktur-Elemente ---------------------------- */
+/* STRUKTUR-ELEMENTE ---------------------------- */
+
 body {
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #fff;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	user-select: none;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  user-select: none;
 }
 
 body > header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1; /* wegen der "Checkboxes" in Handbuch > Einstellungen */
-	border-bottom: 10px solid #fff;
-	padding: 0 10px;
-	width: calc(100% - 20px);
-	height: 60px;
-	background-color: var(--farbe);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1; /* wegen der "Checkboxes" in Handbuch > Einstellungen */
+  border-bottom: 10px solid #fff;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background-color: var(--farbe);
 }
 
 body > header h1 {
-	display: inline-block;
-	margin: 0;
-	color: #fff;
-	font-size: 30px;
-	font-weight: normal;
-	line-height: 60px;
+  display: inline-block;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 60px;
 }
 
 #icon {
-	position: absolute;
-	top: 6px;
-	right: 10px;
+  position: absolute;
+  top: 6px;
+  right: 10px;
 }
 
 main {
-	display: grid;
-	grid-template-columns: 250px 1fr;
-	margin-top: 70px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  margin-top: 70px;
 }
 
 section {
-	padding: 0 15px 10px 15px;
+  padding: 0 15px 10px;
 }
 
 section.padding-suchleiste {
-	padding-bottom: 51px;
+  padding-bottom: 51px;
 }
 
-/* Basis-Elemente ------------------------------- */
+
+/* BASIS-ELEMENTE ------------------------------- */
+
 a {
-	outline: none;
-	color: var(--textFarbe);
-	text-decoration: none;
+  outline: none;
+  color: var(--textFarbe);
+  text-decoration: none;
 }
 
 a:not(.icon-link):focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 abbr {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 code {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--text);
-	color: #fff;
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	user-select: text;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--text);
+  color: #fff;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  user-select: text;
 }
 
 code.quelltext {
-	background-color: var(--hintergrund);
-	color: var(--text);
+  background-color: var(--hintergrund);
+  color: var(--text);
 }
 
 code.quelltext.long {
-	word-break: break-all;
+  word-break: break-all;
 }
 
 figure {
-	clear: left;
-	clear: right;
-	margin: 10px 0;
-	border: 1px solid var(--linie);
-	padding: 5px;
+  clear: left;
+  clear: right;
+  margin: 10px 0;
+  border: 1px solid var(--linie);
+  padding: 5px;
 }
 
 figure.left {
-	float: left;
-	margin: 0 10px 10px 0;
-	width: 35%;
+  float: left;
+  margin: 0 10px 10px 0;
+  width: 35%;
 }
 
 figure.right {
-	float: right;
-	margin: 0 0 10px 10px;
-	width: 35%;
+  float: right;
+  margin: 0 0 10px 10px;
+  width: 35%;
 }
 
 figure img {
-	width: 100%;
+  width: 100%;
 }
 
 .bilder {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .bilder figure {
-	margin: 0 10px 10px 0;
+  margin: 0 10px 10px 0;
 }
 
 figcaption {
-	margin-top: 5px;
-	color: var(--textHell);
-	font-style: italic;
-	text-align: center;
-	line-height: 20px;
+  margin-top: 5px;
+  color: var(--textHell);
+  font-style: italic;
+  text-align: center;
+  line-height: 20px;
 }
 
 h2 {
-	margin: 30px 0 15px 0;
-	color: var(--textFarbe);
-	font-size: 24px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 38px;
+  margin: 30px 0 15px;
+  color: var(--textFarbe);
+  font-size: 24px;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 38px;
 }
 
 h2:first-child {
-	margin-top: 16px;
+  margin-top: 16px;
 }
 
 img {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 img.klein {
-	vertical-align: baseline;
+  vertical-align: baseline;
 }
 
 kbd {
-	display: inline-block;
-	border: 1px solid var(--linie);
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--hintergrund);
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  display: inline-block;
+  border: 1px solid var(--linie);
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--hintergrund);
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 p {
-	margin: 0 0 10px 0;
+  margin: 0 0 10px;
 }
 
 section > p:first-child {
-	margin-top: 23px;
+  margin-top: 23px;
 }
 
 q.bedeutung::before {
-	content: "‚";
+  content: "‚";
 }
 
 q.bedeutung::after {
-	content: "‘";
+  content: "‘";
 }
 
 pre {
-	border-radius: 3px;
-	padding: 3px;
-	background-color: var(--text);
-	color: #fff;
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	white-space: pre-wrap;
-	user-select: text;
-	tab-size: 2;
-	word-break: break-all;
+  border-radius: 3px;
+  padding: 3px;
+  background-color: var(--text);
+  color: #fff;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  white-space: pre-wrap;
+  user-select: text;
+  tab-size: 2;
+  word-break: break-all;
 }
 
 pre.quelltext {
-	background-color: var(--hintergrund);
-	color: var(--text);
+  background-color: var(--hintergrund);
+  color: var(--text);
 }
 
 pre.kein-hintergrund {
-	padding: 0;
-	background-color: transparent;
+  padding: 0;
+  background-color: transparent;
 }
 
 q::before {
-	content: "„";
+  content: "„";
 }
 
 q::after {
-	content: "“";
+  content: "“";
 }
 
 q.einfach::before {
-	content: "‚";
+  content: "‚";
 }
 
 q.einfach::after {
-	content: "‘";
+  content: "‘";
 }
 
 s.rot {
-	color: var(--farbeRot);
+  color: var(--farbeRot);
 }
 
 s.rot span {
-	color: var(--text);
+  color: var(--text);
 }
 
 section ul,
 section ol {
-	margin: 0;
-	padding: 0 0 0 30px;
-	list-style-type: disc;
+  margin: 0;
+  padding: 0 0 0 30px;
+  list-style-type: disc;
 }
 
 section ol {
-	list-style-type: decimal;
+  list-style-type: decimal;
 }
 
 section ol ul {
-	margin-top: 10px;
+  margin-top: 10px;
 }
 
 section li {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 section ul.senza-stile {
-	list-style-type: none;
+  list-style-type: none;
 }
 
 section ul.senza-stile p:first-child {
-	text-indent: -30px;
+  text-indent: -30px;
 }
 
-/* Navigation ----------------------------------- */
+
+/* NAVIGATION ----------------------------------- */
+
 nav {
-	position: sticky;
-	top: 70px;
-	z-index: 1;
-	padding: 20px 0 0 0;
-	overflow: hidden;
-	height: calc(100vh - 70px - 20px); /* 70px Header, 20px Padding */
-	background-color: var(--hintergrund);
+  position: sticky;
+  top: 70px;
+  z-index: 1;
+  padding: 20px 0 0;
+  overflow: hidden;
+  height: calc(100vh - 70px - 20px); /* 70px Header, 20px Padding */
+  background-color: var(--hintergrund);
 }
 
 nav p {
-	position: relative;
-	padding: 0 4px;
+  position: relative;
+  padding: 0 4px;
 }
 
 nav p.suchform {
-	line-height: 32px;
-	overflow: hidden;
+  overflow: hidden;
+  padding-top: 1px; /* ansonsten wird der Outline-Rahmen an der oberen Kante abgeschnitten */
+  line-height: 32px;
 }
 
 nav p.suchform a {
-	position: relative;
-	top: 3px;
-	display: inline-block;
-	vertical-align: top;
-	width: 24px;
-	height: 24px;
-	color: var(--iconHell);
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  vertical-align: top;
+  width: 24px;
+  height: 24px;
+  color: var(--iconHell);
 }
 
 #navi-back {
-	margin-left: 4px;
+  margin-left: 4px;
 }
 
 nav p.suchform a svg path {
-	fill: currentcolor;
+  fill: currentcolor;
 }
 
 nav p.suchform a.navigierbar {
-	color: var(--text);
+  color: var(--text);
 }
 
 nav p.suchform a:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 nav p.suchform a:focus {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
 nav input {
-	margin: 0;
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
-	width: calc(100% - 12px - 52px); /* 12px padding und border, 52px Navigationspfeile */
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  margin: 0;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+  width: calc(100% - 12px - 52px); /* 12px padding und border, 52px Navigationspfeile */
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
 }
 
 nav input:focus {
-	outline: 1px solid var(--farbe);
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
 }
 
 nav p.lupe input {
-	padding-right: 25px;
-	width: calc(100% - 32px - 52px); /* 32px padding und border, 52px Navigationspfeile */
+  padding-right: 25px;
+  width: calc(100% - 32px - 52px); /* 32px padding und border, 52px Navigationspfeile */
 }
 
 #suchfeld-lupe {
-	position: absolute;
-	right: 58px;
-	display: none;
-	background-color: #fff;
+  position: absolute;
+  right: 58px;
+  display: none;
+  background-color: #fff;
 }
 
 nav p.lupe #suchfeld-lupe {
-	display: inline-block;
+  display: inline-block;
 }
 
 nav ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 nav li {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 nav li a.kopf {
-	position: relative;
-	display: block;
-	padding: 2px 10px;
-	background-color: var(--farbeB);
-	color: #fff;
+  position: relative;
+  display: block;
+  padding: 2px 10px;
+  background-color: var(--farbeB);
+  color: #fff;
 }
 
 nav li a.aktiv {
-	background-color: var(--aktiv);
+  background-color: var(--aktiv);
 }
 
 nav li a.kopf:focus,
 nav li a.aktiv:focus {
-	background-color: var(--farbe);
-	text-decoration: none;
+  background-color: var(--farbe);
+  text-decoration: none;
 }
 
 .nav-details-toggle {
-	position: absolute;
-	right: 5px;
-	width: 24px;
-	height: 24px;
-	-webkit-mask-image: url(../../img/plus-dick.svg);
-	mask-image: url(../../img/plus-dick.svg);
-	background-color: transparent;
+  position: absolute;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  -webkit-mask-image: url(../../img/plus-dick.svg);
+  mask-image: url(../../img/plus-dick.svg);
+  background-color: transparent;
 }
 
 a.aktiv .nav-details-toggle {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 .nav-details-toggle-aus {
-	-webkit-mask-image: url(../../img/minus-dick.svg);
-	mask-image: url(../../img/minus-dick.svg);
+  -webkit-mask-image: url(../../img/minus-dick.svg);
+  mask-image: url(../../img/minus-dick.svg);
 }
 
 #navi-details {
-	position: fixed;
-	max-width: 400px;
-	padding: 10px;
-	background-color: var(--farbeB);
-	transition: left .5s ease;
+  position: fixed;
+  max-width: 400px;
+  padding: 10px;
+  background-color: var(--farbeB);
+  transition: left .5s ease;
 }
 
 #navi-details > div {
-	overflow: auto;
-	max-height: 435px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  max-height: 435px;
 }
 
 #navi-details a {
-	display: block;
-	margin: 0 0 5px 0;
-	padding: 0 5px;
-	overflow: hidden;
-	color: #fff;
-	text-decoration: none;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: block;
+  margin: 0 0 5px;
+  padding: 0 5px;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #navi-details a:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #navi-details a.h2 {
-	font-style: italic;
+  font-style: italic;
 }
 
 #navi-details a.icon {
-	font-size: 14px;
+  font-size: 14px;
 }
 
 #navi-details a.level1 {
-	padding-left: 20px
+  padding-left: 20px
 }
 
 #navi-details a.level2 {
-	padding-left: 35px
+  padding-left: 35px
 }
 
 #navi-details a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
-/* Tabellen ------------------------------------- */
+
+/* TABELLEN ------------------------------------- */
+
 table {
-	margin: 0;
-	border-collapse: collapse;
-	border-spacing: 0;
+  margin: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .ztj th,
 .ztj td {
-	padding: 5px 10px;
-	vertical-align: top;
-	text-align: left;
+  padding: 5px 10px;
+  vertical-align: top;
+  text-align: left;
 }
 
 .ztj th:first-child,
 .ztj td:first-child {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 .ztj th:last-child,
 .ztj td:last-child {
-	padding-right: 0;
+  padding-right: 0;
 }
 
 .ztj td:nth-child(3),
 .ztj td:last-child {
-	font-size: 14px;
-	line-height: 20px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .ztj td:nth-child(3) {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .ztj th {
-	font-style: italic;
-	font-weight: normal;
+  font-style: italic;
+  font-weight: normal;
 }
 
 .ztj td[colspan] {
-	font-style: italic;
+  font-style: italic;
 }
 
 .ztj td[colspan] code {
-	font-style: normal;
+  font-style: normal;
 }
 
 tr.ztj-ebene1 td[colspan] p,
@@ -495,9 +498,9 @@ tr.ztj-ebene4 td[colspan] p,
 tr.ztj-ebene4 p,
 tr.ztj-ebene5 td[colspan] p,
 tr.ztj-ebene5 p {
-	margin: 0 0 0 15px;
-	border-left: 3px solid var(--farbeB);
-	padding-left: 15px;
+  margin: 0 0 0 15px;
+  border-left: 3px solid var(--farbeB);
+  padding-left: 15px;
 }
 
 tr.ztj-ebene1 td[colspan] p,
@@ -505,315 +508,323 @@ tr.ztj-ebene2 td[colspan] p,
 tr.ztj-ebene3 td[colspan] p,
 tr.ztj-ebene4 td[colspan] p,
 tr.ztj-ebene5 td[colspan] p {
-	border-color: transparent;
+  border-color: transparent;
 }
 
 tr.ztj-ebene2 td[colspan] p,
 tr.ztj-ebene2 p {
-	margin-left: 43px;
+  margin-left: 43px;
 }
 
 tr.ztj-ebene3 td[colspan] p,
 tr.ztj-ebene3 p {
-	margin-left: 86px;
+  margin-left: 86px;
 }
 
 tr.ztj-ebene4 td[colspan] p,
 tr.ztj-ebene4 p {
-	margin-left: 129px;
+  margin-left: 129px;
 }
 
 tr.ztj-ebene5 td[colspan] p,
 tr.ztj-ebene5 p {
-	margin-left: 172px;
+  margin-left: 172px;
 }
 
 tr.ztj-alt td,
 tr.ztj-alt td code {
-	color: var(--textSehrHell);
+  color: var(--textSehrHell);
 }
 
 tr.ztj-alt td .obacht code {
-	color: var(--text);
+  color: var(--text);
 }
 
 tr.ztj-alt td p {
-	border-color: var(--textExtremHell);
+  border-color: var(--textExtremHell);
 }
 
 .tastatur.last {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .tastatur td {
-	position: relative;
-	padding: 5px;
-	border-top: 1px solid var(--linie);
+  position: relative;
+  padding: 5px;
+  border-top: 1px solid var(--linie);
 }
 
 .tastatur tr:last-child td {
-	border-bottom: 1px solid var(--linie);
+  border-bottom: 1px solid var(--linie);
 }
 
 .tastatur td:nth-child(2n) {
-	padding: 5px 0;
+  padding: 5px 0;
 }
 
 .tastatur td:nth-child(7) {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 .tastatur td:last-child {
-	padding: 5px;
+  padding: 5px;
 }
 
 .tastatur td p {
-	margin-bottom: 5px;
-	padding-left: 25px;
-	text-indent: -25px;
+  margin-bottom: 5px;
+  padding-left: 25px;
+  text-indent: -25px;
 }
 
 .tastatur td p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .tastatur tr:hover td {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 .tastatur kbd.extra {
-	position: absolute;
-	top: 5px;
-	left: 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 
-/* Suche ---------------------------------------- */
+
+/* SUCHE ---------------------------------------- */
+
 mark.suche,
 mark.wort {
-	border-radius: 3px;
-	padding: 0 3px;
-	background-color: var(--farbeOrange);
-	color: #fff;
+  border-radius: 3px;
+  padding: 0 3px;
+  background-color: var(--farbeOrange);
+  color: #fff;
 }
 
 mark.wort {
-	background-color: var(--farbeGelb);
-	color: var(--text);
-	font-weight: bold;
+  background-color: var(--farbeGelb);
+  color: var(--text);
+  font-weight: bold;
 }
 
 
 #suchergebnisse a {
-	display: block;
-	margin-bottom: 15px;
-	color: var(--text);
+  display: block;
+  margin-bottom: 15px;
+  color: var(--text);
 }
 
 #suchergebnisse a:hover,
 #suchergebnisse a:focus {
-	color: var(--farbe);
-	text-decoration: none;
+  color: var(--farbe);
+  text-decoration: none;
 }
 
 #suchergebnisse a.mehr-treffer {
-	color: var(--farbe);
-	font-style: italic;
-	text-align: center;
+  color: var(--farbe);
+  font-style: italic;
+  text-align: center;
 }
 
 #suchergebnisse a.mehr-treffer:hover,
 #suchergebnisse a.mehr-treffer:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #suchergebnisse b {
-	padding-right: 15px;
+  padding-right: 15px;
 }
 
 #suchergebnisse p.keine-treffer {
-	color: var(--textSehrHell);
-	text-align: center;
-	font-style: italic;
+  color: var(--textSehrHell);
+  text-align: center;
+  font-style: italic;
 }
 
-/* Bild ----------------------------------------- */
+
+/* BILD ----------------------------------------- */
+
 #bild {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	padding: 25px;
-	width: calc(100vw - 50px); /* 50px padding */
-	height: 100vh;
-	background-color: rgba(180, 180, 180, .7);
-	backdrop-filter: blur(3px);
-	opacity: 0;
-	transition: opacity .2s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding: 25px;
+  width: calc(100vw - 50px); /* 50px padding */
+  height: 100vh;
+  background-color: rgb(180 180 180 / 70%);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .2s ease;
 }
 
 #bild.einblenden {
-	opacity: 1;
+  opacity: 1;
 }
 
 #bild-cont {
-	position: relative;
-	border-radius: 25px;
-	padding: 25px;
-	width: 90%;
-	background-color: #fff;
-	text-align: center;
+  position: relative;
+  border-radius: 25px;
+  padding: 25px;
+  width: 90%;
+  background-color: #fff;
+  text-align: center;
 }
 
 #bild-cont h2 {
-	margin: 0 25px 10px 25px;
-	font-size: 20px;
-	line-height: 30px;
+  margin: 0 25px 10px;
+  font-size: 20px;
+  line-height: 30px;
 }
 
 #bild-cont img {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 #bild-schliessen {
-	position: absolute;
-	top: 5px;
-	right: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 #bilder-prev {
-	position: absolute;
-	top: calc(50% - 48px);
-	left: 0;
+  position: absolute;
+  top: calc(50% - 48px);
+  left: 0;
 }
 
 #bilder-next {
-	position: absolute;
-	top: calc(50% - 48px);
-	right: 0;
+  position: absolute;
+  top: calc(50% - 48px);
+  right: 0;
 }
 
-/* Laden ---------------------------------------- */
+
+/* LADEN ---------------------------------------- */
+
 #laden {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 2;
-	width: 100%;
-	height: 100%;
-	background-color: #fff;
-	transition: opacity .25s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transition: opacity .25s ease;
 }
 
 #laden.geladen {
-	opacity: 0;
+  opacity: 0;
 }
 
-/* Globale Klassen ------------------------------ */
+
+/* GLOBALE KLASSEN ------------------------------ */
+
 .datei {
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
 
 .datei.long {
-	word-break: break-all;
+  word-break: break-all;
 }
 
 .datentyp {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
 .treffer-vor {
-	outline-color: transparent;
-	outline-offset: 2px;
-	outline-style: solid;
-	outline-width: 2px;
+  outline-color: transparent;
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
 }
 
 .treffer {
-	outline-color: var(--farbe);
-	transition: outline-color 1.5s ease;
+  outline-color: var(--farbe);
+  transition: outline-color 1.5s ease;
 }
 
 .treffer-nach {
-	transition: outline-color 1.5s ease;
+  transition: outline-color 1.5s ease;
 }
 
 .obacht {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
 
 .abschnitt {
-	margin-top: 25px;
+  margin-top: 25px;
 }
 
 .erklaerung-icon {
-	padding-left: 40px;
-	text-indent: -40px;
+  padding-left: 40px;
+  text-indent: -40px;
 }
 
 .info .erklaerung-icon {
-	padding-left: 36px;
-	text-indent: -36px;
+  padding-left: 36px;
+  text-indent: -36px;
 }
 
 .info-option .erklaerung-icon {
-	padding-left: 40px;
+  padding-left: 40px;
 }
 
 .erklaerung-icon * {
-	text-indent: 0;
+  text-indent: 0;
 }
 
 .erklaerung-icon-menues {
-	margin-top: 25px;
-	font-style: italic;
+  margin-top: 25px;
+  font-style: italic;
 }
 
 .erklaerung-icon-menues:first-child {
-	margin-top: 22px;
+  margin-top: 22px;
 }
 
 .erklaerung-icon-text {
-	display: inline-block;
-	width: 20px;
+  display: inline-block;
+  width: 20px;
 }
 
 .erklaerung-icon img:first-child,
 .erklaerung-icon-menues img:first-child,
 .erklaerung-icon .erklaerung-icon-text {
-	margin-right: 16px;
+  margin-right: 16px;
 }
 
 .erklaerung-option {
-	position: relative;
-	margin-top: 25px;
-	margin-left: 40px;
-	font-style: italic;
+  position: relative;
+  margin-top: 25px;
+  margin-left: 40px;
+  font-style: italic;
 }
 
 h2 + .erklaerung-option {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 .erklaerung-option::before {
-	position: absolute;
-	top: 0;
-	left: -40px;
-	content: "☑";
-	width: 40px;
-	color: var(--farbeB);
-	font-style: normal;
+  position: absolute;
+  top: 0;
+  left: -40px;
+  content: "☑";
+  width: 40px;
+  color: var(--farbeB);
+  font-style: normal;
 }
 
 .info {
-	margin-left: 40px;
-	font-size: 14px;
-	line-height: 20px;
+  margin-left: 40px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .info .info p:not(:last-child) {
-	margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .eingerueckt {
-	margin-left: 36px;
+  margin-left: 36px;
 }

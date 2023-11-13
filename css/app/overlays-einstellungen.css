@@ -1,369 +1,374 @@
 @charset "utf-8";
 
-/* Einstellungen -------------------------------- */
+/* EINSTELLUNGEN -------------------------------- */
+
 #einstellungen > div {
-	margin-top: 40px;
-	max-width: 900px;
+  margin-top: 40px;
+  max-width: 900px;
 }
 
 .icon-h-einstellungen {
-	-webkit-mask-image: url(../../img/zahnrad.svg);
-	mask-image: url(../../img/zahnrad.svg);
+  -webkit-mask-image: url(../../img/zahnrad.svg);
+  mask-image: url(../../img/zahnrad.svg);
 }
 
 #einstellungen-cont {
-	display: grid;
-	grid-template-columns: 155px calc(100% - 155px);
+  display: grid;
+  grid-template-columns: 155px calc(100% - 155px);
 }
 
 #einstellungen-cont > div {
-	padding: 10px 10px 10px 15px;
+  padding: 10px 10px 10px 15px;
 }
 
 #einstellungen-cont > div:first-child {
-	padding: 10px 0 20px 0;
-	background-color: var(--hintergrund);
-	border-bottom-left-radius: 10px;
+  padding: 10px 0 20px;
+  background-color: var(--hintergrund);
+  border-bottom-left-radius: 10px;
 }
 
 #einstellungen-cont section {
-	overflow: auto;
-	padding-left: 1px;
-	transition: max-height .5s ease;
+  overflow: auto;
+  padding-left: 1px;
+  transition: max-height .5s ease;
 }
 
 #einstellungen-cont a:not(.icon-link):focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #einstellungen-cont table {
-	margin: 0 0 10px 0;
-	border-collapse: collapse;
-	border-spacing: 0;
+  margin: 0 0 10px;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 #einstellungen-cont td {
-	padding: 0 5px;
-	vertical-align: top;
+  padding: 0 5px;
+  vertical-align: top;
 }
 
 #einstellungen-cont td:first-child {
-	padding-left: 0;
+  padding-left: 0;
 }
 
 #einstellungen-cont td:last-child {
-	padding-right: 0;
+  padding-right: 0;
 }
 
 #einstellungen-cont ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 #einstellungen-cont li {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 #einstellungen-cont li a {
-	display: block;
-	padding: 2px 5px;
-	background-color: var(--farbeB);
-	color: #fff;
+  display: block;
+  padding: 2px 5px;
+  background-color: var(--farbeB);
+  color: #fff;
 }
 
 #einstellungen-cont li a.aktiv {
-	background-color: var(--aktiv);
+  background-color: var(--aktiv);
 }
 
 #einstellungen-cont li a:focus,
 #einstellungen-cont li a.aktiv:focus {
-	background-color: var(--farbe);
-	text-decoration: none !important;
+  background-color: var(--farbe);
+  text-decoration: none !important;
 }
 
 #einstellungen-cont input[type="text"] {
-	width: 185px;
-	color: var(--farbe);
+  width: 185px;
+  color: var(--farbe);
 }
 
 #einstellungen-cont input[type="number"] {
-	width: 50px;
-	color: var(--farbe);
+  width: 50px;
+  color: var(--farbe);
 }
 
 #einstellungen-cont input[type="number"]#einstellung-notizen-max-breite {
-	width: 60px;
+  width: 60px;
 }
 
 #einstellungen-cont input[type="checkbox"] {
-	margin-right: 9px; /* für alignment mit Überschrift */
+  margin-right: 9px; /* für alignment mit Überschrift */
 }
 
 #einstellungen-cont label[for="einstellung-bearbeiterin"],
 #einstellungen-cont label[for="einstellung-timeout"],
 #einstellungen-cont label[for="einstellung-zuletzt"],
 #einstellungen-cont label[for="einstellung-notizen-max-breite"] {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #einstellungen-cont input[name="einstellung-ctrlC-vor"] + label {
-	display: inline-block;
-	width: 150px;
-	text-indent: 0;
+  display: inline-block;
+  width: 150px;
+  text-indent: 0;
 }
 
 #einstellungen-cont p {
-	padding-left: 24px; /* für alignment mit Überschrift */
-	text-indent: -24px; /* so sind mehrzeilige Texte im Block (hängt von checkbox ab) */
+  padding-left: 24px; /* für alignment mit Überschrift */
+  text-indent: -24px; /* so sind mehrzeilige Texte im Block (hängt von checkbox ab) */
 }
 
 #einstellungen-cont p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #einstellungen-cont p.button {
-	margin-bottom: 25px;
-	padding-left: 0;
-	text-indent: 0;
+  margin-bottom: 25px;
+  padding-left: 0;
+  text-indent: 0;
 }
 
 #einstellungen-cont p.button:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #einstellungen-cont p.button input {
-	margin-left: 0;
-	width: 216px;
+  margin-left: 0;
+  width: 216px;
 }
 
 #einstellungen-cont p.button input.einstellung-sichern {
-	margin-left: 15px;
-	width: 135px;
+  margin-left: 15px;
+  width: 135px;
 }
 
 #einstellungen-cont p.button input.einstellung-sichern:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #einstellungen-cont p.einzug {
-	margin-left: 24px;
+  margin-left: 24px;
 }
 
 #einstellungen-cont .einstellungen-spalten {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	align-content: flex-start;
-	height: 145px; /* 5 Items pro Spalte */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  height: 145px; /* 5 Items pro Spalte */
 }
 
 #einstellungen-cont .einstellungen-spalten-flach {
-	height: 87px; /* 3 Items pro Spalte */
+  height: 87px; /* 3 Items pro Spalte */
 }
 
 #einstellungen-cont .einstellungen-spalten p {
-	margin: 0 10px 5px 0;
-	padding-left: 24px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
-	overflow: hidden;
-	text-indent: 0;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  margin: 0 10px 5px 0;
+  padding-left: 24px; /* damit beim Fokussieren der Checkbox der linke Rand nicht abgeschnitten erscheint */
+  overflow: hidden;
+  text-indent: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Quick-Access-Bar ----------------------------- */
+
+/* QUICK-ACCESS-BAR ----------------------------- */
+
 p#quick-config-presets {
-	padding-left: 0;
-	text-align: center;
-	text-indent: 0;
+  padding-left: 0;
+  text-align: center;
+  text-indent: 0;
 }
 
 p#quick-config-presets a {
-	display: inline-block;
-	width: 80px;
-	text-align: center;
+  display: inline-block;
+  width: 80px;
+  text-align: center;
 }
 
 #quick-config {
-	display: grid;
-	grid-template-columns: calc(50% - 39px) 58px calc(50% - 39px);
-	margin-left: 24px;
-	height: 400px;
+  display: grid;
+  grid-template-columns: calc(50% - 39px) 58px calc(50% - 39px);
+  margin-left: 24px;
+  height: 400px;
 }
 
 #quick-config div:first-child,
 #quick-config div:last-child {
-	position: relative;
-	border: 1px solid var(--linie);
-	padding: 4px;
-	overflow-x: hidden;
-	overflow-y: auto;
+  position: relative;
+  border: 1px solid var(--linie);
+  padding: 4px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #quick-config div:nth-child(2) {
-	padding-top: 163px;
-	text-align: center;
+  padding-top: 163px;
+  text-align: center;
 }
 
 #quick-config div:nth-child(2) img {
-	margin: 0;
+  margin: 0;
 }
 
 #quick-config a {
-	display: block;
-	height: 24px;
-	padding: 1px 5px;
-	overflow: hidden;
-	color: var(--text);
-	font-size: 14px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: block;
+  height: 24px;
+  padding: 1px 5px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #quick-config a:focus {
-	background-color: var(--hover);
-	text-decoration: none !important;
+  background-color: var(--hover);
+  text-decoration: none !important;
 }
 
 #quick-config a.aktiv {
-	outline: 2px solid var(--farbe);
+  outline: 2px solid var(--farbe);
 }
 
 #quick-config img {
-	margin-right: 5px;
-	vertical-align: bottom;
+  margin-right: 5px;
+  vertical-align: bottom;
 }
 
 #quick-config hr {
-	margin: 11px 0;
-	border: 1px solid var(--text);
+  margin: 11px 0;
+  border: 1px solid var(--text);
 }
 
 .einstellung-neustart {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
 
 .einstellungen-spacer {
-	height: 5px;
+  height: 5px;
 }
 
-/* Tag-Dateien ---------------------------------- */
+
+/* TAG-DATEIEN ---------------------------------- */
+
 #tags-cont {
-	margin-bottom: 10px;
-	padding-right: 10px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	height: 286px;
+  margin-bottom: 10px;
+  padding-right: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 286px;
 }
 
 #tags-cont table {
-	margin-bottom: 0;
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
-	table-layout: fixed;
+  margin-bottom: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  table-layout: fixed;
 }
 
 #tags-cont td {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #tags-cont td:first-child {
-	padding-left: 5px;
+  padding-left: 5px;
 }
 
 #tags-cont tr.tags-datei:not(:first-child) td {
-	padding-top: 10px;
+  padding-top: 10px;
 }
 
 #tags-cont td[rowspan] {
-	padding-left: 0;
-	width: 24px;
+  padding-left: 0;
+  width: 24px;
 }
 
 #tags-cont td.tags-leer {
-	color: var(--textSehrHell);
-	text-align: center;
-	font-style: italic;
+  color: var(--textSehrHell);
+  text-align: center;
+  font-style: italic;
 }
 
 #tags-cont .icon-link {
-	background-color: var(--iconHell);
+  background-color: var(--iconHell);
 }
 
 #tags-cont .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #tags-cont .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #tags-cont table table {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #tags-cont table table td:first-child {
-	padding-left: 0;
-	width: 130px;
+  padding-left: 0;
+  width: 130px;
 }
 
 #tags-cont table table td:last-child {
-	padding-right: 0;
-	color: var(--textHell);
-	font-size: 14px;
-	line-height: 20px;
+  padding-right: 0;
+  color: var(--textHell);
+  font-size: 14px;
+  line-height: 20px;
 }
 
 #tags-cont i {
-	display: inline-block;
-	width: 65px;
+  display: inline-block;
+  width: 65px;
 }
 
 #tags-cont img {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 #tags-cont + p {
-	position: relative;
+  position: relative;
 }
 
 #tags-laden {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #tags-zuruecksetzen {
-	position: absolute;
-	top: 0;
-	right: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .icon-loeschen {
-	-webkit-mask-image: url(../../img/muelleimer.svg);
-	mask-image: url(../../img/muelleimer.svg);
+  -webkit-mask-image: url(../../img/muelleimer.svg);
+  mask-image: url(../../img/muelleimer.svg);
 }
 
 .icon-reload {
-	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
-	mask-image: url(../../img/pfeil-kreis.svg);
+  -webkit-mask-image: url(../../img/pfeil-kreis.svg);
+  mask-image: url(../../img/pfeil-kreis.svg);
 }
 
 .dialog-tags-liste {
-	display: flex;
-	flex-wrap: wrap;
-	max-height: 240px;
-	overflow-x: hidden;
-	overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 240px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .dialog-tags-liste p {
-	flex: 1 0 185px;
-	margin: 0;
-	padding-right: 20px;
-	max-width: 185px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  flex: 1 0 185px;
+  margin: 0;
+  padding-right: 20px;
+  max-width: 185px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

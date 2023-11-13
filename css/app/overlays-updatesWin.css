@@ -1,109 +1,110 @@
 @charset "utf-8";
 
-/* Updates-Fenster ------------------------------ */
+/* UPDATES-FENSTER ------------------------------ */
+
 #updatesWin > div {
-	max-width: 600px;
+  max-width: 600px;
 }
 
 .icon-h-updates {
-	-webkit-mask-image: url(../../img/pfeil-kreis.svg);
-	mask-image: url(../../img/pfeil-kreis.svg);
+  -webkit-mask-image: url(../../img/pfeil-kreis.svg);
+  mask-image: url(../../img/pfeil-kreis.svg);
 }
 
 #updatesWin-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #updatesWin-header.notes {
-	margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 #updatesWin-header p {
-	text-align: center;
+  text-align: center;
 }
 
 #updatesWin-header input {
-	margin: 0;
-	width: 100px;
+  margin: 0;
+  width: 100px;
 }
 
 #updatesWin-header input:last-child {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 #updatesWin-header a:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #updatesWin-header table {
-	margin-top: 25px;
-	border-spacing: 0;
+  margin-top: 25px;
+  border-spacing: 0;
 }
 
 #updatesWin-header td {
-	padding: 0;
-	color: var(--textHell);
-	font-size: 14px;
+  padding: 0;
+  color: var(--textHell);
+  font-size: 14px;
 }
 
 #updatesWin-header tr:first-child td:first-child {
-	color: var(--text);
+  color: var(--text);
 }
 
 #updatesWin-header tr:first-child td:last-child,
 #updatesWin-header tr:last-child td:last-child {
-	color: var(--farbeB);
+  color: var(--farbeB);
 }
 
 #updatesWin-header img {
-	margin-right: 5px;
-	vertical-align: top;
+  margin-right: 5px;
+  vertical-align: top;
 }
 
 #updatesWin-header td span {
-	display: inline-block;
-	margin: 0 5px 0 29px;
-	width: 65px;
-	color: var(--textHell);
-	font-style: italic;
-	text-align: right;
+  display: inline-block;
+  margin: 0 5px 0 29px;
+  width: 65px;
+  color: var(--textHell);
+  font-style: italic;
+  text-align: right;
 }
 
 #updatesWin-header td span.auto-width {
-	width: auto;
+  width: auto;
 }
 
 #updatesWin-notes {
-	overflow-x: hidden;
-	overflow-y: auto;
-	transition: max-height .5s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: max-height .5s ease;
 }
 
 #updatesWin-notes h1 {
-	margin: 25px 10px 10px 0;
-	border-bottom: 1px solid var(--linie);
-	padding-bottom: 5px;
-	font-size: 20px;
-	font-weight: bold;
-	line-height: 30px;
+  margin: 25px 10px 10px 0;
+  border-bottom: 1px solid var(--linie);
+  padding-bottom: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
 }
 
 #updatesWin-notes h1:first-child {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 #updatesWin-notes h2 {
-	margin: 10px 0 5px 0;
-	padding: 0;
-	color: var(--farbeB);
-	background-color: transparent;
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 24px;
+  margin: 10px 0 5px;
+  padding: 0;
+  color: var(--farbeB);
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 24px;
 }
 
 #updatesWin-notes ul {
-	margin: 0;
-	padding: 0 0 0 35px;
-	list-style-type: disc;
+  margin: 0;
+  padding: 0 0 0 35px;
+  list-style-type: disc;
 }

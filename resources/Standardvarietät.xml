@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE standardvarietät [
-	<!ELEMENT standardvarietät (item)+>
-	<!ELEMENT item (id, name)>
-	<!ELEMENT id (#PCDATA)>
-	<!ELEMENT name (#PCDATA)>
+  <!ELEMENT standardvarietät (item)+>
+  <!ELEMENT item (id, name)>
+  <!ELEMENT id (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
 ]>
 <standardvarietät>
-	<item>
-		<id>1</id>
-		<name>Bundesdeutsches Hochdeutsch</name>
-	</item>
-	<item>
-		<id>2</id>
-		<name>Österreichisches Hochdeutsch</name>
-	</item>
-	<item>
-		<id>3</id>
-		<name>Schweizer Hochdeutsch</name>
-	</item>
+  <item>
+    <id>1</id>
+    <name>Deutschland</name>
+  </item>
+  <item>
+    <id>2</id>
+    <name>Österreich</name>
+  </item>
+  <item>
+    <id>3</id>
+    <name>Schweiz</name>
+  </item>
 </standardvarietät>

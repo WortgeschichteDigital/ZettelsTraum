@@ -1,11 +1,12 @@
 @charset "utf-8";
 
-/* Basis-Elemente ------------------------------- */
+/* BASIS-ELEMENTE ------------------------------- */
+
 body {
-	margin: 0;
-	width: 210mm; /* A4 */
-	height: 297mm;
-	overflow-x: inherit;
+  margin: 0;
+  width: 210mm; /* A4 */
+  height: 297mm;
+  overflow-x: inherit;
 }
 
 #quick,
@@ -15,48 +16,52 @@ body > header,
 #liste,
 #drucken h2,
 #drucken-head {
-	display: none;
+  display: none;
 }
 
-/* Druckseite ----------------------------------- */
+
+/* DRUCKSEITE ----------------------------------- */
+
 @page {
-	margin: 20mm;
+  margin: 20mm;
 }
 
-/* Druck-Fenster -------------------------------- */
+
+/* DRUCK-FENSTER -------------------------------- */
+
 #drucken {
-	position: static;
-	display: block;
-	padding: 0;
-	width: auto;
-	height: auto;
+  position: static;
+  display: block;
+  padding: 0;
+  width: auto;
+  height: auto;
 }
 
 #drucken > div {
-	margin: 0;
-	border-radius: 0;
-	max-width: none;
+  margin: 0;
+  border-radius: 0;
+  max-width: none;
 }
 
 #drucken-cont-rahmen {
-	padding: 0;
+  padding: 0;
 }
 
 #drucken-cont {
-	max-height: none;
-	overflow-y: inherit;
-	font-size: 14pt;
-	line-height: 24pt;
+  max-height: none;
+  overflow-y: inherit;
+  font-size: 14pt;
+  line-height: 24pt;
 }
 
 #drucken-cont h3 {
-	page-break-before: always;
-	margin-top: 0;
-	border-top: none;
-	padding-top: 0;
-	font-size: 18pt;
+  page-break-before: always;
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+  font-size: 18pt;
 }
 
 #drucken-cont th {
-	page-break-after: avoid;
+  page-break-after: avoid;
 }

@@ -1,90 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE soziolekte [
-	<!ELEMENT soziolekte (item)+>
-	<!ELEMENT item (id, name, abbr?)>
-	<!ELEMENT id (#PCDATA)>
-	<!ELEMENT name (#PCDATA)>
-	<!ELEMENT abbr (#PCDATA)>
+  <!ELEMENT soziolekte (item)+>
+  <!ELEMENT item (id, name, abbr?)>
+  <!ELEMENT id (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT abbr (#PCDATA)>
 ]>
 <soziolekte>
-	<item>
-		<id>1</id>
-		<name>Amtssprache</name>
-	</item>
-	<item>
-		<id>2</id>
-		<name>Fachsprache</name>
-	</item>
-	<item>
-		<id>3</id>
-		<name>Gaunersprache</name>
-	</item>
-	<item>
-		<id>4</id>
-		<name>Gewerbesprache</name>
-	</item>
-<!--
-	<item>
-		<id>5</id>
-		<name>in der Sprache der DDR</name>
-		<abbr>DDR</abbr>
-	</item>
--->
-	<item>
-		<id>6</id>
-		<name>in der Sprache der Kirche</name>
-		<abbr>Kirchensp.</abbr>
-	</item>
-<!--
-	<item>
-		<id>7</id>
-		<name>in der Sprache des Nationalsozialismus</name>
-		<abbr>Nationalsoz.</abbr>
-	</item>
-	<item>
-		<id>8</id>
-		<name>in der Sprache des Sozialismus</name>
-		<abbr>Sozialis.</abbr>
-	</item>
--->
-	<item>
-		<id>9</id>
-		<name>Jiddisch</name>
-	</item>
-	<item>
-		<id>10</id>
-		<name>Jugendsprache</name>
-	</item>
-	<item>
-		<id>11</id>
-		<name>Kaufmannssprache</name>
-	</item>
-	<item>
-		<id>12</id>
-		<name>Kindersprache</name>
-	</item>
-	<item>
-		<id>13</id>
-		<name>Rechtssprache</name>
-	</item>
-	<item>
-		<id>14</id>
-		<name>Romani</name>
-	</item>
-	<item>
-		<id>15</id>
-		<name>Rotwelsch</name>
-	</item>
-	<item>
-		<id>16</id>
-		<name>Schülersprache</name>
-	</item>
-	<item>
-		<id>17</id>
-		<name>Studentensprache</name>
-	</item>
-	<item>
-		<id>18</id>
-		<name>Werbesprache</name>
-	</item>
+  <item>
+    <id>1</id>
+    <name>Amtssprache</name>
+  </item>
+  <item>
+    <id>2</id>
+    <name>Fachsprache</name>
+  </item>
+  <item>
+    <id>3</id>
+    <name>Gaunersprache</name>
+  </item>
+  <item>
+    <id>4</id>
+    <name>Gewerbesprache</name>
+  </item>
+  <item>
+    <id>6</id>
+    <name>in der Sprache der Kirche</name>
+    <abbr>Kirchensp.</abbr>
+  </item>
+  <item>
+    <id>9</id>
+    <name>Jiddisch</name>
+  </item>
+  <item>
+    <id>10</id>
+    <name>Jugendsprache</name>
+  </item>
+  <item>
+    <id>11</id>
+    <name>Kaufmannssprache</name>
+  </item>
+  <item>
+    <id>12</id>
+    <name>Kindersprache</name>
+  </item>
+  <item>
+    <id>13</id>
+    <name>Rechtssprache</name>
+  </item>
+  <item>
+    <id>14</id>
+    <name>Romani</name>
+  </item>
+  <item>
+    <id>15</id>
+    <name>Rotwelsch</name>
+  </item>
+  <item>
+    <id>16</id>
+    <name>Schülersprache</name>
+  </item>
+  <item>
+    <id>17</id>
+    <name>Studentensprache</name>
+  </item>
+  <item>
+    <id>18</id>
+    <name>Werbesprache</name>
+  </item>
 </soziolekte>

@@ -1,112 +1,111 @@
 @charset "utf-8";
 
-/* Variablen ------------------------------------ */
+/* IMPORTS -------------------------------------- */
+
+@import url(../animation.css);
+@import url(../fonts.css);
+@import url(../global.css);
 @import url(../variablen.css);
 
-/* Fonts ---------------------------------------- */
-@import url(../fonts.css);
 
-/* Globale Klassen ------------------------------ */
-@import url(../global.css);
+/* STRUKTUR-ELEMENTE ---------------------------- */
 
-/* Animation ------------------------------------ */
-@import url(../animation.css);
-
-/* Struktur-Elemente ---------------------------- */
 body {
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #fff;
-	color: var(--text);
-	font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	user-select: none;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #fff;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  user-select: none;
 }
 
 body > header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1;
-	border-bottom: 10px solid #fff;
-	padding: 0 10px;
-	width: calc(100% - 20px);
-	height: 60px;
-	background-color: var(--farbe);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 10px solid #fff;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background-color: var(--farbe);
 }
 
 body > header h1 {
-	display: inline-block;
-	margin: 0;
-	color: #fff;
-	font-size: 30px;
-	font-weight: normal;
-	line-height: 60px;
+  display: inline-block;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 60px;
 }
 
 #icon {
-	position: absolute;
-	top: 6px;
-	right: 10px;
+  position: absolute;
+  top: 6px;
+  right: 10px;
 }
 
 main {
-	margin-top: 70px;
-	padding: 0 10px 10px 10px;
+  margin-top: 70px;
+  padding: 0 10px 10px;
 }
 
-/* Elemente ------------------------------------- */
+
+/* ELEMENTE ------------------------------------- */
+
 main div {
-	margin-top: 25px;
-	border-top: 1px solid var(--linie);
-	padding-top: 25px;
+  margin-top: 25px;
+  border-top: 1px solid var(--linie);
+  padding-top: 25px;
 }
 
 main div:first-child {
-	border-top: none;
+  border-top: none;
 }
 
 h2 {
-	margin: 0 0 5px 0;
-	font-size: 16px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 24px;
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 24px;
 }
 
 p {
-	margin: 0 0 5px 25px;
-	overflow-wrap: break-word;
+  margin: 0 0 5px 25px;
+  overflow-wrap: break-word;
 }
 
 p.keine {
-	margin-left: 0;
-	color: var(--textSehrHell);
-	text-align: center;
+  margin-left: 0;
+  color: var(--textSehrHell);
+  text-align: center;
 }
 
 p.keine.uovo {
-	color: var(--textHell);
+  color: var(--textHell);
 }
 
 p.js {
-	color: var(--textHell);
-	font-size: 14px;
+  color: var(--textHell);
+  font-size: 14px;
 }
 
 p.obacht {
-	color: var(--textWarnung);
+  color: var(--textWarnung);
 }
 
 p.version {
-	margin-left: 0;
-	color: var(--textHell);
+  margin-left: 0;
+  color: var(--textHell);
 }
 
 p.version span {
-	display: inline-block;
-	width: 80px;
+  display: inline-block;
+  width: 80px;
 }
 
 .gesperrt {
-	letter-spacing: 0.125em;
+  letter-spacing: .125em;
 }

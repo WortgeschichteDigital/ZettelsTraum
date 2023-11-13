@@ -1,99 +1,138 @@
 @charset "utf-8";
 
-/* Element ausschalten -------------------------- */
+/* ELEMENT AUSSCHALTEN -------------------------- */
+
 .aus {
-	display: none !important;
+  display: none !important;
 }
 
-/* BibTeX typographisch ------------------------- */
+
+/* BIBTEX TYPOGRAPHISCH ------------------------- */
+
 .bibtex {
-	display: inline-block;
-	overflow: hidden;
-	vertical-align: bottom;
-	font-family: "Noto Serif", serif;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  font-family: "Noto Serif", serif;
 }
 
 .bibtex span:first-child {
-	font-variant: small-caps;
+  font-variant: small-caps;
 }
 
 .bibtex span:nth-child(2) {
-	position: relative;
-	top: .2em;
+  position: relative;
+  top: .2em;
 }
 
-/* eingefärbte Klammerungen im Belegtext -------- */
-.klammer-anmerkung,
-.klammer-autorenzusatz {
-	color: var(--farbeGruenDunkel);
-}
+
+/* EINGEFÄRBTE KLAMMERUNGEN IM BELEGTEXT -------- */
 
 .klammer-technisch {
-	font-weight: bold;
+  font-weight: bold;
 }
 
-.klammer-streichung {
-	color: var(--farbeB);
+.klammer-autorenzusatz {
+  color: var(--farbeGruenDunkel);
 }
 
 .klammer-loeschung {
-	color: var(--farbeRot);
+  color: var(--farbeRot);
 }
 
-/* XML-Pretty-Print ----------------------------- */
+.klammer-streichung {
+  color: var(--farbeB);
+}
+
+:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::before {
+  content: "{";
+  margin-left: 2px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::after {
+  content: "}";
+  padding-left: 2px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.klammer-loeschung::before {
+  content: "[[";
+}
+
+.klammer-loeschung::after {
+  content: "]]";
+}
+
+.klammer-streichung::before {
+  content: "[";
+}
+
+.klammer-streichung::after {
+  content: "]";
+}
+
+
+/* XML-PRETTY-PRINT ----------------------------- */
+
 .xml-empty {
-	color: var(--textWarnung);
-	font-weight: bold;
+  color: var(--textWarnung);
+  font-weight: bold;
 }
 
 .xml-err {
-	text-decoration: var(--textWarnung) wavy underline;
+  text-decoration: var(--textWarnung) wavy underline;
 }
 
 .xml-comment {
-	color: var(--textHell);
+  color: var(--textHell);
 }
 
 .xml-tag {
-	color: var(--farbeB);
+  color: var(--farbeB);
 }
 
 .xml-attr-key {
-	color: var(--farbeGruenDunkel);
+  color: var(--farbeGruenDunkel);
 }
 
 .xml-attr-val {
-	color: var(--farbeRot);
+  color: var(--farbeRot);
 }
 
 
-/* Ziehen von Elementen ------------------------- */
+/* ZIEHEN VON ELEMENTEN ------------------------- */
+
 *, *::after, *::before {
-	-webkit-app-region: no-drag;
-	-webkit-user-drag: none;
+  -webkit-app-region: no-drag;
+  -webkit-user-drag: none;
 }
 
 a[href^="http"],
 a[href^="mailto"] {
-	-webkit-app-region: drag;
-	-webkit-user-drag: auto;
+  -webkit-app-region: drag;
+  -webkit-user-drag: auto;
 }
 
 a[href^="#"] {
-	user-select: none;
-	cursor: default;
+  user-select: none;
+  cursor: default;
 }
 
 a[href^="http"]::after {
-	content: url(../img/link-extern-gruen-12.svg);
-	padding-left: 3px;
+  content: url(../img/link-extern-gruen-12.svg);
+  padding-left: 3px;
 }
 
 footer a[href^="http"]::after {
-	content: url(../img/link-extern-weiss-12.svg);
+  content: url(../img/link-extern-weiss-12.svg);
 }
 
-/* Farbe Textauswahl ---------------------------- */
+
+/* FARBE TEXTAUSWAHL ---------------------------- */
+
 ::selection,
 /* in date und datetime-local funktioniert ::selection nicht */
 input::-webkit-datetime-edit-day-field:focus,
@@ -102,67 +141,73 @@ input::-webkit-datetime-edit-year-field:focus,
 input::-webkit-datetime-edit-hour-field:focus,
 input::-webkit-datetime-edit-minute-field:focus,
 input::-webkit-datetime-edit-ampm-field:focus {
-	background-color: var(--farbe);
-	color: #fff;
+  background-color: var(--farbe);
+  color: #fff;
 }
 
-/* Placeholder in Inputs ------------------------ */
+
+/* PLACEHOLDER IN INPUTS ------------------------ */
+
 ::placeholder {
   color: var(--textSehrHell);
-	font-style: italic;
+  font-style: italic;
 }
 
-/* Fensterladen --------------------------------- */
+
+/* FENSTERLADEN --------------------------------- */
+
 #fensterladen {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 4;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100vw;
-	height: 100vh;
-	overflow: hidden;
-	background-color: var(--farbeB);
-	transition: opacity .5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--farbeB);
+  transition: opacity .5s ease;
 }
 
 #fensterladen.geladen {
-	opacity: 0;
+  opacity: 0;
 }
 
-/* Kopf-Icons ----------------------------------- */
+
+/* KOPF-ICONS ----------------------------------- */
+
 #kopf-icons {
-	position: relative;
-	top: 3px;
-	display: inline-block;
-	margin-left: 25px;
-	height: 28px;
-	overflow: hidden;
-	line-height: 24px;
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  margin-left: 25px;
+  height: 28px;
+  overflow: hidden;
+  line-height: 24px;
 }
 
 #kopf-icons a {
-	outline: none;
-	display: inline-block;
-	border-right: 1px solid var(--linie);
-	padding: 2px 5px;
-	width: 24px;
-	height: 24px;
-	color: #fff;
-	text-decoration: none;
+  outline: none;
+  display: inline-block;
+  border-right: 1px solid var(--linie);
+  padding: 2px 5px;
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  text-decoration: none;
 }
 
 #kopf-icons a:last-child,
 #kopf-icons a.last {
-	border-right: 0;
+  border-right: 0;
 }
 
 #kopf-icons a svg path:not([fill]) {
-	fill: currentcolor;
+  fill: currentcolor;
 }
 
 #kopf-icons a:focus {
-	color: var(--highlight);
+  color: var(--highlight);
 }

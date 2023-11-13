@@ -34,10 +34,20 @@ const tooltip = {
         return;
       }
       i.addEventListener("mouseover", function () {
+        if (tooltip.target && this !== tooltip.target) {
+          // if the target elements vanish in rapid succession,
+          // the tooltipmight not be turned off at all
+          tooltip.off();
+        }
         clearTimeout(tooltip.defer);
         clearInterval(tooltip.observe);
         const timeout = tooltip.noDefer ? 0 : 500;
         tooltip.defer = setTimeout(() => {
+          // is the target already gone?
+          if (!this.closest("body") || this.closest(".aus")) {
+            return;
+          }
+
           // show tooltip
           tooltip.on(this);
 
@@ -106,6 +116,10 @@ const tooltip = {
     }
     tip.style.zIndex = ++tooltip.zIndex;
     tip.classList.add("visible");
+    // break letters there is a text overflow to the right
+    if (tip.scrollWidth > tip.offsetWidth) {
+      tip.classList.add("break-words");
+    }
   },
 
   // Tooltip ausblenden

@@ -1,50 +1,51 @@
 @charset "utf-8";
 
-/* Kopf ----------------------------------------- */
+/* KOPF ----------------------------------------- */
+
 #bedeutungen header {
-	position: sticky;
-	top: 70px;
-	z-index: 1;
-	padding: 0 0 10px 0;
-	height: 30px;
-	background-color: #fff;
+  position: sticky;
+  top: 70px;
+  z-index: 1;
+  padding: 0 0 10px;
+  height: 30px;
+  background-color: #fff;
 }
 
 #bedeutungen header input:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #bedeutungen.quick header {
-	top: 99px;
+  top: 99px;
 }
 
 #bedeutungen header > div {
-	position: relative;
-	margin: 0 auto;
-	max-width: 850px;
+  position: relative;
+  margin: 0 auto;
+  max-width: 850px;
 }
 
 #bedeutungen header > div > div {
-	position: absolute;
-	top: -3px;
-	right: 0;
-	padding-left: 50px;
-	height: 30px;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  position: absolute;
+  top: -3px;
+  right: 0;
+  padding-left: 50px;
+  height: 30px;
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 25px);
 }
 
 #bedeutungen header > div > div span.dropdown-cont {
-	display: inline-block;
+  display: inline-block;
 }
 
 #bedeutungen-hierarchie,
 #bedeutungen-gerueste,
 #bedeutungen-gerueste-kopieren,
 #geruestwechseln-dropdown {
-	background-color: transparent;
-	width: 75px;
-	color: var(--textSehrHell);
-	cursor: default;
+  background-color: transparent;
+  width: 75px;
+  color: var(--textSehrHell);
+  cursor: default;
 }
 
 #bedeutungen-hierarchie:focus,
@@ -55,9 +56,9 @@
 #bedeutungen-gerueste-kopieren:hover,
 #geruestwechseln-dropdown:focus,
 #geruestwechseln-dropdown:hover {
-	outline: none;
-	border-color: var(--linie);
-	color: var(--text);
+  outline: none;
+  border-color: var(--linie);
+  color: var(--text);
 }
 
 #bedeutungen-hierarchie:hover ~ a,
@@ -68,474 +69,480 @@
 #bedeutungen-gerueste-kopieren:focus ~ a,
 #geruestwechseln-dropdown:hover ~ a,
 #geruestwechseln-dropdown:focus ~ a {
-	color: var(--text);
+  color: var(--text);
 }
 
 /* Styles zu .bedeutungen-opt-block → liste.css */
 #bedeutungen header > div > div .bedeutungen-opt-block {
-	position: relative;
-	top: 3px;
-	margin-left: 0;
+  position: relative;
+  top: 3px;
+  margin-left: 0;
 }
 
 #bedeutungen-gerueste-config {
-	margin-left: 5px;
-	-webkit-mask-image: url(../../img/zahnrad.svg);
-	mask-image: url(../../img/zahnrad.svg);
-	background-color: var(--iconHell);
+  margin-left: 5px;
+  -webkit-mask-image: url(../../img/zahnrad.svg);
+  mask-image: url(../../img/zahnrad.svg);
+  background-color: var(--iconHell);
 }
 
 #bedeutungen-gerueste-config:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #bedeutungen-gerueste-config:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
-/* Tabelle -------------------------------------- */
+
+/* TABELLE -------------------------------------- */
+
 #bedeutungen-cont {
-	padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 #bedeutungen-cont.move,
 #bedeutungen-cont.move * {
-	cursor: move;
+  cursor: move;
 }
 
 #bedeutungen-cont.no-drop,
 #bedeutungen-cont.no-drop * {
-	cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 #bedeutungen-cont h2 {
-	margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border*/
-	padding: 0;
-	background-color: transparent;
-	color: var(--textFarbe);
-	font-size: 24px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 38px;
-	text-align: left;
+  margin: 15px 0 10px 74px; /* 74px = 2 Zellen links + 5px Padding der Gerüstzelle + Border */
+  padding: 0;
+  background-color: transparent;
+  color: var(--textFarbe);
+  font-size: 24px;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 38px;
+  text-align: left;
 }
 
 #bedeutungen-cont h2 span {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #bedeutungen-cont table {
-	margin: 0 auto;
-	border-collapse: collapse;
-	border-spacing: 0;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 #bedeutungen-cont td {
-	padding: 0 5px;
-	vertical-align: top;
-	line-height: 30px;
+  padding: 0 5px;
+  vertical-align: top;
+  line-height: 30px;
 }
 
 #bedeutungen-cont .bedeutungen-neu td {
-	position: relative;
-	padding-top: 10px;
+  position: relative;
+  padding-top: 10px;
 }
 
 #bedeutungen-cont caption + .bedeutungen-neu td {
-	padding-top: 0;
+  padding-top: 0;
 }
 
 #bedeutungen-cont .bedeutungen-kopieren td {
-	padding: 10px 5px;
+  padding: 10px 5px;
 }
 
 #bedeutungen-cont .bedeutungen-kopieren .dropdown-cont {
-	display: inline-block;
+  display: inline-block;
 }
 
 #bedeutungen-cont td:first-child,
 #bedeutungen-cont td:nth-child(2),
 #bedeutungen-cont td:nth-child(3) {
-	padding: 0;
-	width: 24px;
-	max-width: 24px;
-	background-color: var(--hintergrund);
+  padding: 0;
+  width: 24px;
+  max-width: 24px;
+  background-color: var(--hintergrund);
 }
 
 #bedeutungen-cont td:nth-child(2),
 #bedeutungen-cont td:nth-child(3) {
-	border-left: 1px solid var(--linie);
+  border-left: 1px solid var(--linie);
 }
 
 #bedeutungen-cont td:nth-child(4) {
-	min-width: 250px;
-	max-width: 700px;
+  min-width: 250px;
+  max-width: 700px;
 }
 
 #bedeutungen-cont td:nth-child(5) {
-	min-width: 62px;
-	background-color: var(--hintergrund);
+  min-width: 62px;
+  background-color: var(--hintergrund);
 }
 
 #bedeutungen-cont td:last-child {
-	border-left: 1px solid var(--linie);
-	min-width: 62px;
-	background-color: var(--hintergrund);
+  border-left: 1px solid var(--linie);
+  min-width: 62px;
+  background-color: var(--hintergrund);
 }
 
 #bedeutungen-cont span[contenteditable] {
-	display: inline-block;
-	border: 1px solid var(--linie);
-	padding: 0 5px;
-	line-height: 24px;
-	color: var(--text);
-	text-indent: 0;
+  display: inline-block;
+  border: 1px solid var(--linie);
+  padding: 0 5px;
+  line-height: 24px;
+  color: var(--text);
+  text-indent: 0;
 }
 
 #bedeutungen-cont td:nth-child(5) span[contenteditable],
 #bedeutungen-cont td:last-child span[contenteditable] {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 #bedeutungen-cont span[contenteditable]:focus {
-	outline: 1px solid var(--farbe);
-	border-color: var(--farbe);
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
 }
 
 #bedeutungen-cont span[contenteditable].bedeutungen-changed {
-	outline-color: var(--farbeRot);
-	border-color: var(--farbeRot);
+  outline-color: var(--farbeRot);
+  border-color: var(--farbeRot);
 }
 
 #bedeutungen-cont span[contenteditable].bedeutungen-saved {
-	outline-color: var(--farbeGruen);
-	border-color: var(--farbeGruen);
+  outline-color: var(--farbeGruen);
+  border-color: var(--farbeGruen);
 }
 
 #bedeutungen-cont .bedeutungen-edit {
-	background-color: var(--hintergrund);
+  background-color: var(--hintergrund);
 }
 
 #bedeutungen-cont .zaehlung p > b {
-	display: inline-block;
-	width: 35px;
-	vertical-align: top;
-	text-align: center;
-	text-indent: 0;
+  display: inline-block;
+  width: 35px;
+  vertical-align: top;
+  text-align: center;
+  text-indent: 0;
 }
 
 .bedeutungen-dialog b.zaehlung {
-	margin: 0 10px;
+  margin: 0 10px;
 }
 
 .bedeutungen-dialog b.zaehlung:first-child,
 .bedeutungen-dialog b.zaehlung-tief {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #bedeutungen-cont .zaehlung div {
-	margin-left: 35px;
+  margin-left: 35px;
 }
 
 #bedeutungen-cont .zaehlung > div {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #bedeutungen-cont .zaehlung p {
-	position: relative;
-	margin: 0;
-	padding-left: 35px;
-	text-indent: -35px;
+  position: relative;
+  margin: 0;
+  padding-left: 35px;
+  text-indent: -35px;
 }
 
 #bedeutungen-tagger-link {
-	color: var(--text);
+  color: var(--text);
 }
 
 td #bedeutungen-tagger-link:focus {
-	color: var(--farbe);
+  color: var(--farbe);
 }
 
 #bedeutungen-cont .leer #bedeutungen-tagger-link {
-	font-style: italic;
+  font-style: italic;
 }
 
 #bedeutungen-cont span[class^="bedeutungen-tags"]:not(:first-child)::before {
-	content: ", ";
+  content: ", ";
 }
 
 #bedeutungen-cont .bedeutungen-tags-sachgebiete {
-	font-variant: small-caps;
+  font-variant: small-caps;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-affiziert td {
-	background-color: var(--farbe);
-	color: #fff;
+  background-color: var(--farbe);
+  color: #fff;
 }
 
 #bedeutungen-cont.drag .bedeutungen-aktiv td,
 #bedeutungen-cont.drag .bedeutungen-affiziert td {
-	background-color: var(--farbeOrange);
+  background-color: var(--farbeOrange);
 }
 
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen td,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen td {
-	background-color: var(--farbeGelb);
+  background-color: var(--farbeGelb);
 }
 
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen td:not(.leer),
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen td:not(.leer) {
-	color: var(--text);
+  color: var(--text);
 }
 
 #bedeutungen-cont .bedeutungen-moved .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-moved .bedeutungen-affiziert td {
-	background-color: var(--farbeGruen);
+  background-color: var(--farbeGruen);
 }
 
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-aktiv td,
 #bedeutungen-cont .bedeutungen-unmovable .bedeutungen-affiziert td {
-	background-color: var(--farbeRot);
+  background-color: var(--farbeRot);
 }
 
 #bedeutungen-cont .bedeutungen-aktiv mark,
 #bedeutungen-cont .bedeutungen-affiziert mark {
-	color: inherit;
+  color: inherit;
 }
 
 a[class*="icon-windrose"] {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 .icon-windrose_ {
-	-webkit-mask-image: url(../../img/windrose_.svg);
-	mask-image: url(../../img/windrose_.svg);
+  -webkit-mask-image: url(../../img/windrose_.svg);
+  mask-image: url(../../img/windrose_.svg);
 }
 
 .icon-windrose_l-u-r-d {
-	-webkit-mask-image: url(../../img/windrose_l-u-r-d.svg);
-	mask-image: url(../../img/windrose_l-u-r-d.svg);
+  -webkit-mask-image: url(../../img/windrose_l-u-r-d.svg);
+  mask-image: url(../../img/windrose_l-u-r-d.svg);
 }
 
 .icon-windrose_l-u-r {
-	-webkit-mask-image: url(../../img/windrose_l-u-r.svg);
-	mask-image: url(../../img/windrose_l-u-r.svg);
+  -webkit-mask-image: url(../../img/windrose_l-u-r.svg);
+  mask-image: url(../../img/windrose_l-u-r.svg);
 }
 
 .icon-windrose_l-u-d {
-	-webkit-mask-image: url(../../img/windrose_l-u-d.svg);
-	mask-image: url(../../img/windrose_l-u-d.svg);
+  -webkit-mask-image: url(../../img/windrose_l-u-d.svg);
+  mask-image: url(../../img/windrose_l-u-d.svg);
 }
 
 .icon-windrose_l-u {
-	-webkit-mask-image: url(../../img/windrose_l-u.svg);
-	mask-image: url(../../img/windrose_l-u.svg);
+  -webkit-mask-image: url(../../img/windrose_l-u.svg);
+  mask-image: url(../../img/windrose_l-u.svg);
 }
 
 .icon-windrose_l-r-d {
-	-webkit-mask-image: url(../../img/windrose_l-r-d.svg);
-	mask-image: url(../../img/windrose_l-r-d.svg);
+  -webkit-mask-image: url(../../img/windrose_l-r-d.svg);
+  mask-image: url(../../img/windrose_l-r-d.svg);
 }
 
 .icon-windrose_l-r {
-	-webkit-mask-image: url(../../img/windrose_l-r.svg);
-	mask-image: url(../../img/windrose_l-r.svg);
+  -webkit-mask-image: url(../../img/windrose_l-r.svg);
+  mask-image: url(../../img/windrose_l-r.svg);
 }
 
 .icon-windrose_l-d {
-	-webkit-mask-image: url(../../img/windrose_l-d.svg);
-	mask-image: url(../../img/windrose_l-d.svg);
+  -webkit-mask-image: url(../../img/windrose_l-d.svg);
+  mask-image: url(../../img/windrose_l-d.svg);
 }
 
 .icon-windrose_l {
-	-webkit-mask-image: url(../../img/windrose_l.svg);
-	mask-image: url(../../img/windrose_l.svg);
+  -webkit-mask-image: url(../../img/windrose_l.svg);
+  mask-image: url(../../img/windrose_l.svg);
 }
 
 .icon-windrose_u-r-d {
-	-webkit-mask-image: url(../../img/windrose_u-r-d.svg);
-	mask-image: url(../../img/windrose_u-r-d.svg);
+  -webkit-mask-image: url(../../img/windrose_u-r-d.svg);
+  mask-image: url(../../img/windrose_u-r-d.svg);
 }
 
 .icon-windrose_u-r {
-	-webkit-mask-image: url(../../img/windrose_u-r.svg);
-	mask-image: url(../../img/windrose_u-r.svg);
+  -webkit-mask-image: url(../../img/windrose_u-r.svg);
+  mask-image: url(../../img/windrose_u-r.svg);
 }
 
 .icon-windrose_u-d {
-	-webkit-mask-image: url(../../img/windrose_u-d.svg);
-	mask-image: url(../../img/windrose_u-d.svg);
+  -webkit-mask-image: url(../../img/windrose_u-d.svg);
+  mask-image: url(../../img/windrose_u-d.svg);
 }
 
 .icon-windrose_u {
-	-webkit-mask-image: url(../../img/windrose_u.svg);
-	mask-image: url(../../img/windrose_u.svg);
+  -webkit-mask-image: url(../../img/windrose_u.svg);
+  mask-image: url(../../img/windrose_u.svg);
 }
 
 .icon-windrose_r-d {
-	-webkit-mask-image: url(../../img/windrose_r-d.svg);
-	mask-image: url(../../img/windrose_r-d.svg);
+  -webkit-mask-image: url(../../img/windrose_r-d.svg);
+  mask-image: url(../../img/windrose_r-d.svg);
 }
 
 .icon-windrose_r {
-	-webkit-mask-image: url(../../img/windrose_r.svg);
-	mask-image: url(../../img/windrose_r.svg);
+  -webkit-mask-image: url(../../img/windrose_r.svg);
+  mask-image: url(../../img/windrose_r.svg);
 }
 
 .icon-windrose_d {
-	-webkit-mask-image: url(../../img/windrose_d.svg);
-	mask-image: url(../../img/windrose_d.svg);
+  -webkit-mask-image: url(../../img/windrose_d.svg);
+  mask-image: url(../../img/windrose_d.svg);
 }
 
 #bedeutungen-drag-marker {
-	position: fixed;
-	border-radius: 3px;
-	height: 6px;
-	background-color: var(--farbeGruen);
-	cursor: move;
+  position: fixed;
+  border-radius: 3px;
+  height: 6px;
+  background-color: var(--farbeGruen);
+  cursor: move;
 }
 
 #bedeutungen-drag-marker.drag-unmovable {
-	background-color: var(--farbeRot);
-	cursor: not-allowed;
+  background-color: var(--farbeRot);
+  cursor: not-allowed;
 }
 
 #bedeutungen-cont .icon-loeschen {
-	-webkit-mask-image: url(../../img/muelleimer.svg);
-	mask-image: url(../../img/muelleimer.svg);
-	background-color: transparent;
+  -webkit-mask-image: url(../../img/muelleimer.svg);
+  mask-image: url(../../img/muelleimer.svg);
+  background-color: transparent;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv .icon-loeschen {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 #bedeutungen-cont .icon-verschmelzen {
-	-webkit-mask-image: url(../../img/pfeil-verbinden-rechts.svg);
-	mask-image: url(../../img/pfeil-verbinden-rechts.svg);
-	background-color: transparent;
+  -webkit-mask-image: url(../../img/pfeil-verbinden-rechts.svg);
+  mask-image: url(../../img/pfeil-verbinden-rechts.svg);
+  background-color: transparent;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv .icon-verschmelzen {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 #bedeutungen-cont .icon-link {
-	position: relative;
-	top: 3px;
+  position: relative;
+  top: 3px;
 }
 
 #bedeutungen-cont .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #bedeutungen-cont .icon-link:hover,
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .icon-link:hover,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #bedeutungen-cont .bedeutungen-aktiv .icon-link,
 #bedeutungen-cont .bedeutungen-aktiv .icon-link:hover,
 #bedeutungen-cont .bedeutungen-affiziert .icon-link:hover {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .icon-link {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .icon-link {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 #bedeutungen-cont.drag tr:not(.bedeutungen-aktiv) .icon-link:hover {
-	background-color: transparent;
+  background-color: transparent;
 }
 
 #bedeutungen-cont .leer,
 #bedeutungen-cont .bedeutungen-aktiv .leer,
 #bedeutungen-cont .bedeutungen-affiziert .leer {
-	color: transparent;
-	font-style: italic;
+  color: transparent;
+  font-style: italic;
 }
 
 #bedeutungen-cont .bedeutungen-aktiv .leer:hover,
 #bedeutungen-cont .bedeutungen-affiziert .leer:hover {
-	color: #fff;
+  color: #fff;
 }
 
 #bedeutungen-cont .leer:hover,
 #bedeutungen-cont .bedeutungen-aktiv.bedeutungen-verschmelzen .leer:hover,
 #bedeutungen-cont .bedeutungen-affiziert.bedeutungen-verschmelzen .leer:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 #bedeutungen-cont.drag .leer:hover {
-	color: transparent;
+  color: transparent;
 }
 
 #bedeutungen-cont #bedeutungen-neu {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
 }
 
 #bedeutungen-cont #bedeutungen-neu.leer {
-	color: var(--textSehrHell);
-	font-style: italic;
+  color: var(--textSehrHell);
+  font-style: italic;
 }
 
-/* Tools ---------------------------------------- */
+
+/* TOOLS ---------------------------------------- */
+
 #bedeutungen-tools {
-	position: absolute;
-	top: -30px;
-	left: 35px;
-	margin-left: 0 !important;
-	box-shadow: var(--boxShadow);
-	border: 1px solid var(--linie);
-	padding: 0 10px;
-	height: 24px;
-	background-color: #fff;
-	text-indent: 0;
+  position: absolute;
+  top: -30px;
+  left: 35px;
+  margin-left: 0 !important;
+  box-shadow: var(--boxShadow);
+  border: 1px solid var(--linie);
+  padding: 0 10px;
+  height: 24px;
+  background-color: #fff;
+  text-indent: 0;
 }
 
 #bedeutungen-tools.neue-bedeutung {
-	top: -20px;
-	left: 5px;
+  top: -20px;
+  left: 5px;
 }
 
 #bedeutungen-tools.neue-bedeutung-leer {
-	/* für den Fall, dass nur ein Bedeutungsgerüst existiert, in dem noch keine Bedeutung steht */
-	top: -30px;
-	left: 5px;
+  /* für den Fall, dass nur ein Bedeutungsgerüst existiert, in dem noch keine Bedeutung steht */
+  top: -30px;
+  left: 5px;
 }
 
 #bedeutungen-tools .icon-link {
-	top: 0;
-	background-color: var(--iconHell);
+  top: 0;
+  background-color: var(--iconHell);
 }
 
 #bedeutungen-tools .icon-link:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #bedeutungen-tools .icon-link:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #bedeutungen-tools .block-start {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
-/* Besonderheiten ------------------------------- */
+
+/* BESONDERHEITEN ------------------------------- */
+
 .bedeutungen-dialog {
-	margin-left: 25px;
-	padding-left: 35px;
-	font-style: italic;
-	text-indent: -35px;
+  margin-left: 25px;
+  padding-left: 35px;
+  font-style: italic;
+  text-indent: -35px;
 }
 
 .bedeutungen-dialog-sg {
-	margin-left: 25px;
-	font-style: italic;
+  margin-left: 25px;
+  font-style: italic;
 }

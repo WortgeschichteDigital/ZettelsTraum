@@ -1,92 +1,93 @@
 @charset "utf-8";
 
-/* Importfenster für Dateidatensätze ------------ */
+/* IMPORTFENSTER FÜR DATEIDATENSÄTZE ------------ */
+
 #import > div {
-	margin-top: 40px;
-	max-width: 750px;
+  margin-top: 40px;
+  max-width: 750px;
 }
 
 .icon-h-import {
-	-webkit-mask-image: url(../../img/dokument-import.svg);
-	mask-image: url(../../img/dokument-import.svg);
+  -webkit-mask-image: url(../../img/dokument-import.svg);
+  mask-image: url(../../img/dokument-import.svg);
 }
 
 #import-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #import-cont-over {
-	overflow-x: hidden;
-	overflow-y: auto;
-	transition: max-height .5s ease;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: max-height .5s ease;
 }
 
 #import-cont table {
-	table-layout: fixed;
-	border-collapse: collapse;
-	border-spacing: 0;
-	width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
 }
 
 #import-cont td {
-	padding: 0 5px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  padding: 0 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #import-cont tr:hover td {
-	color: var(--farbe);
-	cursor: pointer;
+  color: var(--farbe);
+  cursor: pointer;
 }
 
 #import-cont td:first-child {
-	padding: 0;
-	width: 24px;
+  padding: 0;
+  width: 24px;
 }
 
 #import-cont td:nth-child(2) {
-	width: 45px;
-	font-weight: bold;
-	text-align: center;
+  width: 45px;
+  font-weight: bold;
+  text-align: center;
 }
 
 #import-cont table.datum-breit td:nth-child(2) {
-	width: 95px;
+  width: 95px;
 }
 
 #import-cont td:last-child {
-	width: 70%;
-	font-size: 14px;
+  width: 70%;
+  font-size: 14px;
 }
 
 #import-cont table.datum-breit td:last-child {
-	width: 55%;
+  width: 55%;
 }
 
 #import-cont table.keine-autoren td:last-child {
-	width: 70%;
+  width: 70%;
 }
 
 #import-cont table.keine-belege td:last-child {
-	width: 40%;
+  width: 40%;
 }
 
 #import-cont td.kein-wert {
-	color: var(--textSehrHell);
-	font-style: italic;
+  color: var(--textSehrHell);
+  font-style: italic;
 }
 
 #import-cont img {
-	/* Aus irgendeinem nicht nachvollziehbaren Grund ist die Zellenhöhe 30px,
-	obwohl Padding-Top und -Bottom auf 0 gesetzt wurden und line-height 24px ist.
-	Aber: In der Zelle mit dem Bild fehlen Geister-Padding-Top und -Bottom plötzlich.
-	Sehr merkwürdig! */
-	position: relative;
-	top: 3px;
+  /* Aus irgendeinem nicht nachvollziehbaren Grund ist die Zellenhöhe 30px,
+  obwohl Padding-Top und -Bottom auf 0 gesetzt wurden und line-height 24px ist.
+  Aber: In der Zelle mit dem Bild fehlen Geister-Padding-Top und -Bottom plötzlich.
+  Sehr merkwürdig! */
+  position: relative;
+  top: 3px;
 }
 
 #import-abbrechen {
-	padding: 0 10px 10px 10px;
-	text-align: right;
+  padding: 0 10px 10px;
+  text-align: right;
 }

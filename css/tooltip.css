@@ -14,6 +14,10 @@
   transition: opacity .1s linear;
 }
 
+#tooltip.break-words {
+  word-break: break-all;
+}
+
 #tooltip.visible {
   opacity: 1;
 }

@@ -1,39 +1,39 @@
 {
-	"name": "zettelstraum",
-	"productName": "Zettel’s Traum",
-	"version": "0.80.5-beta.1",
-	"description": "Wortkartei-App von „Wortgeschichte digital“, dem an der „Niedersächsischen Akademie der Wissenschaften zu Göttingen“ angesiedelten Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“, gefördert durch das „Bundesministerium für Bildung und Forschung“",
-	"keywords": [
-		"Kartei",
-		"Karteikarten",
-		"Karteikasten",
-		"Korpuslinguistik",
-		"Lexikographie",
-		"WGd",
-		"ZDL",
-		"Zettel",
-		"Zettelkasten"
-	],
-	"author": {
-		"name": "Nico Dorn",
-		"url": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/mitarbeiterinnen-und-mitarbeiter/nico-dorn/"
-	},
-	"license": "GPL-3.0-only",
-	"homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/WortgeschichteDigital/ZettelsTraum.git"
-	},
-	"bugs": {
-		"url": "https://github.com/WortgeschichteDigital/ZettelsTraum/issues"
-	},
-	"main": "main.js",
-	"scripts": {
-		"start": "electron ."
-	},
-	"devDependencies": {
-		"electron": "^27.0.2",
-		"electron-builder": "^24.6.4",
-		"electron-packager": "^17.1.2"
-	}
+  "name": "zettelstraum",
+  "productName": "Zettel’s Traum",
+  "version": "0.80.5-beta.1",
+  "description": "Wortkartei-App von „Wortgeschichte digital“, dem an der „Niedersächsischen Akademie der Wissenschaften zu Göttingen“ angesiedelten Teilprojekt des „Zentrums für digitale Lexikographie der deutschen Sprache“, gefördert durch das „Bundesministerium für Bildung und Forschung“",
+  "keywords": [
+    "Kartei",
+    "Karteikarten",
+    "Karteikasten",
+    "Korpuslinguistik",
+    "Lexikographie",
+    "WGd",
+    "ZDL",
+    "Zettel",
+    "Zettelkasten"
+  ],
+  "author": {
+    "name": "Nico Dorn",
+    "url": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/mitarbeiterinnen-und-mitarbeiter/nico-dorn/"
+  },
+  "license": "GPL-3.0-only",
+  "homepage": "https://adw-goe.de/forschung/weitere-forschungsprojekte/wortgeschichte-digital-teilprojekt-im-zdl/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WortgeschichteDigital/ZettelsTraum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WortgeschichteDigital/ZettelsTraum/issues"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^25.3.2",
+    "electron-builder": "^24.6.3",
+    "electron-packager": "^17.1.1"
+  }
 }

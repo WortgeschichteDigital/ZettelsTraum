@@ -1,28 +1,35 @@
 "use strict";
 
+// MODULE
+const modules = {
+  clipboard: require("electron").clipboard,
+  ipc: require("electron").ipcRenderer,
+  shell: require("electron").shell,
+};
+
 window.addEventListener("load", async () => {
-	// INIT
-	await initWin.infos();
-	initWin.ipcListener();
-	initWin.appName();
-	initWin.xmlPrettyPrint();
-	initWin.events();
-	initWin.eventsSuche();
-	initWin.eventsPopup();
-	initWin.eventsHilfeKopf();
+  // INIT
+  await initWin.infos();
+  initWin.ipcListener();
+  initWin.appName();
+  initWin.xmlPrettyPrint();
+  initWin.events();
+  initWin.eventsSuche();
+  initWin.eventsPopup();
+  initWin.eventsHilfeKopf();
 
-	// ANZEIGE TASTATURKÜRZEL ANPASSEN
-	tastatur.shortcutsText();
+  // ANZEIGE TASTATURKÜRZEL ANPASSEN
+  tastatur.shortcutsText();
 
-	// TOOLTIPS INITIALISIEREN
-	tooltip.init();
+  // TOOLTIPS INITIALISIEREN
+  tooltip.init();
 
-	// UMBRUCH IN LANGEN DATEIPFADEN
-	hilfe.dateiBreak();
+  // UMBRUCH IN LANGEN DATEIPFADEN
+  hilfe.dateiBreak();
 
-	// ERWEITERTE NAVIGATION
-	hilfe.naviDetailsInit();
+  // ERWEITERTE NAVIGATION
+  hilfe.naviDetailsInit();
 
-	// FENSTER FREISCHALTEN
-	helfer.fensterGeladen();
+  // FENSTER FREISCHALTEN
+  helfer.fensterGeladen();
 });

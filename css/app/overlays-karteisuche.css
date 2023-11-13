@@ -1,421 +1,431 @@
 @charset "utf-8";
 
-/* Karteisuche ---------------------------------- */
+/* KARTEISUCHE ---------------------------------- */
+
 #karteisuche > div {
-	margin-top: 40px;
-	max-width: 800px;
+  margin-top: 40px;
+  max-width: 800px;
 }
 
 .icon-h-karteisuche {
-	-webkit-mask-image: url(../../img/lupe.svg);
-	mask-image: url(../../img/lupe.svg);
+  -webkit-mask-image: url(../../img/lupe.svg);
+  mask-image: url(../../img/lupe.svg);
 }
 
 .icon-filter {
-	-webkit-mask-image: url(../../img/filter.svg);
-	mask-image: url(../../img/filter.svg);
+  -webkit-mask-image: url(../../img/filter.svg);
+  mask-image: url(../../img/filter.svg);
 }
 
 .icon-kartei {
-	-webkit-mask-image: url(../../img/dokument-kartei.svg);
-	mask-image: url(../../img/dokument-kartei.svg);
+  -webkit-mask-image: url(../../img/dokument-kartei.svg);
+  mask-image: url(../../img/dokument-kartei.svg);
 }
 
 .icon-karteisuche-speichern {
-	-webkit-mask-image: url(../../img/dokument-export.svg);
-	mask-image: url(../../img/dokument-export.svg);
+  -webkit-mask-image: url(../../img/dokument-export.svg);
+  mask-image: url(../../img/dokument-export.svg);
 }
 
-/* Suche läuft ---------------------------------- */
+
+/* SUCHE LÄUFT ---------------------------------- */
+
 #karteisuche-suche-laeuft,
 #red-lit-sperre {
-	position: absolute;
-	top: 28px;
-	left: 0;
-	z-index: 2; /* 2, damit offene Dropdown-Menüs überdeckt werden */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-bottom-right-radius: 10px;
-	border-bottom-left-radius: 10px;
-	width: 100%;
-	height: calc(100% - 28px); /* 28px Kopfleiste */
-	background-color: rgba(255, 255, 255, .7);
-	color: var(--farbe);
-	font-size: 30px;
-	font-style: italic;
-	font-weight: bold;
-	backdrop-filter: blur(2px);
+  position: absolute;
+  top: 28px;
+  left: 0;
+  z-index: 2; /* 2, damit offene Dropdown-Menüs überdeckt werden */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  width: 100%;
+  height: calc(100% - 28px); /* 28px Kopfleiste */
+  background-color: rgb(255 255 255 / 70%);
+  color: var(--farbe);
+  font-size: 30px;
+  font-style: italic;
+  font-weight: bold;
+  backdrop-filter: blur(2px);
 }
 
 #karteisuche-suche-laeuft span {
-	display: inline-block;
-	width: 25px;
+  display: inline-block;
+  width: 25px;
 }
 
-/* Content -------------------------------------- */
+
+/* CONTENT -------------------------------------- */
+
 #karteisuche-cont {
-	padding: 10px;
+  padding: 10px;
 }
 
 #karteisuche-cont input[type="button"]:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #karteisuche-cont h3 {
-	position: relative;
-	margin: 20px 0 0 0;
-	overflow: hidden;
-	padding: 0 0 0 4px;
-	background-color: var(--farbeH);
-	color: #fff;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: bold;
-	line-height: 24px;
+  position: relative;
+  margin: 20px 0 0;
+  overflow: hidden;
+  padding: 0 0 0 4px;
+  background-color: var(--farbeH);
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 24px;
 }
 
 #karteisuche-cont h3 .icon-h {
-	margin-right: 5px;
-	height: 24px;
+  margin-right: 5px;
+  height: 24px;
 }
 
 #karteisuche-cont h3 .icon-link {
-	position: absolute;
-	right: 4px;
-	background-color: #fff;
+  position: absolute;
+  right: 4px;
+  background-color: #fff;
 }
 
 #karteisuche-cont h3 .icon-link:focus {
-	background-color: var(--highlight);
+  background-color: var(--highlight);
 }
 
 #karteisuche-cont p + h3 {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 #karteisuche-cont > p {
-	position: relative;
+  position: relative;
 }
 
 #karteisuche-suchenRechts {
-	position: absolute;
-	right: 0;
-	top: -1px;
+  position: absolute;
+  right: 0;
+  top: -1px;
 }
 
 #karteisuche-suchenTiefe {
-	margin-left: 5px;
-	padding: 0 5px;
-	width: 30px;
+  margin-left: 5px;
+  padding: 0 5px;
+  width: 30px;
 }
 
 #karteisuche-filterblock {
-	padding: 10px 0 0 0;
-	transition: height .3s ease, padding-top .3s ease;
+  padding: 10px 0 0;
+  transition: height .3s ease, padding-top .3s ease;
 }
 
 #karteisuche-filterblock.blenden {
-	overflow: hidden;
+  overflow: hidden;
 }
 
-/* Pfade & Filter ------------------------------- */
+
+/* PFADE & FILTER ------------------------------- */
+
 #karteisuche-pfade p {
-	height: 24px;
+  height: 24px;
 }
 
 #karteisuche-pfade a,
 #karteisuche-add-filter a {
-	margin: 0 5px 0 4px;
-	vertical-align: top;
-	background-color: var(--iconHell);
+  margin: 0 5px 0 4px;
+  vertical-align: top;
+  background-color: var(--iconHell);
 }
 
 #karteisuche-pfade a:focus,
 #karteisuche-add-filter a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #karteisuche-pfade a:hover,
 #karteisuche-add-filter a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #karteisuche-pfade .add,
 #karteisuche-add-filter {
-	margin-bottom: 10px;
-	width: fit-content;
-	color: var(--textHell);
-	font-style: italic;
+  margin-bottom: 10px;
+  width: fit-content;
+  color: var(--textHell);
+  font-style: italic;
 }
 
 #karteisuche-pfade .add:hover,
 #karteisuche-add-filter:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 #karteisuche-pfade .add:hover a,
 #karteisuche-add-filter:hover a {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #karteisuche-pfade span {
-	display: inline-block;
-	width: calc(100% - 34px);
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  width: calc(100% - 34px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #karteisuche-pfade input {
-	margin-left: 1px; /* damit beim Fokus das Outline links nicht abgeschnitten wird */
+  margin-left: 1px; /* damit beim Fokus das Outline links nicht abgeschnitten wird */
 }
 
 #karteisuche-pfade img {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 #karteisuche-add-filter {
-	margin: 0;
+  margin: 0;
 }
 
 #karteisuche-filter p {
-	margin: 10px 0 0 0;
-	white-space: nowrap;
+  margin: 10px 0 0;
+  white-space: nowrap;
 }
 
 #karteisuche-filter p > a {
-	vertical-align: text-bottom;
-	margin: 0 5px 0 4px;
-	background-color: var(--iconHell);
+  vertical-align: text-bottom;
+  margin: 0 5px 0 4px;
+  background-color: var(--iconHell);
 }
 
 #karteisuche-filter p > a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #karteisuche-filter p > a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #karteisuche-filter p.karteisuche-ignoriert > a {
-	background-color: var(--farbeRot);
-	-webkit-mask-image: url(../../img/x-dick-rot.svg);
-	mask-image: url(../../img/x-dick-rot.svg);
+  background-color: var(--farbeRot);
+  -webkit-mask-image: url(../../img/x-dick-rot.svg);
+  mask-image: url(../../img/x-dick-rot.svg);
 }
 
 #karteisuche-filter p.karteisuche-ignoriert > a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 #karteisuche-filter p.karteisuche-ignoriert > a:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #karteisuche-filter p > span {
-	display: inline-block;
-	margin-left: 10px;
-	height: 30px;
+  display: inline-block;
+  margin-left: 10px;
+  height: 30px;
 }
 
 #karteisuche-filter p > a + span {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #karteisuche-filter span input[type="text"] {
-	vertical-align: top;
-	width: 200px;
+  vertical-align: top;
+  width: 200px;
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-filter {
-	width: 135px;
+  width: 135px;
 }
 
 #karteisuche-filter span input.karteisuche-karteiwort,
 #karteisuche-filter span input.karteisuche-volltext {
-	width: 219px;
+  width: 219px;
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-datum-typ {
-	width: 75px;
+  width: 75px;
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-datum-dir {
-	width: 25px;
+  width: 25px;
 }
 
 #karteisuche-filter span input[type="text"].karteisuche-redaktion-logik {
-	width: 20px;
+  width: 20px;
 }
 
 #karteisuche-filter input:read-only {
-	cursor: default;
+  cursor: default;
 }
 
 #karteisuche-filter label {
-	margin-right: 5px;
+  margin-right: 5px;
+  color: var(--textFarbe);
 }
 
 #karteisuche-filter input[type="date"] {
-	width: 140px;
+  width: 140px;
 }
 
 #karteisuche-filter input[type="checkbox"] {
-	z-index: 0;
-}
-
-#karteisuche-filter label {
-	color: var(--textFarbe);
+  z-index: 0;
 }
 
 #karteisuche-filter .dropdown-link-td {
-	top: 3px;
-	right: 2px;
+  top: 3px;
+  right: 2px;
 }
 
-/* Karteisuche schmal --------------------------- */
+
+/* KARTEISUCHE SCHMAL --------------------------- */
+
 @media (max-width: 835px) {
-	#karteisuche-filter span input.karteisuche-tag,
-	#karteisuche-filter span input.karteisuche-redaktion-person {
-		width: 150px;
-	}
+  #karteisuche-filter span input.karteisuche-tag,
+  #karteisuche-filter span input.karteisuche-redaktion-person {
+    width: 150px;
+  }
 }
 
 @media (max-width: 780px) {
-	#karteisuche-filter span input[type="text"].karteisuche-filter {
-		width: 100px;
-	}
+  #karteisuche-filter span input[type="text"].karteisuche-filter {
+    width: 100px;
+  }
 }
 
 @media (max-width: 750px) {
-	#karteisuche-filter span input[type="text"] {
-		width: 100px;
-	}
+  #karteisuche-filter span input[type="text"] {
+    width: 100px;
+  }
 }
 
 @media (max-width: 640px) {
-	#karteisuche-filter input.karteisuche-redaktionsdatum-von,
-	#karteisuche-filter input.karteisuche-redaktionsdatum-bis {
-		width: 120px;
-	}
+  #karteisuche-filter input.karteisuche-redaktionsdatum-von,
+  #karteisuche-filter input.karteisuche-redaktionsdatum-bis {
+    width: 120px;
+  }
 }
 
-/* Karteien ------------------------------------- */
+
+/* KARTEIEN ------------------------------------- */
+
 #karteisuche-alphabet {
-	display: inline-block;
-	vertical-align: top;
-	margin-left: 25px;
-	overflow: hidden;
-	background-color: var(--farbeH);
-	font-weight: normal;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 25px;
+  overflow: hidden;
+  background-color: var(--farbeH);
+  font-weight: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #karteisuche-alphabet a {
-	display: inline-block;
-	width: 20px;
-	color: #fff;
-	text-align: center;
+  display: inline-block;
+  width: 20px;
+  color: #fff;
+  text-align: center;
 }
 
 #karteisuche-alphabet a:focus {
-	color: var(--highlight);
+  color: var(--highlight);
 }
 
 #karteisuche-alphabet a:first-child {
-	margin: 0 5px 0 0;
-	width: auto;
+  margin: 0 5px 0 0;
+  width: auto;
 }
 
 #karteisuche-alphabet a.aktiv {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #karteisuche-treffer {
-	margin-left: 5px;
+  margin-left: 5px;
 }
 
 #karteisuche-karteien {
-	margin-top: 10px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	transition: max-height .5s ease;
+  margin-top: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: max-height .5s ease;
 }
 
 #karteisuche-karteien > div {
-	margin: 0;
-	border-top: 1px solid var(--linie);
+  margin: 0;
+  border-top: 1px solid var(--linie);
 }
 
 #karteisuche-karteien > div:first-child {
-	border-top: none;
+  border-top: none;
 }
 
 #karteisuche-karteien a {
-	display: block;
-	padding: 5px 10px;
-	height: 25px;
-	overflow: hidden;
-	line-height: 25px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  display: block;
+  padding: 5px 10px;
+  height: 25px;
+  overflow: hidden;
+  line-height: 25px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #karteisuche-karteien a:focus,
 #karteisuche-karteien a:hover {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 #karteisuche-karteien a span:last-child {
-	margin-left: 10px;
-	color: var(--text);
-	font-size: 12px;
+  margin-left: 10px;
+  color: var(--text);
+  font-size: 12px;
 }
 
-/* Karteien: Redaktionsstatus ------------------- */
+
+/* KARTEIEN: REDAKTIONSSTATUS ------------------- */
+
 #karteisuche-karteien div > div {
-	margin-left: 50px;
-	padding: 0 10px 5px 182px; /* 165px = Redaktionsereignis, 17px Color-Code */
-	font-size: 12px;
-	line-height: 20px;
-	text-indent: -182px;
+  margin-left: 50px;
+  padding: 0 10px 5px 182px; /* 165px = Redaktionsereignis, 17px Color-Code */
+  font-size: 12px;
+  line-height: 20px;
+  text-indent: -182px;
 }
 
 .karteisuche-status {
-	position: relative;
-	top: 1px;
-	display: inline-block;
-	margin-right: 5px;
-	border-radius: 6px;
-	width: 12px;
-	height: 12px;
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 6px;
+  width: 12px;
+  height: 12px;
 }
 
 .karteisuche-status1 {
-	background-color: var(--status1);
+  background-color: var(--status1);
 }
 
 .karteisuche-status2 {
-	background-color: var(--status2);
+  background-color: var(--status2);
 }
 
 .karteisuche-status3 {
-	background-color: var(--status3);
+  background-color: var(--status3);
 }
 
 .karteisuche-status4 {
-	background-color: var(--status4);
+  background-color: var(--status4);
 }
 
 .karteisuche-hoechst {
-	display: inline-block;
-	width: 165px;
-	font-style: italic;
-	text-indent: 0;
+  display: inline-block;
+  width: 165px;
+  font-style: italic;
+  text-indent: 0;
 }
 
 #karteisuche-karteien .verweise {
-	color: var(--farbe);
-	font-weight: bold;
+  color: var(--farbe);
+  font-weight: bold;
 }

@@ -1,405 +1,426 @@
 @charset "utf-8";
 
-/* Quick-Access-Bar ----------------------------- */
+/* QUICK-ACCESS-BAR ----------------------------- */
+
 #quick {
-	position: fixed;
-	top: -29px;
-	left: 0;
-	z-index: 2;
-	border-bottom: 1px dotted var(--linie);
-	padding: 2px 10px;
-	width: calc(100% - 20px);
-	height: 24px;
-	background-color: var(--farbe);
-	white-space: nowrap;
-	transition: top .5s ease;
+  position: fixed;
+  top: -29px;
+  left: 0;
+  z-index: 3;
+  border-bottom: 1px dotted var(--linie);
+  padding: 2px 10px;
+  width: calc(100% - 20px);
+  height: 24px;
+  background-color: var(--farbe);
+  white-space: nowrap;
+  transition: top .5s ease;
 }
 
 #quick.an {
-	top: 0;
+  top: 0;
 }
 
 #quick a {
-	margin-right: 5px;
-	background-color: #fff;
+  margin-right: 5px;
+  background-color: #fff;
 }
 
 #quick a:focus {
-	background-color: var(--highlight);
+  background-color: var(--highlight);
 }
 
 #quick-app-neues-fenster {
-	-webkit-mask-image: url(../../img/fenster-plus.svg);
-	mask-image: url(../../img/fenster-plus.svg);
+  -webkit-mask-image: url(../../img/fenster-plus.svg);
+  mask-image: url(../../img/fenster-plus.svg);
 }
 
 #quick-app-karteisuche {
-	-webkit-mask-image: url(../../img/lupe.svg);
-	mask-image: url(../../img/lupe.svg);
+  -webkit-mask-image: url(../../img/lupe.svg);
+  mask-image: url(../../img/lupe.svg);
 }
 
 #quick-app-einstellungen {
-	-webkit-mask-image: url(../../img/zahnrad.svg);
-	mask-image: url(../../img/zahnrad.svg);
+  -webkit-mask-image: url(../../img/zahnrad.svg);
+  mask-image: url(../../img/zahnrad.svg);
 }
 
 #quick-app-beenden {
-	-webkit-mask-image: url(../../img/ausgang.svg);
-	mask-image: url(../../img/ausgang.svg);
+  -webkit-mask-image: url(../../img/ausgang.svg);
+  mask-image: url(../../img/ausgang.svg);
 }
 
 #quick-kartei-erstellen {
-	-webkit-mask-image: url(../../img/dokument-plus.svg);
-	mask-image: url(../../img/dokument-plus.svg);
+  -webkit-mask-image: url(../../img/dokument-plus.svg);
+  mask-image: url(../../img/dokument-plus.svg);
 }
 
 #quick-kartei-oeffnen {
-	-webkit-mask-image: url(../../img/oeffnen.svg);
-	mask-image: url(../../img/oeffnen.svg);
+  -webkit-mask-image: url(../../img/oeffnen.svg);
+  mask-image: url(../../img/oeffnen.svg);
 }
 
 #quick-kartei-speichern {
-	-webkit-mask-image: url(../../img/speichern.svg);
-	mask-image: url(../../img/speichern.svg);
+  -webkit-mask-image: url(../../img/speichern.svg);
+  mask-image: url(../../img/speichern.svg);
 }
 
 #quick-kartei-speichern-unter {
-	-webkit-mask-image: url(../../img/speichern-unter.svg);
-	mask-image: url(../../img/speichern-unter.svg);
+  -webkit-mask-image: url(../../img/speichern-unter.svg);
+  mask-image: url(../../img/speichern-unter.svg);
 }
 
 #quick-kartei-schliessen {
-	-webkit-mask-image: url(../../img/x-dick.svg);
-	mask-image: url(../../img/x-dick.svg);
+  -webkit-mask-image: url(../../img/x-dick.svg);
+  mask-image: url(../../img/x-dick.svg);
 }
 
 #quick-kartei-formvarianten {
-	-webkit-mask-image: url(../../img/formvarianten.svg);
-	mask-image: url(../../img/formvarianten.svg);
+  -webkit-mask-image: url(../../img/formvarianten.svg);
+  mask-image: url(../../img/formvarianten.svg);
 }
 
 #quick-kartei-notizen {
-	-webkit-mask-image: url(../../img/stift.svg);
-	mask-image: url(../../img/stift.svg);
+  -webkit-mask-image: url(../../img/stift.svg);
+  mask-image: url(../../img/stift.svg);
 }
 
 #quick-kartei-anhaenge {
-	-webkit-mask-image: url(../../img/bueroklammer.svg);
-	mask-image: url(../../img/bueroklammer.svg);
+  -webkit-mask-image: url(../../img/bueroklammer.svg);
+  mask-image: url(../../img/bueroklammer.svg);
 }
 
 #quick-kartei-lexika {
-	-webkit-mask-image: url(../../img/buecher.svg);
-	mask-image: url(../../img/buecher.svg);
+  -webkit-mask-image: url(../../img/buecher.svg);
+  mask-image: url(../../img/buecher.svg);
 }
 
 #quick-kartei-metadaten {
-	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
-	mask-image: url(../../img/zeilen-4,0.svg);
+  -webkit-mask-image: url(../../img/zeilen-4,0.svg);
+  mask-image: url(../../img/zeilen-4,0.svg);
 }
 
 #quick-kartei-bedeutungen {
-	-webkit-mask-image: url(../../img/geruest.svg);
-	mask-image: url(../../img/geruest.svg);
+  -webkit-mask-image: url(../../img/geruest.svg);
+  mask-image: url(../../img/geruest.svg);
 }
 
 #quick-kartei-bedeutungen-wechseln {
-	-webkit-mask-image: url(../../img/geruest-zahnrad.svg);
-	mask-image: url(../../img/geruest-zahnrad.svg);
+  -webkit-mask-image: url(../../img/geruest-zahnrad.svg);
+  mask-image: url(../../img/geruest-zahnrad.svg);
 }
 
 #quick-kartei-bedeutungen-fenster {
-	-webkit-mask-image: url(../../img/fenster.svg);
-	mask-image: url(../../img/fenster.svg);
+  -webkit-mask-image: url(../../img/fenster.svg);
+  mask-image: url(../../img/fenster.svg);
 }
 
 #quick-kartei-suche {
-	-webkit-mask-image: url(../../img/lupe.svg);
-	mask-image: url(../../img/lupe.svg);
+  -webkit-mask-image: url(../../img/lupe.svg);
+  mask-image: url(../../img/lupe.svg);
 }
 
 #quick-redaktion-metadaten {
-	-webkit-mask-image: url(../../img/zeilen-4,0.svg);
-	mask-image: url(../../img/zeilen-4,0.svg);
+  -webkit-mask-image: url(../../img/zeilen-4,0.svg);
+  mask-image: url(../../img/zeilen-4,0.svg);
 }
 
 #quick-redaktion-ereignisse {
-	-webkit-mask-image: url(../../img/personen.svg);
-	mask-image: url(../../img/personen.svg);
+  -webkit-mask-image: url(../../img/personen.svg);
+  mask-image: url(../../img/personen.svg);
 }
 
 #quick-redaktion-literatur {
-	-webkit-mask-image: url(../../img/buecher.svg);
-	mask-image: url(../../img/buecher.svg);
+  -webkit-mask-image: url(../../img/buecher.svg);
+  mask-image: url(../../img/buecher.svg);
 }
 
 #quick-redaktion-wortinformationen {
-	-webkit-mask-image: url(../../img/kreis-info.svg);
-	mask-image: url(../../img/kreis-info.svg);
+  -webkit-mask-image: url(../../img/kreis-info.svg);
+  mask-image: url(../../img/kreis-info.svg);
 }
 
 #quick-redaktion-xml,
 #quick-redaktion-xmlBelegeFenster {
-	-webkit-mask-image: url(../../img/xml.svg);
-	mask-image: url(../../img/xml.svg);
+  -webkit-mask-image: url(../../img/xml.svg);
+  mask-image: url(../../img/xml.svg);
 }
 
 #quick-belege-hinzufuegen {
-	-webkit-mask-image: url(../../img/dokument-plus.svg);
-	mask-image: url(../../img/dokument-plus.svg);
+  -webkit-mask-image: url(../../img/dokument-plus.svg);
+  mask-image: url(../../img/dokument-plus.svg);
 }
 
 #quick-belege-auflisten {
-	-webkit-mask-image: url(../../img/liste-bullets.svg);
-	mask-image: url(../../img/liste-bullets.svg);
+  -webkit-mask-image: url(../../img/liste-bullets.svg);
+  mask-image: url(../../img/liste-bullets.svg);
 }
 
 #quick-belege-taggen {
-	-webkit-mask-image: url(../../img/etikett.svg);
-	mask-image: url(../../img/etikett.svg);
+  -webkit-mask-image: url(../../img/etikett.svg);
+  mask-image: url(../../img/etikett.svg);
 }
 
 #quick-belege-loeschen {
-	-webkit-mask-image: url(../../img/muelleimer.svg);
-	mask-image: url(../../img/muelleimer.svg);
+  -webkit-mask-image: url(../../img/muelleimer.svg);
+  mask-image: url(../../img/muelleimer.svg);
 }
 
 #quick-belege-kopieren,
 #quick-belege-zwischenablage {
-	-webkit-mask-image: url(../../img/kopieren.svg);
-	mask-image: url(../../img/kopieren.svg);
+  -webkit-mask-image: url(../../img/kopieren.svg);
+  mask-image: url(../../img/kopieren.svg);
 }
 
 #quick-belege-einfuegen {
-	-webkit-mask-image: url(../../img/einfuegen.svg);
-	mask-image: url(../../img/einfuegen.svg);
+  -webkit-mask-image: url(../../img/einfuegen.svg);
+  mask-image: url(../../img/einfuegen.svg);
 }
 
 #quick-bearbeiten-rueckgaengig {
-	-webkit-mask-image: url(../../img/pfeil-rund-links.svg);
-	mask-image: url(../../img/pfeil-rund-links.svg);
+  -webkit-mask-image: url(../../img/pfeil-rund-links.svg);
+  mask-image: url(../../img/pfeil-rund-links.svg);
 }
 
 #quick-bearbeiten-wiederherstellen {
-	-webkit-mask-image: url(../../img/pfeil-rund-rechts.svg);
-	mask-image: url(../../img/pfeil-rund-rechts.svg);
+  -webkit-mask-image: url(../../img/pfeil-rund-rechts.svg);
+  mask-image: url(../../img/pfeil-rund-rechts.svg);
 }
 
 #quick-bearbeiten-ausschneiden {
-	-webkit-mask-image: url(../../img/schere.svg);
-	mask-image: url(../../img/schere.svg);
+  -webkit-mask-image: url(../../img/schere.svg);
+  mask-image: url(../../img/schere.svg);
 }
 
 #quick-bearbeiten-kopieren {
-	-webkit-mask-image: url(../../img/kopieren.svg);
-	mask-image: url(../../img/kopieren.svg);
+  -webkit-mask-image: url(../../img/kopieren.svg);
+  mask-image: url(../../img/kopieren.svg);
 }
 
 #quick-bearbeiten-einfuegen {
-	-webkit-mask-image: url(../../img/einfuegen.svg);
-	mask-image: url(../../img/einfuegen.svg);
+  -webkit-mask-image: url(../../img/einfuegen.svg);
+  mask-image: url(../../img/einfuegen.svg);
 }
 
 #quick-bearbeiten-alles-auswaehlen {
-	-webkit-mask-image: url(../../img/auswaehlen.svg);
-	mask-image: url(../../img/auswaehlen.svg);
+  -webkit-mask-image: url(../../img/auswaehlen.svg);
+  mask-image: url(../../img/auswaehlen.svg);
 }
 
 #quick-ansicht-anzeige-vergroessern {
-	-webkit-mask-image: url(../../img/plus-quadrat.svg);
-	mask-image: url(../../img/plus-quadrat.svg);
+  -webkit-mask-image: url(../../img/plus-quadrat.svg);
+  mask-image: url(../../img/plus-quadrat.svg);
 }
 
 #quick-ansicht-anzeige-verkleinern {
-	-webkit-mask-image: url(../../img/minus-quadrat.svg);
-	mask-image: url(../../img/minus-quadrat.svg);
+  -webkit-mask-image: url(../../img/minus-quadrat.svg);
+  mask-image: url(../../img/minus-quadrat.svg);
 }
 
 #quick-ansicht-standardgroesse {
-	-webkit-mask-image: url(../../img/fenster-standard.svg);
-	mask-image: url(../../img/fenster-standard.svg);
+  -webkit-mask-image: url(../../img/fenster-standard.svg);
+  mask-image: url(../../img/fenster-standard.svg);
 }
 
 #quick-ansicht-vollbild {
-	-webkit-mask-image: url(../../img/fenster-vollbild.svg);
-	mask-image: url(../../img/fenster-vollbild.svg);
+  -webkit-mask-image: url(../../img/fenster-vollbild.svg);
+  mask-image: url(../../img/fenster-vollbild.svg);
 }
 
 #quick-hilfe-handbuch {
-	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
-	mask-image: url(../../img/kreis-fragezeichen.svg);
+  -webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+  mask-image: url(../../img/kreis-fragezeichen.svg);
 }
 
 .quick-spacer {
-	display: inline-block;
-	width: 20px;
+  display: inline-block;
+  width: 20px;
 }
 
 .quick-ein-1 {
-	-webkit-mask-image: url(../../img/checkbox.svg);
-	mask-image: url(../../img/checkbox.svg);
+  -webkit-mask-image: url(../../img/checkbox.svg);
+  mask-image: url(../../img/checkbox.svg);
 }
 
 .quick-ein-2 {
-	-webkit-mask-image: url(../../img/zahnrad.svg);
-	mask-image: url(../../img/zahnrad.svg);
+  -webkit-mask-image: url(../../img/zahnrad.svg);
+  mask-image: url(../../img/zahnrad.svg);
 }
 
 .quick-ein-3 {
-	-webkit-mask-image: url(../../img/stern.svg);
-	mask-image: url(../../img/stern.svg);
+  -webkit-mask-image: url(../../img/stern.svg);
+  mask-image: url(../../img/stern.svg);
 }
 
 .quick-ein-4 {
-	-webkit-mask-image: url(../../img/fahne.svg);
-	mask-image: url(../../img/fahne.svg);
+  -webkit-mask-image: url(../../img/fahne.svg);
+  mask-image: url(../../img/fahne.svg);
 }
 
 .quick-ein-5 {
-	-webkit-mask-image: url(../../img/birne.svg);
-	mask-image: url(../../img/birne.svg);
+  -webkit-mask-image: url(../../img/birne.svg);
+  mask-image: url(../../img/birne.svg);
 }
 
 .quick-ein-6 {
-	-webkit-mask-image: url(../../img/lesezeichen.svg);
-	mask-image: url(../../img/lesezeichen.svg);
+  -webkit-mask-image: url(../../img/lesezeichen.svg);
+  mask-image: url(../../img/lesezeichen.svg);
 }
 
 .quick-ein-7 {
-	-webkit-mask-image: url(../../img/stecknadel.svg);
-	mask-image: url(../../img/stecknadel.svg);
+  -webkit-mask-image: url(../../img/stecknadel.svg);
+  mask-image: url(../../img/stecknadel.svg);
 }
 
 .quick-ein-8 {
-	-webkit-mask-image: url(../../img/sonne.svg);
-	mask-image: url(../../img/sonne.svg);
+  -webkit-mask-image: url(../../img/sonne.svg);
+  mask-image: url(../../img/sonne.svg);
 }
 
 .quick-ein-9 {
-	-webkit-mask-image: url(../../img/herz.svg);
-	mask-image: url(../../img/herz.svg);
+  -webkit-mask-image: url(../../img/herz.svg);
+  mask-image: url(../../img/herz.svg);
 }
 
 .quick-ein-10 {
-	-webkit-mask-image: url(../../img/check.svg);
-	mask-image: url(../../img/check.svg);
+  -webkit-mask-image: url(../../img/check.svg);
+  mask-image: url(../../img/check.svg);
 }
 
 .quick-ein-11 {
-	-webkit-mask-image: url(../../img/plus-dick.svg);
-	mask-image: url(../../img/plus-dick.svg);
+  -webkit-mask-image: url(../../img/plus-dick.svg);
+  mask-image: url(../../img/plus-dick.svg);
 }
 
 .quick-ein-12 {
-	-webkit-mask-image: url(../../img/minus-dick.svg);
-	mask-image: url(../../img/minus-dick.svg);
+  -webkit-mask-image: url(../../img/minus-dick.svg);
+  mask-image: url(../../img/minus-dick.svg);
 }
 
 
-/* Kopf allgemein ------------------------------- */
+/* KOPF ALLGEMEIN ------------------------------- */
+
 body > header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 2;
-	border-bottom: 10px solid #fff;
-	padding: 0 10px;
-	width: calc(100% - 20px);
-	height: 60px;
-	background-color: var(--farbe);
-	white-space: nowrap;
-	transition: top .5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  border-bottom: 10px solid #fff;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background-color: var(--farbe);
+  white-space: nowrap;
+  transition: top .5s ease;
 }
 
 body > header.quick {
-	top: 29px;
+  top: 29px;
 }
 
 body > header h1,
 body > header span {
-	display: inline-block;
-	margin: 0;
-	color: #fff;
-	font-size: 30px;
-	font-weight: normal;
-	line-height: 60px;
+  display: inline-block;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 60px;
 }
 
-/* Wort ----------------------------------------- */
+
+/* WORT ----------------------------------------- */
+
 #wort {
-	vertical-align: top;
-	overflow: hidden;
-	max-width: 50%;
-	text-overflow: ellipsis;
+  vertical-align: top;
+  overflow: hidden;
+  max-width: 50%;
+  text-overflow: ellipsis;
+}
+
+#wort span {
+  margin-left: 5px;
+  font-size: 16px;
+}
+
+#wort span::before {
+  content: "(";
+}
+
+#wort span::after {
+  content: ")";
 }
 
 #wort.keine-kartei {
-	font-size: 20px;
-	font-style: italic;
+  font-size: 20px;
+  font-style: italic;
 }
 
 #kartei-geaendert {
-	visibility: hidden;
-	margin: 0 0 0 10px;
+  visibility: hidden;
+  margin: 0 0 0 10px;
 }
 
 #kartei-geaendert.geaendert {
-	visibility: visible;
+  visibility: visible;
 }
 
-/* Kopf-Icons ----------------------------------- */
+
+/* KOPF-ICONS ----------------------------------- */
+
 #kartei-anhaenge {
-	padding: 2px 0;
-	height: 24px;
-	line-height: 24px;
+  padding: 2px 0;
+  height: 24px;
+  line-height: 24px;
 }
 
 #kartei-anhaenge.not-first {
-	border-left: 1px solid var(--linie);
+  border-left: 1px solid var(--linie);
 }
 
 #kartei-anhaenge img {
-	margin-left: 5px;
+  margin-left: 5px;
 }
 
 #kartei-anhaenge img:last-child {
-	margin-right: 5px;
+  margin-right: 5px;
 }
 
-/* Kopf-Icons rechts ---------------------------- */
+
+/* KOPF-ICONS RECHTS ---------------------------- */
+
 #kopf-icons-rechts {
-	position: absolute;
-	top: 6px;
-	right: 0;
-	padding-left: 50px;
-	height: 48px;
-	background-image: linear-gradient(to right, rgba(114, 160, 207, 0), rgba(114, 160, 207, 1) 25px);
+  position: absolute;
+  top: 6px;
+  right: 0;
+  padding-left: 50px;
+  height: 48px;
+  background-image: linear-gradient(to right, rgb(114 160 207 / 0%), rgb(114 160 207 / 100%) 25px);
 }
 
 #kopf-icons-rechts > span {
-	position: relative;
-	display: inline-block;
-	vertical-align: top;
-	margin-right: 10px;
-	width: 48px;
-	height: 48px;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+  width: 48px;
+  height: 48px;
 }
 
 #updates {
-	border-radius: 10px;
-	background: #fff url(../../img/pfeil-kreis-rot-48.svg) no-repeat;
+  border-radius: 10px;
+  background: #fff url(../../img/pfeil-kreis-rot-48.svg) no-repeat;
 }
 
 #kopieren {
-	vertical-align: top;
-	border-radius: 10px;
-	width: 48px;
-	height: 48px;
-	background: #fff url(../../img/kopieren-blau-48.svg) no-repeat;
-	color: var(--text);
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 48px;
-	text-align: center;
-	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+  vertical-align: top;
+  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  background: #fff url(../../img/kopieren-blau-48.svg) no-repeat;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 48px;
+  text-align: center;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }

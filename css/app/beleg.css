@@ -1,582 +1,712 @@
 @charset "utf-8";
 
-/* Kopf ----------------------------------------- */
+/* KOPF ----------------------------------------- */
+
 #beleg.padding-suchleiste {
-	padding-bottom: 29px;
+  padding-bottom: 29px;
 }
 
 #beleg header {
-	position: sticky;
-	top: 70px;
-	z-index: 2;
-	padding: 0 0 10px 0;
-	background-color: #fff;
+  position: sticky;
+  top: 70px;
+  z-index: 3;
+  padding: 0 0 10px;
+  background-color: #fff;
 }
 
 #beleg header input:first-child {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 #beleg.quick header {
-	top: 99px;
+  top: 99px;
 }
 
 #beleg header > div {
-	position: relative;
-	margin: 0 auto;
-	max-width: 850px;
+  position: relative;
+  margin: 0 auto;
+  max-width: 850px;
 }
 
 #beleg-buttons {
-	position: relative;
-	z-index: 1;
-	padding-right: 50px;
-	width: fit-content;
-	background-image: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 25px);
+  position: relative;
+  z-index: 1;
+  padding-right: 50px;
+  width: fit-content;
+  background-image: linear-gradient(to left, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
 }
 
 #beleg-buttons input:last-child {
-	margin-left: 45px;
+  margin-left: 45px;
 }
 
 /* Styles zu .beleg-opt-block → liste.css */
 #beleg-opt {
-	position: absolute;
-	right: 0;
-	top: 0;
-	height: 24px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 24px;
 }
 
-/* Tabelle des Formulars ------------------------ */
+
+/* TABELLE DES FORMULARS ------------------------ */
+
 #beleg table {
-	margin: 0 auto 20px auto;
-	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 0;
-	border-radius: 10px;
-	padding: 15px;
-	width: calc(100% - 104px);
-	min-width: 500px;
-	max-width: 850px;
-	background-color: var(--hintergrund);
+  margin: 0 auto 20px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  padding: 15px;
+  width: calc(100% - 104px);
+  min-width: 500px;
+  max-width: 850px;
+  background-color: var(--hintergrund);
 }
 
 #beleg h2 {
-	position: sticky;
-	top: 104px;
-	z-index: 2;
-	margin: 0 auto;
-	padding: 21px 0 10px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
-	width: calc(100% - 104px);
-	min-width: 500px;
-	max-width: 850px;
-	background-color: #fff;
-	color: var(--textFarbe);
-	font-size: 24px;
-	font-style: italic;
-	font-weight: normal;
-	line-height: 38px;
-	text-align: left;
+  position: sticky;
+  top: 104px;
+  z-index: 3;
+  margin: 0 auto;
+  padding: 21px 0 10px; /* 21px von oben, damit identische Position mit Überschrift Bedeutungsgerüst */
+  width: calc(100% - 104px);
+  min-width: 500px;
+  max-width: 850px;
+  background-color: #fff;
+  color: var(--textFarbe);
+  font-size: 24px;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 38px;
+  text-align: left;
 }
 
 #beleg.quick h2 {
-	top: 133px;
+  top: 133px;
 }
 
 #beleg-geaendert {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 #beleg-referenz {
-	margin-left: 10px;
-	font-size: 16px;
-	line-height: 24px;
+  margin-left: 10px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 #beleg th {
-	position: relative;
-	padding: 10px 35px 0 11px;
-	width: calc(50% - 46px);
-	color: var(--textFarbe);
-	vertical-align: top;
-	font-size: 14px;
-	font-style: italic;
-	font-weight: normal;
-	text-align: left;
+  position: relative;
+  padding: 10px 35px 0 11px;
+  width: calc(50% - 46px);
+  color: var(--textFarbe);
+  vertical-align: top;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: normal;
+  text-align: left;
 }
 
 #beleg th[colspan="2"] {
-	width: auto;
-}
-
-#beleg th#beleg-meta {
-	padding-top: 30px;
+  width: auto;
 }
 
 #beleg td {
-	position: relative;
-	padding: 0 5px;
-	width: calc(50% - 10px);
-	vertical-align: top;
+  position: relative;
+  padding: 0 5px;
+  width: calc(50% - 10px);
+  vertical-align: top;
 }
 
 #beleg td[colspan="2"] {
-	width: auto;
+  width: auto;
 }
 
-#beleg td.check div {
-	display: flex;
-	flex-wrap: wrap;
+#beleg td.check > div {
+  position: relative;
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 20px;
+}
+
+#beleg td.check > div:has([data-ansicht="neu"]) {
+  grid-template-columns: 160px auto;
 }
 
 #beleg td.check p {
-	flex: 1 0 130px;
-	margin: 0;
-	padding: 0;
-	line-height: 30px;
-	text-align: center;
+  margin-bottom: 0;
 }
 
-#beleg td.check p:last-child {
-	padding-right: 0;
+#beleg-tags[data-ansicht="alt"] span {
+  white-space: nowrap;
+}
+
+#beleg-tags[data-ansicht="alt"] span:not(:last-child) {
+  margin-right: 20px;
+}
+
+#beleg-tags[data-ansicht="neu"] {
+  font-size: 14px;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag:last-child {
+  margin-right: 0;
+}
+
+#beleg-tags[data-ansicht="neu"] .tag img {
+  margin-right: 3px;
+  vertical-align: top;
 }
 
 #beleg-form-dwds td {
-	padding-top: 3px;
-	padding-bottom: 3px;
-	text-align: right;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  text-align: right;
 }
 
 #beleg hr {
-	margin: 30px 0 10px 0;
-	border: none;
-	height: 1px;
-	background-color: var(--linie);
+  margin: 30px 0 10px;
+  border: none;
+  height: 1px;
+  background-color: var(--linie);
 }
 
-/* Formular-Elemente ---------------------------- */
+#beleg hr.flach {
+  margin-top: 20px;
+}
+
+
+/* FORMULAR-ELEMENTE ---------------------------- */
+
 #beleg input[type="text"] {
-	width: calc(100% - 12px);
+  width: calc(100% - 12px);
+}
+
+#beleg #beleg-ul {
+  width: calc(100% - 12px - 165px);
+}
+
+#beleg #beleg-ud {
+  margin-left: 10px;
+  width: 143px;
 }
 
 #beleg input[type="text"].dropdown-feld {
-	width: calc(100% - 31px);
+  width: calc(100% - 31px);
 }
 
 #beleg input[type="text"].fehler {
-	outline-color: var(--textWarnung);
+  outline-color: var(--textWarnung);
 }
 
 #beleg input[type="number"] {
-	margin-left: 10px;
-	width: 57px;
+  margin-left: 10px;
+  width: 57px;
 }
 
-#beleg input[type="text"]#beleg-dta {
-	width: calc(100% - 12px - 79px - 145px); /* 64px Number-Feld, 145px Button */
+#beleg-import p {
+  position: relative;
 }
 
-#beleg-dta-button {
-	margin-left: 10px;
-	width: 135px;
+#beleg-import p:last-child {
+  margin-bottom: 0;
 }
 
-#beleg-datei-importieren {
-	width: 135px;
+#beleg-import span {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
-#beleg-datei-oeffnen {
-	width: 85px;
+#beleg-import input[type="text"] {
+  width: calc(100% - 12px - 2 * 79px); /* 79px Number-Feld */
 }
 
-#beleg-form-datei {
-	line-height: 30px;
-	text-align: right;
+#beleg-import #beleg-import-start {
+  margin-left: 10px;
+  width: 148px;
 }
 
-#beleg-datei-name {
-	display: inline-block;
-	vertical-align: bottom;
-	overflow: hidden;
-	width: calc(100% - 25px - 22px - 52px - 95px - 145px); /* margin, checkbox, label, button1, button2 */
-	max-width: calc(850px - 25px - 22px - 52px - 95px - 145px);
-	text-overflow: ellipsis;
-	white-space: nowrap;
+th:has(input[type="radio"]) {
+  position: relative;
 }
 
-#beleg-datei-name.leer {
-	color: var(--textHell);
-	font-style: italic;
+#beleg-import-hilfe {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  background-color: var(--iconHell);
 }
 
-#beleg-form-datei label {
-	display: inline-block;
-	width: 52px;
-	text-align: left;
-}
-
-#beleg-form-datei input {
-	margin-left: 10px;
-}
-
-#beleg-form-datei input[type="checkbox"] {
-	margin-left: 25px;
+#beleg-import-hilfe:hover {
+  background-color: var(--text);
 }
 
 #beleg textarea {
-	margin: 0 auto;
-	min-height: 24px;
-	max-height: 192px;
+  margin: 0 auto;
+  min-height: 24px;
+  max-height: 192px;
 }
 
 #beleg textarea:invalid {
-	background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
+  background: #fff url(../../img/zeilen-2,5-grau.svg) no-repeat left 2px;
 }
 
 #beleg textarea.dropdown-feld {
-	width: calc(100% - 31px);
+  width: calc(100% - 31px);
 }
 
 textarea#beleg-bs {
-	min-height: 24px;
-	max-height: 288px;
+  overscroll-behavior: contain;
+  min-height: 24px;
+  max-height: 288px;
 }
 
 #beleg input[type="radio"] {
-	margin-left: 25px;
+  margin-left: 25px;
 }
 
 #beleg label {
-	color: var(--textFarbe);
+  color: var(--textFarbe);
+}
+
+#beleg-bewertung {
+  width: max-content;
+}
+
+span#beleg-bewertung {
+  margin-right: 20px;
 }
 
 #beleg-bewertung a.aktiv {
-	background-color: var(--farbeStern);
+  background-color: var(--farbeStern);
 }
 
 #beleg-bewertung a.aktiv:focus {
-	background-color: var(--farbe);
+  background-color: var(--farbe);
 }
 
 #beleg-an {
-	margin: 0 auto;
-	max-width: 550px;
+  margin: 0 auto;
+  max-width: 550px;
 }
 
 #beleg-an p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 #beleg-an .anhaenge-item:hover {
-	background-color: var(--hintergrund);
+  background-color: var(--hintergrund);
 }
 
+#beleg th:has(.beleg-ul-ud) {
+  padding-right: 0;
+}
 
-/* Metadaten ------------------------------------ */
+.beleg-ul-ud {
+  position: relative;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.beleg-ul-ud:first-child {
+  width: calc(100% - 165px - 5px);
+}
+
+.beleg-ul-ud:last-child {
+  margin-left: 10px;
+  padding-left: 6px;
+  width: calc(155px - 6px);
+}
+
+.beleg-ul-ud .text-tools {
+  right: 1px;
+}
+
+.beleg-ul-ud .text-tools-quelle {
+  right: 73px;
+}
+
+.beleg-ul-ud:last-child .text-tools-quelle {
+  right: 1px;
+}
+
+.beleg-lese .beleg-ul-ud {
+  padding-left: 0;
+}
+
+.beleg-lese .beleg-ul-ud:first-child {
+  width: calc(100% - 165px);
+}
+
+.beleg-lese .beleg-ul-ud:last-child {
+  margin-left: 10px;
+  width: 155px;
+}
+
+.beleg-lese .beleg-ul-ud p {
+  display: inline-block;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  max-width: calc(100% - 10px);
+}
+
+/* METADATEN ------------------------------------ */
+
 #beleg pre {
-	margin: 0;
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
-	background-color: #fff;
-	font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
-	font-size: 14px;
-	line-height: 20px;
-	white-space: pre-wrap;
-	user-select: text;
-	tab-size: 2;
-	word-break: break-all;
+  margin: 0;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+  background-color: #fff;
+  font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  user-select: text;
+  tab-size: 2;
+  word-break: break-all;
 }
 
 #beleg .meta div {
-	border: 1px solid var(--linie);
-	padding: 2px 5px;
-	width: calc(100% - 12px);
-	background-color: #fff;
-	user-select: text;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+  width: calc(100% - 12px);
+  background-color: #fff;
+  user-select: text;
 }
 
 #beleg-meta-toggle {
-	vertical-align: bottom;
-	display: inline-block;
-	margin-left: 5px;
-	width: 24px;
-	height: 24px;
+  vertical-align: bottom;
+  display: inline-block;
+  margin-left: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+#beleg .meta .text-tools a {
+  margin-left: 24px;
 }
 
 
-/* Text-Tools ----------------------------------- */
+/* TEXT-TOOLS ----------------------------------- */
+
 .text-tools {
-	position: absolute;
-	right: 6px;
+  position: absolute;
+  right: 6px;
 }
 
 .text-tools-beleg,
 .text-tools-bedeutung,
 .text-tools-quelle {
-	position: absolute;
-	right: 78px;
+  position: absolute;
+  right: 78px;
 }
 
 @media (max-width: 750px) {
-	.text-tools-beleg {
-		overflow: hidden;
-		width: 320px;
-		white-space: nowrap;
-	}
+  .text-tools-beleg {
+    overflow: hidden;
+    width: 320px;
+    white-space: nowrap;
+  }
 }
 
 .text-tools a,
 .text-tools-beleg a,
 .text-tools-bedeutung a,
 .text-tools-quelle a {
-	display: inline-block;
-	background-color: var(--iconHell);
+  display: inline-block;
+  background-color: var(--iconHell);
 }
 
 .text-tools a:hover,
 .text-tools-beleg a:hover,
 .text-tools-bedeutung a:hover,
 .text-tools-quelle a:hover {
-	background-color: var(--text);
+  background-color: var(--text);
 }
 
 .text-tools-beleg a:first-child,
 .text-tools-beleg a:nth-child(2),
 .text-tools-beleg a:nth-child(5) {
-	margin-right: 24px;
+  margin-right: 24px;
 }
 
 .text-tools-beleg a.text-link {
-	padding: 0 5px;
-	color: var(--textSehrHell);
-	font-style: normal;
-	background-color: transparent;
+  padding: 0 5px;
+  color: var(--textSehrHell);
+  font-style: normal;
+  background-color: transparent;
 }
 
 .text-tools-beleg a.text-link:hover {
-	color: var(--text);
+  color: var(--text);
 }
 
 .icon-tools-aufrufdatum {
-	-webkit-mask-image: url(../../img/uhr.svg);
-	mask-image: url(../../img/uhr.svg);
+  -webkit-mask-image: url(../../img/uhr.svg);
+  mask-image: url(../../img/uhr.svg);
 }
 
 .icon-tools-auszug {
-	-webkit-mask-image: url(../../img/pfeil-doppelt-links.svg);
-	mask-image: url(../../img/pfeil-doppelt-links.svg);
+  -webkit-mask-image: url(../../img/pfeil-doppelt-links.svg);
+  mask-image: url(../../img/pfeil-doppelt-links.svg);
 }
 
 .icon-tools-buchen {
-	-webkit-mask-image: url(../../img/buch.svg);
-	mask-image: url(../../img/buch.svg);
+  -webkit-mask-image: url(../../img/buch.svg);
+  mask-image: url(../../img/buch.svg);
 }
 
 .icon-tools-gebucht {
-	-webkit-mask-image: url(../../img/buch-check-gruen.svg);
-	mask-image: url(../../img/buch-check-gruen.svg);
+  -webkit-mask-image: url(../../img/buch-check-gruen.svg);
+  mask-image: url(../../img/buch-check-gruen.svg);
 }
 
 .icon-tools-einfuegen {
-	-webkit-mask-image: url(../../img/einfuegen.svg);
-	mask-image: url(../../img/einfuegen.svg);
+  -webkit-mask-image: url(../../img/einfuegen.svg);
+  mask-image: url(../../img/einfuegen.svg);
 }
 
 .icon-tools-einzug {
-	-webkit-mask-image: url(../../img/pfeil-doppelt-rechts.svg);
-	mask-image: url(../../img/pfeil-doppelt-rechts.svg);
+  -webkit-mask-image: url(../../img/pfeil-doppelt-rechts.svg);
+  mask-image: url(../../img/pfeil-doppelt-rechts.svg);
 }
 
 .icon-tools-kopieren {
-	-webkit-mask-image: url(../../img/kopieren.svg);
-	mask-image: url(../../img/kopieren.svg);
+  -webkit-mask-image: url(../../img/kopieren.svg);
+  mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-tools-antiqua {
-	-webkit-mask-image: url(../../img/text-antiqua.svg);
-	mask-image: url(../../img/text-antiqua.svg);
+  -webkit-mask-image: url(../../img/text-antiqua.svg);
+  mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-bold {
-	-webkit-mask-image: url(../../img/text-fett.svg);
-	mask-image: url(../../img/text-fett.svg);
+  -webkit-mask-image: url(../../img/text-fett.svg);
+  mask-image: url(../../img/text-fett.svg);
 }
 
 .icon-tools-br {
-	-webkit-mask-image: url(../../img/text-br.svg);
-	mask-image: url(../../img/text-br.svg);
+  -webkit-mask-image: url(../../img/text-br.svg);
+  mask-image: url(../../img/text-br.svg);
 }
 
 .icon-tools-caps {
-	-webkit-mask-image: url(../../img/text-kapitaelchen.svg);
-	mask-image: url(../../img/text-kapitaelchen.svg);
+  -webkit-mask-image: url(../../img/text-kapitaelchen.svg);
+  mask-image: url(../../img/text-kapitaelchen.svg);
 }
 
 .icon-tools-clear {
-	-webkit-mask-image: url(../../img/pinsel.svg);
-	mask-image: url(../../img/pinsel.svg);
+  -webkit-mask-image: url(../../img/pinsel.svg);
+  mask-image: url(../../img/pinsel.svg);
+}
+
+.icon-tools-header-an {
+  -webkit-mask-image: url(../../img/auge.svg);
+  mask-image: url(../../img/auge.svg);
+}
+
+.icon-tools-header-aus {
+  -webkit-mask-image: url(../../img/auge-durchgestrichen.svg);
+  mask-image: url(../../img/auge-durchgestrichen.svg);
 }
 
 .icon-tools-heading {
-	-webkit-mask-image: url(../../img/text-antiqua.svg);
-	mask-image: url(../../img/text-antiqua.svg);
+  -webkit-mask-image: url(../../img/text-antiqua.svg);
+  mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-italic {
-	-webkit-mask-image: url(../../img/text-kursiv.svg);
-	mask-image: url(../../img/text-kursiv.svg);
+  -webkit-mask-image: url(../../img/text-kursiv.svg);
+  mask-image: url(../../img/text-kursiv.svg);
 }
 
 .icon-tools-kuerzen {
-	-webkit-mask-image: url(../../img/kuerzung.svg);
-	mask-image: url(../../img/kuerzung.svg);
+  -webkit-mask-image: url(../../img/kuerzung.svg);
+  mask-image: url(../../img/kuerzung.svg);
 }
 
 .icon-tools-list-unordered {
-	-webkit-mask-image: url(../../img/liste-bullets-gross.svg);
-	mask-image: url(../../img/liste-bullets-gross.svg);
+  -webkit-mask-image: url(../../img/liste-bullets-gross.svg);
+  mask-image: url(../../img/liste-bullets-gross.svg);
 }
 
 .icon-tools-list-ordered {
-	-webkit-mask-image: url(../../img/liste-zahlen-gross.svg);
-	mask-image: url(../../img/liste-zahlen-gross.svg);
+  -webkit-mask-image: url(../../img/liste-zahlen-gross.svg);
+  mask-image: url(../../img/liste-zahlen-gross.svg);
 }
 
 .icon-tools-mark {
-	-webkit-mask-image: url(../../img/text-markiert.svg);
-	mask-image: url(../../img/text-markiert.svg);
-}
-
-.icon-tools-save {
-	-webkit-mask-image: url(../../img/speichern.svg);
-	mask-image: url(../../img/speichern.svg);
-}
-
-.icon-tools-size {
-	-webkit-mask-image: url(../../img/text-gross.svg);
-	mask-image: url(../../img/text-gross.svg);
-}
-
-.icon-tools-sonderzeichen {
-	-webkit-mask-image: url(../../img/pi.svg);
-	mask-image: url(../../img/pi.svg);
-}
-
-.icon-tools-spacing {
-	-webkit-mask-image: url(../../img/text-gesperrt.svg);
-	mask-image: url(../../img/text-gesperrt.svg);
-}
-
-.icon-tools-strike {
-	-webkit-mask-image: url(../../img/text-durchgestrichen.svg);
-	mask-image: url(../../img/text-durchgestrichen.svg);
-}
-
-.icon-tools-superscript {
-	-webkit-mask-image: url(../../img/text-hochgestellt.svg);
-	mask-image: url(../../img/text-hochgestellt.svg);
-}
-
-.icon-tools-subscript {
-	-webkit-mask-image: url(../../img/text-tiefgestellt.svg);
-	mask-image: url(../../img/text-tiefgestellt.svg);
-}
-
-.icon-tools-underline {
-	-webkit-mask-image: url(../../img/text-unterstrichen.svg);
-	mask-image: url(../../img/text-unterstrichen.svg);
+  -webkit-mask-image: url(../../img/text-markiert.svg);
+  mask-image: url(../../img/text-markiert.svg);
 }
 
 .icon-tools-meta-plus {
-	-webkit-mask-image: url(../../img/plus.svg);
-	mask-image: url(../../img/plus.svg);
+  -webkit-mask-image: url(../../img/plus.svg);
+  mask-image: url(../../img/plus.svg);
 }
 
 .icon-tools-meta-minus {
-	-webkit-mask-image: url(../../img/minus.svg);
-	mask-image: url(../../img/minus.svg);
+  -webkit-mask-image: url(../../img/minus.svg);
+  mask-image: url(../../img/minus.svg);
 }
 
-/* Leseansicht ---------------------------------- */
+.icon-tools-save {
+  -webkit-mask-image: url(../../img/speichern.svg);
+  mask-image: url(../../img/speichern.svg);
+}
+
+.icon-tools-size {
+  -webkit-mask-image: url(../../img/text-gross.svg);
+  mask-image: url(../../img/text-gross.svg);
+}
+
+.icon-tools-sonderzeichen {
+  -webkit-mask-image: url(../../img/pi.svg);
+  mask-image: url(../../img/pi.svg);
+}
+
+.icon-tools-spacing {
+  -webkit-mask-image: url(../../img/text-gesperrt.svg);
+  mask-image: url(../../img/text-gesperrt.svg);
+}
+
+.icon-tools-strike {
+  -webkit-mask-image: url(../../img/text-durchgestrichen.svg);
+  mask-image: url(../../img/text-durchgestrichen.svg);
+}
+
+.icon-tools-superscript {
+  -webkit-mask-image: url(../../img/text-hochgestellt.svg);
+  mask-image: url(../../img/text-hochgestellt.svg);
+}
+
+.icon-tools-subscript {
+  -webkit-mask-image: url(../../img/text-tiefgestellt.svg);
+  mask-image: url(../../img/text-tiefgestellt.svg);
+}
+
+.icon-tools-underline {
+  -webkit-mask-image: url(../../img/text-unterstrichen.svg);
+  mask-image: url(../../img/text-unterstrichen.svg);
+}
+
+
+/* LESEANSICHT ---------------------------------- */
+
 .beleg-lese {
-	display: none;
+  display: none;
 }
 
 .leseansicht .beleg-lese {
-	display: table-row;
+  display: table-row;
 }
 
 .leseansicht .beleg-form {
-	display: none;
+  display: none;
 }
 
 .beleg-lese a {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .beleg-lese a:focus {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .beleg-lese p {
-	margin: 0 auto 10px auto;
-	padding: 0 6px;
-	max-width: 700px;
-	user-select: text;
+  margin: 0 auto 10px;
+  padding: 0 6px;
+  max-width: 700px;
+  user-select: text;
 }
 
 .beleg-lese p.einblenden {
-	overflow: hidden;
-	transition: height .5s ease;
+  overflow: hidden;
+  transition: height .5s ease;
 }
 
 #beleg .beleg-lese td {
-	border-bottom: 1px solid var(--linie);
-	padding-top: 10px;
+  border-bottom: 1px solid var(--linie);
+  padding-top: 10px;
 }
 
 #beleg .beleg-lese td#beleg-lese-meta {
-	padding-top: 0;
+  padding-top: 0;
 }
 
 #beleg-lese-meta div {
-	margin-bottom: 10px;
-	padding-left: 6px;
-	height: 24px;
+  margin-bottom: 10px;
+  padding-left: 6px;
 }
 
 #beleg-lese-meta div > span {
-	display: inline-block;
-	margin-left: 20px;
-	height: 24px;
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 10px;
+  height: 24px;
+  font-size: 14px;
+}
+
+#beleg-lese-meta div > span:not(.tag):first-child {
+  margin-right: 20px;
+}
+
+#beleg-lese-meta div > span:last-child {
+  margin-right: 0;
+}
+
+#beleg-lese-meta div > span.tag {
+  white-space: nowrap;
+}
+
+#beleg-lese-meta div > span.tag img {
+  vertical-align: top;
+  margin-right: 3px;
 }
 
 #beleg-lese-meta div span span {
-	overflow: hidden;
+  overflow: hidden;
 }
 
-#beleg-lese-bd p {
-	padding-left: 39px;
-	text-indent: -39px;
+#beleg-form-bd {
+  padding-top: 10px;
+  user-select: text;
 }
 
-#beleg-lese-bd b {
-	display: inline-block;
-	padding: 0 5px 0 15px;
-	text-align: center;
-	text-indent: 0;
+#beleg-form-bd:empty {
+  padding-top: 0;
 }
 
-#beleg-lese-bd a {
-	vertical-align: bottom;
-	background-color: var(--iconHell);
-	cursor: default;
+:is(#beleg-lese-bd, #beleg-form-bd) p {
+  padding-left: 39px;
+  text-indent: -39px;
 }
 
-#beleg-lese-bd a:hover {
-	background-color: var(--text);
+:is(#beleg-lese-bd, #beleg-form-bd) b.zaehlung {
+  display: inline-block;
+  padding: 0 5px 0 15px;
+  text-align: center;
+  text-indent: 0;
 }
 
-#beleg-lese-bd a:focus {
-	background-color: var(--farbe);
+:is(#beleg-lese-bd, #beleg-form-bd) a {
+  vertical-align: bottom;
+  background-color: var(--iconHell);
+  cursor: default;
+}
+
+:is(#beleg-lese-bd, #beleg-form-bd) a:hover {
+  background-color: var(--farbeRot);
+}
+
+:is(#beleg-lese-bd, #beleg-form-bd) a:focus {
+  background-color: var(--farbe);
 }

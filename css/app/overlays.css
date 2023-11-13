@@ -1,61 +1,61 @@
 @charset "utf-8";
 
-/* Bedeutungenbaum ------------------------------ */
+/* IMPORTS -------------------------------------- */
+
 @import url(../bedeutungenbaum.css);
 
-/* Alle Overlay-Fenster ------------------------- */
-.overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 2;
-	padding: 0 25px;
-	width: calc(100% - 50px); /* 50px padding */
-	height: 100%;
-	background-color: rgba(180, 180, 180, .7);
-	backdrop-filter: blur(3px);
-}
 
-.overlay > div {
-	position: relative;
-	margin: 80px auto 0 auto;
-	border-bottom-right-radius: 10px;
-	border-bottom-left-radius: 10px;
-	padding: 0;
-	background-color: #fff;
-}
-
-.overlay h2 {
-	position: relative;
-}
-
-.overlay h2 a {
-	position: absolute;
-	top: 2px;
-	right: 5px;
-	background-color: #fff;
-}
-
-.overlay h2 a:focus {
-	background-color: var(--highlight);
-}
-
-.icon-schliessen {
-	-webkit-mask-image: url(../../img/x.svg);
-	mask-image: url(../../img/x.svg);
-}
-
-.icon-handbuch {
-	-webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
-	mask-image: url(../../img/kreis-fragezeichen.svg);
-	right: 34px !important;
-}
+/* ALLE OVERLAY-FENSTER ------------------------- */
 
 .overlay {
-	opacity: 0;
-	transition: opacity .2s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  opacity: 0;
+  padding: 0 25px;
+  width: calc(100% - 50px); /* 50px padding */
+  height: 100%;
+  background-color: rgb(180 180 180 / 70%);
+  backdrop-filter: blur(3px);
+  transition: opacity .2s ease;
 }
 
 .overlay.einblenden {
-	opacity: 1;
+  opacity: 1;
+}
+
+.overlay > div {
+  position: relative;
+  margin: 80px auto 0;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 0;
+  background-color: #fff;
+}
+
+.overlay h2 {
+  position: relative;
+}
+
+.overlay h2 a {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  background-color: #fff;
+}
+
+.overlay h2 a:focus {
+  background-color: var(--highlight);
+}
+
+.icon-schliessen {
+  -webkit-mask-image: url(../../img/x.svg);
+  mask-image: url(../../img/x.svg);
+}
+
+.icon-handbuch {
+  -webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
+  mask-image: url(../../img/kreis-fragezeichen.svg);
+  right: 34px !important;
 }

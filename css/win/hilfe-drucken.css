@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 main {
-	display: block;
+  display: block;
 }
 
 header,
 nav,
 #suchleiste {
-	display: none;
+  display: none;
 }

@@ -1,117 +1,128 @@
 @charset "utf-8";
 
-/* Drucken -------------------------------------- */
+/* DRUCKEN -------------------------------------- */
+
 #drucken > div {
-	margin-top: 40px;
-	max-width: 720px;
+  margin-top: 40px;
+  max-width: 720px;
 }
 
 .icon-h-drucken {
-	-webkit-mask-image: url(../../img/drucker.svg);
-	mask-image: url(../../img/drucker.svg);
+  -webkit-mask-image: url(../../img/drucker.svg);
+  mask-image: url(../../img/drucker.svg);
 }
 
 #drucken-head {
-	position: relative;
-	margin: 10px 0;
-	text-align: center;
+  position: relative;
+  margin: 10px 0;
+  text-align: center;
 }
 
 #drucken-head span {
-	display: inline-block;
-	border: 1px solid var(--linie);
-	border-radius: 10px;
-	padding: 5px;
-	width: 78px;
+  display: inline-block;
+  border: 1px solid var(--linie);
+  border-radius: 10px;
+  padding: 5px;
+  width: 78px;
 }
 
 #drucken-head span:first-child {
-	margin-right: 25px;
+  margin-right: 25px;
 }
 
 #drucken-head span:hover {
-	background-color: var(--hover);
+  background-color: var(--hover);
 }
 
 #drucken-cont-rahmen {
-	padding: 10px;
+  padding: 10px;
 }
 
 #drucken-cont {
-	overflow-y: auto;
-	color: #000;
-	font-family: "Noto Serif", serif;
-	user-select: text;
-	transition: max-height .5s ease;
+  overflow-y: auto;
+  color: #000;
+  font-family: "Noto Serif", serif;
+  user-select: text;
+  transition: max-height .5s ease;
 }
 
 #drucken-cont h3 {
-	border-top: 7px double #000;
-	padding-top: 30px;
-	color: #000;
-	font-size: 20px;
-	font-style: normal;
-	font-weight: bold;
+  border-top: 7px double #000;
+  padding-top: 30px;
+  color: #000;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
 }
 
 #drucken-cont h3:first-child {
-	border-top: none;
-	padding-top: 0;
+  border-top: none;
+  padding-top: 0;
 }
 
 #drucken-cont mark.wort {
-	padding: 0;
-	background-color: var(--hover) !important;
-	color: var(--text);
-	font-weight: bold;
+  padding: 0;
+  background-color: var(--hover) !important;
+  color: var(--text);
+  font-weight: bold;
+}
+
+#drucken-cont span[class^="klammer-"] {
+  font-weight: normal;
+  color: inherit;
+}
+
+#drucken-cont span[class^="klammer-"]::before,
+#drucken-cont span[class^="klammer-"]::after {
+  margin-left: 0;
+  padding-left: 0;
+  font-weight: normal;
+  letter-spacing: 0;
 }
 
 #drucken-cont table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 #drucken-cont th {
-	border-bottom: 1px solid #000;
-	padding: 10px 0 0 10px;
-	width: calc(50% - 10px);
-	font-style: italic;
-	font-weight: normal;
-	text-align: left;
+  border-bottom: 1px solid #000;
+  padding: 10px 0 0 10px;
+  width: calc(50% - 10px);
+  font-style: italic;
+  font-weight: normal;
+  text-align: left;
 }
 
 #drucken-cont td {
-	padding: 10px 0 0 10px;
-	width: calc(50% - 10px);
-	vertical-align: top;
-}
-
-#drucken-cont td {
-	/* word-break: break-word; ist deprecated! overflow-wrap: anywhere; wird von Chromium, Stand 2020-02-02, aber noch nicht verstanden. */
-	word-break: break-word;
-	overflow-wrap: anywhere;
+  padding: 10px 0 0 10px;
+  width: calc(50% - 10px);
+  vertical-align: top;
+  /* word-break: break-word; ist deprecated! overflow-wrap: anywhere; wird von Chromium, Stand 2020-02-02, aber noch nicht verstanden. */
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 #drucken-cont th:first-child,
 #drucken-cont td:first-child {
-	padding-left: 0;
-	width: 50%;
+  padding-left: 0;
+  width: 50%;
 }
 
 #drucken-cont th[colspan="2"],
 #drucken-cont td[colspan="2"] {
-	width: 100%;
+  width: 100%;
 }
 
-#drucken-cont .dta-antiqua {
-	font-family: "Noto Sans", "Noto Sans Symbols2", sans-serif;
-	font-size: 100%;
+#drucken-cont .tei-antiqua {
+  font-family: "Noto Sans", "Noto Sans Symbols2", sans-serif;
+  font-size: 100%;
 }
 
 #drucken-cont .bd-win-baum {
-	border-color: transparent;
+  border-color: transparent;
 }
 
 #drucken-cont mark.paraphrase {
-	color: inherit;
+  color: inherit;
 }
