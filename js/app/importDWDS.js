@@ -253,11 +253,32 @@ const importDWDS = {
     return result;
   },
 
+  // Mapper für den JSON-Import: in diesen Korpora ist page_ => facsimile_
+  pageToFacsimile: [
+    "dekude",
+    "dsdk",
+    "dtae",
+    "dtak",
+    "gei_digital",
+    "grenzboten",
+  ],
+
   // JSON-Import starten
   //   json = object
   startImportJSON (json) {
     // Datensätze parsen
     for (const i of json) {
+      // Daten korrigieren:
+      //   - wenn !page_ => Daten aus matches nehmen
+      //   - in gewissen Korpora page_ => facsimile_
+      if (!i.meta_.page_) {
+        i.meta_.page_ = i.matches?.[0]?.page || "";
+      }
+      if (importDWDS.pageToFacsimile.includes(i.collection)) {
+        i.meta_.facsimile_ = i.meta_.page_;
+        i.meta_.page_ = "";
+      }
+
       // Datensatz erzeugen
       importShared.fileData.data.push(importDWDS.importObject());
       const ds = importShared.fileData.data.at(-1).ds;
@@ -307,7 +328,6 @@ const importDWDS = {
         const titeldaten = {
           titel: i.meta_.title || "",
           seite: i.meta_.page_ || "",
-          // TODO im DWDS (noch) nicht umgesetzt
           faksimile: i.meta_.facsimile_ || "",
         };
         importDWDS.korrekturen({
@@ -366,7 +386,6 @@ const importDWDS = {
       }
 
       // 2. weitere Links
-      // TODO im DWDS (noch) nicht umgesetzt
       importDWDS.links({
         ds,
         faksimile: i.meta_.facsimile_ || "",
@@ -397,7 +416,6 @@ const importDWDS = {
       if (i.meta_.page_) {
         xmlStr += `<Seite>${i.meta_.page_}</Seite>`;
       }
-      // TODO im DWDS (noch) nicht umgesetzt
       if (i.meta_.facsimile_) {
         xmlStr += `<Faksimile>${i.meta_.facsimile_}</Faksimile>`;
       }
