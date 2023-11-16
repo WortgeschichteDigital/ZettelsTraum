@@ -1040,7 +1040,10 @@ const importShared = {
         break;
       }
     }
-    if (!source) {
+    if (!source ||
+        !source.xmlPath && !source.xmlPathReg.test(ds.ul)) {
+      // auch Quellen aussschließen, bei denen die XML-URL nicht berechnet werden kann,
+      // wenn die XML-Datei nicht direkt verlinkt wird (z.B. WDB)
       return false;
     }
 
