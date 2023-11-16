@@ -474,6 +474,11 @@ const importDWDS = {
       // Unicode-Normalisierung
       ds.qu = txt.normalize("NFC");
 
+      // kleinere Textnormierungen
+      //   - Spatien vor Semikolon entfernen
+      ds.qu = ds.qu.replace(/\s; /g, "; ");
+      titeldaten.titel = titeldaten.titel.replace(/\s; /g, "; ");
+
       // eine Verrenkung wegen der häufig merkwürdigen Zitierweise
       ds.qu = ds.qu.replace(/ Zitiert nach:.+/, "");
       const jahrDatierung = ds.da.match(/[0-9]{4}/);
