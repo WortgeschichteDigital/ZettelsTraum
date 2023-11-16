@@ -170,9 +170,11 @@ const importDWDS = {
       // Titel
       const nTitel = xmlDoc.querySelector("Fundstelle Titel");
       const nSeite = xmlDoc.querySelector("Fundstelle Seite");
+      const nFaksimile = xmlDoc.querySelector("Fundstelle Faksimile");
       const titeldaten = {
         titel: nTitel?.firstChild?.nodeValue || "",
         seite: nSeite?.firstChild?.nodeValue || "",
+        faksimile: nFaksimile?.firstChild?.nodeValue || "",
       };
       importDWDS.korrekturen({
         typ: "qu",
@@ -298,6 +300,8 @@ const importDWDS = {
         const titeldaten = {
           titel: i.meta_.title || "",
           seite: i.meta_.page_ || "",
+          // TODO im DWDS (noch) nicht umgesetzt
+          faksimile: i.meta_.facsimile_ || "",
         };
         importDWDS.korrekturen({
           typ: "qu",
@@ -377,6 +381,10 @@ const importDWDS = {
       }
       if (i.meta_.page_) {
         xmlStr += `<Seite>${i.meta_.page_}</Seite>`;
+      }
+      // TODO im DWDS (noch) nicht umgesetzt
+      if (i.meta_.facsimile_) {
+        xmlStr += `<Faksimile>${i.meta_.facsimile_}</Faksimile>`;
       }
       if (i.textclass) {
         xmlStr += `<Textklasse>${i.textclass}</Textklasse>`;
@@ -521,6 +529,11 @@ const importDWDS = {
       // ggf. Punkt am Ende der Quellenangabe ergänzen
       if (!/[.!?]$/.test(ds.qu)) {
         ds.qu += ".";
+      }
+
+      // ggf. Faksimile-Nummer ergänzen
+      if (titeldaten.faksimile) {
+        ds.qu += ` [Faksimile Nr. ${titeldaten.faksimile}]`;
       }
 
       // Tagesdaten ggf. aufhübschen
