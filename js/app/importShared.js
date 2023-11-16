@@ -1296,14 +1296,17 @@ const importShared = {
 
     // Seiten/Spalten
     const seite_spalte = td.spalte ? "Sp.\u00A0" : "S.\u00A0";
-    if (td.seiten) {
-      titel += `, ${/Sp?\. /.test(td.seiten) ? "" : seite_spalte}${td.seiten}`;
+    const seiten_reg = new RegExp(`\\b${td.seiten.replace(/^Sp?\. /, "")}\\b`);
+    if (td.seiten && !seiten_reg.test(td.seite)) {
+      titel += ", " + (/Sp?\. /.test(td.seiten) ? "" : seite_spalte) + td.seiten;
+    } else {
+      td.seiten = "";
     }
     if (td.seite) {
       if (td.seiten) {
         titel += `, hier ${td.seite}`;
       } else {
-        titel += `, ${seite_spalte}${td.seite}`;
+        titel += ", " + seite_spalte + td.seite;
       }
     }
 
