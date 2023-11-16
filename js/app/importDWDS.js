@@ -166,15 +166,15 @@ const importDWDS = {
 
     // Datensatz: Quelle
     const nQu = xmlDoc.querySelector("Fundstelle Bibl");
+    const faksimile = xmlDoc.querySelector("Fundstelle Faksimile")?.firstChild?.nodeValue || "";
     if (nQu?.firstChild) {
       // Titel
       const nTitel = xmlDoc.querySelector("Fundstelle Titel");
       const nSeite = xmlDoc.querySelector("Fundstelle Seite");
-      const nFaksimile = xmlDoc.querySelector("Fundstelle Faksimile");
       const titeldaten = {
         titel: nTitel?.firstChild?.nodeValue || "",
         seite: nSeite?.firstChild?.nodeValue || "",
-        faksimile: nFaksimile?.firstChild?.nodeValue || "",
+        faksimile,
       };
       importDWDS.korrekturen({
         typ: "qu",
@@ -225,6 +225,7 @@ const importDWDS = {
     }
 
     // Datensatz: Notizen
+    // 1. Link zum DWDS
     const nDok = xmlDoc.querySelector("Fundstelle Dokument");
     if (nDok?.firstChild) {
       ds.no = importDWDS.korrekturen({
@@ -234,6 +235,12 @@ const importDWDS = {
         korpus,
       });
     }
+
+    // 2. weitere Links
+    importDWDS.links({
+      ds,
+      faksimile,
+    });
 
     // Datensatz zurückgeben oder Karteikarte füllen
     if (returnResult) {
@@ -348,6 +355,7 @@ const importDWDS = {
       }
 
       // Notizen
+      // 1. Link zum DWDS
       if (i.meta_.basename) {
         ds.no = importDWDS.korrekturen({
           typ: "no",
@@ -356,6 +364,13 @@ const importDWDS = {
           korpus,
         });
       }
+
+      // 2. weitere Links
+      // TODO im DWDS (noch) nicht umgesetzt
+      importDWDS.links({
+        ds,
+        faksimile: i.meta_.facsimile_ || "",
+      });
 
       // Beleg-XML
       let xmlStr = "<Beleg>";
@@ -648,6 +663,27 @@ const importDWDS = {
 
       // 1. Zeile frei lassen (s.o.)
       return `\n${txt}`;
+    }
+  },
+
+  // Links im Notizenfeld ergänzen
+  //   ds = object
+  //     (Datensatz mit Belegdaten)
+  //   faksimile = string
+  //     (Faksimile-Nummer)
+  links ({ ds, faksimile }) {
+    // GEI-Digital: seitengenauer Link zum Digitalisat
+    if (faksimile && /https?:\/\/gei-digital\.gei\.de\/viewer\/ppnresolver/.test(ds.ul)) {
+      const url = new URL(ds.ul);
+      const ppn = url.searchParams.get("id");
+      if (ppn) {
+        if (ds.no) {
+          ds.no += "\n\n";
+        } else {
+          ds.no += "\n";
+        }
+        ds.no += `Digitalisat bei GEI-Digital: https://gei-digital.gei.de/viewer/image/${ppn}/${faksimile}`;
+      }
     }
   },
 };
