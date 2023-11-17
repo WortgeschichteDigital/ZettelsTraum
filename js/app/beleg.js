@@ -591,17 +591,16 @@ const beleg = {
       } catch {
         return;
       }
-      if (parsedURL.origin === "https://www.deutschestextarchiv.de" &&
-          document.getElementById("beleg-import-quelle-url").checked) {
+      const urlImport = document.getElementById("beleg-import-quelle-url").checked;
+      const von = this.nextSibling;
+      const bis = von.nextSibling;
+      if (urlImport && parsedURL.origin === "https://www.deutschestextarchiv.de") {
         const page = importTEI.dtaGetPageNo(parsedURL);
-        const von = this.nextSibling;
-        const bis = von.nextSibling;
-        if (von.value === "0") {
-          von.value = page;
-        }
-        if (bis.value === "0") {
-          bis.value = page + 1;
-        }
+        von.value = page;
+        bis.value = page + 1;
+      } else if (urlImport) {
+        von.value = "0";
+        bis.value = "0";
       }
     });
 
