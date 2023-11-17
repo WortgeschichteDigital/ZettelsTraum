@@ -421,18 +421,25 @@ const beleg = {
   //     (das Formularfeld, das geändert wurde)
   formularGeaendert (feld) {
     feld.addEventListener("change", function () {
+      const val = helfer.textTrim(this.value, true);
       const name = this.id.replace(/^beleg-/, "");
       let noLeerzeilen = "";
       if (name === "no" && /^\n/.test(this.value)) {
         // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
         // weil die erste Zeile in der Belegliste angezeigt werden kann
         noLeerzeilen = this.value.match(/^\n+/)[0];
-      } else if (name === "ul" && !beleg.data.ul) {
-        const heute = new Date().toISOString().split("T")[0];
-        document.getElementById("beleg-ud").value = heute;
-        beleg.data.ud = heute;
+      } else if (name === "ul") {
+        const ud = document.getElementById("beleg-ud");
+        if (!beleg.data.ul) {
+          const heute = new Date().toISOString().split("T")[0];
+          ud.value = heute;
+          beleg.data.ud = heute;
+        } else if (!val && beleg.data.ul) {
+          ud.value = "";
+          beleg.data.ud = "";
+        }
       }
-      beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
+      beleg.data[name] = noLeerzeilen + val;
       beleg.belegGeaendert(true);
     });
   },
