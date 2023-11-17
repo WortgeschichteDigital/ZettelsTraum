@@ -110,7 +110,8 @@ mark.suche-kein-ende {
 
 mark.user {
   position: relative;
-  background-color: var(--farbeGelb);
+  background-color: var(--farbeBlau);
+  color: #fff;
 }
 
 mark.wort {
