@@ -256,6 +256,8 @@ const kartei = {
     filter.ctrlReset(false);
     // Okay! Content kann eingelesen werden
     data = JSON.parse(content);
+    // Sicherheit: potenziell gefährliche Daten aus Karteikartenfeldern löschen
+    kartei.oeffnenBereinigen();
     // Karteiwort eintragen
     // (muss wegen Konversion nach v9 vor der Konversion geschehen;
     // mit der Konversion nach v26 wird data.wo entfernt)
@@ -295,6 +297,19 @@ const kartei = {
     filter.inaktiveSchliessen(true);
     // Bedeutungsgerüst auf Korruption überprüfen
     bedeutungen.korruptionCheck();
+  },
+
+  // Sicherheit: potenziell gefährliche Tags aus Karteikartenfeldern löschen
+  oeffnenBereinigen () {
+    const rep = /<\/?(?:a|script).*?>/g;
+    for (const karte of Object.values(data.ka)) {
+      for (const [ k, v ] of Object.entries(karte)) {
+        if (typeof v !== "string") {
+          continue;
+        }
+        karte[k] = v.replace(rep, "")
+      }
+    }
   },
 
   // Speichern: Verteilerfunktion
