@@ -36,6 +36,15 @@
   font-weight: bold;
 }
 
+#stamm-kopf > span > .farbe-kopf {
+  vertical-align: top;
+  display: inline-block;
+  margin: 5px 5px 0 5px;
+  border: 1px solid var(--linie);
+  width: 13px;
+  height: 13px;
+}
+
 #stamm-kopf img {
   vertical-align: bottom;
 }

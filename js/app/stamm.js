@@ -386,6 +386,8 @@ const stamm = {
       // Aktivierung umstellen
       aktiv.classList.remove("aktiv");
       this.classList.add("aktiv");
+      // Icons auffrischen
+      stamm.kopfIcons(this.closest("[data-wort]"));
       // Änderungsmarkierung setzen
       kartei.karteiGeaendert(true);
     });
@@ -416,29 +418,40 @@ const stamm = {
   //     (der Kopfblock, in dem die Icons erzeugt/aufgefrischt werden sollen)
   kopfIcons (span) {
     // alle bisherigen Icons entfernen
-    span.querySelectorAll(".stamm-kopf-icon").forEach(i => i.parentNode.removeChild(i));
+    span.querySelectorAll(".stamm-kopf-icon, .farbe-kopf").forEach(i => i.parentNode.removeChild(i));
+
     // Wort ermitteln
     const wort = span.dataset.wort;
+
     // Textelement, vor dem die Images stehen sollen, zwischenspeichern
     const text = span.firstChild;
+
     // aktivieren
     if (data.fv[wort].an) {
       span.insertBefore(stamm.kopfMakeIcon("check-gruen.svg"), text);
     } else {
       span.insertBefore(stamm.kopfMakeIcon("x-dick-rot.svg"), text);
     }
+
     // erweitern
     if (data.fv[wort].an && !data.fv[wort].tr) {
       span.insertBefore(stamm.kopfMakeIcon("nicht-trunkiert.svg"), text);
     }
+
     // Nebenlemma
     if (data.fv[wort].an && data.fv[wort].nl) {
       span.insertBefore(stamm.kopfMakeIcon("raute.svg"), text);
     }
+
     // nur markiert
     if (data.fv[wort].an && data.fv[wort].ma) {
-      span.insertBefore(stamm.kopfMakeIcon("text-markiert-gelb.svg"), text);
+      span.insertBefore(stamm.kopfMakeIcon("text-markiert.svg"), text);
     }
+
+    // Farbe
+    const fa = document.createElement("span");
+    span.insertBefore(fa, text);
+    fa.classList.add("farbe-kopf", `wortFarbe${data.fv[wort].fa}`);
   },
 
   // Icon erzeugen

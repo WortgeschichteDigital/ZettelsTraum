@@ -324,6 +324,15 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   color: var(--textSehrHell);
 }
 
+#liste-filter .farbe {
+  vertical-align: top;
+  display: inline-block;
+  margin: 5px 5px 0 0;
+  border: 1px solid var(--linie);
+  width: 13px;
+  height: 13px;
+}
+
 #filter-verschiedenes-bewertung {
   margin: 5px 0 0 22px;
 }
