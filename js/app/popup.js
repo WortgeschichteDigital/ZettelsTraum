@@ -80,7 +80,7 @@ const popup = {
         items.push("sep", "schliessen", "sep", "belegHinzufuegen");
         popup.belegeAuflisten(items);
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("sep", "karteikarteConf", "sep", "belegHinzufuegen");
+        items.push("sep", "karteikarteConf", "importConf", "sep", "belegHinzufuegen");
         popup.belegeAuflisten(items);
       } else if (helfer.hauptfunktion === "liste") {
         items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen");
@@ -136,7 +136,7 @@ const popup = {
       if (oben === "stamm") {
         items.push("link", "sep", "schliessen");
       } else if (oben === "red-lit") {
-        items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
+        items.push("link", "sep", "titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "importConf", "sep", "schliessen");
         if (kartei.wort) {
           items.splice(4, 0, "titelXml");
         }
@@ -144,7 +144,7 @@ const popup = {
           items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
         }
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf");
+        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf");
       } else if (helfer.hauptfunktion === "liste") {
         items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
       } else {
@@ -175,12 +175,12 @@ const popup = {
       } else if (overlay.oben() === "anhaenge") {
         items.push("sep", "schliessen");
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf");
+        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf");
       }
       items.push("sep", "belegHinzufuegen");
       popup.belegeAuflisten(items);
     } else if (target === "titelaufnahme") {
-      items.push("titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "literaturConf", "sep", "schliessen");
+      items.push("titelBearbeiten", "titelAufnahmen", { name: "titelAufnahmeCp", sub: [ "titelAufnahmeXml", "titelAufnahmeText" ] }, { name: "titelReferenzCp", sub: [ "titelReferenzXml", "titelReferenzText" ] }, "titelSigle", "sep", "importConf", "sep", "schliessen");
       if (kartei.wort) {
         items.splice(2, 0, "titelXml");
       }
@@ -202,7 +202,7 @@ const popup = {
       } else if (popup.overlayID === "ctrlC") {
         items.push("sep", "kopierenConf");
       } else if (popup.overlayID === "red-lit") {
-        items.push("sep", "literaturConf");
+        items.push("sep", "importConf");
       }
       if (kartei.wort) {
         items.push("sep", "belegHinzufuegen");
@@ -217,7 +217,7 @@ const popup = {
     } else if (target === "beleg-conf") {
       popup.referenz.data = beleg.data;
       popup.referenz.id = "" + beleg.id_karte;
-      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "sep", "belegHinzufuegen" ];
+      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf", "sep", "belegHinzufuegen" ];
       if (popup.klammern) {
         items.unshift("klammernEntfernen", "sep");
       }

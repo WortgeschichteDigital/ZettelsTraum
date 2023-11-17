@@ -2245,7 +2245,89 @@ Mustermann, Erika
             <p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
           </div>
 
-          <h2 id="einstellungen-literatur">Literatur</h2>
+          <h2 id="einstellungen-import">Import</h2>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Import-Feld in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder ein Dateipfad befindet. Ist dem der Fall, wird der Inhalt der Zwischenablage umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Quelle zu importieren.</p>
+
+            <p>Haben Sie einen Verweis in der Zwischenablage wird beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> das Import-Feld automatisch fokussiert. Ist diese Einstellung aktiviert, sparen Sie sich dann den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder des Dateipfads.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteOriginalBevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus einer bekannten Online-Ressource stammt, immer automatisch von der Originalquelle bezogen.</p>
+
+            <p>Dabei wird ein Download von der im Snippet angegebenen URL angestoßen. Dies hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Wird ein <a href="#karteikarte-dwdsImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> und ist von dem Quellkorpus bekannt, dass es sich um ein Zeitungskorpus handelt, wird der Zeitungsname in die erste Zeile der Notizen geschrieben. Diese Option kann sinnvoll sein, wenn man den Zeitungsnamen in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> sehen möchte.</p>
+
+            <p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
+
+            <p>Beim <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-teiImport">importieren Sie eine Seite mehr</a>.</p>
+
+            <p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
+
+            <p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefenNurMarkieren">mit <q>nur markieren</q> gekennzeichnete Wörter in die Überprüfung mit einbeziehen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, eine <abbr title="Pica-Produktionsnummer">PPN</abbr> oder dergleichen, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
+
+            <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext hart gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
+
+            <p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Ist diese Option aktiviert, streicht die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion für den Belegtext</a> den unmittelbaren Kontext von Absätzen, in denen das Karteiwort auftaucht, nicht. Das heißt konkret, dass aus der Sicht eines Absatzes, in dem das Karteiwort auftaucht, der vorhergehende und der folgende Absatz erhalten bleiben.</p>
+
+            <p>Diese Option wird auch <a href="#einstellungen-karteikarteTextKuerzenAuto">bei der harten Kürzung nach Belegimport</a> berücksichtigt.</p>
+          </div>
 
           <p class="erklaerung-option" id="einstellungen-literaturVerlag">Verlag anzeigen</p>
 
@@ -2486,88 +2568,6 @@ Mustermann, Erika
             <p>Ist die Einstellung aktiviert, werden Sie nicht mehr gefragt. Der im Feld stehende Text wird am Ende automatisch um den einzufügenden Text ergänzt.</p>
 
             <p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> aktiviert</p>
-
-            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Import-Feld in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder ein Dateipfad befindet. Ist dem der Fall, wird der Inhalt der Zwischenablage umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Quelle zu importieren.</p>
-
-            <p>Haben Sie einen Verweis in der Zwischenablage wird beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> das Import-Feld automatisch fokussiert. Ist diese Einstellung aktiviert, sparen Sie sich dann den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder des Dateipfads.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteOriginalBevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus einer bekannten Online-Ressource stammt, immer automatisch von der Originalquelle bezogen.</p>
-
-            <p>Dabei wird ein Download von der im Snippet angegebenen URL angestoßen. Dies hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Wird ein <a href="#karteikarte-dwdsImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> und ist von dem Quellkorpus bekannt, dass es sich um ein Zeitungskorpus handelt, wird der Zeitungsname in die erste Zeile der Notizen geschrieben. Diese Option kann sinnvoll sein, wenn man den Zeitungsnamen in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> sehen möchte.</p>
-
-            <p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
-
-          <div class="info">
-            <p><i>Standard:</i> aktiviert</p>
-
-            <p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
-
-            <p>Beim <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-teiImport">importieren Sie eine Seite mehr</a>.</p>
-
-            <p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
-
-            <p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefenNurMarkieren">mit <q>nur markieren</q> gekennzeichnete Wörter in die Überprüfung mit einbeziehen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, eine <abbr title="Pica-Produktionsnummer">PPN</abbr> oder dergleichen, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
-
-            <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext hart gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
-
-            <p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Ist diese Option aktiviert, streicht die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion für den Belegtext</a> den unmittelbaren Kontext von Absätzen, in denen das Karteiwort auftaucht, nicht. Das heißt konkret, dass aus der Sicht eines Absatzes, in dem das Karteiwort auftaucht, der vorhergehende und der folgende Absatz erhalten bleiben.</p>
-
-            <p>Diese Option wird auch <a href="#einstellungen-karteikarteTextKuerzenAuto">bei der harten Kürzung nach Belegimport</a> berücksichtigt.</p>
           </div>
 
           <p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>

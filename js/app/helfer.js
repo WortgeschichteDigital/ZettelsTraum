@@ -61,7 +61,7 @@ const helfer = {
       "einstellungen-sec-kopieren": {
         queries: [],
       },
-      "einstellungen-sec-literatur": {
+      "einstellungen-sec-import": {
         queries: [],
       },
       "einstellungen-sec-menue": {
