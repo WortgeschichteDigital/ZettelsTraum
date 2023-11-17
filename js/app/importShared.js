@@ -954,6 +954,13 @@ const importShared = {
       return false;
     }
 
+    // URL und Aufrufdatum entfernen, wenn der Import aus einem XML-Snippet des DWDS kommt
+    // und die URL auf eine XML-Resource zeigt
+    if (ds.bi === "xml-dwds" && /\.xml$/.test(ds.ul)) {
+      ds.ud = "";
+      ds.ul = "";
+    }
+
     // Ist die Karte schon ausgefüllt?
     const datenfelder = {
       da: "Datum",
