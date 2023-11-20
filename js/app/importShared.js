@@ -1311,7 +1311,7 @@ const importShared = {
     }
     if (td.seite) {
       if (td.seiten) {
-        titel += `, hier ${td.seite}`;
+        titel += ", hier " + seite_spalte + td.seite;
       } else {
         titel += ", " + seite_spalte + td.seite;
       }
