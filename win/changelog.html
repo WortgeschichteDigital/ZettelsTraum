@@ -48,18 +48,6 @@
       <div>
         <h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
-        <h3>Entfernte Funktionen</h3>
-
-        <ul>
-          <li></li>
-        </ul>
-
-        <h3>Neue Funktionen</h3>
-
-        <ul>
-          <li></li>
-        </ul>
-
         <h3>Verbesserungen</h3>
 
         <ul>
@@ -88,10 +76,24 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
 
         <ul>
-          <li></li>
+          <li>die automatische Ermittlung der passenden Seiteneinstellungen einer via URL zu importierenden Quelle funktionierte nicht, wenn in den Feldern <i>Seite von</i> und <i>Seite bis</i> schon ein Wert stand</li>
+
+          <li>für den Lemmata-Dialog konnte kein Icon zur Quick-Access-Bar hinzugefügt werden</li>
+
+          <li>wurde in der Karteikarte die URL aus dem URL-Feld entfernt, wurde das Datum im Aufrufdatums-Feld nicht automatisch gelöscht</li>
+
+          <li>bei der automatisierten, harten Kürzung des Belegtextes wurde in der Quellenangabe die Seitenzahl nicht angepasst</li>
+
+          <li>beim Import eines TEI-Dokuments konnten in der Quellenangabe verwirrende Seitenangaben nach dem Muster <q>S.&nbsp;187, hier 187-188</q> auftauchen</li>
+
+          <li>wurde ein komplettes TEI-Dokument importiert, wurden die Start- und Endseite für die Quellenangabe nicht ermittelt</li>
+
+          <li>wurde mit der Suchleiste im Belegfeld des Karteikartenformulars gesucht, wurde das Suchwort unter gewissen Umständen nicht gefunden, obwohl es im Text vorhanden war</li>
+
+          <li>beim Import eines Belegs wurde auch bei Online-Ressourcen, deren XML-URL nicht berechnet werden kann, unter Umständen nachgefragt, ob diese nicht lieber aus der Originalquelle importiert werden sollen</li>
         </ul>
       </div>
 
