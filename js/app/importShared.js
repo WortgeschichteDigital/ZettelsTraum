@@ -1326,6 +1326,7 @@ const importShared = {
     // Titel typographisch verbessern und zurückgeben
     titel = helfer.textTrim(titel, true);
     titel = helfer.typographie(titel);
+    titel = importShared.changeTitleStyle(titel);
     return titel;
 
     // ggf. Punkt ergänzen
@@ -1363,5 +1364,94 @@ const importShared = {
       }
       return pers;
     }
+  },
+
+  // Format des Titesl ggf. anpassen
+  //   titel = string
+  changeTitleStyle (titel) {
+    // Titel nicht anpassen
+    if (!optionen.data.einstellungen["literatur-wgd-style"]) {
+      return titel;
+    }
+
+    // Stylesheet ggf. anpassen
+    const monate = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];
+
+    const zeitungen = [
+      // Berliner Zeitung
+      /^(?<title>.*?)(?<name>Berliner Zeitung), (?<date>[0-9]{1,2}\.\s[0-9]{1,2}\.\s[0-9]{4}).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Die Gartenlaube
+      /(?<name>Die Gartenlaube).+?Jg\.\s(?<no>[0-9]+).+?\((?<year>[0-9]{4})\).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Die Grenzboten
+      /(?:Jg\.\s(?<no>[0-9]+)), (?<year>[0-9]{4}), (?<quarter>[a-zA-Z ]+?)\. In: (?<name>Die Grenzboten).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Neue Rheinische Zeitung
+      /(?<name>Neue Rheinische Zeitung).+?(?<no>Nr\.\s[0-9]+).+?\s(?<day>[0-9]{1,2})\.\s(?<month>[a-zA-Zä]+)\s(?<year>[0-9]{4}).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Polytechnisches Journal
+      /(?<name>Dingler['’]?s [pP]olytechnisches Journal).+?(?:Bd\.\s(?<no>[0-9]+)).+?\((?<year>[0-9]{4})\).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+    ];
+
+    for (const z of zeitungen) {
+      let artikel = / In: /.test(titel) ? titel.split(" In: ")[0] : "";
+      const m = titel.match(z);
+      const g = m?.groups;
+      let updated = false;
+      if (g?.name === "Berliner Zeitung") {
+        // hier geht es nur darum, das u.U. fehlende "In:" zu ergänzen
+        titel = `${g.name}, ${g.date}`;
+        if (g.title && !/ In: /.test(g.title)) {
+          artikel = g.title.trim();
+        }
+        updated = true;
+      } else if (g?.name === "Die Gartenlaube") {
+        titel = `${g.name} ${g.no} (${g.year})`;
+        updated = true;
+      } else if (g?.name === "Die Grenzboten") {
+        let quarter = g.quarter;
+        switch (quarter) {
+          case "Erstes Vierteljahr":
+            quarter = "1";
+            break;
+          case "Zweites Vierteljahr":
+            quarter = "2";
+            break;
+          case "Drittes Vierteljahr":
+            quarter = "3";
+            break;
+          case "Viertes Vierteljahr":
+            quarter = "4";
+            break;
+        }
+        titel = `${g.name} ${g.no}/${quarter} (${g.year})`;
+        artikel = "";
+        updated = true;
+      } else if (g?.name === "Neue Rheinische Zeitung") {
+        const monat = monate.indexOf(g.month) >= 0 ? monate.indexOf(g.month) + 1 : g.month;
+        titel = `${g.name}, ${g.day}.\u00A0${monat}. ${g.year}, ${g.no}`;
+        updated = true;
+      } else if (/Dingler['’]?s [pP]olytechnisches Journal/.test(g?.name)) {
+        titel = `Polytechnisches Journal ${g.no} (${g.year})`;
+        if (g.page) {
+          g.page = g.page.replace("Sp.", "S.");
+        }
+        updated = true;
+      }
+      if (updated) {
+        if (g.page) {
+          titel += `, ${g.page}`;
+        }
+        titel += ".";
+        if (artikel) {
+          titel = artikel + " In: " + titel;
+        }
+        return titel;
+      }
+    }
+
+    // Titel nicht aufbereitet
+    return titel;
   },
 };

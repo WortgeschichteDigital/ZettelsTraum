@@ -1933,9 +1933,25 @@ const beleg = {
   async toolsQuelleLaden (shortcut = false) {
     // keine Quelle gefunden
     if (!beleg.data.bx || !beleg.data.bi) {
+      let text = "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.";
+      if (beleg.data.qu) {
+        const ori = beleg.data.qu;
+        const neu = importShared.changeTitleStyle(ori);
+        if (ori !== neu) {
+          beleg.toolsQuelleLadenChanges({
+            Quelle: {
+              key: "qu",
+              ori,
+              neu,
+            },
+          }, shortcut);
+          return;
+        }
+        text = "Die vorhandene Quellenangabe kann (oder muss) nicht automatisch angepasst werden.\n" + text;
+      }
       dialog.oeffnen({
         typ: "alert",
-        text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+        text,
         callback: () => document.getElementById("beleg-qu").focus(),
       });
       return;
@@ -1963,6 +1979,7 @@ const beleg = {
       // PLAIN-DEREKO
       const reg = new RegExp(`^(${importDereko.idForm})(.+)`);
       titel = beleg.data.bx.match(reg)[2] + ".";
+      titel = importShared.changeTitleStyle(titel);
     } else if (/^tei/.test(beleg.data.bi) && xmlDoc) {
       // TEI
       importTEI.data.cit = importTEI.citObject();
@@ -2007,6 +2024,7 @@ const beleg = {
     } else if (beleg.data.bi === "xml-wgd" && xmlDoc) {
       // XML-WGD
       titel = xmlDoc.querySelector("Fundstelle unstrukturiert")?.firstChild?.textContent || "";
+      titel = importShared.changeTitleStyle(titel);
     }
 
     // keine Titeldaten gefunden
@@ -2024,7 +2042,13 @@ const beleg = {
       ori: beleg.data.qu,
       neu: titel,
     };
+    beleg.toolsQuelleLadenChanges(aenderungen, shortcut);
+  },
 
+  // Inhalt des Quelle-Felds neu laden (Änderungen ausführen)
+  //   aenderungen = object
+  //   shortcut = boolean
+  async toolsQuelleLadenChanges (aenderungen, shortcut) {
     // Änderungen ermitteln
     const txt = [];
     for (const [ k, v ] of Object.entries(aenderungen)) {

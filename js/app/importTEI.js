@@ -375,6 +375,7 @@ const importTEI = {
     // make and return title
     let title = importShared.makeTitle(td);
     title = title.normalize("NFC");
+    title = importShared.changeTitleStyle(title);
     return title;
   },
 
