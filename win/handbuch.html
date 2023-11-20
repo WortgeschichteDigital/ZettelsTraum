@@ -583,7 +583,7 @@
           <div class="info">
             <p id="karteikarte-maskieren">Der Inhalt des Textfeldes wird so behandelt, als sei er in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> formatiert. Sie können zur Auszeichnung des Textes somit alle standardisierten <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags verwenden. Das heißt aber auch, dass die <b>Spitzklammern</b> &lt; und&nbsp;&gt; maskiert werden müssen, wenn sie literal und nicht als Begrenzungen von Tags gemeint sind. Wollen Sie literale Spitzklammern eingeben, müssen Sie <code class="quelltext">&amp;lt;</code> <abbr title="beziehungsweise">bzw.</abbr> <code class="quelltext">&amp;gt;</code> tippen.</p>
 
-            <p id="karteikarte-kuerzenBeleg">Mithilfe des Icons <img src="../img/kuerzung.svg" width="20" height="20" alt=""> kann der <b>Belegtext gekürzt</b> werden. Die Funktion operiert auf der Ebene von Absätzen. Standardmäßig werden alle Absätze gestrichen, in denen das Karteiwort nicht auftaucht. Für gekürzte Absätze wird <abbr title="gegebenenfalls">ggf.</abbr> ein Kürzungszeichen eingefügt: <code class="quelltext">&lt;span class="klammer-loeshung"&gt;...&lt;/span&gt;</code> (falls sie zwischen Absätzen mit Karteiwort stehen). Über Einstellungen lässt sich steuern, dass der <a href="#einstellungen-karteikarteTextKuerzenKontext">Kontext erhalten</a> bleibt (ein Absatz vor und einer hinter einem Absatz mit Karteiwort) oder die <a href="#einstellungen-karteikarteTextKuerzenAuto">Kürzung nach dem Import automatisch</a> vorgenommen wird.</p>
+            <p id="karteikarte-kuerzenBeleg">Mithilfe des Icons <img src="../img/kuerzung.svg" width="20" height="20" alt=""> kann der <b>Belegtext hart gekürzt</b> werden. Die Funktion operiert auf der Ebene von Absätzen. Standardmäßig werden alle Absätze gestrichen, in denen das Karteiwort nicht auftaucht. Für gekürzte Absätze wird <abbr title="gegebenenfalls">ggf.</abbr> ein Kürzungszeichen eingefügt: <code class="quelltext">&lt;span class="klammer-loeshung"&gt;...&lt;/span&gt;</code> (falls sie zwischen Absätzen mit Karteiwort stehen). Über Einstellungen lässt sich steuern, dass der <a href="#einstellungen-karteikarteTextKuerzenKontext">Kontext erhalten</a> bleibt (ein Absatz vor und einer hinter einem Absatz mit Karteiwort) oder die <a href="#einstellungen-karteikarteTextKuerzenAuto">Kürzung nach dem Import automatisch</a> vorgenommen wird.</p>
 
             <p id="karteikarte-sonderzeichen">Über das Icon <img src="../img/pi.svg" width="20" height="20" alt=""> können einige <b>Sonderzeichen</b> an der Stelle des Belegs eingefügt werden, an der sich der Cursor gerade befindet, darunter auch die maskierten Spitzklammern. Befinden Sie sich im Beleg- der Bedeutungs-Feld kann die Funktion auch mit <kbd>Strg</kbd> + <kbd>M</kbd> aufgerufen werden.</p>
 
@@ -621,7 +621,7 @@
 
             <p>Das Vornehmen einer Formatierung kann mit der Fehlermeldung <q>illegale Verschachtelung</q> scheitern. In diesem Fall müssen Sie die Textauswahl ändern. Eine <a href="#belegliste-nesting">Erläuterung zu Verschachtelungsregeln in <abbr title="Hypertext Markup Language" lang="en">HTML</abbr></a> finden Sie im <a href="#belegliste"><abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
 
-            <p>Etwas Besonderes stellt das Text-Tool <img src="../img/text-markiert.svg" width="20" height="20" alt=""> dar. Mit ihm können Sie Textteile markieren, um sie später leichter wiederzufinden. So <b>markierte Texte</b> werden standardmäßig gelb hinterlegt und werden explizit als Nutzermarkierung klassifiziert (durch <code class="quelltext">class="user"</code>). Die so markierten Textteile sind in der Detailansicht der Belegliste und der Leseansicht der Karteikarte klicksensitiv. In einem Popup-Fensterchen können Sie die Farbe der Markierung ändern und/oder die markierte Stelle um eine Notiz ergänzen. Die Funktion wird genauer in der <a href="#belegliste-karteiwortHervorheben">Belegliste im Zusammenhang mit der Annotierung von Karteiwörtern erläutert</a>.</p>
+            <p>Etwas Besonderes stellt das Text-Tool <img src="../img/text-markiert.svg" width="20" height="20" alt=""> dar. Mit ihm können Sie Textteile markieren, um sie später leichter wiederzufinden. So <b>markierte Texte</b> werden standardmäßig blau hinterlegt und werden explizit als Nutzermarkierung klassifiziert (durch <code class="quelltext">class="user"</code>). Die so markierten Textteile sind in der Detailansicht der Belegliste und der Leseansicht der Karteikarte klicksensitiv. In einem Popup-Fensterchen können Sie die Farbe der Markierung ändern und/oder die markierte Stelle um eine Notiz ergänzen. Die Funktion wird genauer in der <a href="#belegliste-karteiwortHervorheben">Belegliste im Zusammenhang mit der Annotierung von Karteiwörtern erläutert</a>.</p>
 
             <p id="karteikarte-belegEinfuegen">Das <b>Einfügen von Text</b> funktioniert in diesem Feld anders als in anderen Textfeldern der Karteikarte. Normalerweise wird der in der Zwischenablage befindliche Text so, wie er ist, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne jede Formatierung, in das betreffende Feld hineinkopiert. Verfügt der in der Zwischenablage liegende Text jedoch über Layoutangaben im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format, bleiben einfache Formate wie fett (<code class="quelltext">&lt;b&gt;</code>), kursiv (<code class="quelltext">&lt;i&gt;</code>) oder unterstrichen (<code class="quelltext">&lt;u&gt;</code>) erhalten. Dabei wird das Original-<abbr title="Hypertext Markup Language" lang="en">HTML</abbr> automatisch bereinigt.</p>
 
@@ -799,7 +799,7 @@
 
           <p>Beim Öffnen einer neuen Karteikarte scannt <i class="app-name"></i> automatisch die <b>Zwischenablage</b> und stellt das Importformular so ein, dass Sie nur noch auf <kbd>⏎</kbd> drücken müssen, um die Karte zu befüllen. Dies setzt natürlich voraus, dass das Format der in der Zwischenablage liegenden Daten bekannt ist. Befindet sich dort die URL aus einer der App bekannten Importquelle, wird die URL-Ansicht ausgewählt. Befindet sich in ihr ein Dateipfad (den sie aus Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> in die Zwischenablage geholt haben), wird die Datei- und für andere Daten die Zwischenablagen-Ansicht eingestellt.</p>
 
-          <p>Die folgenden <b>Datentypen</b> können automatisch importiert werden. Details zu den einzelnen Importwegen und Dateitypen werden weiter unten beschrieben.</p>
+          <p>Die folgenden <b>Datentypen</b> können automatisch importiert werden. Details zu den einzelnen Importwegen und Datentypen werden weiter unten beschrieben.</p>
 
           <div class="info">
             <p><i>Importweg URL</i></p>
@@ -872,13 +872,13 @@
             <figcaption>der Import aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> funktioniert über die URL der Textseite</figcaption>
           </figure>
 
-          <p>Für die Texte aus Dingler Online gibt es keine seitengenauen Links. Lassen Sie im ersten Nummernfeld die <code class="quelltext">0</code> stehen, wird der gesamte Text importiert. (Dies gilt im Übrigen für jeden Import aus einer in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Quelle.) Geben Sie hingegen eine Nummer ein, sucht das Programm in der heruntergeladenen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei zunächst, ob es in dem Text eine Seite findet, die im physischen Original genau diese Nummer hatte. Ist dem nicht der Fall, greift es auf verschiedene Fallback-Lösungen zurück. Prinzipiell sind die Texte aus Dingler Online jedoch nicht sonderlich lang, sodass <i class="app-name"></i> gut mit einem komplett importierten Text zurechtkommt. Sie können nach dem Import dann die <a href="#karteikarte-kuerzenBeleg">automatische Kürzungsfunktion nutzen</a>, die alle Absätze löscht, in denen keines Ihrer <a href="#menueKartei-lemmata">Karteiwörter</a> auftaucht. Alternativ könnten Sie im gerade importierten Text durch die <a href="karteikarte-leseansicht">Leseansicht</a> scrollen und nach denjenigen Seiten suchen, die Sie interessieren. Die Seitenumbrüche werden fett hervorgehoben. Der Beginn von Seite 25 wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> so markiert: <code class="quelltext">[:25:]</code>. Sobald Sie wissen, welche Seiten Sie interessieren, können Sie den Import in derselben Karteikarte noch einmal ausführen und dazu die passenden Seitennummern eingeben. Die Datei wird im Hintergrund in einem Cache gespeichert, muss dafür also nicht noch einmal heruntergeladen werden.</p>
+          <p>Für die Texte aus Dingler Online gibt es keine seitengenauen Links. Lassen Sie im ersten Nummernfeld die <code class="quelltext">0</code> stehen, wird der gesamte Text importiert. (Dies gilt im Übrigen für jeden Import aus einer in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Quelle.) Geben Sie hingegen eine Nummer ein, sucht das Programm in der heruntergeladenen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei zunächst, ob es in dem Text eine Seite findet, die im physischen Original genau diese Nummer hatte. Ist dem nicht der Fall, greift es auf verschiedene Fallback-Lösungen zurück. Prinzipiell sind die Texte aus Dingler Online jedoch nicht sonderlich lang, sodass <i class="app-name"></i> gut mit einem komplett importierten Text zurechtkommt. Sie können nach dem Import dann die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion nutzen</a>, die alle Absätze löscht, in denen keines Ihrer <a href="#menueKartei-lemmata">Karteiwörter</a> auftaucht. Alternativ könnten Sie im gerade importierten Text durch die <a href="#karteikarte-leseansicht">Leseansicht</a> scrollen und nach denjenigen Seiten suchen, die Sie interessieren. Die Seitenumbrüche werden fett hervorgehoben. Der Beginn von Seite 25 wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> so markiert: <code class="quelltext">[:25:]</code>. Sobald Sie wissen, welche Seiten Sie interessieren, können Sie den Import in derselben Karteikarte noch einmal ausführen und dazu die passenden Seitennummern eingeben. Die Datei wird im Hintergrund in einem Cache gespeichert, muss dafür also nicht noch einmal heruntergeladen werden.</p>
 
           <p>Im Falle von Dingler Online und dem <abbr title="Deutsches Textarchiv">DTA</abbr> können Sie sowohl eine Artikel- <abbr title="beziehungsweise">bzw.</abbr> Textseiten-URL eingeben als auch eine URL, die direkt zur <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei führt. Im Falle von <a href="https://www.hab.de/digitale-editionen/"><abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr></a> müssen Sie zwingend die URL zur XML-Datei eingeben. Wie bei Dingler Online kann auch bei <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Texten die passende Seite nicht automatisch ermittelt werden. Da die Editionen in vielen Fällen sehr lang sind, müssten Sie vorher wissen, welche Seiten oder Blätter Sie importieren möchten.</p>
 
           <p>Geben Sie für den Import keine Startseite an, lassen Sie das erste Nummernfeld also auf <code class="quelltext">0</code> stehen, wird zwar prinzipiell der gesamte Text importiert. Dies gilt aber nur mit Einschränkungen. Ist die Datei mehr als 400&nbsp;KB groß, wird der Import rundweg abgelehnt. Bei einer Größe von über 200&nbsp;KB werden Sie gewarnt, dass der Import Probleme bereiten könnte. Die gilt auch für den Fall, dass Sie 10 Seiten oder mehr importieren möchten. Der Import von 30 Seiten oder mehr wird gleich ganz unterbunden.</p>
 
-          <p>Aus all diesen Quellen (<abbr title="Deutsches Textarchiv">DTA</abbr>, Dingler Online, <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>) können Sie den Import nicht nur via URL, sondern auch über eine heruntergeladene <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei anstoßen. Wechseln Sie dazu einfach in die Ansicht <i>Datei</i>. Hier gibt es einen Button, der einen Dateidialog öffnet. Noch schneller geht es für Sie unter Umständen, indem Sie die Datei in Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> kopieren. Fokussieren Sie das Importfeld, wird automatisch der kopierte Dateipfad eingefügt. Sobald Sie <kbd>⏎</kbd> oder den Button <i>Importieren</i> drücken, wird die Datei eingelesen. Auch in diesem Fall wird die Eingaben in den Nummernfeldern, mit denen Sie steuern können, welche Seiten importiert werden sollen, beachtet.</p>
+          <p>Aus all diesen Quellen (<abbr title="Deutsches Textarchiv">DTA</abbr>, Dingler Online, <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>) können Sie den Import nicht nur via URL, sondern auch über eine heruntergeladene <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei anstoßen. Wechseln Sie dazu einfach in die Ansicht <i>Datei</i>. Hier gibt es einen Button, der einen Dateidialog öffnet. Noch schneller geht es für Sie unter Umständen, indem Sie die Datei in Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> kopieren. Fokussieren Sie das Importfeld, wird automatisch der kopierte Dateipfad eingefügt. Sobald Sie <kbd>⏎</kbd> oder den Button <i>Importieren</i> drücken, wird die Datei eingelesen. Auch in diesem Fall wird die Eingabe in den Nummernfeldern, mit denen Sie steuern können, welche Seiten importiert werden sollen, beachtet.</p>
 
           <p>Der Vorteil eines Dateiimports ist, dass Sie sich bei Ihrer Arbeit nicht auf die Quellen, aus denen heraus ein URL-Import möglich ist, beschränken müssen. Auf diese Weise können Sie jedes in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Dokument in <i class="app-name"></i> importieren, egal aus welcher Quelle es stammt. Das ganze funktioniert übrigens genauso gut, wenn Sie die Datei öffnen und das komplette <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> in die Zwischenablage kopieren. Über die Formularansicht <i>Zwischenablage</i> lassen sich die Daten dann so importieren, als wäre sie aus einer Datei eingelesen worden.</p>
 
@@ -889,7 +889,7 @@
             <figcaption>Export-Dialog des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></figcaption>
           </figure>
 
-          <p>Mithilfe der Funktion <i>Treffer exportieren</i> kann nach einer Korpussuche im <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> eine Belegreihe heruntergeladen und in einer Datei gespeichert werden. <i class="app-name"></i> unterstützt den Import von Korpusergebnissen im <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Format. Dazu gehen Sie wie folgt vor:</p>
+          <p>Mithilfe der Funktion <i>Treffer exportieren</i> kann nach einer Korpussuche im <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> eine Belegreihe heruntergeladen und in einer Datei gespeichert werden. <i class="app-name"></i> unterstützt den Import von Korpusergebnissen im <b><abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Format</b>. Dazu gehen Sie wie folgt vor:</p>
 
           <ol>
             <li>Laden Sie sich die Datei mit den Korpusergebnissen im <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Format herunter.</li>
@@ -901,18 +901,18 @@
             <li>Klicken Sie auf den Button <i>Importieren</i>.</li>
           </ol>
 
-          <p>Alternativ können Sie die Datei auch in Ihrem Dateimanager kopieren. <i class="app-name"></i> erkennt dann den Dateipfad und liest die Datei nach dem Klick auf <i>Importieren</i> ein. Prinzipiell könnten Sie die Datei auch öffnen und den gesamten Inhalt in die Zwischenablage kopieren. Wechseln Sie zur Formularansicht <i>Zwischenablage</i>, erkennt <i class="app-name"></i>, dass in der Zwischenablage <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Daten aus dem <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr> liegen und wird sie nach einem Klick auf <i>Importieren</i> problemlos einlesen.</p>
+          <p>Alternativ können Sie die Datei auch in Ihrem Dateimanager kopieren. <i class="app-name"></i> erkennt dann den Dateipfad und liest die Datei nach dem Klick auf <i>Importieren</i> ein. Prinzipiell könnten Sie die Datei auch öffnen und den gesamten Inhalt in die Zwischenablage kopieren. Wechseln Sie zur Formularansicht <i>Zwischenablage</i>, erkennt <i class="app-name"></i>, dass in der Zwischenablage <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Daten aus dem <abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr> liegen, und wird sie nach einem Klick auf <i>Importieren</i> problemlos einlesen.</p>
 
           <p>Der Inhalt dieser Datei wird nun in der App vorgehalten, bis Sie Daten aus einer anderen Datei importieren. (Auch wenn die Daten aus der Zwischenablage stammen, verhält sich die App so, als hätte sie diese aus einer Datei eingelesen.) Enthält die Datei nur einen Beleg, wird der Import ohne Nachfrage gestartet. Enthält sie jedoch mehrere Belege, öffnet sich das <a href="#karteikarte-importfenster">Importfenster</a>. Beim Import eines Belegs werden die Datenfelder <i>Datum, Autor, Beleg, Quelle, URL, Aufrufdatum, Korpus, Textsorte</i> und <i>Notizen</i> gefüllt. Welche Felder genau ausgefüllt werden, hängt freilich davon ab, welche Daten zu den einzelnen Belegen verfügbar sind.</p>
 
-          <p>Öffnen Sie eine neue Karteikarte wird automatisch in die Datei-Ansicht gewechselt und der Dateipfad in das Importfeld eingetragen. Klicken Sie auf <i>Importieren</i>, wird erneut das Importfenster geöffnet und Sie können einen weiteren Beleg einfügen. Haben Sie die Daten über die Zwischenablage einlesen lassen, also indem Sie die Datei geöffnet und ihren Inhalt kopiert haben, ist dies allerdings nur solange möglich, solange in der Zwischenablage genau diese Daten liegen. Ändern Sie den Inhalt der Zwischenablage haben Sie keinen Zugriff mehr auf die zuvor eingelesenen Belege.</p>
+          <p>Öffnen Sie eine neue Karteikarte wird automatisch in die Datei-Ansicht gewechselt und der Dateipfad in das Importfeld eingetragen. Klicken Sie auf <i>Importieren</i>, wird erneut das Importfenster geöffnet und Sie können einen weiteren Beleg einfügen. Haben Sie die Daten über die Zwischenablage einlesen lassen, also indem Sie die Datei geöffnet und ihren Inhalt kopiert haben, ist der Import weiterer Titel allerdings nur solange möglich, solange sich in der Zwischenablage dieselben Daten befinden. Ändern Sie zwischendurch den Inhalt der Zwischenablage, indem Sie anderen Text kopieren, haben Sie keinen Zugriff mehr auf die zuvor eingelesenen Belege.</p>
 
           <figure class="right" title="zum Vergrößern anklicken">
             <img src="../img/win/karteikarte-importfunktion-dwds-snippet.png" alt="">
             <figcaption>Kopier-Icon in der Korporasuche des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></figcaption>
           </figure>
 
-          <p>Bei sehr umfangreichen Ergebnislisten und immer dann, wenn Sie nur wenige Belege aus den Ergebnissen importieren möchten, könnte es komfortabler sein, nicht erst eine umfangreiche Belegreihe herunterzuladen, sondern nur ausgewählte Belege aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> zu importieren. Für solche Fälle steht für jeden der angezeigten Belege auf der Ergebnisseite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet zur Verfügung, das durch Klick auf ein Kopier-Icon in die Zwischenablage Ihres Rechners geschoben werden kann. Liegt in der Zwischenablage ein passendes Snippet, wird <i class="app-name"></i> dies erkennen und in der Zwischenablagen-Ansicht anzeigen. Klicken Sie auf <i>Importieren</i> werden die im Snippet enthaltenen Daten in die Karteikarte eingetragen.</p>
+          <p>Bei sehr umfangreichen Ergebnislisten und immer dann, wenn Sie nur wenige Belege aus den Ergebnissen importieren möchten, könnte es komfortabler sein, nicht erst eine umfangreiche Belegreihe herunterzuladen, sondern nur ausgewählte Belege aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> zu importieren. Für solche Fälle steht für jeden der angezeigten Belege auf der Ergebnisseite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> ein <b><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet</b> zur Verfügung, das durch Klick auf ein Kopier-Icon in die Zwischenablage Ihres Rechners geschoben werden kann. Liegt in der Zwischenablage ein passendes Snippet, wird <i class="app-name"></i> dies erkennen und in der Zwischenablagen-Ansicht anzeigen. Klicken Sie auf <i>Importieren</i> werden die im Snippet enthaltenen Daten in die Karteikarte eingetragen.</p>
 
           <p>Beim Importieren eines Belegs aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> wird in das <i>Notizen</i>-Feld eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> geschrieben, mit der sich der Beleg auf der Seite des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr> leichter wiederfinden, wenn auch nicht exakt referenzieren lässt. Stammt der Beleg aus einem Zeitungskorpus, kann in die erste Zeile des Notizenfeldes darüber hinaus der Name der Zeitung automatisch eingetragen werden. Hierzu muss eine <a href="#einstellungen-karteikarteZeitungsname">Einstellung</a> aktiviert werden. Es kann sinnvoll sein, dass der Zeitungsname an dieser Stelle steht, wenn man in der <a href="#belegliste">Belegliste</a> immer im Blick haben möchte, aus welcher Zeitung ein Beleg stammt. In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> kann man sich nämlich <a href="#einstellungen-beleglisteNotizen">die erste Zeile des Notizen-Feldes anzeigen</a> lassen.</p>
 
@@ -949,7 +949,7 @@
 
                 <li><i>Volltext &gt; Quellennachweis &gt; exportieren:</i> aktivieren</li>
 
-                <li><i>Volltext &gt; Quellennachweis &gt; nachher:</i> <strong>deaktivieren</strong></li>
+                <li><i>Volltext &gt; Quellennachweis &gt; nachher:</i> deaktivieren</li>
 
                 <li><i>Volltext &gt; Quellennachweis:</i> <q>ausführliche Zitierung</q> im Dropdown-Menü auswählen</li>
 
@@ -985,13 +985,13 @@
 
           <p>Die Dateidaten werden im Hintergrund so lange vorgehalten, bis Sie eine andere Datei einlesen. Öffnen Sie eine neue Karteikarte, wechselt die App automatisch in die Datei-Ansicht und trägt den Dateipfad in das Importfeld ein. Das Importfenster können Sie dann durch Klick auf den Button <i>Importieren</i> erneut öffnen, um die neue Karteikarte mit einem weiteren Beleg zu füllen.</p>
 
-          <p>Wurde ein Beleg importiert, wird dieser im Importfenster durch den Haken <img src="../img/check-gruen.svg" width="24" height="24" alt=""> gekennzeichnet. <i class="app-name"></i> merkt sich, welche Belege zum Importieren ausgewählt wurden und stellt die Markierung bei jedem Aufruf des Importfensters wieder her. Sie können die Markierung auch manuell umschalten, indem Sie auf den Haken oder in dem Bereich vor einem Beleg klicken, in dem der Haken für gewöhnlich erscheint. (Dies dient für Fälle, in denen Sie versehentlich einen Beleg zum Importieren ausgewählt, die Karteikarte dann aber nicht mit diesem Beleg gespeichert haben.)</p>
+          <p>Wurde ein Beleg importiert, wird dieser im Importfenster durch das Icon <img src="../img/check-gruen.svg" width="24" height="24" alt=""> gekennzeichnet. <i class="app-name"></i> merkt sich, welche Belege zum Importieren ausgewählt wurden und stellt die Markierung bei jedem Aufruf des Importfensters wieder her. Sie können die Markierung auch manuell umschalten, indem Sie auf den Haken oder in dem Bereich vor einem Beleg klicken, in dem der Haken für gewöhnlich erscheint. (Dies dient für Fälle, in denen Sie versehentlich einen Beleg zum Importieren ausgewählt, die Karteikarte dann aber nicht mit diesem Beleg gespeichert haben.)</p>
 
           <p>Für Dateien aus <abbr title="Corpus Search, Management, and Analysis System" lang="en">COSMAS</abbr>&nbsp;II gilt übrigens dasselbe wie für die <abbr title="JavaScript Object Notation" class="en">JSON</abbr>-Dateien vom <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr>: Sie können die Datei mit den Belgen auch öffnen und ihren kompletten Inhalt kopieren. Danach lassen sich die Belegdaten über die Zwischenablage genauso einfügen, als wäre die Datei direkt von der Festplatte gelesen worden.</p>
 
-          <p class="add-navi-details" id="karteikarte-modsImport"><b><abbr title="Metadata Object Description Schema">MODS</abbr>- und Fundstellen-Import:</b> Sie haben auch die Möglichkeit, Karteikarten automatisch mit bibliographische Daten ohne Belegtext zu befüllen. Neben dem <a href="#karteikarte-bibtexImport"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import</a> erkennt die App zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten aus Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
+          <p class="add-navi-details" id="karteikarte-modsImport"><b><abbr title="Metadata Object Description Schema">MODS</abbr>- und Fundstellen-Import:</b> Sie haben auch die Möglichkeit, Karteikarten automatisch mit bibliographischen Daten ohne Belegtext zu befüllen. Neben dem <a href="#karteikarte-bibtexImport"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import</a> erkennt die App zum einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Daten aus Fundstellen-Snippets, wie sie aus der in <i class="app-name"></i> integrierten <a href="#menueRedaktion-literaturExportieren">Literaturdatenbank exportiert</a> werden können. Zum anderen können bibliographische <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dokumente im <a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema">MODS-Format</a> eingelesen werden.</p>
 
-          <p>Keines dieser Formate enthält Belegtexte. Es geht bei diesen Importformaten also nur darum, dass Sie bibliographische Angaben möglichst reibungslos in die Karteikarte bekommen, wenn Sie Belege händisch eingepflegt müssen, die in digitalen Korpora (noch) nicht zur Verfügung stehen. Da in den Quelldaten, die vearbeitet werden können, keine Belegtexte zu finden sind, wird das Datenfeld <i>Beleg</i> auch niemals überschrieben. Sollte Ihr Workflow also so aussehen, dass Sie zunächst die Belegstelle exzerpieren, können Sie die Titeldaten somit problemlos im Nachhinein aus einer der Quellen importieren, ohne den Belegtext zu verlieren.</p>
+          <p>Keines dieser Formate enthält Belegtext. Es geht bei diesen Importformaten also nur darum, dass Sie bibliographische Angaben möglichst reibungslos in die Karteikarte bekommen, wenn Sie Belege händisch einpflegen müssen, die in digitalen Korpora (noch) nicht zur Verfügung stehen. Da in den Quelldaten, die vearbeitet werden können, keine Belegtexte zu finden sind, wird das Datenfeld <i>Beleg</i> auch niemals überschrieben. Sollte Ihr Workflow also so aussehen, dass Sie zunächst die Belegstelle exzerpieren, können Sie die Titeldaten somit problemlos im Nachhinein aus einer der Quellen importieren, ohne den Belegtext zu verlieren.</p>
 
           <p>Ansonsten funktioniert der Umgang mit diesen Daten genauso wie der mit allen anderen: Sie können die Daten sowohl aus einer Datei als auch aus der Zwischenablage einlesen..</p>
 
@@ -1002,9 +1002,9 @@
 
           <p class="add-navi-details" id="karteikarte-ppnImport"><b><abbr title="Pica-Produktionsnummer">PPN</abbr>-Import:</b> Der bequemste Weg, sich zuverlässige bibliographische Daten zu einem Titel in die Karteikarte zu laden, ist freilich ein Import via <abbr title="Pica-Produktionsnummer">PPN</abbr>. Befindet sich in der Zwischenablage eine <abbr title="Pica-Produktionsnummer">PPN</abbr>, wird dies im Importfeld der Zwischenablagen-Ansicht angezeigt. Klicken Sie auf <i>Importieren</i> wird im Hintergrund ein Datensatz im <abbr title="Metadata Object Description Schema">MODS</abbr>-Format aus dem <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> heruntergeladen und analysiert. Danach wird die Karteikarte mit den Titeldaten gefüllt. Die <abbr title="Pica-Produktionsnummern">PPN</abbr> werden in der Titelanzeige des <abbr title="Gemeinsamen Verbundkatalog">GVK</abbr> direkt in der obersten Zeile angezeigt (<abbr title="siehe">s.</abbr> Screenshot).</p>
 
-          <p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor, Quelle, URL</i> und <i>Aufrufdatum</i> können jedoch gefüllt werden, womit das Format besonders dafür geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
+          <p class="add-navi-details" id="karteikarte-bibtexImport"><b><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Import:</b> Die Datenfelder in der Karteikarte können auch mit Titeldatensätzen gefüllt werden, die im <a href="https://en.wikipedia.org/wiki/BibTeX"><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Format</a> vorliegen. <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Daten enthalten zwar niemals Belegtext, die Datenfelder <i>Datum, Autor, Quelle, URL</i> und <i>Aufrufdatum</i> können jedoch gefüllt werden, womit das Format besonders dann geeignet ist, wenn Sie manuell Belege einpflegen (müssen).</p>
 
-          <p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien werden <abbr title="unter anderem">u.&nbsp;a.</abbr> von <b><i>GoogleBooks</i></b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> zu exportieren. Beim Importieren eines <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
+          <p><span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Dateien werden <abbr title="unter anderem">u.&nbsp;a.</abbr> von <b>GoogleBooks</b> bereitgestellt. Ein Download-Link findet sich auf der Übersichtsseite des Digitalisats. Befinden Sie sich in der Ansicht eines Volldigitalisats, klicken Sie in der Seitenleiste auf den (sehr kleinen) Link <i>Über dieses Buch</i>. Im unteren Teil der sich öffnenden Übersichtsseite, finden Sie dann die Titelinformationen und eine Möglichkeit, diese als <span class="bibtex"><span>Bib</span>T<span>E</span>X</span> zu exportieren. Beim Importieren eines <span class="bibtex"><span>Bib</span>T<span>E</span>X</span>-Datensatzes von <i>GoogleBooks</i> wird in der Literaturangabe die <abbr title="Uniform Resource Locator" lang="en">URL</abbr> zum Digitalsat übernommen und das Datenfeld <i>Korpus</i> mit <q>GoogleBooks</q> gefüllt.</p>
 
           <div class="bilder">
             <figure title="zum Vergrößern anklicken">
@@ -1337,7 +1337,7 @@
 
           <ul>
             <li>
-              <p>Sie können den <a href="#belegliste-kuerzung">Kontext der Belege generell kürzen</a>, sodass nur Absätze aufgebaut werden, in denen das Karteiwort enthalten ist.</p>
+              <p>Sie können den <a href="#belegliste-kuerzung">Kontext der Belege dynamisch kürzen</a>, sodass nur Absätze aufgebaut werden, in denen das Karteiwort enthalten ist.</p>
 
               <p class="info">Zum Kürzen dient das Icon <img src="../img/kuerzung.svg" width="20" height="20" alt=""> im Kopf der Belegliste. Es ist ein Leichtes, die Kürzung spontan und punktuell rückgängig zu machen: Klicken Sie auf das Kürzungszeichen <q>[…]</q>, um einen zum angezeigten Text angrenzenden Absatz einzublenden.</p>
             </li>
@@ -1396,10 +1396,10 @@
 
           <p class="info">Beim Aktivieren des Icons werden alle Belege in der Liste aufgeklappt, sodass die Details sichtbar werden. Um welche Details es sich hierbei genau handelt, hängt von den <a href="#belegliste-platzhalter">Detaileinstellungen</a> ab. Deaktiviert man das Icon, werden die Belege wieder zugeklappt, sodass nur die <a href="#belegliste-kopfleisteBelege">Kopfleisten</a> mit knapper Belegvorschau sichtbar sind. Einzelne Belege können durch einen Klick auf die Kopfleiste jederzeit auf- <abbr title="beziehungsweise">bzw.</abbr> zugeklappt werden, ganz egal, ob die Detailansicht aller Belege aktiviert oder deaktiviert ist.</p>
 
-          <p class="erklaerung-icon" id="belegliste-kuerzung"><img src="../img/kuerzung.svg" width="24" height="24" alt="">Kürzung des Belegkontextes</p>
+          <p class="erklaerung-icon" id="belegliste-kuerzung"><img src="../img/kuerzung.svg" width="24" height="24" alt="">dynamische Kürzung des Belegkontextes</p>
 
           <div class="info">
-            <p>Ist die Kürzung aktiviert, versucht die App, lange Belege sinnvoll zu kürzen. <abbr title="das heißt">D.&nbsp;h.</abbr> konkret: Absätze, in denen das Karteiwort nicht auftaucht, werden durch ein Kürzungszeichen ersetzt: <q>[…]</q>. Folgen mehrere gekürzte Absätze aufeinander, erscheint nur ein Kürzungszeichen.</p>
+            <p>Ist die dynamische Kürzung aktiviert, versucht die App, lange Belege sinnvoll zu kürzen. <abbr title="das heißt">D.&nbsp;h.</abbr> konkret: Absätze, in denen das Karteiwort nicht auftaucht, werden durch ein Kürzungszeichen ersetzt: <q>[…]</q>. Folgen mehrere gekürzte Absätze aufeinander, erscheint nur ein Kürzungszeichen.</p>
 
             <p>Eine automatisch erfolgte Kürzung kann man durch Klick auf den gekürzten Absatz nach und nach rückgängig machen, um mehr Kontext zu erhalten. Pro Klick wird ein zum angezeigten Text benachbarter Absatz eingeblendet. Ist an der zuvor gekürzten Stelle der komplette Text sichtbar, verschwindet das Kürzungszeichen.</p>
 
@@ -1415,7 +1415,7 @@
           <p class="erklaerung-icon" id="belegliste-karteiwortHervorheben"><img src="../img/text-fett.svg" width="24" height="24" alt="">Karteiwort im Belegtext hervorheben</p>
 
           <div class="info">
-            <p>Ist das Icon aktiviert, versucht das Programm, alle Vorkommen des Karteiworts im Belegtext gelb hervorzuheben. Haben Sie eine Kartei zum Wort <i>Freiheit</i> erstellt, könnte die Hervorhebung so aussehen: <mark class="wort">Freiheit</mark>. Für das Hervorheben des Karteiworts werden ebenso wie für die <a href="#belegliste-kuerzung">Kürzungsfunktion</a> die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten <a href="#menueKartei-formvarianten">Formvarianten</a> herangezogen. Die Markierung funktioniert gut, wenn die Liste der Formvarianten gut ist, sodass auch variierende Schreibungen wie <i>Fraiheit</i> oder <i>Freyheit</i> automatisch markiert werden sollten. Die Markierung bleibt dabei standardmäßig nicht auf das Karteiwort selbst beschränkt; es wird automatisch eine Links- und Rechtserweiterung des Worts vorgenommen, sodass Varianten mit Affix ebenso markiert werden sollten wie Komposita oder andere Derivativa. Darum dürften Sie in den Belegen auch Markierungen wie <mark class="wort">Freiheiten</mark> oder <mark class="wort">Freiheitsversprechen</mark> finden.</p>
+            <p>Ist das Icon aktiviert, versucht das Programm, alle Vorkommen des Karteiworts im Belegtext farblich hervorzuheben. Haben Sie eine Kartei zum Wort <i>Freiheit</i> erstellt, könnte die Hervorhebung so aussehen: <mark class="wort">Freiheit</mark>. Für das Hervorheben des Karteiworts werden ebenso wie für die <a href="#belegliste-kuerzung">Kürzungsfunktion</a> die aus dem <abbr title="Deutschen Textarchiv">DTA</abbr> importierten <a href="#menueKartei-formvarianten">Formvarianten</a> herangezogen. Die Markierung funktioniert gut, wenn die Liste der Formvarianten gut ist, sodass auch variierende Schreibungen wie <i>Fraiheit</i> oder <i>Freyheit</i> automatisch markiert werden sollten. Die Markierung bleibt dabei standardmäßig nicht auf das Karteiwort selbst beschränkt; es wird automatisch eine Links- und Rechtserweiterung des Worts vorgenommen, sodass Varianten mit Affix ebenso markiert werden sollten wie Komposita oder andere Derivativa. Darum dürften Sie in den Belegen auch Markierungen wie <mark class="wort">Freiheiten</mark> oder <mark class="wort">Freiheitsversprechen</mark> finden.</p>
 
             <p>Die Güte einer solchen automatischen Markierung hat natürlich ihre Grenzen, die besonders bei sehr kurzen Wörtern und erst recht bei Homonymen sichtbar werden. Haben Sie eine Kartei zum Wort <i>Tor</i>, werden standardmäßig auch Wörter wie <mark class="wort">Senator</mark>, <mark class="wort">Territorium</mark> oder <mark class="wort">historisch</mark> hervorgehoben. (Für solche Fälle kann man die <a href="#menueKartei-formvariantenErweitern">automatische Erweiterung ausstellen</a>.) Und arbeiten Sie zum Wort <i>Masse</i> im Sinne von <q class="bedeutung">Menschenmasse</q>, wird die App nicht erkennen können, ob im Text von der physikalischen Größe oder einer Menschengruppe die Rede ist.</p>
 
@@ -1424,7 +1424,7 @@
               <figcaption>die Annotierungsfunktion</figcaption>
             </figure>
 
-            <p id="belegliste-annotierenBeleg">Für solche Fälle lassen sich einzelne Vorkommen der Karteiwörter im <b>Belegtext</b> bequem <b>annotieren</b>. Dazu müssen Sie sich zunächst den Belegtext anzeigen lassen (Klick auf einen Karteikartenkopf oder <img src="../img/auge.svg" width="20" height="20" alt="">) und die <a href="#belegliste-trennzeichen">Trennstriche einblenden</a> (<img src="../img/trennzeichen.svg" width="20" height="20" alt="">). Klicken Sie jetzt auf ein gelb markiertes Karteiwort, öffnet sich ein Popup-Fenster, in dem Sie die Markierungsfarbe ändern und/oder eine Notiz hinzufügen können. Die Notiz erscheint nach dem Schließen des Popups in einem Tooltip, sobald Sie mit der Maus über der annotierten Passage schweben.</p>
+            <p id="belegliste-annotierenBeleg">Für solche Fälle lassen sich einzelne Vorkommen der Karteiwörter im <b>Belegtext</b> bequem <b>annotieren</b>. Dazu müssen Sie sich zunächst den Belegtext anzeigen lassen (Klick auf einen Karteikartenkopf oder <img src="../img/auge.svg" width="20" height="20" alt="">) und die <a href="#belegliste-trennzeichen">Trennstriche einblenden</a> (<img src="../img/trennzeichen.svg" width="20" height="20" alt="">). Klicken Sie jetzt auf ein farblich markiertes Karteiwort, öffnet sich ein Popup-Fenster, in dem Sie die Markierungsfarbe ändern und/oder eine Notiz hinzufügen können. Die Notiz erscheint nach dem Schließen des Popups in einem Tooltip, sobald Sie mit der Maus über der annotierten Passage schweben.</p>
 
             <p id="belegliste-annotierenBelegTransparent">Wählen Sie als <b>Farbe transparent</b>, hat das nicht nur visuelle Konsequenzen. Treffer von Karteiwörtern, die in dieser Weise markiert wurden, werden von der App fortan so behandelt, als wären es gar keine Treffer. <abbr title="Das heißt">D.&nbsp;h.</abbr> konkret: Versucht das Programm den Belegtext <a href="#belegliste-kuerzung">um Absätze zu kürzen</a>, in denen das Karteiwort nicht auftaucht, wird ein Absatz, in dem das Karteiwort transparent gesetzt wurde, so behandelt, als würde das Karteiwort in diesem Absatz nicht auftauchen. Der Absatz wird in diesem Fall herausgekürzt. Außerdem: In der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> wird dieses Wort für die Ermittlung des Textausschnitts nicht herangezogen und dort auch niemals hervorgehoben. Und schließlich: Haben Sie in den <a href="#einstellungen">Einstellungen</a> die Kopierfunktionen so konfiguriert, dass die <a href="#einstellungen-kopierenHervorhebung">Hervorhebung von Karteiwörtern erhalten</a> bleiben soll, werden Karteiwörter, deren Hintergrund transparent gesetzt wurde, von dieser Operation ausgenommen. Dasselbe gilt für <a href="#belegliste-xmlZwischenablageBelegschnitt"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets</a>: Automatisch markierte Karteiwörter, deren Hintergrundfarbe transparent gesetzt wurde, werden nicht mit dem Tag <code class="quelltext">&lt;Stichwort&gt;</code> ausgezeichnet.</p>
 
@@ -1437,7 +1437,7 @@
             <ol>
               <li>Klicken Sie auf das Icon <img src="../img/muelleimer.svg" width="20" height="20" alt=""> wird die Annotierung entfernt.</li>
 
-              <li>Der zweite Weg ist komplizierter: Hierfür müssten Sie eine <abbr title="eventuell">evtl.</abbr> hinzugefügte Notiz entfernen, aus der Checkbox <i>nicht taggen</i> den Haken nehmen und die Standardfarbe auswählen, was in diesem Fall Gelb ist. (Gelb dient auch dann zum Löschen der Annotierung, wenn Sie im <a href="#menueKartei-formvarianten">Formvarianten-Fenster</a> eine andere Farbe für das Wort festgelegt haben.) Nutzen Sie einfach das Icon!</li>
+              <li>Der zweite Weg ist komplizierter: Hierfür müssten Sie eine <abbr title="eventuell">evtl.</abbr> hinzugefügte Notiz entfernen, aus der Checkbox <i>nicht taggen</i> den Haken nehmen und die Standardfarbe auswählen, was in diesem Fall Gelb ist. (Gelb dient auch dann zum Löschen der Annotierung, wenn im <a href="#menueKartei-formvarianten">Formvarianten-Fenster</a> eine andere Farbe für das Wort festgelegt ist.) Nutzen Sie einfach das Icon!</li>
             </ol>
 
             <p id="belegliste-annotieren">Die Annotierungsfunktion kann nicht nur für Karteiwörter benutzt werden. Im Prinzip können Sie mit ihr einen beliebigen <b>Abschnitt im Belegtext markieren</b>. Hierzu müssen Sie nur den Text mit der Maus auswählen, der markiert werden soll, auf dem ausgewählten Text rechtsklicken und <i>Textauswahl markieren</i> wählen. Klicken Sie auf die Markierung, öffnet sich das gleiche Popup-Fenster wie beim Klick auf ein Karteiwort. Der einzige Unterschied zur Annotierung von Karteiwörtern: Die Markierung wird in diesem Fall gelöscht, wenn die Farbe transparent gesetzt wird.</p>
@@ -1584,7 +1584,7 @@
             <figcaption>Detailansicht eines Belegs</figcaption>
           </figure>
 
-          <p>Aktiviert man die Funktion <img src="../img/auge.svg" width="24" height="24" alt=""> oder klickt auf die <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> wird die Detailansicht geöffnet. In ihr können Sie, wie es der Name schon sagt, die Details zu den Belegen sehen. Prinzipiell können hier alle Inhalte angezeigt werden, die in der Karteikarte eingetragen worden sind, standardmäßig wird aber nur der Belegtext eingeblendet, dieser allerdings komplett (es sei denn, die Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt=""> zum <a href="#belegliste-kuerzung">Kürzen des Kontexts um das Karteiwort herum</a> wurde aktiviert). Wollen Sie weitere Elemente (<abbr title="das heißt">d.&nbsp;h.</abbr> den Inhalt weiterer Datenfelder) sehen, müssen Sie zunächst die entsprechenden Icons aktivieren, die die <a href="#belegliste-platzhalter">Anzeige der Detailansicht steuern</a>. Jedes Element kann ausgeblendet werden mit Ausnahme des Belegtextes.</p>
+          <p>Aktiviert man die Funktion <img src="../img/auge.svg" width="24" height="24" alt=""> oder klickt auf die <a href="#belegliste-kopfleisteBelege">Kopfleiste eines Belegs</a> wird die Detailansicht geöffnet. In ihr können Sie, wie es der Name schon sagt, die Details zu den Belegen sehen. Prinzipiell können hier alle Inhalte angezeigt werden, die in der Karteikarte eingetragen worden sind, standardmäßig wird aber nur der Belegtext eingeblendet, dieser allerdings komplett (es sei denn, die Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt=""> zum <a href="#belegliste-kuerzung">dynamischen Kürzen des Kontexts um das Karteiwort herum</a> wurde aktiviert). Wollen Sie weitere Elemente (<abbr title="das heißt">d.&nbsp;h.</abbr> den Inhalt weiterer Datenfelder) sehen, müssen Sie zunächst die entsprechenden Icons aktivieren, die die <a href="#belegliste-platzhalter">Anzeige der Detailansicht steuern</a>. Jedes Element kann ausgeblendet werden mit Ausnahme des Belegtextes.</p>
 
           <p><b>Elemente</b> werden in der Detailansicht nur dann angezeigt, wenn sie vorher in der Karteikarte auch gefüllt wurden. Haben Sie <abbr title="beispielsweise">bspw.</abbr> zu einem Beleg keine Informationen zu Synonymen hinterlegt, wird das Element in der Detailansicht selbst dann nicht angezeigt, wenn das Icon <img src="../img/synonym.svg" width="24" height="24" alt=""> aktiviert ist.</p>
 
@@ -1594,7 +1594,7 @@
 
           <p id="belegliste-bedeutungsgeruest">Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei&nbsp;&gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
 
-          <p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext steht ein <b>Kopier-Icon</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Mit ihm kann man mit nur einem Klick den Belegtext mit Quellenangabe in die Zwischenablage des Rechners schieben, um diesen in ein anderes (Textverarbeitungs-)Programm einzufügen. Normalerweise wird der komplette Belegtext kopiert, und zwar auch, wenn der Kontext gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">). Wurde allerdings ein Teil des Belegtextes mit der Maus markiert, wird nur dieser kopiert (<abbr title="siehe unten">s.&nbsp;u.</abbr>).</p>
+          <p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext steht ein <b>Kopier-Icon</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Mit ihm kann man mit nur einem Klick den Belegtext mit Quellenangabe in die Zwischenablage des Rechners schieben, um diesen in ein anderes (Textverarbeitungs-)Programm einzufügen. Normalerweise wird der komplette Belegtext kopiert, und zwar auch, wenn der Kontext dynamisch gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">). Wurde allerdings ein Teil des Belegtextes mit der Maus markiert, wird nur dieser kopiert (<abbr title="siehe unten">s.&nbsp;u.</abbr>).</p>
 
           <p id="belegliste-buchungsIcon">Auf Wunsch lässt sich an dieser Stelle zusätzlich ein Buchungs-Icon einblenden (<abbr title="siehe">s.</abbr> die <a href="#einstellungen-beleglisteBuchungsIcon">entsprechende Option</a>, die zunächst aktiviert werden muss). Mit ihm kann der Buchungsstatus des Belegs umgestellt werden: Auf Klick kann ein ungebuchter Beleg als gebucht und ein gebuchter Beleg als ungebucht markiert werden. Die Form des Icons passt sich dabei an: <img src="../img/buch.svg" width="24" height="24" alt=""> für ungebucht <abbr title="respektive">resp.</abbr> <img src="../img/buch-check-gruen.svg" width="24" height="24" alt=""> für gebucht.</p>
 
@@ -2245,7 +2245,89 @@ Mustermann, Erika
             <p>Führen Sie wiederholt kleinere Einfügeoperationen aus, könnte es sinnvoll sein, die Checkbox zu deaktivieren. Dann müssten Sie das Einfügen-Fenster nicht immer wieder aufs Neue öffnen.</p>
           </div>
 
-          <h2 id="einstellungen-literatur">Literatur</h2>
+          <h2 id="einstellungen-import">Import</h2>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Import-Feld in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder ein Dateipfad befindet. Ist dem der Fall, wird der Inhalt der Zwischenablage umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Quelle zu importieren.</p>
+
+            <p>Haben Sie einen Verweis in der Zwischenablage wird beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> das Import-Feld automatisch fokussiert. Ist diese Einstellung aktiviert, sparen Sie sich dann den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder des Dateipfads.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteOriginalBevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus einer bekannten Online-Ressource stammt, immer automatisch von der Originalquelle bezogen.</p>
+
+            <p>Dabei wird ein Download von der im Snippet angegebenen URL angestoßen. Dies hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Wird ein <a href="#karteikarte-dwdsImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> und ist von dem Quellkorpus bekannt, dass es sich um ein Zeitungskorpus handelt, wird der Zeitungsname in die erste Zeile der Notizen geschrieben. Diese Option kann sinnvoll sein, wenn man den Zeitungsnamen in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> sehen möchte.</p>
+
+            <p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
+
+            <p>Beim <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-teiImport">importieren Sie eine Seite mehr</a>.</p>
+
+            <p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
+
+            <p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefenNurMarkieren">mit <q>nur markieren</q> gekennzeichnete Wörter in die Überprüfung mit einbeziehen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, eine <abbr title="Pica-Produktionsnummer">PPN</abbr> oder dergleichen, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
+
+            <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext hart gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
+
+            <p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>
+
+          <div class="info">
+            <p><i>Standard:</i> nicht aktiviert</p>
+
+            <p>Ist diese Option aktiviert, streicht die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion für den Belegtext</a> den unmittelbaren Kontext von Absätzen, in denen das Karteiwort auftaucht, nicht. Das heißt konkret, dass aus der Sicht eines Absatzes, in dem das Karteiwort auftaucht, der vorhergehende und der folgende Absatz erhalten bleiben.</p>
+
+            <p>Diese Option wird auch <a href="#einstellungen-karteikarteTextKuerzenAuto">bei der harten Kürzung nach Belegimport</a> berücksichtigt.</p>
+          </div>
 
           <p class="erklaerung-option" id="einstellungen-literaturVerlag">Verlag anzeigen</p>
 
@@ -2486,88 +2568,6 @@ Mustermann, Erika
             <p>Ist die Einstellung aktiviert, werden Sie nicht mehr gefragt. Der im Feld stehende Text wird am Ende automatisch um den einzufügenden Text ergänzt.</p>
 
             <p>Bei dieser Einstellung handelt es sich im Prinzip um dieselbe, die Sie in jenem Meldungsfenster sehen, das Sie nach einer der genannten Einfüge-Funktionen fragt, ob Sie das Textfeld überschreiben oder ergänzen möchten. Die Checkbox im Meldungsfenster ist mit dieser verknüpft.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteURLAutomatisch"><abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder Dateipfad aus der Zwischenablage automatisch in das Import-Feld eintragen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> aktiviert</p>
-
-            <p>Ist die Einstellung aktiviert, überprüft die App in dem Moment, in dem Sie das Import-Feld in der <a href="#karteikarte-formularansicht">Formularansicht der Karteikarte</a> fokussieren, ob sich in der Zwischenablage ihres Betriebssystems eine <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder ein Dateipfad befindet. Ist dem der Fall, wird der Inhalt der Zwischenablage umgehend in das Textfeld eingetragen. Sie brauchen im Anschluss also nur noch <kbd>⏎</kbd> zu drücken, um die Quelle zu importieren.</p>
-
-            <p>Haben Sie einen Verweis in der Zwischenablage wird beim <a href="#karteikarte">Erstellen einer neuen Karteikarte</a> das Import-Feld automatisch fokussiert. Ist diese Einstellung aktiviert, sparen Sie sich dann den Schritt des manuellen Einfügens der <abbr title="Uniform Resource Locator" lang="en">URL</abbr> oder des Dateipfads.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteOriginalBevorzugen"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets ohne Nachfrage aus der Originalquelle importieren</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Ist die Einstellung aktiviert, werden die Belegdaten eines <a href="#karteikarte-dwdsImport"><abbr title="Digitales Wörterbuch der deutschen Sprache">DWDS</abbr>-Snippets</a>, das aus einer bekannten Online-Ressource stammt, immer automatisch von der Originalquelle bezogen.</p>
-
-            <p>Dabei wird ein Download von der im Snippet angegebenen URL angestoßen. Dies hat den Vorteil, dass der Belegkontext (in aller Regel) umfangreicher und die Orthografie (unter Umständen) näher am Original ist. Außerdem bleiben einige Textformatierungen erhalten.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteZeitungsname">bei Zeitungskorpora den Zeitungsnamen in die erste Zeile der Notizen schreiben</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Wird ein <a href="#karteikarte-dwdsImport"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet aus dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> importiert</a> und ist von dem Quellkorpus bekannt, dass es sich um ein Zeitungskorpus handelt, wird der Zeitungsname in die erste Zeile der Notizen geschrieben. Diese Option kann sinnvoll sein, wenn man den Zeitungsnamen in der <a href="#belegliste-kopfleisteBelege">Kopfleiste der Belege</a> sehen möchte.</p>
-
-            <p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
-
-          <div class="info">
-            <p><i>Standard:</i> aktiviert</p>
-
-            <p>Haben Sie automatisch einen Beleg aus dem <abbr title="Deutsches Textarchiv">DTA</abbr>, dem <abbr title="Digitalen Wörterbuch der deutschen Sprache">DWDS</abbr> oder dem <abbr title="Deutschen Referenzkorpus">DeReKo</abbr> <a href="#karteikarte-importfunktion">importiert</a>, wird die App nach dem Import einmalig überprüfen, ob in der importieren Belegstelle eines der Karteiwörter zu finden ist. Wenn nicht, werden Sie über dieses Manko informiert.</p>
-
-            <p>Beim <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import könnte es vorkommen, dass sich das Wort, das Sie interessiert, erst am Anfang der nächsten Textseite befindet. Wiederholen Sie den Import dann einfach in derselben, immer noch geöffneten Karte und <a href="#karteikarte-teiImport">importieren Sie eine Seite mehr</a>.</p>
-
-            <p>Ansonsten gilt: Der Algorithmus, der nach dem Karteiwort sucht, ist gut, aber gewiss nicht perfekt. Vielleicht ist die Meldung falsch. Sie können sofort nach dem Import, <abbr title="das heißt">d.&nbsp;h.</abbr> ohne die Karte zu speichern, in die <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> wechseln, um hier (<abbr title="eventuell">evtl.</abbr> mit Hilfe der <a href="#karteikarte-suchleiste">Suchleiste</a>) zu überprüfen, ob das Wort nicht doch zu finden ist.</p>
-
-            <p>Der Kontrollalgorithmus bedient sich übrigens der <a href="#menueKartei-formvarianten">Formvarianten</a>, die beim Erstellen einer Kartei automatisch importiert werden. Sollte es wiederholt passieren, dass Sie auf ein Fehlen des Karteiworts aufmerksam gemacht werden, es aber eigentlich im Text zu finden ist, wurden die Formvarianten vielleicht noch nicht importiert oder Sie müssen sie manuell um dem <abbr title="Deutschen Textarchiv">DTA</abbr> unbekannte Formen ergänzen.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefenNurMarkieren">mit <q>nur markieren</q> gekennzeichnete Wörter in die Überprüfung mit einbeziehen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Befindet sich in der Zwischenablage eine <abbr title="Deutsches Textarchiv">DTA</abbr>-URL, ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, eine <abbr title="Pica-Produktionsnummer">PPN</abbr> oder dergleichen, wird die Zwischenablage nach erfolgreichem Import der Daten gelöscht.</p>
-
-            <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext automatisch gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
-
-            <p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
-          </div>
-
-          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>
-
-          <div class="info">
-            <p><i>Standard:</i> nicht aktiviert</p>
-
-            <p>Ist diese Option aktiviert, streicht die <a href="#karteikarte-kuerzenBeleg">Kürzungsfunktion für den Belegtext</a> den unmittelbaren Kontext von Absätzen, in denen das Karteiwort auftaucht, nicht. Das heißt konkret, dass aus der Sicht eines Absatzes, in dem das Karteiwort auftaucht, der vorhergehende und der folgende Absatz erhalten bleiben.</p>
-
-            <p>Diese Option wird auch <a href="#einstellungen-karteikarteTextKuerzenAuto">bei der automatische Kürzung nach Belegimport</a> berücksichtigt.</p>
           </div>
 
           <p class="erklaerung-option" id="einstellungen-karteikarteLeseansicht">bestehende Karteikarte in der Leseansicht öffnen</p>
@@ -4073,7 +4073,7 @@ Mustermann, Erika
 
             <p>Ist im aktuellen Fenster bereits eine Kartei geöffnet, wird ein <b>neues Programmfenster</b> aufgebaut. In diesem Fenster wiederum poppt eine Dialogfenster auf, in dem Sie das gewünschte Wort, Sprichwort, Syntagma eingeben können. Danach haben Sie eine initiale Kartei, in der sich umgehend eine leere Karteikarte öffnet, in der Sie Ihren ersten Beleg einpflegen können.</p>
 
-            <p id="menueKartei-erstellenForm">Zur <b>Form der Eingabe</b>: Es ist in aller Regel nicht sinnvoll, im <a href="#menueKartei-lemmata">Lemmata-Fenster</a>, das beim Erstellen der Kartei aufgerufen wird, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbuchartikels erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, <a href="#menueKartei-formvarianten">Formvarianten</a> zu finden, um diese auf Wunsch im Belegtext hervorzuheben, um den Belegkontext zu kürzen <abbr title="und so weiter">usw.</abbr> Unter Umständen kann es gerade für ein solides Funktionieren der automatisierten Kürzung sogar kontraproduktiv sein, wenn der Artikel in der Lemmaansetzung mit angegeben wird. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie das Auftreten des Artikels <i>das</i> in den Belegen wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein. In gewissen Fällen ist es freilich dennoch sinnvoll, einen Artikel mit anzugeben, weil er ein für die Semantik entscheidender Marker ist (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>das Mensch</q>). In solchen Fällen ist es allerdings angezeigt, die Hervorhebung des Artikels in den <a href="#menueKartei-formvarianten">Formvarianten</a> zu deaktivieren. Da der Zeichenvorrat für dieses Datenfeld begrenzt wurde, ist ferner das Komma (neben vielen anderen Sonderzeichen) nicht erlaubt.</p>
+            <p id="menueKartei-erstellenForm">Zur <b>Form der Eingabe</b>: Es ist in aller Regel nicht sinnvoll, im <a href="#menueKartei-lemmata">Lemmata-Fenster</a>, das beim Erstellen der Kartei aufgerufen wird, etwas einzugeben, was in irgendeiner Weise an den Beginn eines klassischen Wörterbuchartikels erinnert. Schon eine Eingabe wie <q>Auto, das</q> wäre an dieser Stelle eher problematisch. Denn das Programm versucht, zu dem Wort oder den Wörtern, die Sie eingegeben haben, <a href="#menueKartei-formvarianten">Formvarianten</a> zu finden, um diese auf Wunsch im Belegtext hervorzuheben, um den Belegkontext zu kürzen <abbr title="und so weiter">usw.</abbr> Unter Umständen kann es gerade für ein solides Funktionieren der dynamischen Kürzung sogar kontraproduktiv sein, wenn der Artikel in der Lemmaansetzung mit angegeben wird. Möchten Sie einen Wörterbuchartikel zum Substantiv <i>Auto</i> schreiben, interessiert Sie das Auftreten des Artikels <i>das</i> in den Belegen wahrscheinlich eher nicht. Geben Sie in einem solchen Fall lieber nur <q>Auto</q> ein. In gewissen Fällen ist es freilich dennoch sinnvoll, einen Artikel mit anzugeben, weil er ein für die Semantik entscheidender Marker ist (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> <q>das Mensch</q>). In solchen Fällen ist es allerdings angezeigt, die Hervorhebung des Artikels in den <a href="#menueKartei-formvarianten">Formvarianten</a> zu deaktivieren. Da der Zeichenvorrat für dieses Datenfeld begrenzt wurde, ist ferner das Komma (neben vielen anderen Sonderzeichen) nicht erlaubt.</p>
 
             <p>Vollkommen unproblematisch ist es andererseits, <b>Wortverbindungen</b> wie <q>politisch korrekt</q> oder Redewendungen wie <q>Kopf an Kopf</q> einzugeben. Im letzten Fall wollen Sie wahrscheinlich nicht, dass die Präposition <i>an</i> im Belegtext hervorgehoben wird, zumal eine trunkierte Hervorhebung zahlreiche falschpositive Markierungen produzieren wird. Die Hervorhebung einzelner Wörter kann man darum <a href="#menueKartei-formvariantenAktivieren">abstellen</a>, ebenso wie die <a href="#menueKartei-formvariantenErweitern">automatische Erweiterung</a>.</p>
 
@@ -4199,7 +4199,7 @@ Mustermann, Erika
             <p id="menueKartei-formvariantenFunktionen">Sobald Sie eine <a href="#menueKartei-erstellen">neue Kartei erstellen</a>, versucht <i class="app-name"></i> Formvarianten zu dem gewählten Karteiwort aus einem <a href="https://www.deutschestextarchiv.de/demo/cab/">Service</a> des <abbr title="Deutschen Textarchivs">DTA</abbr> zu beziehen. Diese Formvarianten sind für mehrere <b>Funktionen</b> des Programms von Bedeutung:</p>
 
             <ol>
-              <li>Mit ihrer Hilfe wird ermittelt, ob ein <a href="#belegliste-kuerzung">Absatz gekürzt</a> werden sollte oder nicht.</li>
+              <li>Mit ihrer Hilfe wird ermittelt, ob ein <a href="#belegliste-kuerzung">Absatz dynamisch gekürzt</a> werden sollte oder nicht.</li>
 
               <li>Erst mithilfe der Formvarianten ist eine zuverlässige <a href="#belegliste-karteiwortHervorheben">Hervorhebung des Karteiworts</a> möglich.</li>
 
@@ -4251,9 +4251,9 @@ Mustermann, Erika
               <figcaption>automatisch markiertes Synonym im Umfeld des Karteiworts</figcaption>
             </figure>
 
-            <p id="menueKartei-formvariantenKollokationen">Die Änderung der Hintergrundfarbe ist freilich keine Spielerei, denn Sie können das Ergänzen von Wörtern und die Einstellung einer je eigenen Hintergrundfarbe dafür verwenden, um in der Belegliste <b>Kollokationen, Synonyme</b> oder <abbr title="dergleichen">dgl.</abbr> automatisch sichtbar zu machen. Nehmen wir ein Beispiel aus der <a href="#" class="hilfe-demo">Demonstrationskartei</a> zum Wort <i>Team</i>: Ihnen ist aufgefallen, dass <i>Mannschaft</i> häufig synonym gebraucht wird. Sie möchten das im Blick behalten. <a href="#menueKartei-formvariantenErgaenzenWort">Ergänzen</a> Sie also zunächst das Wort <i>Mannschaft</i> im Formvariantenfenster. Ändern Sie im Konfigurations-Popup die Hintergrundfarbe (standardmäßig werden alle Wörter gelb hinterlegt). Das Wort wird in der Belegliste und der Leseansicht der Karteikarte fortan ebenfalls hervorgehoben – mit der gewählten Hintergrundfarbe.</p>
+            <p id="menueKartei-formvariantenKollokationen">Die Änderung der Hintergrundfarbe ist freilich keine Spielerei, denn Sie können das Ergänzen von Wörtern und die Einstellung einer je eigenen Hintergrundfarbe dafür verwenden, um in der Belegliste <b>Kollokationen, Synonyme</b> oder <abbr title="dergleichen">dgl.</abbr> automatisch sichtbar zu machen. Nehmen wir ein Beispiel aus der <a href="#" class="hilfe-demo">Demonstrationskartei</a> zum Wort <i>Team</i>: Ihnen ist aufgefallen, dass <i>Mannschaft</i> häufig synonym gebraucht wird. Sie möchten das im Blick behalten. <a href="#menueKartei-formvariantenErgaenzenWort">Ergänzen</a> Sie also zunächst das Wort <i>Mannschaft</i> im Formvariantenfenster. Ändern Sie im Konfigurations-Popup die Hintergrundfarbe (standardmäßig werden manuell hinzugefügte Wörter gelb hinterlegt). Das Wort wird in der Belegliste und der Leseansicht der Karteikarte fortan ebenfalls hervorgehoben – mit der gewählten Hintergrundfarbe.</p>
 
-            <p id="menueKartei-formvariantenNurMarkieren">Das ist ein praktisches Verfahren, aber auch problematisch. Denn die Wörter im Formvariantenfenster werden <abbr title="unter anderem">u.&nbsp;a.</abbr> dafür genutzt, den <a href="#belegliste-kuerzung">Kontext eines Belegs zu kürzen</a>. Sind mehrere Wörter vorhanden, nimmt das Programm an, dass Sie zu einem mehrgliedrigen Karteiwort arbeiten. Dies ist hier aber gar nicht der Fall. Sie arbeiten zu <i>Team</i>, nicht zu <i>Mannschaft</i>, um bei dem Beispiel zu bleiben. Kürzen Sie nun den Belegkontext, wird das Programm alle Absätze eliminieren, in denen nicht sowohl <i>Team</i> als auch <i>Mannschaft</i> zu finden sind. Kurzum: Sie müssen dem Programm mitteilen, dass die Formvarianten von <i>Mannschaft</i> nur zum Markieren genutzt werden sollen, das Wort für andere Funktionen jedoch nicht von Relevanz ist. Aktivieren Sie hierzu im Konfigurations-Popup die standardmäßig deaktivierte <b>Option <i>nur markieren</i></b>. Dann wird <i>Mannschaft</i> für die folgenden Funktionen nicht berücksichtigt:</p>
+            <p id="menueKartei-formvariantenNurMarkieren">Das ist ein praktisches Verfahren, aber auch problematisch. Denn die Wörter im Formvariantenfenster werden <abbr title="unter anderem">u.&nbsp;a.</abbr> dafür genutzt, den <a href="#belegliste-kuerzung">Kontext eines Belegs dynamisch zu kürzen</a>. Sind mehrere Wörter vorhanden, nimmt das Programm an, dass Sie zu einem mehrgliedrigen Karteiwort arbeiten. Dies ist hier aber gar nicht der Fall. Sie arbeiten zu <i>Team</i>, nicht zu <i>Mannschaft</i>, um bei dem Beispiel zu bleiben. Kürzen Sie nun den Belegkontext, wird das Programm alle Absätze eliminieren, in denen nicht sowohl <i>Team</i> als auch <i>Mannschaft</i> zu finden sind. Kurzum: Sie müssen dem Programm mitteilen, dass die Formvarianten von <i>Mannschaft</i> nur zum Markieren genutzt werden sollen, das Wort für andere Funktionen jedoch nicht von Relevanz ist. Aktivieren Sie hierzu im Konfigurations-Popup die standardmäßig deaktivierte <b>Option <i>nur markieren</i></b>. Dann wird <i>Mannschaft</i> für die folgenden Funktionen nicht berücksichtigt:</p>
 
             <ol id="menueKartei-formvariantenNurMarkierenFunktionen">
               <li>die <a href="#belegliste-kuerzung">Kürzung von Absätzen</a>,</li>
@@ -4299,7 +4299,7 @@ Mustermann, Erika
 
             <p class="erklaerung-icon"><img src="../img/nicht-trunkiert.svg" width="20" height="20" alt="">Das Wort wird beim Hervorheben <a href="#menueKartei-formvariantenErweitern"><em>nicht</em> links und rechts erweitert</a>.</p>
 
-            <p class="erklaerung-icon"><img src="../img/text-markiert-gelb.svg" width="20" height="20" alt="">Das Wort wird <a href="#menueKartei-formvariantenNurMarkieren">nur markiert</a> und somit <a href="#menueKartei-formvariantenNurMarkierenFunktionen">für einige Funktionen nicht herangezogen</a>.</p>
+            <p class="erklaerung-icon"><img src="../img/text-markiert.svg" width="20" height="20" alt="">Das Wort wird <a href="#menueKartei-formvariantenNurMarkieren">nur markiert</a> und somit <a href="#menueKartei-formvariantenNurMarkierenFunktionen">für einige Funktionen nicht herangezogen</a>.</p>
 
             <p class="erklaerung-icon"><img src="../img/raute.svg" width="20" height="20" alt="">Das Wort wurde als <a href="#menueKartei-formvariantenNebenlemma">Nebenlemma</a> gekennzeichnet.</p>
           </div>

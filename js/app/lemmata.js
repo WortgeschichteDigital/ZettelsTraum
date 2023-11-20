@@ -109,7 +109,6 @@ const lemmata = {
           }
         }
         const woerter = [];
-        const ausWortverbindung = new Set();
         const ausWortverbindungNl = new Set();
         for (const lemma of hinzu) {
           if (data.fv[lemma]) {
@@ -129,7 +128,6 @@ const lemmata = {
               for (const wort of lemma.split(" ")) {
                 if (!woerter.includes(wort) && !data.fv[wort]) {
                   woerter.push(wort);
-                  ausWortverbindung.add(wort);
                   if (nl.has(lemma)) {
                     ausWortverbindungNl.add(wort);
                   }
@@ -139,6 +137,30 @@ const lemmata = {
           }
         }
         if (woerter.length) {
+          // Farben ermitteln, die noch vergeben werden können
+          // 0 = Gelb
+          // 4 = Rot
+          // 5 = Rosa
+          // 6 = Lila
+          // 11 = Türkis
+          // 14 = Hellgrün
+          const farben = [ 0, 14, 4, 11, 6, 5 ];
+          while (farben.length < 17) {
+            const fa = helfer.zufall(1, 17);
+            if (fa !== 9 && !farben.includes(fa)) {
+              // 9 = Blau (auslassen, weil Standardfarbe für Annotierungen)
+              farben.push(fa);
+            }
+          }
+          const farbenFv = {};
+          for (const [ wort, val ] of Object.entries(data.fv)) {
+            farbenFv[wort] = val.fa;
+            const idx = farben.indexOf(val.fa);
+            if (idx > -1) {
+              farben.splice(idx, 1);
+            }
+          }
+
           // Fenster sperren und Formvarianten laden
           document.activeElement.blur();
           const sperre = helfer.sperre(document.getElementById("lemmata-cont"));
@@ -162,9 +184,55 @@ const lemmata = {
             }
           }
 
-          // Farbe der Einzelwörter aus Wortverbindugnen anpassen
-          for (const wort of ausWortverbindung) {
-            data.fv[wort].fa = 14;
+          // Farben für die Formvarianten vergeben
+          // 1. Wortgruppen mit neuen Wörtern und deren Farbe ermitteln
+          const gruppen = {};
+          for (let i = 0, len = data.la.la.length; i < len; i++) {
+            const lemma = data.la.la[i];
+            if (data.la.wf && !lemma.nl) {
+              // Titel von Wortfeldartikeln ausschließen
+              continue;
+            }
+            let sc = [ ...lemma.sc ];
+            let fa = -1;
+            for (const i of lemma.sc) {
+              if (typeof farbenFv[i] !== "undefined") {
+                fa = farbenFv[i];
+              }
+              const mehrwort = i.split(" ");
+              if (mehrwort.length > 1) {
+                sc = sc.concat(mehrwort);
+              }
+            }
+            if (sc.some(i => woerter.includes(i))) {
+              // Gruppe nur aufnehmen, wenn eines der Wörter neu geladen wurde
+              gruppen[i] = {
+                sc,
+                fa,
+              };
+            }
+          }
+
+
+          // 2. den Wortgruppen mit neuen Wörtern ihre Farben zuordnen
+          for (const val of Object.values(gruppen)) {
+            let fa = val.fa;
+            if (fa === -1) {
+              if (!farben.length) {
+                do {
+                  fa = helfer.zufall(0, 17);
+                  // 9 = Blau (auslassen, weil Standardfarbe für Annotierungen)
+                } while (fa === 9);
+              } else {
+                fa = farben[0];
+                farben.shift();
+              }
+            }
+            for (const i of val.sc) {
+              if (data.fv[i]) {
+                data.fv[i].fa = fa;
+              }
+            }
           }
         }
 

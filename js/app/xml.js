@@ -156,6 +156,15 @@ const xml = {
     const belegtext = helferXml.parseXML(`<Belegtext>${text}</Belegtext>`);
     schnitt.firstChild.appendChild(belegtext.firstChild);
 
+    // leere <Hervorhebung> entfernen
+    schnitt.querySelectorAll("Hervorhebung").forEach(i => {
+      if (!i.attributes.length) {
+        const template = document.createElement("template");
+        template.innerHTML = i.innerHTML;
+        i.parentNode.replaceChild(template.content, i);
+      }
+    });
+
     // Elemente und Text extrahieren
     //   n = Knoten
     //     (Knoten, der geparst werden soll)

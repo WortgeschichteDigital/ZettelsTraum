@@ -152,7 +152,7 @@ window.addEventListener("load", async () => {
         "drucken-cont",
         "einstellungen-sec-allgemeines",
         "einstellungen-sec-kopieren",
-        "einstellungen-sec-literatur",
+        "einstellungen-sec-import",
         "einstellungen-sec-menue",
         "einstellungen-sec-notizen",
         "einstellungen-sec-bedeutungsgeruest",

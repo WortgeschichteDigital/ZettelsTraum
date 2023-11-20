@@ -750,14 +750,17 @@ const filter = {
     } else if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
       return [ null ];
     }
+
     // Sollte der Filter als Filterbaum dargestellt werden?
     const baum = f.match(/: /g);
     let baum_tiefe = 0;
     if (baum) {
       baum_tiefe = baum.length;
     }
+
     // in der Filter-ID sind wahrscheinlich Leerzeichen
     const f_enc = encodeURI(f);
+
     // Filter drucken
     const frag = document.createDocumentFragment();
     const div = document.createElement("div");
@@ -766,6 +769,7 @@ const filter = {
     div.classList.add("filter-baum");
     div.dataset.f = f;
     frag.appendChild(div);
+
     // Input
     const input = document.createElement("input");
     input.classList.add("filter");
@@ -776,6 +780,7 @@ const filter = {
     if (!obj.wert && /^bedeutungen-/.test(f)) {
       input.disabled = true;
     }
+
     // Label
     const label = document.createElement("label");
     label.setAttribute("for", `filter-${f_enc}`);
@@ -785,6 +790,14 @@ const filter = {
       label.innerHTML = helfer.escapeHtml(obj.name);
     }
     p.appendChild(label);
+
+    // Farbe (für Lemmata-Filter)
+    if (/^lemmata-/.test(f) && data.fv[obj.name]) {
+      const fa = document.createElement("span");
+      p.insertBefore(fa, label);
+      fa.classList.add("farbe", `wortFarbe${data.fv[obj.name].fa}`);
+    }
+
     // Anzahl der Belege
     if (obj.wert) {
       const span = document.createElement("span");
@@ -793,11 +806,13 @@ const filter = {
       span.title = `Anzahl der Belege, auf die der Filter „${obj.name}“ zutrifft`;
       p.appendChild(span);
     }
+
     // ggf. Absatz mit Sternen aufbauen
     if (f === "verschiedenes-markierung") {
       frag.lastChild.classList.add("markierung");
       frag.appendChild(filter.aufbauenSterne());
     }
+
     // Fragment zurückgeben
     return [ frag, baum_tiefe ];
   },

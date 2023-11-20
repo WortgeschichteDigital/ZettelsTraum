@@ -48,6 +48,11 @@ const quick = {
       short: `${tastatur.shortcutsTextAktuell("Strg")} + W`,
       img: "x-dick.svg",
     },
+    "kartei-lemmata": {
+      title: "Kartei > Lemmata",
+      short: "",
+      img: "lemmata.svg",
+    },
     "kartei-formvarianten": {
       title: "Kartei > Formvarianten",
       short: "",
@@ -405,6 +410,9 @@ const quick = {
           break;
         case "kartei-schliessen":
           kartei.schliessen();
+          break;
+        case "kartei-lemmata":
+          lemmata.oeffnen();
           break;
         case "kartei-formvarianten":
           stamm.oeffnen();

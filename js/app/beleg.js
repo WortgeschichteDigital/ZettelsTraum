@@ -421,18 +421,25 @@ const beleg = {
   //     (das Formularfeld, das geändert wurde)
   formularGeaendert (feld) {
     feld.addEventListener("change", function () {
+      const val = helfer.textTrim(this.value, true);
       const name = this.id.replace(/^beleg-/, "");
       let noLeerzeilen = "";
       if (name === "no" && /^\n/.test(this.value)) {
         // am Anfang der Notizen müssen Leerzeilen erlaubt sein,
         // weil die erste Zeile in der Belegliste angezeigt werden kann
         noLeerzeilen = this.value.match(/^\n+/)[0];
-      } else if (name === "ul" && !beleg.data.ul) {
-        const heute = new Date().toISOString().split("T")[0];
-        document.getElementById("beleg-ud").value = heute;
-        beleg.data.ud = heute;
+      } else if (name === "ul") {
+        const ud = document.getElementById("beleg-ud");
+        if (!beleg.data.ul) {
+          const heute = new Date().toISOString().split("T")[0];
+          ud.value = heute;
+          beleg.data.ud = heute;
+        } else if (!val && beleg.data.ul) {
+          ud.value = "";
+          beleg.data.ud = "";
+        }
       }
-      beleg.data[name] = noLeerzeilen + helfer.textTrim(this.value, true);
+      beleg.data[name] = noLeerzeilen + val;
       beleg.belegGeaendert(true);
     });
   },
@@ -584,17 +591,16 @@ const beleg = {
       } catch {
         return;
       }
-      if (parsedURL.origin === "https://www.deutschestextarchiv.de" &&
-          document.getElementById("beleg-import-quelle-url").checked) {
+      const urlImport = document.getElementById("beleg-import-quelle-url").checked;
+      const von = this.nextSibling;
+      const bis = von.nextSibling;
+      if (urlImport && parsedURL.origin === "https://www.deutschestextarchiv.de") {
         const page = importTEI.dtaGetPageNo(parsedURL);
-        const von = this.nextSibling;
-        const bis = von.nextSibling;
-        if (von.value === "0") {
-          von.value = page;
-        }
-        if (bis.value === "0") {
-          bis.value = page + 1;
-        }
+        von.value = page;
+        bis.value = page + 1;
+      } else if (urlImport) {
+        von.value = "0";
+        bis.value = "0";
       }
     });
 
@@ -2122,50 +2128,95 @@ const beleg = {
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
   toolsKuerzen () {
     // Absätze ermitteln, die das Wort enthalten
-    const bs = document.querySelector("#beleg-bs");
-    const textOri = bs.value;
+    const feldBs = document.querySelector("#beleg-bs");
+    const textOri = feldBs.value;
     const text = textOri.split("\n\n");
     const wortVorhanden = [];
+    const pb = [];
+    const regPb = /\[:(.+?):\]/g;
     for (let i = 0, len = text.length; i < len; i++) {
       if (liste.wortVorhanden(text[i])) {
         wortVorhanden.push(i);
       }
+      const pbAll = [];
+      for (const m of text[i].matchAll(regPb)) {
+        if (m[1] !== "?" &&
+            !/^[a-z]+$/.test(m[1])) {
+          // in Handschriften der WDB werden die Spalten mitunter durch a, b, c usw. bezeichnet => ausschließen
+          pbAll.push(m[1]);
+        }
+      }
+      pb.push([ ...pbAll ]);
     }
+
     // gekürzten Text ermitteln
-    const kurz = [];
-    let kurzZuletzt = -1;
     const kontextErhalten = optionen.data.einstellungen["karteikarte-text-kuerzen-kontext"];
+    const kurzText = [];
+    const kurzErhalten = [];
+    let kurzZuletzt = -1;
     for (let i = 0, len = text.length; i < len; i++) {
       if (wortVorhanden.includes(i) || // Stichwort vorhananden
           kontextErhalten && (wortVorhanden.includes(i - 1) || wortVorhanden.includes(i + 1))) { // Kontext erhalten
-        kurz.push(text[i]);
+        // Text bleibt erhalten
+        kurzText.push(text[i]);
+        kurzErhalten.push(i);
         kurzZuletzt = i;
-      } else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) { // Kürzungszeichen
-        kurz.push('<span class="klammer-loeschung">…</span>' + seitenumbruch(text[i]));
-      } else {
-        const su = seitenumbruch(text[i]);
-        if (su) {
-          kurz[kurz.length - 1] = kurz[kurz.length - 1] + su;
-        }
+      } else if (i > 0 && i < len - 1 && kurzZuletzt === i - 1) {
+        // Text löschen, aber Kürzungszeichen setzen
+        kurzText.push('<span class="klammer-loeschung">…</span>');
+        kurzErhalten.push(i);
       }
     }
-    function seitenumbruch (text) { // Seitenumbruch erhalten
-      const reg = /\[:.+?:\]/;
-      if (reg.test(text)) {
-        return " " + text.match(reg)[0];
-      }
-      return "";
+
+    // überflüssige Kürzung am Ende entfernen
+    if (kurzText.at(-1) === '<span class="klammer-loeschung">…</span>') {
+      kurzText.pop();
+      kurzErhalten.pop();
     }
-    if (/<span class="klammer-loeschung">…<\/span>/.test(kurz[kurz.length - 1])) { // überflüssige Kürzung am Ende entfernen
-      kurz.pop();
-    }
+
     // gekürzten Text übernehmen
-    const textKurz = kurz.join("\n\n");
+    const textKurz = kurzText.join("\n\n");
     if (textOri !== textKurz) {
       beleg.data.bs = textKurz;
-      bs.value = textKurz;
-      helfer.textareaGrow(bs);
+      feldBs.value = textKurz;
+      helfer.textareaGrow(feldBs);
       beleg.belegGeaendert(true);
+    } else {
+      return;
+    }
+
+    // Seitenzahl in der Quelle anpassen
+    let seiteStart = "";
+    for (let i = kurzErhalten[0]; i >= 0; i--) {
+      if (pb[i].some(i => i)) {
+        seiteStart = pb[i][0];
+        break;
+      }
+    }
+    let seiteEnde = "";
+    for (let i = kurzErhalten.at(-1); i >= 0; i--) {
+      if (pb[i].some(i => i)) {
+        seiteEnde = pb[i].at(-1);
+        break;
+      }
+    }
+    if (!seiteStart) {
+      return;
+    }
+    let seiten = seiteStart;
+    if (seiteEnde && seiteEnde !== seiteStart) {
+      seiten += "–" + seiteEnde;
+    }
+    const qu = beleg.data.qu.split("\n");
+    const seitenReg = /, ((?:Sp?\.|hier)\s)[^.]+\.$/;
+    const seitenMatch = qu[0].match(seitenReg);
+    if (seitenMatch) {
+      const zaehlung = seitenMatch[1];
+      qu[0] = qu[0].replace(seitenReg, ", " + zaehlung + seiten + ".");
+      beleg.data.qu = qu.join("\n");
+      const feldQu = document.getElementById("beleg-qu")
+      feldQu.value = beleg.data.qu;
+      helfer.textareaGrow(feldQu);
     }
   },
 

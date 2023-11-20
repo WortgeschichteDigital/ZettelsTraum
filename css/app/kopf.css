@@ -74,6 +74,11 @@
   mask-image: url(../../img/x-dick.svg);
 }
 
+#quick-kartei-lemmata {
+  -webkit-mask-image: url(../../img/lemmata.svg);
+  mask-image: url(../../img/lemmata.svg);
+}
+
 #quick-kartei-formvarianten {
   -webkit-mask-image: url(../../img/formvarianten.svg);
   mask-image: url(../../img/formvarianten.svg);

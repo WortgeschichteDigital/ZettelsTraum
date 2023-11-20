@@ -119,6 +119,14 @@ const punkte = {
     icon: "pfeil-kreis.png",
     click: "filter.ctrlReset(true)",
   },
+  importConf: {
+    label: "Import-Einstellungen",
+    icon: "zahnrad.png",
+    click: `
+      optionen.oeffnen();
+      optionen.sektionWechseln(document.getElementById("einstellungen-link-import"));
+    `,
+  },
   karteiEntfernen: {
     label: "Aus Liste entfernen",
     icon: "muelleimer.png",
@@ -155,7 +163,7 @@ const punkte = {
   klammernEntfernen: {
     label: "Klammern entfernen",
     icon: "klammern-entfernen.png",
-    click: 'belegKlammern.remove()',
+    click: "belegKlammern.remove()",
   },
   klammernLoeschung: {
     label: "Löschung",
@@ -238,14 +246,6 @@ const punkte = {
       modules.clipboard.write({
         text: popup.element.getAttribute("href"),
       });
-    `,
-  },
-  literaturConf: {
-    label: "Literatur-Einstellungen",
-    icon: "zahnrad.png",
-    click: `
-      optionen.oeffnen();
-      optionen.sektionWechseln(document.getElementById("einstellungen-link-literatur"));
     `,
   },
   mail: {

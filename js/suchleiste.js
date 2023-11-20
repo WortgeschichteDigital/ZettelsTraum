@@ -211,7 +211,7 @@ const suchleiste = {
           letter = letter.replace(/\s/g, "(&nbsp;|\\s)");
           formText[i] = letter;
         }
-        const reg = new RegExp(formText.join("(?:<[^>]+>)*"), "g" + genaue);
+        const reg = new RegExp(formText.join("(?:<[^>]+>|\\[¬\\]| \\[:.+?:\\] )*"), "g" + genaue);
         beleg.ctrlSpringenFormMatches(reg);
         // Feld mit Importdaten hinzufügen (wenn es sichtbar ist)
         if (!document.getElementById("beleg-bx").closest("tr").classList.contains("aus")) {

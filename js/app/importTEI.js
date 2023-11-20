@@ -844,6 +844,12 @@ const importTEI = {
         }
       }
 
+      // detect page numbers
+      if (pb.length) {
+        importTEI.data.cit.seiteStart = pb[0].getAttribute("n") || "";
+        importTEI.data.cit.seiteEnde = pb[pb.length - 1].getAttribute("n") || "";
+      }
+
       // return the whole content of <text>
       const text = xmlStr.match(/<text[ >].+?<\/text>/s)?.[0] || false;
       if (!text) {

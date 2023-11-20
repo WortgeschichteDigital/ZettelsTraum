@@ -166,6 +166,7 @@ const importDWDS = {
 
     // Datensatz: Quelle
     const nQu = xmlDoc.querySelector("Fundstelle Bibl");
+    const faksimile = xmlDoc.querySelector("Fundstelle Faksimile")?.firstChild?.nodeValue || "";
     if (nQu?.firstChild) {
       // Titel
       const nTitel = xmlDoc.querySelector("Fundstelle Titel");
@@ -173,6 +174,7 @@ const importDWDS = {
       const titeldaten = {
         titel: nTitel?.firstChild?.nodeValue || "",
         seite: nSeite?.firstChild?.nodeValue || "",
+        faksimile,
       };
       importDWDS.korrekturen({
         typ: "qu",
@@ -223,6 +225,7 @@ const importDWDS = {
     }
 
     // Datensatz: Notizen
+    // 1. Link zum DWDS
     const nDok = xmlDoc.querySelector("Fundstelle Dokument");
     if (nDok?.firstChild) {
       ds.no = importDWDS.korrekturen({
@@ -232,6 +235,12 @@ const importDWDS = {
         korpus,
       });
     }
+
+    // 2. weitere Links
+    importDWDS.links({
+      ds,
+      faksimile,
+    });
 
     // Datensatz zurückgeben oder Karteikarte füllen
     if (returnResult) {
@@ -244,11 +253,32 @@ const importDWDS = {
     return result;
   },
 
+  // Mapper für den JSON-Import: in diesen Korpora ist page_ => facsimile_
+  pageToFacsimile: [
+    "dekude",
+    "dsdk",
+    "dtae",
+    "dtak",
+    "gei_digital",
+    "grenzboten",
+  ],
+
   // JSON-Import starten
   //   json = object
   startImportJSON (json) {
     // Datensätze parsen
     for (const i of json) {
+      // Daten korrigieren:
+      //   - wenn !page_ => Daten aus matches nehmen
+      //   - in gewissen Korpora page_ => facsimile_
+      if (!i.meta_.page_) {
+        i.meta_.page_ = i.matches?.[0]?.page || "";
+      }
+      if (importDWDS.pageToFacsimile.includes(i.collection)) {
+        i.meta_.facsimile_ = i.meta_.page_;
+        i.meta_.page_ = "";
+      }
+
       // Datensatz erzeugen
       importShared.fileData.data.push(importDWDS.importObject());
       const ds = importShared.fileData.data.at(-1).ds;
@@ -298,6 +328,7 @@ const importDWDS = {
         const titeldaten = {
           titel: i.meta_.title || "",
           seite: i.meta_.page_ || "",
+          faksimile: i.meta_.facsimile_ || "",
         };
         importDWDS.korrekturen({
           typ: "qu",
@@ -344,6 +375,7 @@ const importDWDS = {
       }
 
       // Notizen
+      // 1. Link zum DWDS
       if (i.meta_.basename) {
         ds.no = importDWDS.korrekturen({
           typ: "no",
@@ -352,6 +384,12 @@ const importDWDS = {
           korpus,
         });
       }
+
+      // 2. weitere Links
+      importDWDS.links({
+        ds,
+        faksimile: i.meta_.facsimile_ || "",
+      });
 
       // Beleg-XML
       let xmlStr = "<Beleg>";
@@ -377,6 +415,9 @@ const importDWDS = {
       }
       if (i.meta_.page_) {
         xmlStr += `<Seite>${i.meta_.page_}</Seite>`;
+      }
+      if (i.meta_.facsimile_) {
+        xmlStr += `<Faksimile>${i.meta_.facsimile_}</Faksimile>`;
       }
       if (i.textclass) {
         xmlStr += `<Textklasse>${i.textclass}</Textklasse>`;
@@ -466,6 +507,11 @@ const importDWDS = {
       // Unicode-Normalisierung
       ds.qu = txt.normalize("NFC");
 
+      // kleinere Textnormierungen
+      //   - Spatien vor Semikolon entfernen
+      ds.qu = ds.qu.replace(/\s; /g, "; ");
+      titeldaten.titel = titeldaten.titel.replace(/\s; /g, "; ");
+
       // eine Verrenkung wegen der häufig merkwürdigen Zitierweise
       ds.qu = ds.qu.replace(/ Zitiert nach:.+/, "");
       const jahrDatierung = ds.da.match(/[0-9]{4}/);
@@ -521,6 +567,11 @@ const importDWDS = {
       // ggf. Punkt am Ende der Quellenangabe ergänzen
       if (!/[.!?]$/.test(ds.qu)) {
         ds.qu += ".";
+      }
+
+      // ggf. Faksimile-Nummer ergänzen
+      if (titeldaten.faksimile) {
+        ds.qu += ` [Faksimile Nr. ${titeldaten.faksimile}]`;
       }
 
       // Tagesdaten ggf. aufhübschen
@@ -630,6 +681,27 @@ const importDWDS = {
 
       // 1. Zeile frei lassen (s.o.)
       return `\n${txt}`;
+    }
+  },
+
+  // Links im Notizenfeld ergänzen
+  //   ds = object
+  //     (Datensatz mit Belegdaten)
+  //   faksimile = string
+  //     (Faksimile-Nummer)
+  links ({ ds, faksimile }) {
+    // GEI-Digital: seitengenauer Link zum Digitalisat
+    if (faksimile && /https?:\/\/gei-digital\.gei\.de\/viewer\/ppnresolver/.test(ds.ul)) {
+      const url = new URL(ds.ul);
+      const ppn = url.searchParams.get("id");
+      if (ppn) {
+        if (ds.no) {
+          ds.no += "\n\n";
+        } else {
+          ds.no += "\n";
+        }
+        ds.no += `Digitalisat bei GEI-Digital: https://gei-digital.gei.de/viewer/image/${ppn}/${faksimile}`;
+      }
     }
   },
 };

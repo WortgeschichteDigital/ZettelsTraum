@@ -120,7 +120,7 @@ const annotieren = {
 
     // Werte auslesen (falls vorhanden)
     const werte = {
-      farbe: 1,
+      farbe: w.classList.contains("wort") ? 1 : 4,
       taggen: true,
       text: "",
     };
@@ -375,7 +375,7 @@ const annotieren = {
   ausfuehren () {
     const aw = document.getElementById("annotierung-wort");
     const werte = {
-      farbe: 1,
+      farbe: 4,
       taggen: aw.querySelector("#annotierung-nicht-taggen:checked") === null,
       text: "",
     };

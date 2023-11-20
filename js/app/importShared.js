@@ -954,6 +954,13 @@ const importShared = {
       return false;
     }
 
+    // URL und Aufrufdatum entfernen, wenn der Import aus einem XML-Snippet des DWDS kommt
+    // und die URL auf eine XML-Resource zeigt
+    if (ds.bi === "xml-dwds" && /\.xml$/.test(ds.ul)) {
+      ds.ud = "";
+      ds.ul = "";
+    }
+
     // Ist die Karte schon ausgefüllt?
     const datenfelder = {
       da: "Datum",
@@ -1040,7 +1047,10 @@ const importShared = {
         break;
       }
     }
-    if (!source) {
+    if (!source ||
+        !source.xmlPath && !source.xmlPathReg.test(ds.ul)) {
+      // auch Quellen aussschließen, bei denen die XML-URL nicht berechnet werden kann,
+      // wenn die XML-Datei nicht direkt verlinkt wird (z.B. WDB)
       return false;
     }
 
@@ -1293,14 +1303,17 @@ const importShared = {
 
     // Seiten/Spalten
     const seite_spalte = td.spalte ? "Sp.\u00A0" : "S.\u00A0";
-    if (td.seiten) {
-      titel += `, ${/Sp?\. /.test(td.seiten) ? "" : seite_spalte}${td.seiten}`;
+    const seiten_reg = new RegExp(`\\b${td.seiten.replace(/^Sp?\. /, "")}\\b`);
+    if (td.seiten && !seiten_reg.test(td.seite)) {
+      titel += ", " + (/Sp?\. /.test(td.seiten) ? "" : seite_spalte) + td.seiten;
+    } else {
+      td.seiten = "";
     }
     if (td.seite) {
       if (td.seiten) {
         titel += `, hier ${td.seite}`;
       } else {
-        titel += `, ${seite_spalte}${td.seite}`;
+        titel += ", " + seite_spalte + td.seite;
       }
     }
 

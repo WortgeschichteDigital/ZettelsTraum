@@ -147,7 +147,24 @@ const optionen = {
       "ctrlC-vor": "1",
       // Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
       "einfuegen-schliessen": true,
-      // LITERATUR
+      // IMPORT
+      // beim Fokussieren des Import-Feldes automatisch den Inhalt der Zwischenablage parsen
+      // ("url" aus historischen Gründen, weil früher nur eine DTA-URL eingetragen wurde)
+      "url-eintragen": true,
+      // DWDS-Snippets, die auf eine bekannte Online-Ressource zurückgehen, ohne Nachfrage direkt aus der Ressource importieren
+      "karteikarte-original-bevorzugen": false,
+      // bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
+      "notizen-zeitung": false,
+      // nach Text-Import überprüfen, ob das Karteiwort im Belegtext gefunden werden kann
+      "wort-check": true,
+      // bei der Überprüfung nach Text-Import Wörter mit einbeziehen, die nur markiert werden sollen
+      "wort-check-nur-markieren": false,
+      // nach dem Import den Inhalt der Zwischenablage löschen
+      "karteikarte-clear-clipboard": false,
+      // nach dem Import Absätze ohne Stichwort automatisch löschen
+      "karteikarte-text-kuerzen-auto": false,
+      // Kontext beim Löschen der Absätze ohne Stichwort teilweise erhalten
+      "karteikarte-text-kuerzen-kontext": false,
       // Verlag importieren
       "literatur-verlag": false,
       // Serie importieren
@@ -191,23 +208,6 @@ const optionen = {
       // Textfeld immer ergänzen, wenn aus einem Dropdown-Menü ein Wert
       // ausgewählt wurde (betrifft Bedeutung und Textsorte)
       "immer-ergaenzen": false,
-      // beim Fokussieren des Import-Feldes automatisch den Inhalt der Zwischenablage parsen
-      // ("url" aus historischen Gründen, weil früher nur eine DTA-URL eingetragen wurde)
-      "url-eintragen": true,
-      // DWDS-Snippets, die auf eine bekannte Online-Ressource zurückgehen, ohne Nachfrage direkt aus der Ressource importieren
-      "karteikarte-original-bevorzugen": false,
-      // bei Zeitungskorpora Namen in die erste Zeile der Notizen schreiben
-      "notizen-zeitung": false,
-      // nach Text-Import überprüfen, ob das Karteiwort im Belegtext gefunden werden kann
-      "wort-check": true,
-      // bei der Überprüfung nach Text-Import Wörter mit einbeziehen, die nur markiert werden sollen
-      "wort-check-nur-markieren": false,
-      // nach dem Import den Inhalt der Zwischenablage löschen
-      "karteikarte-clear-clipboard": false,
-      // nach dem Import Absätze ohne Stichwort automatisch löschen
-      "karteikarte-text-kuerzen-auto": false,
-      // Kontext beim Löschen der Absätze ohne Stichwort teilweise erhalten
-      "karteikarte-text-kuerzen-kontext": false,
       // bestehende Karteikarten in der Leseansicht öffnen
       leseansicht: true,
       // FILTERLEISTE
