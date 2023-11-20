@@ -90,6 +90,16 @@ const importTEI = {
       data.cit.spalte = true;
     }
 
+    // in case of a reimport, get precollected page data
+    if (beleg.metadatenReimportData.reimport) {
+      for (const i of [ "seiten", "spalte" ]) {
+        if (beleg.metadatenReimportData[i]) {
+          importTEI.data.cit[i] = beleg.metadatenReimportData[i];
+        }
+      }
+      beleg.metadatenReimportData.reimport = false;
+    }
+
     // fill in missing card values
     // date
     let da = data.cit.datumEntstehung;

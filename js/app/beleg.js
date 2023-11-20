@@ -1967,6 +1967,7 @@ const beleg = {
       // TEI
       importTEI.data.cit = importTEI.citObject();
       importTEI.citFill(xmlDoc);
+      importTEI.data.cit.seiten = beleg.data.qu.match(/, Sp?\.\s(.+)\.$/)?.[1] || "";
       importTEI.data.cit.spalte = /, Sp\.\s/.test(beleg.data.qu);
       titel = importTEI.makeQu();
     } else if (beleg.data.bi === "xml-dwds" && xmlDoc) {
@@ -3086,6 +3087,9 @@ const beleg = {
     beleg.metadaten();
   },
 
+  // Metadaten: Daten für den Reimport, die zuvor aus dem Quelle-Feld ausgelesen werden müssen
+  metadatenReimportData: {},
+
   // Metadaten: Daten aus bx erneut importieren
   metadatenReimport () {
     // keine Daten vorhanden
@@ -3104,6 +3108,12 @@ const beleg = {
       // müssen darum neu zusammengebaut werden
       bx = "© Leibniz-Institut für Deutsche Sprache, Mannheim\n\n" + beleg.data.no + "\n".repeat(3);
       bx += `Belege ()\n${"_".repeat(10)}\n\n` + beleg.data.bx;
+    } else if (/^tei/.test(beleg.data.bi)) {
+      beleg.metadatenReimportData = {
+        reimport: true,
+        seiten: beleg.data.qu.match(/, Sp?\.\s(.+)\.$/)?.[1] || "",
+        spalte: /, Sp\.\s/.test(beleg.data.qu),
+      };
     }
     modules.clipboard.writeText(bx);
     beleg.formularImport({
