@@ -1188,15 +1188,17 @@ const importShared = {
 
     // Autor
     if (td.autor.length) {
-      if (td.autor.length > 3) {
+      const imTitel = istImTitel(td.autor);
+      if (!imTitel && td.autor.length > 3) {
         titel = `${td.autor[0]}/${td.autor[1]} u.\u00A0a.: `;
-      } else {
+      } else if (!imTitel) {
         titel = `${td.autor.join("/")}: `;
       }
     } else if (td.hrsg.length) {
-      if (td.hrsg.length > 3) {
+      const imTitel = istImTitel(td.hrsg);
+      if (!imTitel && td.hrsg.length > 3) {
         titel = `${td.hrsg[0]}/${td.hrsg[1]} u.\u00A0a.: `;
-      } else {
+      } else if (!imTitel) {
         titel = `${td.hrsg.join("/")} (Hrsg.): `;
       }
     } else {
@@ -1305,11 +1307,13 @@ const importShared = {
     const seite_spalte = td.spalte ? "Sp.\u00A0" : "S.\u00A0";
     const seiten_reg = new RegExp(`\\b${td.seiten.replace(/^Sp?\. /, "")}\\b`);
     if (td.seiten && !seiten_reg.test(td.seite)) {
+      punktWeg();
       titel += ", " + (/Sp?\. /.test(td.seiten) ? "" : seite_spalte) + td.seiten;
     } else {
       td.seiten = "";
     }
     if (td.seite) {
+      punktWeg();
       if (td.seiten) {
         titel += ", hier " + seite_spalte + td.seite;
       } else {
@@ -1329,10 +1333,30 @@ const importShared = {
     titel = importShared.changeTitleStyle(titel);
     return titel;
 
+    // feststellen, ob eine Person bereits im Titel genannt wird
+    //   pers = array
+    function istImTitel (pers) {
+      let imTitel = false;
+      for (const p of pers) {
+        if (td.titel.some(i => i.includes(p))) {
+          imTitel = true;
+          break;
+        }
+      }
+      return imTitel;
+    }
+
     // ggf. Punkt ergänzen
     function punkt () {
       if (!/[,;.:!?]$/.test(titel)) {
         titel += ".";
+      }
+    }
+
+    // ggf. Punkt entfernen
+    function punktWeg () {
+      if (/\.$/.test(titel)) {
+        titel = titel.substring(0, titel.length - 1);
       }
     }
 

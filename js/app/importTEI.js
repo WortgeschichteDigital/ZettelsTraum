@@ -192,10 +192,13 @@ const importTEI = {
     // persons
     const persons = {
       autor: evaluator("//t:biblFull/t:titleStmt/t:author/t:persName"),
+      autor2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:persName"),
+      autor3: evaluator("//t:profileDesc/t:creation/t:persName[@type='sender']"),
       hrsg: evaluator("//t:biblFull/t:titleStmt/t:editor/t:persName"),
     };
     for (const [ k, v ] of Object.entries(persons)) {
       let item = v.iterateNext();
+      const key = k.replace(/[0-9]$/, "");
       while (item) {
         const forename = item.querySelector("forename");
         const surname = item.querySelector("surname");
@@ -207,9 +210,11 @@ const importTEI = {
           if (forename) {
             name.push(trimmer(forename.textContent));
           }
-          data[k].push(name.join(", "));
+          data[key].push(name.join(", "));
         } else if (addName) {
-          data[k].push(trimmer(addName.textContent));
+          data[key].push(trimmer(addName.textContent));
+        } else {
+          data[key].push(trimmer(item.textContent));
         }
         item = v.iterateNext();
       }
@@ -218,6 +223,7 @@ const importTEI = {
     // further pub infos
     const pub = {
       titel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='main']"),
+      titel2: evaluator("//t:sourceDesc/t:bibl/t:title"),
       untertitel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='sub']"),
       band: evaluator("//t:biblFull/t:titleStmt/t:title[@type='volume']"),
       auflage: evaluator("//t:biblFull/t:editionStmt/t:edition"),
@@ -225,14 +231,41 @@ const importTEI = {
       verlag: evaluator("//t:biblFull/t:publicationStmt/t:publisher/t:name"),
       datumDruck: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='publication']"),
       datumEntstehung: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='creation']"),
+      datumEntstehung2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:date"),
+      datumEntstehung3: evaluator("//t:profileDesc/t:creation/t:date[@type='sent']"),
+      datumEntstehung4: evaluator("//t:sourceDesc/t:biblFull/t:publicationStmt/t:date"),
     };
     for (const [ k, v ] of Object.entries(pub)) {
       let item = v.iterateNext();
+      const key = k.replace(/[0-9]$/, "");
       while (item) {
-        if (Array.isArray(data[k])) {
-          data[k].push(trimmer(item.textContent));
+        if (/datumEntstehung[0-9]/.test(k)) {
+          // @when, @notBefore, @notAfter
+          const when = item.getAttribute("when");
+          if (!data.datumEntstehung && when) {
+            data.datumEntstehung = when;
+          } else if (!data.datumEntstehung) {
+            const notBefore = item.getAttribute("notAfter");
+            const notAfter = item.getAttribute("notAfter");
+            let date = notBefore || notAfter || "";
+            if (notBefore && notAfter) {
+              date = `zwischen ${notBefore} und ${notAfter}`;
+            } else if (notBefore) {
+              date = "nicht vor " + notBefore;
+            } else if (notAfter) {
+              date = "nicht nach " + notAfter;
+            }
+            if (!date) {
+              date = trimmer(item.textContent);
+            }
+            data.datumEntstehung = date;
+          }
+        } else if (Array.isArray(data[key])) {
+          if (/[0-9]$/.test(k) && !data[key].length) {
+            data[key].push(trimmer(item.textContent));
+          }
         } else {
-          data[k] = trimmer(item.textContent);
+          data[key] = trimmer(item.textContent);
         }
         item = v.iterateNext();
       }
@@ -249,6 +282,7 @@ const importTEI = {
       bdJg: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='volume']"),
       heft: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='issue']"),
       seiten: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='pages']"),
+      seiten2: evaluator("//t:sourceDesc/t:bibl/t:biblScope[@unit='page']"),
     };
     const seriesTitel = [];
     let item = series.titel.iterateNext();
@@ -272,12 +306,28 @@ const importTEI = {
         data.seiten = trimmer(item.textContent);
       }
     } else {
-      // series
+      // series/edition
       data.serie = seriesTitel.join(". ");
       item = series.bdJg.iterateNext();
       if (item) {
         data.serieBd = trimmer(item.textContent);
       }
+      item = series.seiten2.iterateNext();
+      const seiten = [];
+      while (item) {
+        const num = item.querySelectorAll("num");
+        if (num.length) {
+          const s = [];
+          for (const i of num) {
+            s.push(trimmer(i.textContent));
+          }
+          seiten.push(s.join("–"));
+        } else {
+          seiten.push(trimmer(item.textContent));
+        }
+        item = series.seiten2.iterateNext();
+      }
+      data.seiten = seiten.join(" u. ");
     }
 
     // fallback for documents without full bibliographical information
@@ -351,9 +401,13 @@ const importTEI = {
     td.jahrgang = data.zeitschriftJg;
     td.jahr = data.datumDruck;
     if (!data.datumDruck) {
-      td.jahr = data.datumEntstehung;
+      const d = td.titel.join(", ").match(/\((?<jahr1>[0-9]{4})\)|(?<jahr2>[0-9]{4})\./);
+      data.datumDruck = d?.groups?.jahr1 || d?.groups?.jahr2 || "";
+    }
+    if (!data.datumDruck) {
+      td.jahr = data.datumEntstehung.match(/[0-9]{4}/)?.[0] || "";
     } else {
-      td.jahrZuerst = data.datumEntstehung;
+      td.jahrZuerst = data.datumEntstehung.match(/[0-9]{4}/)?.[0] || "";
     }
     if (data.zeitschriftH && !data.zeitschriftJg) {
       td.jahrgang = data.zeitschriftH;
