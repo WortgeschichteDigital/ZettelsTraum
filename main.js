@@ -914,7 +914,10 @@ const fenster = {
   erstellen (kartei, neuesWort = false, cli = null) {
     // Position und Größe des Fensters ermitteln
     // (das screen Modul steht erst nach app "ready" zur Verfügung => ggf. abfangen)
-    const Bildschirm = require("electron")?.screen?.getPrimaryDisplay();
+    let Bildschirm;
+    try {
+      Bildschirm = require("electron").screen.getPrimaryDisplay();
+    } catch {}
     const workAreaW = Bildschirm?.workArea?.width || 1024;
     const workAreaH = Bildschirm?.workArea?.height || 768;
     let x = optionen.data.fenster ? optionen.data.fenster.x : null;
