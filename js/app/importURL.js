@@ -10,7 +10,7 @@ const importURL = {
     }
 
     // URL-Daten ermitteln
-    const urlData = importURL.getURLData(formData);
+    const urlData = await importURL.getURLData(formData);
     if (!urlData) {
       return false;
     }
@@ -79,7 +79,7 @@ const importURL = {
   // URL-Daten ermitteln
   //   formData = object
   //     (formData.resource, formData.url, formData.von, formData.bis)
-  getURLData (formData) {
+  async getURLData (formData) {
     // direkter Link zur XML-Datei
     const result = {
       url: "",
@@ -102,6 +102,23 @@ const importURL = {
       result.id = titleId;
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId + ".xml";
+      }
+    } else if (formData.resource.type === "tei-jeanpaul") {
+      const titleId = importTEI.jeanpaulGetTitleId(parsedURL);
+      result.id = titleId;
+      if (!result.url) {
+        if (/^[IVX]+_/.test(titleId)) {
+          // Brief von Jean Paul
+          const vol = titleId.split("_")[0];
+          result.url = `${formData.resource.xmlPath}briefe/${vol}/${titleId}.xml`;
+        } else {
+          // Umfeldbrief => URL aus der Seite auslesen
+          const response = await helfer.fetchURL(formData.url);
+          const path = response.text.match(/href="https:\/\/github.com\/.+?\/main\/(.+?\.xml)"/)?.[1];
+          if (path) {
+            result.url = formData.resource.xmlPath + path;
+          }
+        }
       }
     }
 

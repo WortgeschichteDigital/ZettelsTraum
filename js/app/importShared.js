@@ -12,6 +12,15 @@ const importShared = {
       xmlPathReg: /^\/book\/download_xml\/[^/]+/,
     },
     {
+      name: "Briefe von Jean Paul",
+      desc: "aus den Briefen von Jean Paul",
+      type: "tei-jeanpaul",
+      originReg: /^https:\/\/www\.jeanpaul-edition\.de$/,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/telota/jean_paul_briefe/main/",
+      xmlPathReg: /^\/telota\/jean_paul_briefe\/main\/(umfeld)?briefe\/.+?\.xml$/,
+    },
+    {
       name: "Polytechnisches Journal",
       desc: "aus dem Polytechnischen Journal",
       type: "tei-dingler",
@@ -273,7 +282,8 @@ const importShared = {
       return null;
     }
     for (const i of importShared.onlineResources) {
-      if (i.originReg.test(validURL.origin)) {
+      if (i.originReg.test(validURL.origin) ||
+          i?.xmlReg?.test(validURL.origin) && i.xmlPathReg.test(validURL.pathname)) {
         return i;
       }
     }
@@ -345,6 +355,19 @@ const importShared = {
           },
           type: "tei-dta",
           formText: "TEI-XML (DTA)",
+          usesFileData: false,
+        };
+      }
+
+      // Briefe von Jean Paul
+      if (/Briefe von Jean Paul|Briefe aus Jean Pauls Umfeld/.test(xml.querySelector("editionStmt edition")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-jeanpaul",
+          formText: "TEI-XML (Briefe von Jean Paul)",
           usesFileData: false,
         };
       }

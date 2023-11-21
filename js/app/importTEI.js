@@ -19,9 +19,9 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //     type           = string (tei | tei-dingler | tei-dta | tei-jeanpaul | tei-wdb)
   //     urlData        = object
-  //       id           = string (tei-dta and tei-dingler => title ID)
+  //       id           = string (tei-dta, tei-dingler, tei-jeanpaul => title ID)
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -53,12 +53,19 @@ const importTEI = {
     if (importData.urlData) {
       data.ds.ui = importData.urlData.url;
       data.ds.ud = new Date().toISOString().split("T")[0];
-      if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
+      if (importData.type === "tei-dta" && data.ds.bv) {
         data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
-      } else if (importData.type === "tei-dingler" && importData.urlData) {
+      } else if (importData.type === "tei-dingler") {
         data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
+      } else if (importData.type === "tei-jeanpaul") {
+        const html = /^[IXV]+_/.test(importData.urlData.id) ? "brief" : "umfeldbrief";
+        data.ds.ul = `https://www.jeanpaul-edition.de/${html}.html?num=${importData.urlData.id}`;
       } else {
         data.ds.ul = importData.formData?.url || "";
+      }
+      if (/\.xml$/.test(data.ds.ul)) {
+        data.ds.ul = "";
+        data.ds.ud = "";
       }
     }
 
@@ -82,6 +89,11 @@ const importTEI = {
 
     // fill in citation data
     importTEI.citFill(importData.data.xmlDoc);
+
+    // values depending on the source
+    if (importData.type === "tei-jeanpaul") {
+      data.cit.textsorte.push("Brief");
+    }
 
     // detect column count (no mark as recto/verso folio and snippet has <cb/>)
     if (!/[rv]$/.test(data.cit.seiteStart) &&
@@ -633,7 +645,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //   type = string (tei | tei-dingler | tei-dta | tei-jeanpaul | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -869,7 +881,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //   type = string (tei | tei-dingler | tei-dta | tei-jeanpaul | tei-wdb)
   //   xmlDoc = document
   //   xmlStr = string
   async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -1279,6 +1291,21 @@ const importTEI = {
 
     // return default
     return 1;
+  },
+
+  // Briefe von Jean Paul: get title ID
+  //   url = string | object
+  jeanpaulGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    if (/\.xml$/.test(url.pathname)) {
+      return url.pathname.match(/\/([IVX]+_[^.])\.xml$/)?.[1] || false;
+    }
+    return url.searchParams.get("num") || false;
   },
 
   // parse the given URL (if necessary)
