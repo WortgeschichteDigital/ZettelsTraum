@@ -536,7 +536,7 @@ const xml = {
   //     (ID der betreffenden Karteikarte)
   belegId ({ data = popup.referenz.data, id = popup.referenz.id }) {
     // Autor
-    let autor = helfer.textTrim(data.au, true);
+    let autor = helfer.textTrim(data.au.replace(/ ?\(.+?\)/, ""), true);
     if (!autor) {
       autor = "n-n";
     } else {
