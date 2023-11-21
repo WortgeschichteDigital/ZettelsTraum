@@ -912,12 +912,15 @@ const fenster = {
   //   cli = object | undefined
   //     (ggf. verstecktes Fenster öffnen, in dem CLI-Befehle ausgeführt werden)
   erstellen (kartei, neuesWort = false, cli = null) {
-    // Position und Größe des Fensters ermitteln;
-    const Bildschirm = require("electron").screen.getPrimaryDisplay();
+    // Position und Größe des Fensters ermitteln
+    // (das screen Modul steht erst nach app "ready" zur Verfügung => ggf. abfangen)
+    const Bildschirm = require("electron")?.screen?.getPrimaryDisplay();
+    const workAreaW = Bildschirm?.workArea?.width || 1024;
+    const workAreaH = Bildschirm?.workArea?.height || 768;
     let x = optionen.data.fenster ? optionen.data.fenster.x : null;
     let y = optionen.data.fenster ? optionen.data.fenster.y : null;
     const width = optionen.data.fenster ? optionen.data.fenster.width : 1100;
-    const height = optionen.data.fenster ? optionen.data.fenster.height : Bildschirm.workArea.height;
+    const height = optionen.data.fenster ? optionen.data.fenster.height : workAreaH;
 
     // Position des Fensters anpassen, falls das gerade fokussierte Fenster ein Hauptfenster ist
     if (!cli) {
@@ -925,13 +928,13 @@ const fenster = {
       if (w && win[w.id].typ === "index") {
         const wBounds = w.getBounds();
         // Verschieben in der Horizontalen
-        if (wBounds.x + width + 100 <= Bildschirm.workArea.width) {
+        if (wBounds.x + width + 100 <= workAreaW) {
           x = wBounds.x + 100;
         } else if (wBounds.x - 100 >= 0) {
           x = wBounds.x - 100;
         }
         // Verschieben in der Vertikalen
-        if (wBounds.y + height + 100 <= Bildschirm.workArea.height) {
+        if (wBounds.y + height + 100 <= workAreaH) {
           y = wBounds.y + 100;
         } else if (wBounds.y - 100 >= 0) {
           y = wBounds.y - 100;
