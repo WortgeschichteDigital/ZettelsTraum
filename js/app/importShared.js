@@ -4,6 +4,16 @@ const importShared = {
   // Online-Ressourcen
   onlineResources: [
     {
+      name: "DiBiPhil-Korpus",
+      desc: "aus dem DiBiPhil-Korpus",
+      type: "tei-dibiphil",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/DiBiPhil\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/DiBiPhil/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/DiBiPhil\/main\/data\/[^/]+\.xml$/,
+    },
+    {
       name: "DTA",
       desc: "aus dem DTA",
       type: "tei-dta",
@@ -365,8 +375,21 @@ const importShared = {
 
     // TEI
     if (xml.documentElement.nodeName === "TEI") {
+      // DiBiPhil-Korpus
+      if (xml.querySelector("profileDesc textClass classCode[scheme$='DTACorpus']")?.textContent === "dibiphil") {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-dibiphil",
+          formText: "TEI-XML (DiBiPhil-Korpus)",
+          usesFileData: false,
+        };
+      }
+
       // DTA
-      if (xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent === "Deutsches Textarchiv") {
+      else if (xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent === "Deutsches Textarchiv") {
         return {
           data: {
             xmlDoc: xml,
@@ -379,7 +402,7 @@ const importShared = {
       }
 
       // Humboldt-Schriften
-      if (/^Alexander von Humboldt: Sämtliche Schriften/.test(xml.querySelector("publicationStmt publisher orgName[role='edition']")?.textContent)) {
+      else if (/^Alexander von Humboldt: Sämtliche Schriften/.test(xml.querySelector("publicationStmt publisher orgName[role='edition']")?.textContent)) {
         return {
           data: {
             xmlDoc: xml,
@@ -392,7 +415,7 @@ const importShared = {
       }
 
       // Briefe von Jean Paul
-      if (/Briefe von Jean Paul|Briefe aus Jean Pauls Umfeld/.test(xml.querySelector("editionStmt edition")?.textContent)) {
+      else if (/Briefe von Jean Paul|Briefe aus Jean Pauls Umfeld/.test(xml.querySelector("editionStmt edition")?.textContent)) {
         return {
           data: {
             xmlDoc: xml,
@@ -405,7 +428,7 @@ const importShared = {
       }
 
       // Korpus historischer Patiententexte
-      if (xml.querySelector("publicationStmt authority")?.textContent === "Copadocs") {
+      else if (xml.querySelector("publicationStmt authority")?.textContent === "Copadocs") {
         return {
           data: {
             xmlDoc: xml,
@@ -418,7 +441,7 @@ const importShared = {
       }
 
       // Polytechnisches Journal
-      if (/\bDingler\b/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
+      else if (/\bDingler\b/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
         return {
           data: {
             xmlDoc: xml,
@@ -431,7 +454,7 @@ const importShared = {
       }
 
       // WDB
-      if (/<TEI [^>]+\/{2}diglib\.hab\.de\//.test(str) ||
+      else if (/<TEI [^>]+\/{2}diglib\.hab\.de\//.test(str) ||
           /Herzog August Bibliothek/.test(xml.querySelector("publicationStmt publisher name[type='org']")?.textContent)) {
         return {
           data: {
@@ -1137,11 +1160,28 @@ const importShared = {
       }
     }
 
+    // ggf. Snippet
+    let seiteVon = 0;
+    let seiteBis = 0;
+    if (/^tei-(dibiphil)$/.test(source.type) && ds.bx) {
+      const xmlDoc = helferXml.parseXML(ds.bx);
+      if (xmlDoc) {
+        const facs = xmlDoc.querySelector("Fundstelle Faksimile")?.textContent || xmlDoc.querySelector("Fundstelle Seite")?.textContent;
+        if (facs) {
+          seiteVon = parseInt(facs, 10);
+          seiteBis = seiteVon + 1;
+        }
+      }
+    }
+
     // Ansicht des Import-Formulars wechseln
-    modules.clipboard.writeText(ds.ul);
+    document.querySelector("#beleg-import-feld").value = ds.ul;
     beleg.formularImport({
       src: "url",
+      autoFill: false,
     });
+    document.querySelector("#beleg-import-von").value = seiteVon;
+    document.querySelector("#beleg-import-bis").value = seiteBis;
     importShared.startImport();
     return true;
   },

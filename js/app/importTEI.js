@@ -19,9 +19,9 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //     type           = string (tei | tei-copadocs | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   //     urlData        = object
-  //       id           = string (tei-copadocs, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul => title ID)
+  //       id           = string (tei-copadocs, tei-dibiphil, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul => title ID)
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -132,6 +132,10 @@ const importTEI = {
     // citation
     data.ds.qu = importTEI.makeQu();
     // text class
+    if (!data.cit.textsorte.length && data.cit.textsorteSub.length) {
+      data.cit.textsorte = [ ...data.cit.textsorteSub ];
+      data.cit.textsorteSub = [];
+    }
     if (data.cit.textsorte.length) {
       const textclass = new Set();
       for (let i = 0, len = data.cit.textsorte.length; i < len; i++) {
@@ -651,7 +655,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -893,7 +897,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   //   xmlDoc = document
   //   xmlStr = string
   async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -946,7 +950,7 @@ const importTEI = {
         return false;
       }
       return normalize(text);
-    } else if (type === "tei-dta") {
+    } else if (/^tei-(dibiphil|dta)$/.test(type)) {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
@@ -1318,6 +1322,18 @@ const importTEI = {
 
     // return default
     return 1;
+  },
+
+  // DiBiPhil: get title ID
+  //   url = string | object
+  dtaGitHubGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    return url.pathname.match(/\/data\/(.+?)\.xml$/)?.[1] || false;
   },
 
   // Humboldt-Schriften: get title ID
