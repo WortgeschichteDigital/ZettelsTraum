@@ -381,6 +381,10 @@ span#beleg-bewertung {
   user-select: text;
 }
 
+#beleg .meta #beleg-ui div {
+  word-break: break-all;
+}
+
 #beleg-meta-toggle {
   vertical-align: bottom;
   display: inline-block;
