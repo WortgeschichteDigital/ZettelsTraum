@@ -30,6 +30,16 @@ const importShared = {
       xmlPathReg: /^\/telota\/jean_paul_briefe\/main\/(umfeld)?briefe\/.+?\.xml$/,
     },
     {
+      name: "Korpus historischer Patiententexte",
+      desc: "aus dem Korpus historischer Patiententexte",
+      type: "tei-copadocs",
+      originReg: /^https:\/\/deutschestextarchiv\.github\.io$/,
+      originPathReg: /^\/copadocs\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/copadocs/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/copadocs\/main\/data\/[^/]+\/[^/]+\.xml$/,
+    },
+    {
       name: "Polytechnisches Journal",
       desc: "aus dem Polytechnischen Journal",
       type: "tei-dingler",
@@ -291,7 +301,7 @@ const importShared = {
       return null;
     }
     for (const i of importShared.onlineResources) {
-      if (i.originReg.test(validURL.origin) ||
+      if (i.originReg.test(validURL.origin) && (!i.originPathReg || i.originPathReg.test(validURL.pathname)) ||
           i?.xmlReg?.test(validURL.origin) && i.xmlPathReg.test(validURL.pathname)) {
         return i;
       }
@@ -390,6 +400,19 @@ const importShared = {
           },
           type: "tei-jeanpaul",
           formText: "TEI-XML (Briefe von Jean Paul)",
+          usesFileData: false,
+        };
+      }
+
+      // Korpus historischer Patiententexte
+      if (xml.querySelector("publicationStmt authority")?.textContent === "Copadocs") {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-copadocs",
+          formText: "TEI-XML (Korpus historischer Patiententexte)",
           usesFileData: false,
         };
       }
@@ -1085,7 +1108,7 @@ const importShared = {
       return false;
     }
     for (const i of importShared.onlineResources) {
-      if (i.originReg.test(validURL.origin)) {
+      if (i.originReg.test(validURL.origin) && (!i.originPathReg || i.originPathReg.test(validURL.pathname))) {
         if (ds.bi !== i.type) {
           source = i;
         }

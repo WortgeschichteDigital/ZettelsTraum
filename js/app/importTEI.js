@@ -19,9 +19,9 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //     type           = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   //     urlData        = object
-  //       id           = string (tei-dta, tei-dingler, tei-humboldt, tei-jeanpaul => title ID)
+  //       id           = string (tei-copadocs, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul => title ID)
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -53,7 +53,9 @@ const importTEI = {
     if (importData.urlData) {
       data.ds.ui = importData.urlData.url;
       data.ds.ud = new Date().toISOString().split("T")[0];
-      if (importData.type === "tei-dta" && data.ds.bv) {
+      if (importData.type === "tei-copadocs") {
+        data.ds.ul = `https://deutschestextarchiv.github.io/copadocs/${importData.urlData.id}.html`;
+      } else if (importData.type === "tei-dta" && data.ds.bv) {
         data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
       } else if (importData.type === "tei-dingler") {
         data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
@@ -93,7 +95,9 @@ const importTEI = {
     importTEI.citFill(importData.data.xmlDoc);
 
     // values depending on the source
-    if (importData.type === "tei-jeanpaul") {
+    if (importData.type === "tei-copadocs" && data.cit.titel.some(i => /brief/i.test(i))) {
+      data.cit.textsorte.push("Brief");
+    } else if (importData.type === "tei-jeanpaul") {
       data.cit.textsorte.push("Brief");
     }
 
@@ -647,7 +651,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -889,7 +893,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   //   xmlDoc = document
   //   xmlStr = string
   async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -1240,6 +1244,21 @@ const importTEI = {
 
     // return complete document
     return `<TEI xmlns="http://www.tei-c.org/ns/1.0">${header}${text}</TEI>`;
+  },
+
+  // Korpus historischer Patiententexte: get title ID
+  //   url = string | object
+  copadocsGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    if (/\.xml$/.test(url.pathname)) {
+      return url.pathname.match(/\/data\/(.+?)\.xml$/)?.[1] || false;
+    }
+    return url.pathname.match(/\/copadocs\/(.+?)\.html$/)?.[1] || false;
   },
 
   // Polytechnisches Journal: get title ID

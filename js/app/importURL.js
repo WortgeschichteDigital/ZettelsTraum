@@ -98,9 +98,12 @@ const importURL = {
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId;
       }
-    } else if (/^tei-(dingler|humboldt)$/.test(type)) {
+    } else if (/^tei-(copadocs|dingler|humboldt)$/.test(type)) {
       let titleId;
       switch (type) {
+        case "tei-copadocs":
+          titleId = importTEI.copadocsGetTitleId(parsedURL);
+          break;
         case "tei-dingler":
           titleId = importTEI.dinglerGetTitleId(parsedURL);
           break;
