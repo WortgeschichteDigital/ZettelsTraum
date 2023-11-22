@@ -101,10 +101,10 @@ const importTEI = {
       data.cit.textsorte.push("Brief");
     }
 
-    // detect column count (no mark as recto/verso folio and snippet has <cb/>)
+    // detect column count (no mark as recto/verso folio and snippet has <cb/> with @n)
     if (!/[rv]$/.test(data.cit.seiteStart) &&
         !/[rv]$/.test(data.cit.seiteEnde) &&
-        /<cb[ /]/.test(snippet)) {
+        /<cb[^>]+?n=".+?"/.test(snippet)) {
       data.cit.spalte = true;
     }
 
