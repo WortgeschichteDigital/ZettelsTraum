@@ -1163,7 +1163,7 @@ const importShared = {
     // ggf. Snippet
     let seiteVon = 0;
     let seiteBis = 0;
-    if (/^tei-(dibiphil)$/.test(source.type) && ds.bx) {
+    if (/^tei-(dibiphil|humboldt)$/.test(source.type) && ds.bx) {
       const xmlDoc = helferXml.parseXML(ds.bx);
       if (xmlDoc) {
         const facs = xmlDoc.querySelector("Fundstelle Faksimile")?.textContent || xmlDoc.querySelector("Fundstelle Seite")?.textContent;

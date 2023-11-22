@@ -950,7 +950,7 @@ const importTEI = {
         return false;
       }
       return normalize(text);
-    } else if (/^tei-(dibiphil|dta)$/.test(type)) {
+    } else if (/^tei-(dibiphil|dta|humboldt)$/.test(type)) {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
