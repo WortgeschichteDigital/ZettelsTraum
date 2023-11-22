@@ -91,19 +91,28 @@ const importURL = {
     }
 
     // Download-URL ermitteln
-    if (formData.resource.type === "tei-dta") {
+    const type = formData.resource.type;
+    if (type === "tei-dta") {
       const titleId = importTEI.dtaGetTitleId(parsedURL);
       result.id = titleId;
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId;
       }
-    } else if (formData.resource.type === "tei-dingler") {
-      const titleId = importTEI.dinglerGetTitleId(parsedURL);
+    } else if (/^tei-(dingler|humboldt)$/.test(type)) {
+      let titleId;
+      switch (type) {
+        case "tei-dingler":
+          titleId = importTEI.dinglerGetTitleId(parsedURL);
+          break;
+        case "tei-humboldt":
+          titleId = importTEI.humboldtGetTitleId(parsedURL);
+          break;
+      }
       result.id = titleId;
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId + ".xml";
       }
-    } else if (formData.resource.type === "tei-jeanpaul") {
+    } else if (type === "tei-jeanpaul") {
       const titleId = importTEI.jeanpaulGetTitleId(parsedURL);
       result.id = titleId;
       if (!result.url) {

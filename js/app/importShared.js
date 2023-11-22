@@ -12,6 +12,15 @@ const importShared = {
       xmlPathReg: /^\/book\/download_xml\/[^/]+/,
     },
     {
+      name: "Humboldt-Schriften",
+      desc: "aus den Humboldt-Schriften",
+      type: "tei-humboldt",
+      originReg: /^https:\/\/humboldt\.unibe\.ch$/,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/avh-bern-berlin/avh-texts/main/xml/",
+      xmlPathReg: /^\/avh-bern-berlin\/avh-texts\/main\/xml\/[^/]+\.xml$/,
+    },
+    {
       name: "Briefe von Jean Paul",
       desc: "aus den Briefen von Jean Paul",
       type: "tei-jeanpaul",
@@ -355,6 +364,19 @@ const importShared = {
           },
           type: "tei-dta",
           formText: "TEI-XML (DTA)",
+          usesFileData: false,
+        };
+      }
+
+      // Humboldt-Schriften
+      if (/^Alexander von Humboldt: Sämtliche Schriften/.test(xml.querySelector("publicationStmt publisher orgName[role='edition']")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-humboldt",
+          formText: "TEI-XML (Humboldt-Schriften)",
           usesFileData: false,
         };
       }
