@@ -790,8 +790,14 @@ const importTEI = {
     // remove <br> at the end of the text
     str = str.replace(/<br>$/, "");
 
-    // remove placeholders for <cb> and <pb> at the end and the beginning of the text
-    str = str.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
+    // remove placeholders for <cb> and <pb> at the end of the text
+    str = str.replace(/\[:.+?:\]$/, "");
+
+    // remove placeholders for <cb> and <pb> at the beginning of the text
+    // if there is only one placeholder
+    if (str.match(/\[:.+?:\]/g)?.length === 1) {
+      str = str.replace(/^\[:.+?:\]/, "");
+    }
 
     // erase empty placeholders for <cb> and <pb> that follow immediately after another placeholder
     str = str.replace(/(\[:.+?:\])\s+\[:\?:\]/g, (...args) => args[1]);

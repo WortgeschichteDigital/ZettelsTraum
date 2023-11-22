@@ -2171,7 +2171,14 @@ const beleg = {
           pbAll.push(m[1]);
         }
       }
-      pb.push([ ...pbAll ]);
+      if (i && (!pbAll.length || !new RegExp(`^\\[:${helfer.escapeRegExp(pbAll[0])}:\\]`).test(text[i]))) {
+        pbAll.unshift(pb.at(-1).at(-1));
+      }
+      if (!pbAll.length) {
+        pb.push([ "" ]);
+      } else {
+        pb.push([ ...pbAll ]);
+      }
     }
 
     // gekürzten Text ermitteln
@@ -2211,20 +2218,8 @@ const beleg = {
     }
 
     // Seitenzahl in der Quelle anpassen
-    let seiteStart = "";
-    for (let i = kurzErhalten[0]; i >= 0; i--) {
-      if (pb[i].some(i => i)) {
-        seiteStart = pb[i][0];
-        break;
-      }
-    }
-    let seiteEnde = "";
-    for (let i = kurzErhalten.at(-1); i >= 0; i--) {
-      if (pb[i].some(i => i)) {
-        seiteEnde = pb[i].at(-1);
-        break;
-      }
-    }
+    const seiteStart = pb[ kurzErhalten[0] ][0];
+    const seiteEnde = pb[ kurzErhalten.at(-1) ].at(-1);
     if (!seiteStart) {
       return;
     }
