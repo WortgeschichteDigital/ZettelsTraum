@@ -98,9 +98,9 @@ const importURL = {
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId;
       }
-    } else if (/^tei-(copadocs|dibilit|dibiphil|dingler|humboldt|soldatenbriefe)$/.test(type)) {
+    } else if (/^tei-(copadocs|dibilit|dibiphil|dingler|humboldt|soldatenbriefe|stimmlos)$/.test(type)) {
       let titleId;
-      if (/^tei-(dibilit|dibiphil|soldatenbriefe)$/.test(type)) {
+      if (/^tei-(dibilit|dibiphil|soldatenbriefe|stimmlos)$/.test(type)) {
         titleId = importTEI.dtaGitHubGetTitleId(parsedURL);
       } else if (type === "tei-copadocs") {
         titleId = importTEI.copadocsGetTitleId(parsedURL);

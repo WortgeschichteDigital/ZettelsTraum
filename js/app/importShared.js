@@ -78,6 +78,16 @@ const importShared = {
       xmlPathReg: /^\/deutschestextarchiv\/soldatenbriefe\/main\/data\/[^/]+\.xml$/,
     },
     {
+      name: "stimm-los",
+      desc: "aus dem Korpus stimm-los",
+      type: "tei-stimmlos",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/stimm-los\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/stimm-los/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/stimm-los\/main\/data\/[^/]+\.xml$/,
+    },
+    {
       name: "WDB",
       desc: "aus der WDB",
       type: "tei-wdb",
@@ -495,6 +505,19 @@ const importShared = {
           },
           type: "tei-soldatenbriefe",
           formText: "TEI-XML (Korpus Soldatenbriefe)",
+          usesFileData: false,
+        };
+      }
+
+      // Korpus stimm-los
+      else if (/www\.stimm-los\.de/.test(xml.querySelector("respStmt resp ref")?.getAttribute("target"))) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-stimmlos",
+          formText: "TEI-XML (Korpus stimm-los)",
           usesFileData: false,
         };
       }
@@ -1209,7 +1232,7 @@ const importShared = {
     // ggf. Snippet
     let seiteVon = 0;
     let seiteBis = 0;
-    if (/^tei-(dibilit|dibiphil|humboldt)$/.test(source.type) && ds.bx) {
+    if (/^tei-(dibilit|dibiphil|humboldt|stimmlos)$/.test(source.type) && ds.bx) {
       const xmlDoc = helferXml.parseXML(ds.bx);
       if (xmlDoc) {
         const facs = xmlDoc.querySelector("Fundstelle Faksimile")?.textContent || xmlDoc.querySelector("Fundstelle Seite")?.textContent;

@@ -19,9 +19,9 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-wdb)
+  //     type           = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-stimmlos | tei-wdb)
   //     urlData        = object
-  //       id           = string (tei-copadocs, tei-dibilit, tei-dibiphil, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul, tei-soldatenbriefe => title ID)
+  //       id           = string (tei-copadocs, tei-dibilit, tei-dibiphil, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul, tei-soldatenbriefe, tei-stimmlos => title ID)
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -655,7 +655,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-stimmlos | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -950,7 +950,7 @@ const importTEI = {
         return false;
       }
       return normalize(text);
-    } else if (/^tei-(dibilit|dibiphil|dta|humboldt)$/.test(type)) {
+    } else if (/^tei-(dibilit|dibiphil|dta|humboldt|stimmlos)$/.test(type)) {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
@@ -1324,7 +1324,7 @@ const importTEI = {
     return 1;
   },
 
-  // DiBiLit, DiBiPhil, Soldatenbriefe: get title ID
+  // DiBiLit, DiBiPhil, Soldatenbriefe, stimm-los: get title ID
   //   url = string | object
   dtaGitHubGetTitleId (url) {
     // parse URL
