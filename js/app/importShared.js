@@ -4,6 +4,16 @@ const importShared = {
   // Online-Ressourcen
   onlineResources: [
     {
+      name: "DiBiLit-Korpus",
+      desc: "aus dem DiBiLit-Korpus",
+      type: "tei-dibilit",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/DiBiLit-Korpus\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/DiBiLit-Korpus/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/DiBiLit-Korpus\/main\/data\/[^/]+\/[^/]+\.xml$/,
+    },
+    {
       name: "DiBiPhil-Korpus",
       desc: "aus dem DiBiPhil-Korpus",
       type: "tei-dibiphil",
@@ -375,8 +385,21 @@ const importShared = {
 
     // TEI
     if (xml.documentElement.nodeName === "TEI") {
+      // DiBiLit-Korpus
+      if (/Texte der Digitalen Bibliothek \(Literatur-Ordner\)/.test(xml.querySelector("respStmt resp note")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-dibilit",
+          formText: "TEI-XML (DiBiLit-Korpus)",
+          usesFileData: false,
+        };
+      }
+
       // DiBiPhil-Korpus
-      if (xml.querySelector("profileDesc textClass classCode[scheme$='DTACorpus']")?.textContent === "dibiphil") {
+      else if (xml.querySelector("profileDesc textClass classCode[scheme$='DTACorpus']")?.textContent === "dibiphil") {
         return {
           data: {
             xmlDoc: xml,
@@ -1163,7 +1186,7 @@ const importShared = {
     // ggf. Snippet
     let seiteVon = 0;
     let seiteBis = 0;
-    if (/^tei-(dibiphil|humboldt)$/.test(source.type) && ds.bx) {
+    if (/^tei-(dibilit|dibiphil|humboldt)$/.test(source.type) && ds.bx) {
       const xmlDoc = helferXml.parseXML(ds.bx);
       if (xmlDoc) {
         const facs = xmlDoc.querySelector("Fundstelle Faksimile")?.textContent || xmlDoc.querySelector("Fundstelle Seite")?.textContent;
