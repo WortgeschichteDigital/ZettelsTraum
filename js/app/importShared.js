@@ -68,6 +68,16 @@ const importShared = {
       xmlPathReg: /^\/xml\/articles\/[^/]+/,
     },
     {
+      name: "Korpus Soldatenbriefe",
+      desc: "aus dem Korpus Soldatenbriefe",
+      type: "tei-soldatenbriefe",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/soldatenbriefe\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/soldatenbriefe/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/soldatenbriefe\/main\/data\/[^/]+\.xml$/,
+    },
+    {
       name: "WDB",
       desc: "aus der WDB",
       type: "tei-wdb",
@@ -472,6 +482,19 @@ const importShared = {
           },
           type: "tei-dingler",
           formText: "TEI-XML (Polytechnisches Journal)",
+          usesFileData: false,
+        };
+      }
+
+      // Korpus Soldatenbriefe
+      else if (/Soldatenbriefen/.test(xml.querySelectorAll("respStmt resp note")?.[1]?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-soldatenbriefe",
+          formText: "TEI-XML (Korpus Soldatenbriefe)",
           usesFileData: false,
         };
       }

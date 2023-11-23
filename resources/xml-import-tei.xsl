@@ -11,7 +11,7 @@
   indent="no"
   encoding="utf-8"/>
 
-<!-- $teiType = "" | copadocs | dibilit | dibiphil | dingler | dta | humboldt | jeanpaul | wdb -->
+<!-- $teiType = "" | copadocs | dibilit | dibiphil | dingler | dta | humboldt | jeanpaul | soldatenbriefe | wdb -->
 
 <xsl:template match="t:TEI/t:text">
   <xsl:apply-templates/>
