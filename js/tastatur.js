@@ -173,7 +173,7 @@ const tastatur = {
           beleg.leseToggle(true);
         }
       } else if (m === "Ctrl+Shift" && evt.code === "KeyD") {
-        beleg.toolsQuelleURL();
+        beleg.toolsQuelleURL("ul");
       }
       return;
     }

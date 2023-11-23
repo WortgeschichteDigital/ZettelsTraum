@@ -717,6 +717,8 @@
             <p>Geben Sie eine URL ein, wird das <a href="#karteikarte-aufrufdatum">Aufrufdatum</a> automatisch auf das aktuelle Tagesdatum gestellt, allerdings nur, wenn das URL-Feld zuvor leer war.</p>
 
             <p>Handelt es sich bei der URL um einen Verweis auf eine bekannte <a href="#karteikarte-importfunktion">Importquelle</a>, können Sie die URL mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt="">, das über dem Feld steht, in das Importformular laden. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
+
+            <p>Befindet sich in dem Feld keine URL, wird auf das Feld <a href="#karteikarte-metaImportURL">Import-URL</a> zurückgegriffen. Nur wenn dort auch keine URL zu finden ist, wird eine Fehlermeldung zurückgegeben</p>
           </div>
 
           <p class="add-navi-details" id="karteikarte-aufrufdatum"><b>Aufrufdatum:</b> Datum, an dem die URL aus dem <a href="#karteikarte-url">URL-Feld</a> aufgerufen wurde</p>
@@ -759,25 +761,27 @@
 
           <p class="info">Die Metadaten können nicht manuell geändert werden. Ihr Inhalt ist eher technischer Natur. Steht in einem Feld nur <code class="quelltext">–</code>, ist das Feld (noch) nicht gefüllt.</p>
 
-          <p class="add-navi-details"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaErstellt"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
 
           <p class="info">Die Datumsangabe folgt dem ISO&nbsp;8601-Standard. Das Z am Ende steht für <q>Zulu</q>. Es zeigt an, dass es sich bei der Zeitangabe, um ein Datum der <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">koordinierten Weltzeit</a> handelt. Zulu-Zeit entspricht der <a href="https://en.wikipedia.org/wiki/Greenwich_Mean_Time" lang="en"><abbr title="Greenwich Mean Time">GMT</abbr></a>.</p>
 
-          <p class="add-navi-details"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaGeaendert"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
 
-          <p class="add-navi-details"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
+          <p class="add-navi-details" id="karteikarte-metaImporttyp"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
 
           <p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Feld <a href="#karteikarte-metaImportdaten"><i>Importdaten</i></a> stehen).</p>
 
-          <p class="add-navi-details"><b>Importdatum:</b> Datum, zu dem zuletzt ein automatischer <a href="#karteikarte-importfunktion">Import</a> der Karteikartendaten vorgenommen wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaImportdatum"><b>Importdatum:</b> Datum, zu dem zuletzt ein automatischer <a href="#karteikarte-importfunktion">Import</a> der Karteikartendaten vorgenommen wurde</p>
 
-          <p class="add-navi-details"><b>Import-URL:</b> URL, von der die Daten heruntergeladen wurden</p>
+          <p class="add-navi-details" id="karteikarte-metaImportURL"><b>Import-URL:</b> URL, von der die Daten heruntergeladen wurden</p>
 
-          <p class="add-navi-details"><b>Import von Seite:</b> Seite aus den Importdaten, ab der der Inhalt importiert wurde</p>
+          <p class="info">Mit dem Icon <img src="../img/link.svg" width="20" height="20" alt=""> kann die URL für einen Reimport in das Importformular geladen werden. Sind Angaben zu den Importseiten da, werden diese ebenfalls in das Formular eingetragen.</p>
+
+          <p class="add-navi-details" id="karteikarte-metaImportVon"><b>Import von Seite:</b> Seite aus den Importdaten, ab der der Inhalt importiert wurde</p>
 
           <p class="info">Diese Angaben sind nur für Daten wichtig, die aus <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> importiert wurden. <q>Seite</q> bezieht sich dabei auf das Element <code class="quelltext">&lt;pb&gt;</code>.</p>
 
-          <p class="add-navi-details"><b>Import bis Seite:</b> Seite aus den Importdaten, bis zu deren Anfang der Inhalt importiert wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaImportBis"><b>Import bis Seite:</b> Seite aus den Importdaten, bis zu deren Anfang der Inhalt importiert wurde</p>
 
           <p class="add-navi-details" id="karteikarte-metaImportdaten"><b>Importdaten:</b> Rohdaten, aus denen heraus der Beleg ursprünglich importiert wurde</p>
 

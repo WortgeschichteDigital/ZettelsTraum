@@ -1237,6 +1237,8 @@ const beleg = {
         beleg.metadatenToggle(true);
       } else if (/beleg-meta-copy/.test(this.id)) {
         beleg.metadatenCopy(this.id);
+      } else if (this.id === "beleg-meta-load-ui") {
+        beleg.toolsQuelleURL("ui");
       } else if (this.id === "beleg-meta-header") {
         beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
@@ -1916,7 +1918,7 @@ const beleg = {
     if (link.classList.contains("icon-pfeil-kreis")) {
       beleg.toolsQuelleLaden();
     } else if (link.classList.contains("icon-link-link")) {
-      beleg.toolsQuelleURL();
+      beleg.toolsQuelleURL("ul");
     }
   },
 
@@ -2113,9 +2115,23 @@ const beleg = {
   },
 
   // Link aus dem URL-Feld in das Importformular laden
-  toolsQuelleURL () {
+  //   feld = string
+  toolsQuelleURL (feld) {
+    // Reihenfolge festlegen, in der die URL-Felder auf Inhalt geprüft werden
+    const felder = [ "ul", "ui" ];
+    if (feld === "ui") {
+      felder.splice(0, 1);
+    }
+
     // URL vorhanden?
-    if (!beleg.data.ul) {
+    let url;
+    for (const i of felder) {
+      if (beleg.data[i]) {
+        url = beleg.data[i];
+        break;
+      }
+    }
+    if (!url) {
       dialog.oeffnen({
         typ: "alert",
         text: "Keine URL gefunden.",
@@ -2124,7 +2140,7 @@ const beleg = {
     }
 
     // URL bekannt?
-    const validURL = importShared.isKnownURL(beleg.data.ul);
+    const validURL = importShared.isKnownURL(url);
     if (!validURL) {
       const text = validURL === null ? "Die URL ist nicht valide." : "Bei der URL handelt es sich nicht um eine bekannte Importquelle.";
       dialog.oeffnen({
@@ -2142,12 +2158,12 @@ const beleg = {
     });
 
     // Formular füllen
-    document.querySelector("#beleg-import-feld").value = beleg.data.ul;
+    document.querySelector("#beleg-import-feld").value = url;
+    beleg.formularImport({ src: "url", autoFill: false });
     if (beleg.data.bb && beleg.data.bv) {
       document.querySelector("#beleg-import-von").value = beleg.data.bv;
       document.querySelector("#beleg-import-bis").value = beleg.data.bb;
     }
-    beleg.formularImport({ src: "url", autoFill: false });
   },
 
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
