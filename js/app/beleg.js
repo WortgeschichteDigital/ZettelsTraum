@@ -1237,6 +1237,8 @@ const beleg = {
         beleg.metadatenToggle(true);
       } else if (/beleg-meta-copy/.test(this.id)) {
         beleg.metadatenCopy(this.id);
+      } else if (this.id === "beleg-meta-load-ui") {
+        beleg.toolsQuelleURL("ui");
       } else if (this.id === "beleg-meta-header") {
         beleg.metadatenHeaderToggle(true);
       } else if (this.id === "beleg-meta-reimport") {
@@ -1916,7 +1918,7 @@ const beleg = {
     if (link.classList.contains("icon-pfeil-kreis")) {
       beleg.toolsQuelleLaden();
     } else if (link.classList.contains("icon-link-link")) {
-      beleg.toolsQuelleURL();
+      beleg.toolsQuelleURL("ul");
     }
   },
 
@@ -1933,9 +1935,25 @@ const beleg = {
   async toolsQuelleLaden (shortcut = false) {
     // keine Quelle gefunden
     if (!beleg.data.bx || !beleg.data.bi) {
+      let text = "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.";
+      if (beleg.data.qu) {
+        const ori = beleg.data.qu;
+        const neu = importShared.changeTitleStyle(ori);
+        if (ori !== neu) {
+          beleg.toolsQuelleLadenChanges({
+            Quelle: {
+              key: "qu",
+              ori,
+              neu,
+            },
+          }, shortcut);
+          return;
+        }
+        text = "Die vorhandene Quellenangabe kann (oder muss) nicht automatisch angepasst werden.\n" + text;
+      }
       dialog.oeffnen({
         typ: "alert",
-        text: "Es wurde keine Quelle gefunden, aus der die Titeldaten automatisch neu geladen werden könnten.",
+        text,
         callback: () => document.getElementById("beleg-qu").focus(),
       });
       return;
@@ -1963,6 +1981,7 @@ const beleg = {
       // PLAIN-DEREKO
       const reg = new RegExp(`^(${importDereko.idForm})(.+)`);
       titel = beleg.data.bx.match(reg)[2] + ".";
+      titel = importShared.changeTitleStyle(titel);
     } else if (/^tei/.test(beleg.data.bi) && xmlDoc) {
       // TEI
       importTEI.data.cit = importTEI.citObject();
@@ -2007,6 +2026,7 @@ const beleg = {
     } else if (beleg.data.bi === "xml-wgd" && xmlDoc) {
       // XML-WGD
       titel = xmlDoc.querySelector("Fundstelle unstrukturiert")?.firstChild?.textContent || "";
+      titel = importShared.changeTitleStyle(titel);
     }
 
     // keine Titeldaten gefunden
@@ -2024,7 +2044,13 @@ const beleg = {
       ori: beleg.data.qu,
       neu: titel,
     };
+    beleg.toolsQuelleLadenChanges(aenderungen, shortcut);
+  },
 
+  // Inhalt des Quelle-Felds neu laden (Änderungen ausführen)
+  //   aenderungen = object
+  //   shortcut = boolean
+  async toolsQuelleLadenChanges (aenderungen, shortcut) {
     // Änderungen ermitteln
     const txt = [];
     for (const [ k, v ] of Object.entries(aenderungen)) {
@@ -2089,9 +2115,23 @@ const beleg = {
   },
 
   // Link aus dem URL-Feld in das Importformular laden
-  toolsQuelleURL () {
+  //   feld = string
+  toolsQuelleURL (feld) {
+    // Reihenfolge festlegen, in der die URL-Felder auf Inhalt geprüft werden
+    const felder = [ "ul", "ui" ];
+    if (feld === "ui") {
+      felder.splice(0, 1);
+    }
+
     // URL vorhanden?
-    if (!beleg.data.ul) {
+    let url;
+    for (const i of felder) {
+      if (beleg.data[i]) {
+        url = beleg.data[i];
+        break;
+      }
+    }
+    if (!url) {
       dialog.oeffnen({
         typ: "alert",
         text: "Keine URL gefunden.",
@@ -2100,7 +2140,7 @@ const beleg = {
     }
 
     // URL bekannt?
-    const validURL = importShared.isKnownURL(beleg.data.ul);
+    const validURL = importShared.isKnownURL(url);
     if (!validURL) {
       const text = validURL === null ? "Die URL ist nicht valide." : "Bei der URL handelt es sich nicht um eine bekannte Importquelle.";
       dialog.oeffnen({
@@ -2118,12 +2158,12 @@ const beleg = {
     });
 
     // Formular füllen
-    document.querySelector("#beleg-import-feld").value = beleg.data.ul;
+    document.querySelector("#beleg-import-feld").value = url;
+    beleg.formularImport({ src: "url", autoFill: false });
     if (beleg.data.bb && beleg.data.bv) {
       document.querySelector("#beleg-import-von").value = beleg.data.bv;
       document.querySelector("#beleg-import-bis").value = beleg.data.bb;
     }
-    beleg.formularImport({ src: "url", autoFill: false });
   },
 
   // Belegtext um alle Absätze kürzen, die kein Stichwort enthalten
@@ -2147,7 +2187,14 @@ const beleg = {
           pbAll.push(m[1]);
         }
       }
-      pb.push([ ...pbAll ]);
+      if (i && (!pbAll.length || !new RegExp(`^\\[:${helfer.escapeRegExp(pbAll[0])}:\\]`).test(text[i]))) {
+        pbAll.unshift(pb.at(-1).at(-1));
+      }
+      if (!pbAll.length) {
+        pb.push([ "" ]);
+      } else {
+        pb.push([ ...pbAll ]);
+      }
     }
 
     // gekürzten Text ermitteln
@@ -2187,20 +2234,8 @@ const beleg = {
     }
 
     // Seitenzahl in der Quelle anpassen
-    let seiteStart = "";
-    for (let i = kurzErhalten[0]; i >= 0; i--) {
-      if (pb[i].some(i => i)) {
-        seiteStart = pb[i][0];
-        break;
-      }
-    }
-    let seiteEnde = "";
-    for (let i = kurzErhalten.at(-1); i >= 0; i--) {
-      if (pb[i].some(i => i)) {
-        seiteEnde = pb[i].at(-1);
-        break;
-      }
-    }
+    const seiteStart = pb[ kurzErhalten[0] ][0];
+    const seiteEnde = pb[ kurzErhalten.at(-1) ].at(-1);
     if (!seiteStart) {
       return;
     }

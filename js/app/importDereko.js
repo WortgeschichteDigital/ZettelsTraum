@@ -114,6 +114,9 @@ const importDereko = {
         ds.qu += ".";
       }
 
+      // ggf. an Stylesheet anpassen
+      ds.qu = importShared.changeTitleStyle(ds.qu);
+
       // Beleg-Daten zurücksetzen
       id = "";
       quelle = "";

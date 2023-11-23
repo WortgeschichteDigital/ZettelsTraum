@@ -4,6 +4,26 @@ const importShared = {
   // Online-Ressourcen
   onlineResources: [
     {
+      name: "DiBiLit-Korpus",
+      desc: "aus dem DiBiLit-Korpus",
+      type: "tei-dibilit",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/DiBiLit-Korpus\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/DiBiLit-Korpus/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/DiBiLit-Korpus\/main\/data\/[^/]+\/[^/]+\.xml$/,
+    },
+    {
+      name: "DiBiPhil-Korpus",
+      desc: "aus dem DiBiPhil-Korpus",
+      type: "tei-dibiphil",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/DiBiPhil\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/DiBiPhil/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/DiBiPhil\/main\/data\/[^/]+\.xml$/,
+    },
+    {
       name: "DTA",
       desc: "aus dem DTA",
       type: "tei-dta",
@@ -12,12 +32,60 @@ const importShared = {
       xmlPathReg: /^\/book\/download_xml\/[^/]+/,
     },
     {
+      name: "Humboldt-Schriften",
+      desc: "aus den Humboldt-Schriften",
+      type: "tei-humboldt",
+      originReg: /^https:\/\/humboldt\.unibe\.ch$/,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/avh-bern-berlin/avh-texts/main/xml/",
+      xmlPathReg: /^\/avh-bern-berlin\/avh-texts\/main\/xml\/[^/]+\.xml$/,
+    },
+    {
+      name: "Briefe von Jean Paul",
+      desc: "aus den Briefen von Jean Paul",
+      type: "tei-jeanpaul",
+      originReg: /^https:\/\/www\.jeanpaul-edition\.de$/,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/telota/jean_paul_briefe/main/",
+      xmlPathReg: /^\/telota\/jean_paul_briefe\/main\/(umfeld)?briefe\/.+?\.xml$/,
+    },
+    {
+      name: "Korpus historischer Patiententexte",
+      desc: "aus dem Korpus historischer Patiententexte",
+      type: "tei-copadocs",
+      originReg: /^https:\/\/deutschestextarchiv\.github\.io$/,
+      originPathReg: /^\/copadocs\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/copadocs/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/copadocs\/main\/data\/[^/]+\/[^/]+\.xml$/,
+    },
+    {
       name: "Polytechnisches Journal",
       desc: "aus dem Polytechnischen Journal",
       type: "tei-dingler",
       originReg: /^https:\/\/dingler\.bbaw\.de$/,
       xmlPath: "https://dingler.bbaw.de/xml/articles/",
       xmlPathReg: /^\/xml\/articles\/[^/]+/,
+    },
+    {
+      name: "Korpus Soldatenbriefe",
+      desc: "aus dem Korpus Soldatenbriefe",
+      type: "tei-soldatenbriefe",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/soldatenbriefe\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/soldatenbriefe/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/soldatenbriefe\/main\/data\/[^/]+\.xml$/,
+    },
+    {
+      name: "stimm-los",
+      desc: "aus dem Korpus stimm-los",
+      type: "tei-stimmlos",
+      originReg: /^https:\/\/github\.com$/,
+      originPathReg: /^\/deutschestextarchiv\/stimm-los\//,
+      xmlReg: /^https:\/\/raw\.githubusercontent\.com$/,
+      xmlPath: "https://raw.githubusercontent.com/deutschestextarchiv/stimm-los/main/data/",
+      xmlPathReg: /^\/deutschestextarchiv\/stimm-los\/main\/data\/[^/]+\.xml$/,
     },
     {
       name: "WDB",
@@ -273,7 +341,8 @@ const importShared = {
       return null;
     }
     for (const i of importShared.onlineResources) {
-      if (i.originReg.test(validURL.origin)) {
+      if (i.originReg.test(validURL.origin) && (!i.originPathReg || i.originPathReg.test(validURL.pathname)) ||
+          i?.xmlReg?.test(validURL.origin) && i.xmlPathReg.test(validURL.pathname)) {
         return i;
       }
     }
@@ -336,8 +405,34 @@ const importShared = {
 
     // TEI
     if (xml.documentElement.nodeName === "TEI") {
+      // DiBiLit-Korpus
+      if (/Texte der Digitalen Bibliothek \(Literatur-Ordner\)/.test(xml.querySelector("respStmt resp note")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-dibilit",
+          formText: "TEI-XML (DiBiLit-Korpus)",
+          usesFileData: false,
+        };
+      }
+
+      // DiBiPhil-Korpus
+      else if (xml.querySelector("profileDesc textClass classCode[scheme$='DTACorpus']")?.textContent === "dibiphil") {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-dibiphil",
+          formText: "TEI-XML (DiBiPhil-Korpus)",
+          usesFileData: false,
+        };
+      }
+
       // DTA
-      if (xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent === "Deutsches Textarchiv") {
+      else if (xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent === "Deutsches Textarchiv") {
         return {
           data: {
             xmlDoc: xml,
@@ -349,8 +444,47 @@ const importShared = {
         };
       }
 
+      // Humboldt-Schriften
+      else if (/^Alexander von Humboldt: Sämtliche Schriften/.test(xml.querySelector("publicationStmt publisher orgName[role='edition']")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-humboldt",
+          formText: "TEI-XML (Humboldt-Schriften)",
+          usesFileData: false,
+        };
+      }
+
+      // Briefe von Jean Paul
+      else if (/Briefe von Jean Paul|Briefe aus Jean Pauls Umfeld/.test(xml.querySelector("editionStmt edition")?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-jeanpaul",
+          formText: "TEI-XML (Briefe von Jean Paul)",
+          usesFileData: false,
+        };
+      }
+
+      // Korpus historischer Patiententexte
+      else if (xml.querySelector("publicationStmt authority")?.textContent === "Copadocs") {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-copadocs",
+          formText: "TEI-XML (Korpus historischer Patiententexte)",
+          usesFileData: false,
+        };
+      }
+
       // Polytechnisches Journal
-      if (/\bDingler\b/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
+      else if (/\bDingler\b/.test(xml.querySelector("publicationStmt publisher orgName[role='project']")?.textContent)) {
         return {
           data: {
             xmlDoc: xml,
@@ -362,8 +496,34 @@ const importShared = {
         };
       }
 
+      // Korpus Soldatenbriefe
+      else if (/Soldatenbriefen/.test(xml.querySelectorAll("respStmt resp note")?.[1]?.textContent)) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-soldatenbriefe",
+          formText: "TEI-XML (Korpus Soldatenbriefe)",
+          usesFileData: false,
+        };
+      }
+
+      // Korpus stimm-los
+      else if (/www\.stimm-los\.de/.test(xml.querySelector("respStmt resp ref")?.getAttribute("target"))) {
+        return {
+          data: {
+            xmlDoc: xml,
+            xmlStr: str,
+          },
+          type: "tei-stimmlos",
+          formText: "TEI-XML (Korpus stimm-los)",
+          usesFileData: false,
+        };
+      }
+
       // WDB
-      if (/<TEI [^>]+\/{2}diglib\.hab\.de\//.test(str) ||
+      else if (/<TEI [^>]+\/{2}diglib\.hab\.de\//.test(str) ||
           /Herzog August Bibliothek/.test(xml.querySelector("publicationStmt publisher name[type='org']")?.textContent)) {
         return {
           data: {
@@ -1040,7 +1200,7 @@ const importShared = {
       return false;
     }
     for (const i of importShared.onlineResources) {
-      if (i.originReg.test(validURL.origin)) {
+      if (i.originReg.test(validURL.origin) && (!i.originPathReg || i.originPathReg.test(validURL.pathname))) {
         if (ds.bi !== i.type) {
           source = i;
         }
@@ -1069,11 +1229,28 @@ const importShared = {
       }
     }
 
+    // ggf. Snippet
+    let seiteVon = 0;
+    let seiteBis = 0;
+    if (/^tei-(dibilit|dibiphil|humboldt|stimmlos)$/.test(source.type) && ds.bx) {
+      const xmlDoc = helferXml.parseXML(ds.bx);
+      if (xmlDoc) {
+        const facs = xmlDoc.querySelector("Fundstelle Faksimile")?.textContent || xmlDoc.querySelector("Fundstelle Seite")?.textContent;
+        if (facs) {
+          seiteVon = parseInt(facs, 10);
+          seiteBis = seiteVon + 1;
+        }
+      }
+    }
+
     // Ansicht des Import-Formulars wechseln
-    modules.clipboard.writeText(ds.ul);
+    document.querySelector("#beleg-import-feld").value = ds.ul;
     beleg.formularImport({
       src: "url",
+      autoFill: false,
     });
+    document.querySelector("#beleg-import-von").value = seiteVon;
+    document.querySelector("#beleg-import-bis").value = seiteBis;
     importShared.startImport();
     return true;
   },
@@ -1188,15 +1365,17 @@ const importShared = {
 
     // Autor
     if (td.autor.length) {
-      if (td.autor.length > 3) {
+      const imTitel = istImTitel(td.autor);
+      if (!imTitel && td.autor.length > 3) {
         titel = `${td.autor[0]}/${td.autor[1]} u.\u00A0a.: `;
-      } else {
+      } else if (!imTitel) {
         titel = `${td.autor.join("/")}: `;
       }
     } else if (td.hrsg.length) {
-      if (td.hrsg.length > 3) {
+      const imTitel = istImTitel(td.hrsg);
+      if (!imTitel && td.hrsg.length > 3) {
         titel = `${td.hrsg[0]}/${td.hrsg[1]} u.\u00A0a.: `;
-      } else {
+      } else if (!imTitel) {
         titel = `${td.hrsg.join("/")} (Hrsg.): `;
       }
     } else {
@@ -1305,13 +1484,15 @@ const importShared = {
     const seite_spalte = td.spalte ? "Sp.\u00A0" : "S.\u00A0";
     const seiten_reg = new RegExp(`\\b${td.seiten.replace(/^Sp?\. /, "")}\\b`);
     if (td.seiten && !seiten_reg.test(td.seite)) {
+      punktWeg();
       titel += ", " + (/Sp?\. /.test(td.seiten) ? "" : seite_spalte) + td.seiten;
     } else {
       td.seiten = "";
     }
     if (td.seite) {
+      punktWeg();
       if (td.seiten) {
-        titel += `, hier ${td.seite}`;
+        titel += ", hier " + seite_spalte + td.seite;
       } else {
         titel += ", " + seite_spalte + td.seite;
       }
@@ -1326,12 +1507,33 @@ const importShared = {
     // Titel typographisch verbessern und zurückgeben
     titel = helfer.textTrim(titel, true);
     titel = helfer.typographie(titel);
+    titel = importShared.changeTitleStyle(titel);
     return titel;
+
+    // feststellen, ob eine Person bereits im Titel genannt wird
+    //   pers = array
+    function istImTitel (pers) {
+      let imTitel = false;
+      for (const p of pers) {
+        if (td.titel.some(i => i.includes(p))) {
+          imTitel = true;
+          break;
+        }
+      }
+      return imTitel;
+    }
 
     // ggf. Punkt ergänzen
     function punkt () {
       if (!/[,;.:!?]$/.test(titel)) {
         titel += ".";
+      }
+    }
+
+    // ggf. Punkt entfernen
+    function punktWeg () {
+      if (/\.$/.test(titel)) {
+        titel = titel.substring(0, titel.length - 1);
       }
     }
 
@@ -1363,5 +1565,94 @@ const importShared = {
       }
       return pers;
     }
+  },
+
+  // Format des Titesl ggf. anpassen
+  //   titel = string
+  changeTitleStyle (titel) {
+    // Titel nicht anpassen
+    if (!optionen.data.einstellungen["literatur-wgd-style"]) {
+      return titel;
+    }
+
+    // Stylesheet ggf. anpassen
+    const monate = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];
+
+    const zeitungen = [
+      // Berliner Zeitung
+      /^(?<title>.*?)(?<name>Berliner Zeitung), (?<date>[0-9]{1,2}\.\s[0-9]{1,2}\.\s[0-9]{4}).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Die Gartenlaube
+      /(?<name>Die Gartenlaube).+?Jg\.\s(?<no>[0-9]+).+?\((?<year>[0-9]{4})\).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Die Grenzboten
+      /(?:Jg\.\s(?<no>[0-9]+)), (?<year>[0-9]{4}), (?<quarter>[a-zA-Z ]+?)\. In: (?<name>Die Grenzboten).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Neue Rheinische Zeitung
+      /(?<name>Neue Rheinische Zeitung).+?(?<no>Nr\.\s[0-9]+).+?\s(?<day>[0-9]{1,2})\.\s(?<month>[a-zA-Zä]+)\s(?<year>[0-9]{4}).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+
+      // Polytechnisches Journal
+      /(?<name>Dingler['’]?s [pP]olytechnisches Journal).+?(?:Bd\.\s(?<no>[0-9]+)).+?\((?<year>[0-9]{4})\).*?(?:,\s(?<page>Sp?\.\s.+))?\.$/,
+    ];
+
+    for (const z of zeitungen) {
+      let artikel = / In: /.test(titel) ? titel.split(" In: ")[0] : "";
+      const m = titel.match(z);
+      const g = m?.groups;
+      let updated = false;
+      if (g?.name === "Berliner Zeitung") {
+        // hier geht es nur darum, das u.U. fehlende "In:" zu ergänzen
+        titel = `${g.name}, ${g.date}`;
+        if (g.title && !/ In: /.test(g.title)) {
+          artikel = g.title.trim();
+        }
+        updated = true;
+      } else if (g?.name === "Die Gartenlaube") {
+        titel = `${g.name} ${g.no} (${g.year})`;
+        updated = true;
+      } else if (g?.name === "Die Grenzboten") {
+        let quarter = g.quarter;
+        switch (quarter) {
+          case "Erstes Vierteljahr":
+            quarter = "1";
+            break;
+          case "Zweites Vierteljahr":
+            quarter = "2";
+            break;
+          case "Drittes Vierteljahr":
+            quarter = "3";
+            break;
+          case "Viertes Vierteljahr":
+            quarter = "4";
+            break;
+        }
+        titel = `${g.name} ${g.no}/${quarter} (${g.year})`;
+        artikel = "";
+        updated = true;
+      } else if (g?.name === "Neue Rheinische Zeitung") {
+        const monat = monate.indexOf(g.month) >= 0 ? monate.indexOf(g.month) + 1 : g.month;
+        titel = `${g.name}, ${g.day}.\u00A0${monat}. ${g.year}, ${g.no}`;
+        updated = true;
+      } else if (/Dingler['’]?s [pP]olytechnisches Journal/.test(g?.name)) {
+        titel = `Polytechnisches Journal ${g.no} (${g.year})`;
+        if (g.page) {
+          g.page = g.page.replace("Sp.", "S.");
+        }
+        updated = true;
+      }
+      if (updated) {
+        if (g.page) {
+          titel += `, ${g.page}`;
+        }
+        titel += ".";
+        if (artikel) {
+          titel = artikel + " In: " + titel;
+        }
+        return titel;
+      }
+    }
+
+    // Titel nicht aufbereitet
+    return titel;
   },
 };

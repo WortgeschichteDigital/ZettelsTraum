@@ -2538,7 +2538,7 @@ const redLit = {
     if (jahr) {
       data.ds.da = jahr[jahr.length - 1];
     }
-    data.ds.qu = data.td.ti;
+    data.ds.qu = importShared.changeTitleStyle(data.td.ti);
     if (data.td.ul) {
       data.ds.ul = data.td.ul;
       data.ds.ud = data.td.ad || new Date().toISOString().split("T")[0];

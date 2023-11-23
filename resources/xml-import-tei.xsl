@@ -11,7 +11,7 @@
   indent="no"
   encoding="utf-8"/>
 
-<!-- $teiType = "" | dingler | dta | wdb -->
+<!-- $teiType = "" | copadocs | dibilit | dibiphil | dingler | dta | humboldt | jeanpaul | soldatenbriefe | stimmlos | wdb -->
 
 <xsl:template match="t:TEI/t:text">
   <xsl:apply-templates/>
@@ -19,11 +19,11 @@
 
 
 <!-- ignore content -->
-<xsl:template match="t:figDesc|t:fw|t:index|t:teiHeader"/>
+<xsl:template match="t:figDesc|t:fw|t:index|t:metamark|t:teiHeader"/>
 
 
 <!-- typical block content -->
-<xsl:template match="t:byline|t:castList|t:castGroup|t:cit|t:closer|t:dateline|t:div|t:figure|t:floatingText|t:item|t:lg|t:listBibl|t:opener|t:postscript|t:row|t:salute|t:signed|t:sp|t:table|t:titlePage|t:trailer">
+<xsl:template match="t:byline|t:castList|t:castGroup|t:cit|t:closer|t:dateline|t:figure|t:floatingText|t:item|t:lg|t:listBibl|t:opener|t:postscript|t:row|t:salute|t:signed|t:sp|t:table|t:titlePage|t:trailer">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -93,6 +93,14 @@
   </s>
 </xsl:template>
 
+<xsl:template match="t:div">
+  <xsl:if test="not(@type) or @type != 'comment'">
+    <div>
+      <xsl:apply-templates/>
+    </div>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="t:ex">
   <xsl:text>[</xsl:text>
     <xsl:apply-templates/>
@@ -153,7 +161,7 @@
 
 <xsl:template match="t:note">
   <xsl:variable name="notEmpty" select="./node()"/>
-  <xsl:if test="not(@type = 'editorial') and not(@resp) and $notEmpty">
+  <xsl:if test="not(@type = 'editorial') and not(@resp) and $notEmpty and $teiType != 'jeanpaul'">
     <xsl:text>[Anmerkung</xsl:text>
     <xsl:if test="@n">
       <xsl:text> </xsl:text>

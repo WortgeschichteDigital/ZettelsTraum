@@ -34,6 +34,7 @@ const importWGd = {
     // Datensatz: Quelle
     const nQu = xmlDoc.querySelector("Fundstelle unstrukturiert");
     ds.qu = nQu?.firstChild?.textContent?.normalize("NFC") || "";
+    ds.qu = importShared.changeTitleStyle(ds.qu);
 
     // Datensatz: Autor
     let autoren = ds.qu.split(": ")[0];

@@ -614,6 +614,9 @@ const importDWDS = {
         ds.au = auQu[0].replace(/\su\.\s/g, "/");
       }
 
+      // ggf. an Stylesheet anpassen
+      ds.qu = importShared.changeTitleStyle(ds.qu);
+
     // TEXTSORTE
     } else if (typ === "ts") {
       if (!/::/.test(txt)) {

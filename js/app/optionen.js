@@ -169,6 +169,8 @@ const optionen = {
       "literatur-verlag": false,
       // Serie importieren
       "literatur-serie": false,
+      // Titel automatisch an das WGd-Stylesheet anpassen
+      "literatur-wgd-style": true,
       // MENÜ
       // Menü-Leiste ausblenden (einblenden, wenn Alt gedruckt)
       autoHideMenuBar: false,

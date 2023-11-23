@@ -139,12 +139,12 @@ const lemmata = {
         if (woerter.length) {
           // Farben ermitteln, die noch vergeben werden können
           // 0 = Gelb
-          // 4 = Rot
           // 5 = Rosa
           // 6 = Lila
           // 11 = Türkis
+          // 12 = Dunkeltürkisgrün
           // 14 = Hellgrün
-          const farben = [ 0, 14, 4, 11, 6, 5 ];
+          const farben = [ 0, 14, 6, 11, 12, 5 ];
           while (farben.length < 17) {
             const fa = helfer.zufall(1, 17);
             if (fa !== 9 && !farben.includes(fa)) {

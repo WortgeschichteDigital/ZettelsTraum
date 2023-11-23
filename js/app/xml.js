@@ -20,6 +20,7 @@ const xml = {
     "Neue Rheinische Zeitung",
     "Neue Zürcher Zeitung",
     "neues deutschland",
+    "Polytechnisches Journal",
     "Siebenbürgisch-Deutsches Wochenblatt",
     "(Der )?Spiegel",
     "(Der )?Standard",

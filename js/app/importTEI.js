@@ -19,9 +19,9 @@ const importTEI = {
   //       von          = number (to page)
   //     formText       = string
   //     formView       = string
-  //     type           = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //     type           = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-stimmlos | tei-wdb)
   //     urlData        = object
-  //       id           = string (tei-dta and tei-dingler => title ID)
+  //       id           = string (tei-copadocs, tei-dibilit, tei-dibiphil, tei-dingler, tei-dta, tei-humboldt, tei-jeanpaul, tei-soldatenbriefe, tei-stimmlos => title ID)
   //       url          = string (URL to XML file)
   //     usesFileData   = boolean
   async startImport (importData) {
@@ -53,12 +53,23 @@ const importTEI = {
     if (importData.urlData) {
       data.ds.ui = importData.urlData.url;
       data.ds.ud = new Date().toISOString().split("T")[0];
-      if (importData.type === "tei-dta" && importData.urlData && data.ds.bv) {
+      if (importData.type === "tei-copadocs") {
+        data.ds.ul = `https://deutschestextarchiv.github.io/copadocs/${importData.urlData.id}.html`;
+      } else if (importData.type === "tei-dta" && data.ds.bv) {
         data.ds.ul = `https://www.deutschestextarchiv.de/${importData.urlData.id}/${data.ds.bv}`;
-      } else if (importData.type === "tei-dingler" && importData.urlData) {
+      } else if (importData.type === "tei-dingler") {
         data.ds.ul = `https://dingler.bbaw.de/articles/${importData.urlData.id}.html`;
+      } else if (importData.type === "tei-humboldt") {
+        data.ds.ul = "https://humboldt.unibe.ch/text/" + importData.urlData.id;
+      } else if (importData.type === "tei-jeanpaul") {
+        const html = /^[IXV]+_/.test(importData.urlData.id) ? "brief" : "umfeldbrief";
+        data.ds.ul = `https://www.jeanpaul-edition.de/${html}.html?num=${importData.urlData.id}`;
       } else {
         data.ds.ul = importData.formData?.url || "";
+      }
+      if (/\.xml$/.test(data.ds.ul)) {
+        data.ds.ul = "";
+        data.ds.ud = "";
       }
     }
 
@@ -83,10 +94,17 @@ const importTEI = {
     // fill in citation data
     importTEI.citFill(importData.data.xmlDoc);
 
-    // detect column count (no mark as recto/verso folio and snippet has <cb/>)
+    // values depending on the source
+    if (importData.type === "tei-copadocs" && data.cit.titel.some(i => /brief/i.test(i))) {
+      data.cit.textsorte.push("Brief");
+    } else if (importData.type === "tei-jeanpaul") {
+      data.cit.textsorte.push("Brief");
+    }
+
+    // detect column count (no mark as recto/verso folio and snippet has <cb/> with @n)
     if (!/[rv]$/.test(data.cit.seiteStart) &&
         !/[rv]$/.test(data.cit.seiteEnde) &&
-        /<cb[ /]/.test(snippet)) {
+        /<cb[^>]+?n=".+?"/.test(snippet)) {
       data.cit.spalte = true;
     }
 
@@ -114,6 +132,10 @@ const importTEI = {
     // citation
     data.ds.qu = importTEI.makeQu();
     // text class
+    if (!data.cit.textsorte.length && data.cit.textsorteSub.length) {
+      data.cit.textsorte = [ ...data.cit.textsorteSub ];
+      data.cit.textsorteSub = [];
+    }
     if (data.cit.textsorte.length) {
       const textclass = new Set();
       for (let i = 0, len = data.cit.textsorte.length; i < len; i++) {
@@ -192,10 +214,13 @@ const importTEI = {
     // persons
     const persons = {
       autor: evaluator("//t:biblFull/t:titleStmt/t:author/t:persName"),
+      autor2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:persName"),
+      autor3: evaluator("//t:profileDesc/t:creation/t:persName[@type='sender']"),
       hrsg: evaluator("//t:biblFull/t:titleStmt/t:editor/t:persName"),
     };
     for (const [ k, v ] of Object.entries(persons)) {
       let item = v.iterateNext();
+      const key = k.replace(/[0-9]$/, "");
       while (item) {
         const forename = item.querySelector("forename");
         const surname = item.querySelector("surname");
@@ -207,9 +232,11 @@ const importTEI = {
           if (forename) {
             name.push(trimmer(forename.textContent));
           }
-          data[k].push(name.join(", "));
+          data[key].push(name.join(", "));
         } else if (addName) {
-          data[k].push(trimmer(addName.textContent));
+          data[key].push(trimmer(addName.textContent));
+        } else {
+          data[key].push(trimmer(item.textContent));
         }
         item = v.iterateNext();
       }
@@ -218,6 +245,7 @@ const importTEI = {
     // further pub infos
     const pub = {
       titel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='main']"),
+      titel2: evaluator("//t:sourceDesc/t:bibl/t:title"),
       untertitel: evaluator("//t:biblFull/t:titleStmt/t:title[@type='sub']"),
       band: evaluator("//t:biblFull/t:titleStmt/t:title[@type='volume']"),
       auflage: evaluator("//t:biblFull/t:editionStmt/t:edition"),
@@ -225,14 +253,41 @@ const importTEI = {
       verlag: evaluator("//t:biblFull/t:publicationStmt/t:publisher/t:name"),
       datumDruck: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='publication']"),
       datumEntstehung: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='creation']"),
+      datumEntstehung2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:date"),
+      datumEntstehung3: evaluator("//t:profileDesc/t:creation/t:date[@type='sent']"),
+      datumEntstehung4: evaluator("//t:sourceDesc/t:biblFull/t:publicationStmt/t:date"),
     };
     for (const [ k, v ] of Object.entries(pub)) {
       let item = v.iterateNext();
+      const key = k.replace(/[0-9]$/, "");
       while (item) {
-        if (Array.isArray(data[k])) {
-          data[k].push(trimmer(item.textContent));
+        if (/datumEntstehung[0-9]/.test(k)) {
+          // @when, @notBefore, @notAfter
+          const when = item.getAttribute("when");
+          if (!data.datumEntstehung && when) {
+            data.datumEntstehung = when;
+          } else if (!data.datumEntstehung) {
+            const notBefore = item.getAttribute("notAfter");
+            const notAfter = item.getAttribute("notAfter");
+            let date = notBefore || notAfter || "";
+            if (notBefore && notAfter) {
+              date = `zwischen ${notBefore} und ${notAfter}`;
+            } else if (notBefore) {
+              date = "nicht vor " + notBefore;
+            } else if (notAfter) {
+              date = "nicht nach " + notAfter;
+            }
+            if (!date) {
+              date = trimmer(item.textContent);
+            }
+            data.datumEntstehung = date;
+          }
+        } else if (Array.isArray(data[key])) {
+          if (/[0-9]$/.test(k) && !data[key].length) {
+            data[key].push(trimmer(item.textContent));
+          }
         } else {
-          data[k] = trimmer(item.textContent);
+          data[key] = trimmer(item.textContent);
         }
         item = v.iterateNext();
       }
@@ -249,6 +304,7 @@ const importTEI = {
       bdJg: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='volume']"),
       heft: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='issue']"),
       seiten: evaluator("//t:biblFull/t:seriesStmt/t:biblScope[@unit='pages']"),
+      seiten2: evaluator("//t:sourceDesc/t:bibl/t:biblScope[@unit='page']"),
     };
     const seriesTitel = [];
     let item = series.titel.iterateNext();
@@ -272,12 +328,28 @@ const importTEI = {
         data.seiten = trimmer(item.textContent);
       }
     } else {
-      // series
+      // series/edition
       data.serie = seriesTitel.join(". ");
       item = series.bdJg.iterateNext();
       if (item) {
         data.serieBd = trimmer(item.textContent);
       }
+      item = series.seiten2.iterateNext();
+      const seiten = [];
+      while (item) {
+        const num = item.querySelectorAll("num");
+        if (num.length) {
+          const s = [];
+          for (const i of num) {
+            s.push(trimmer(i.textContent));
+          }
+          seiten.push(s.join("–"));
+        } else {
+          seiten.push(trimmer(item.textContent));
+        }
+        item = series.seiten2.iterateNext();
+      }
+      data.seiten = seiten.join(" u. ");
     }
 
     // fallback for documents without full bibliographical information
@@ -351,9 +423,13 @@ const importTEI = {
     td.jahrgang = data.zeitschriftJg;
     td.jahr = data.datumDruck;
     if (!data.datumDruck) {
-      td.jahr = data.datumEntstehung;
+      const d = td.titel.join(", ").match(/\((?<jahr1>[0-9]{4})\)|(?<jahr2>[0-9]{4})\./);
+      data.datumDruck = d?.groups?.jahr1 || d?.groups?.jahr2 || "";
+    }
+    if (!data.datumDruck) {
+      td.jahr = data.datumEntstehung.match(/[0-9]{4}/)?.[0] || "";
     } else {
-      td.jahrZuerst = data.datumEntstehung;
+      td.jahrZuerst = data.datumEntstehung.match(/[0-9]{4}/)?.[0] || "";
     }
     if (data.zeitschriftH && !data.zeitschriftJg) {
       td.jahrgang = data.zeitschriftH;
@@ -375,6 +451,7 @@ const importTEI = {
     // make and return title
     let title = importShared.makeTitle(td);
     title = title.normalize("NFC");
+    title = importShared.changeTitleStyle(title);
     return title;
   },
 
@@ -578,7 +655,7 @@ const importTEI = {
 
   // transform the passed XML snippet
   //   tei = string
-  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-soldatenbriefe | tei-stimmlos | tei-wdb)
   async transformXML ({ tei, type }) {
     // reset set for unknown renditions
     importTEI.unknownRenditions = new Set();
@@ -721,8 +798,14 @@ const importTEI = {
     // remove <br> at the end of the text
     str = str.replace(/<br>$/, "");
 
-    // remove placeholders for <cb> and <pb> at the end and the beginning of the text
-    str = str.replace(/^\[:.+?:\]|\[:.+?:\]$/g, "");
+    // remove placeholders for <cb> and <pb> at the end of the text
+    str = str.replace(/\[:.+?:\]$/, "");
+
+    // remove placeholders for <cb> and <pb> at the beginning of the text
+    // if there is only one placeholder
+    if (str.match(/\[:.+?:\]/g)?.length === 1) {
+      str = str.replace(/^\[:.+?:\]/, "");
+    }
 
     // erase empty placeholders for <cb> and <pb> that follow immediately after another placeholder
     str = str.replace(/(\[:.+?:\])\s+\[:\?:\]/g, (...args) => args[1]);
@@ -814,7 +897,7 @@ const importTEI = {
   // get the proper snippet of <text> using the submitted <pb> numbers
   //   pageFrom = number
   //   pageTo = number
-  //   type = string (tei | tei-dingler | tei-dta | tei-wdb)
+  //   type = string (tei | tei-copadocs | tei-dibilit | tei-dibiphil | tei-dingler | tei-dta | tei-humboldt | tei-jeanpaul | tei-wdb)
   //   xmlDoc = document
   //   xmlStr = string
   async getTextSnippet ({ pageFrom, pageTo, type, xmlDoc, xmlStr }) {
@@ -867,7 +950,7 @@ const importTEI = {
         return false;
       }
       return normalize(text);
-    } else if (type === "tei-dta") {
+    } else if (/^tei-(dibilit|dibiphil|dta|humboldt|stimmlos)$/.test(type)) {
       // DTA => search for @facs="#000n"
       pbStartSel = `facs="#f${pageFrom.toString().padStart(4, "0")}"`;
       pbStart = xmlDoc.querySelector(`pb[${pbStartSel}]`);
@@ -1167,6 +1250,21 @@ const importTEI = {
     return `<TEI xmlns="http://www.tei-c.org/ns/1.0">${header}${text}</TEI>`;
   },
 
+  // Korpus historischer Patiententexte: get title ID
+  //   url = string | object
+  copadocsGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    if (/\.xml$/.test(url.pathname)) {
+      return url.pathname.match(/\/data\/(.+?)\.xml$/)?.[1] || false;
+    }
+    return url.pathname.match(/\/copadocs\/(.+?)\.html$/)?.[1] || false;
+  },
+
   // Polytechnisches Journal: get title ID
   //   url = string | object
   dinglerGetTitleId (url) {
@@ -1224,6 +1322,48 @@ const importTEI = {
 
     // return default
     return 1;
+  },
+
+  // DiBiLit, DiBiPhil, Soldatenbriefe, stimm-los: get title ID
+  //   url = string | object
+  dtaGitHubGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    return url.pathname.match(/\/data\/(.+?)\.xml$/)?.[1] || false;
+  },
+
+  // Humboldt-Schriften: get title ID
+  //   url = string | object
+  humboldtGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    if (/\.xml$/.test(url.pathname)) {
+      return url.pathname.match(/\/xml\/(.+?)\.xml$/)?.[1] || false;
+    }
+    return url.pathname.match(/\/text\/(.+)/)?.[1] || false;
+  },
+
+  // Briefe von Jean Paul: get title ID
+  //   url = string | object
+  jeanpaulGetTitleId (url) {
+    // parse URL
+    url = importTEI.parseURL(url);
+    if (!url) {
+      return false;
+    }
+
+    if (/\.xml$/.test(url.pathname)) {
+      return url.pathname.match(/\/([IVX]+_[^.])\.xml$/)?.[1] || false;
+    }
+    return url.searchParams.get("num") || false;
   },
 
   // parse the given URL (if necessary)

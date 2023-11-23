@@ -17,14 +17,16 @@ const initWin = {
     modules.ipc.on("xml-daten", async (evt, xmlDaten) => {
       // Auf langsamen Rechnern kann es passieren, dass die XML-Daten ankommen,
       // aber das XSL für den XML-Indent noch nicht geladen wurde. => Warten bis dies geschehen ist.
-      await new Promise(resolve => {
-        const interval = setInterval(() => {
-          if (helferXml.indentXsl) {
-            clearInterval(interval);
-            resolve(true);
-          }
-        }, 50);
-      });
+      if (!helferXml.indentXsl) {
+        await new Promise(resolve => {
+          const interval = setInterval(() => {
+            if (helferXml.indentXsl) {
+              clearInterval(interval);
+              resolve(true);
+            }
+          }, 50);
+        });
+      }
       if (xml.data.wort) {
         // beim Ändern des Karteiworts werden alle Daten noch einmal
         // an das bereits offene Fenster geschickt; in diesem Fall

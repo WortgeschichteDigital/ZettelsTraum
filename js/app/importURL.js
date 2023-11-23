@@ -10,7 +10,7 @@ const importURL = {
     }
 
     // URL-Daten ermitteln
-    const urlData = importURL.getURLData(formData);
+    const urlData = await importURL.getURLData(formData);
     if (!urlData) {
       return false;
     }
@@ -79,7 +79,7 @@ const importURL = {
   // URL-Daten ermitteln
   //   formData = object
   //     (formData.resource, formData.url, formData.von, formData.bis)
-  getURLData (formData) {
+  async getURLData (formData) {
     // direkter Link zur XML-Datei
     const result = {
       url: "",
@@ -91,17 +91,44 @@ const importURL = {
     }
 
     // Download-URL ermitteln
-    if (formData.resource.type === "tei-dta") {
+    const type = formData.resource.type;
+    if (type === "tei-dta") {
       const titleId = importTEI.dtaGetTitleId(parsedURL);
       result.id = titleId;
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId;
       }
-    } else if (formData.resource.type === "tei-dingler") {
-      const titleId = importTEI.dinglerGetTitleId(parsedURL);
+    } else if (/^tei-(copadocs|dibilit|dibiphil|dingler|humboldt|soldatenbriefe|stimmlos)$/.test(type)) {
+      let titleId;
+      if (/^tei-(dibilit|dibiphil|soldatenbriefe|stimmlos)$/.test(type)) {
+        titleId = importTEI.dtaGitHubGetTitleId(parsedURL);
+      } else if (type === "tei-copadocs") {
+        titleId = importTEI.copadocsGetTitleId(parsedURL);
+      } else if (type === "tei-dingler") {
+        titleId = importTEI.dinglerGetTitleId(parsedURL);
+      } else if (type === "tei-humboldt") {
+        titleId = importTEI.humboldtGetTitleId(parsedURL);
+      }
       result.id = titleId;
       if (!result.url) {
         result.url = formData.resource.xmlPath + titleId + ".xml";
+      }
+    } else if (type === "tei-jeanpaul") {
+      const titleId = importTEI.jeanpaulGetTitleId(parsedURL);
+      result.id = titleId;
+      if (!result.url) {
+        if (/^[IVX]+_/.test(titleId)) {
+          // Brief von Jean Paul
+          const vol = titleId.split("_")[0];
+          result.url = `${formData.resource.xmlPath}briefe/${vol}/${titleId}.xml`;
+        } else {
+          // Umfeldbrief => URL aus der Seite auslesen
+          const response = await helfer.fetchURL(formData.url);
+          const path = response.text.match(/href="https:\/\/github.com\/.+?\/main\/(.+?\.xml)"/)?.[1];
+          if (path) {
+            result.url = formData.resource.xmlPath + path;
+          }
+        }
       }
     }
 

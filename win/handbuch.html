@@ -717,6 +717,8 @@
             <p>Geben Sie eine URL ein, wird das <a href="#karteikarte-aufrufdatum">Aufrufdatum</a> automatisch auf das aktuelle Tagesdatum gestellt, allerdings nur, wenn das URL-Feld zuvor leer war.</p>
 
             <p>Handelt es sich bei der URL um einen Verweis auf eine bekannte <a href="#karteikarte-importfunktion">Importquelle</a>, können Sie die URL mithilfe des Icons <img src="../img/link.svg" width="20" height="20" alt="">, das über dem Feld steht, in das Importformular laden. Die Funktion lässt sich auch über das Tastaturkürzel <kbd>Strg</kbd> + <kbd>Umsch</kbd> + <kbd>D</kbd> aufrufen.</p>
+
+            <p>Befindet sich in dem Feld keine URL, wird auf das Feld <a href="#karteikarte-metaImportURL">Import-URL</a> zurückgegriffen. Nur wenn dort auch keine URL zu finden ist, wird eine Fehlermeldung zurückgegeben</p>
           </div>
 
           <p class="add-navi-details" id="karteikarte-aufrufdatum"><b>Aufrufdatum:</b> Datum, an dem die URL aus dem <a href="#karteikarte-url">URL-Feld</a> aufgerufen wurde</p>
@@ -759,25 +761,27 @@
 
           <p class="info">Die Metadaten können nicht manuell geändert werden. Ihr Inhalt ist eher technischer Natur. Steht in einem Feld nur <code class="quelltext">–</code>, ist das Feld (noch) nicht gefüllt.</p>
 
-          <p class="add-navi-details"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaErstellt"><b>Karteikarte erstellt:</b> Datum, zu dem die Karteikarte angelegt wurde</p>
 
           <p class="info">Die Datumsangabe folgt dem ISO&nbsp;8601-Standard. Das Z am Ende steht für <q>Zulu</q>. Es zeigt an, dass es sich bei der Zeitangabe, um ein Datum der <a href="https://en.wikipedia.org/wiki/Coordinated_Universal_Time">koordinierten Weltzeit</a> handelt. Zulu-Zeit entspricht der <a href="https://en.wikipedia.org/wiki/Greenwich_Mean_Time" lang="en"><abbr title="Greenwich Mean Time">GMT</abbr></a>.</p>
 
-          <p class="add-navi-details"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaGeaendert"><b>Karteikarte geändert:</b> Datum, zu dem die Karteikarte zuletzt geändert wurde</p>
 
-          <p class="add-navi-details"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
+          <p class="add-navi-details" id="karteikarte-metaImporttyp"><b>Importtyp:</b> eine Zeichenkette, die die Quelle der <i>Importdaten</i> beschreibt</p>
 
           <p class="info">Die Zeichenkette erlaubt Rückschlüsse auf das Format der Rohdaten (die im folgenden Feld <a href="#karteikarte-metaImportdaten"><i>Importdaten</i></a> stehen).</p>
 
-          <p class="add-navi-details"><b>Importdatum:</b> Datum, zu dem zuletzt ein automatischer <a href="#karteikarte-importfunktion">Import</a> der Karteikartendaten vorgenommen wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaImportdatum"><b>Importdatum:</b> Datum, zu dem zuletzt ein automatischer <a href="#karteikarte-importfunktion">Import</a> der Karteikartendaten vorgenommen wurde</p>
 
-          <p class="add-navi-details"><b>Import-URL:</b> URL, von der die Daten heruntergeladen wurden</p>
+          <p class="add-navi-details" id="karteikarte-metaImportURL"><b>Import-URL:</b> URL, von der die Daten heruntergeladen wurden</p>
 
-          <p class="add-navi-details"><b>Import von Seite:</b> Seite aus den Importdaten, ab der der Inhalt importiert wurde</p>
+          <p class="info">Mit dem Icon <img src="../img/link.svg" width="20" height="20" alt=""> kann die URL für einen Reimport in das Importformular geladen werden. Sind Angaben zu den Importseiten da, werden diese ebenfalls in das Formular eingetragen.</p>
+
+          <p class="add-navi-details" id="karteikarte-metaImportVon"><b>Import von Seite:</b> Seite aus den Importdaten, ab der der Inhalt importiert wurde</p>
 
           <p class="info">Diese Angaben sind nur für Daten wichtig, die aus <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> importiert wurden. <q>Seite</q> bezieht sich dabei auf das Element <code class="quelltext">&lt;pb&gt;</code>.</p>
 
-          <p class="add-navi-details"><b>Import bis Seite:</b> Seite aus den Importdaten, bis zu deren Anfang der Inhalt importiert wurde</p>
+          <p class="add-navi-details" id="karteikarte-metaImportBis"><b>Import bis Seite:</b> Seite aus den Importdaten, bis zu deren Anfang der Inhalt importiert wurde</p>
 
           <p class="add-navi-details" id="karteikarte-metaImportdaten"><b>Importdaten:</b> Rohdaten, aus denen heraus der Beleg ursprünglich importiert wurde</p>
 
@@ -801,84 +805,127 @@
 
           <p>Die folgenden <b>Datentypen</b> können automatisch importiert werden. Details zu den einzelnen Importwegen und Datentypen werden weiter unten beschrieben.</p>
 
-          <div class="info">
-            <p><i>Importweg URL</i></p>
+          <table class="import">
+            <tr>
+              <td></td>
+              <th>Importweg<br>URL</th>
+              <th>Importweg<br>Datei/Zwischenablage</th>
+            </tr>
+            <tr>
+              <th><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr></th>
+              <td>
+                <ul>
+                  <li><a href="https://www.deutschestextarchiv.de/">Deutsches Textarchiv</a> (DTA)</li>
 
-            <ul>
-              <li><a href="https://www.deutschestextarchiv.de/">Deutsches Textarchiv</a> (DTA)</li>
+                  <li><a href="https://deutschestextarchiv.github.io/copadocs/">Korpus historischer Patiententexte</a> (CoPaDocs)</li>
 
-              <li><a href="https://dingler.bbaw.de/">Polytechnisches Journal</a> (Dingler Online)</li>
+                  <li><a href="https://github.com/deutschestextarchiv/DiBiLit-Korpus">DiBiLit-Korpus</a></li>
 
-              <li><a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitale Bibliothek</a> (WDB)</li>
-            </ul>
+                  <li><a href="https://github.com/deutschestextarchiv/DiBiPhil">DiBiPhil-Korpus</a></li>
 
-            <p><i>Importweg Datei/Zwischenablage</i></p>
+                  <li><a href="https://dingler.bbaw.de/">Polytechnisches Journal</a> (Dingler Online)</li>
 
-            <div class="eingerueckt">
-              <p><i><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+                  <li><a href="https://humboldt.unibe.ch/text">Sämtliche Schriften von Alexander von Humboldt</a> (Humboldt-Schriften)</li>
 
-              <ul>
-                <li>DTA</li>
+                  <li><a href="https://www.jeanpaul-edition.de/start.html">Briefe von Jean Paul</a></li>
 
-                <li>Dingler Online</li>
+                  <li><a href="https://github.com/deutschestextarchiv/soldatenbriefe">Korpus Soldatenbriefe</a></li>
 
-                <li>WDB</li>
+                  <li><a href="https://github.com/deutschestextarchiv/stimm-los">Korpus stimm-los</a></li>
 
-                <li>jede in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Datei</li>
-              </ul>
+                  <li><a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitale Bibliothek</a> (WDB)</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>DTA</li>
 
-              <p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+                  <li>CoPaDocs</li>
 
-              <ul>
-                <li>Belegsnippet aus den Korpora des <a href="https://www.dwds.de/r">Digitalen Wörterbuchs der deutschen Sprache</a> (DWDS)</li>
+                  <li>DiBiLit</li>
 
-                <li><a href="#xml" class="link-dokumentation">Belegsnippet</a> von <a href="https://wortgeschichten.zdl.org">Wortgeschichte digital</a> (WGd)</li>
+                  <li>DiBiPhil</li>
 
-                <li><a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema"><abbr title="Metadata Object Description Schema">MODS</abbr></a> (nur Titeldaten)</li>
+                  <li>Dingler Online</li>
 
-                <li><a href="#xml-fundstelle" class="link-dokumentation">Fundstellen-Snippet</a> von <abbr title="Wortgeschichte digital">WGd</abbr> (nur Titeldaten)</li>
-              </ul>
+                  <li>Humboldt-Schriften</li>
 
-              <p><i><abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i></p>
+                  <li>Briefe von Jean Paul</li>
 
-              <ul>
-                <li>Belegsammlung aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></li>
-              </ul>
+                  <li>Soldatenbriefe</li>
 
-              <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span></i></p>
+                  <li>stimm-los</li>
 
-              <ul>
-                <li>jede Quelle (nur Titeldaten)</li>
-              </ul>
+                  <li>WDB</li>
 
-              <p><i>Sonstiges</i></p>
+                  <li>jede in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Datei</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><abbr title="Extensible Markup Language" lang="en">XML</abbr></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsnippet aus den Korpora des <a href="https://www.dwds.de/r">Digitalen Wörterbuchs der deutschen Sprache</a> (DWDS)</li>
 
-              <ul>
-                <li>Belegsammlung aus <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/">COSMAS II</a> (<abbr title="Deutschen Referenzkorpus">DeReKo</abbr>)</li>
+                  <li><a href="#xml" class="link-dokumentation">Belegsnippet</a> von <a href="https://wortgeschichten.zdl.org">Wortgeschichte digital</a> (WGd)</li>
 
-                <li><abbr title="Pica-Produktionsnummer">PPN</abbr> (<abbr title="Metadata Object Description Schema">MODS</abbr>-Download aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a>; nur Titeldaten)</li>
+                  <li><a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema"><abbr title="Metadata Object Description Schema">MODS</abbr></a> (nur Titeldaten)</li>
 
-                <li><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (nur Beleg)</li>
+                  <li><a href="#xml-fundstelle" class="link-dokumentation">Fundstellen-Snippet</a> von <abbr title="Wortgeschichte digital">WGd</abbr> (nur Titeldaten)</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><abbr title="JavaScript Object Notation" lang="en">JSON</abbr></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsammlung aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><span class="bibtex"><span>Bib</span>T<span>E</span>X</span></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>jede Quelle (nur Titeldaten)</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th>Sonstiges</th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsammlung aus <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/">COSMAS II</a> (<abbr title="Deutschen Referenzkorpus">DeReKo</abbr>)</li>
 
-                <li>jeder unstrukturierte Plain-Text (nur Beleg)</li>
-              </ul>
-            </div>
-          </div>
+                  <li><abbr title="Pica-Produktionsnummer">PPN</abbr> (<abbr title="Metadata Object Description Schema">MODS</abbr>-Download aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a>, nur Titeldaten)</li>
 
-          <p class="add-navi-details" id="karteikarte-teiImport"><b><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import:</b> Am bequemsten funktioniert der Import aus dem <a href="https://www.deutschestextarchiv.de/"><abbr title="Deutsches Textarchiv">DTA</abbr></a> und aus <a href="https://dingler.bbaw.de/">Dingler Online</a>. Geben Sie eine URL aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> in das Importfeld ein, wird automatisch ermittelt, um welche Faksimile-Seite des Werks es sich handelt. Die Felder für den Seitenimport werden dann genau so eingestellt, dass exakt die Seite als Beleg importiert wird, auf die die URL zeigt. Möchten Sie mehrere Seiten importieren, müssen Sie im zweiten Nummernfeld (<i>bis Seite</i>) die Seite angeben, bis zu deren Beginn der Text importiert werden soll.</p>
+                  <li><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (nur Beleg)</li>
+
+                  <li>jeder unstrukturierte Plain-Text (nur Beleg)</li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+
+          <p class="add-navi-details" id="karteikarte-teiImport"><b><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import:</b> Am bequemsten funktioniert der Import aus dem <a href="https://www.deutschestextarchiv.de/"><abbr title="Deutsches Textarchiv">DTA</abbr></a>, aus <a href="https://dingler.bbaw.de/">Dingler Online</a> und den anderen Importquellen, die via URL zur Verfügung stehen. Geben Sie eine URL aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> in das Importfeld ein, wird automatisch ermittelt, um welche Faksimile-Seite des Werks es sich handelt. Die Felder für den Seitenimport werden dann genau so eingestellt, dass exakt die Seite als Beleg importiert wird, auf die die URL zeigt. Möchten Sie mehrere Seiten importieren, müssen Sie im zweiten Nummernfeld (<i>bis Seite</i>) die Seite angeben, bis zu deren Beginn der Text importiert werden soll.</p>
 
           <figure class="right" title="zum Vergrößern anklicken">
             <img src="../img/win/karteikarte-importfunktion-dta.png" alt="">
             <figcaption>der Import aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> funktioniert über die URL der Textseite</figcaption>
           </figure>
 
-          <p>Für die Texte aus Dingler Online gibt es keine seitengenauen Links. Lassen Sie im ersten Nummernfeld die <code class="quelltext">0</code> stehen, wird der gesamte Text importiert. (Dies gilt im Übrigen für jeden Import aus einer in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Quelle.) Geben Sie hingegen eine Nummer ein, sucht das Programm in der heruntergeladenen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei zunächst, ob es in dem Text eine Seite findet, die im physischen Original genau diese Nummer hatte. Ist dem nicht der Fall, greift es auf verschiedene Fallback-Lösungen zurück. Prinzipiell sind die Texte aus Dingler Online jedoch nicht sonderlich lang, sodass <i class="app-name"></i> gut mit einem komplett importierten Text zurechtkommt. Sie können nach dem Import dann die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion nutzen</a>, die alle Absätze löscht, in denen keines Ihrer <a href="#menueKartei-lemmata">Karteiwörter</a> auftaucht. Alternativ könnten Sie im gerade importierten Text durch die <a href="#karteikarte-leseansicht">Leseansicht</a> scrollen und nach denjenigen Seiten suchen, die Sie interessieren. Die Seitenumbrüche werden fett hervorgehoben. Der Beginn von Seite 25 wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> so markiert: <code class="quelltext">[:25:]</code>. Sobald Sie wissen, welche Seiten Sie interessieren, können Sie den Import in derselben Karteikarte noch einmal ausführen und dazu die passenden Seitennummern eingeben. Die Datei wird im Hintergrund in einem Cache gespeichert, muss dafür also nicht noch einmal heruntergeladen werden.</p>
+          <p>Für die meisten <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Quellen, die über den Importweg URL verfügbar sind, gibt es keine seitengenauen Links. Lassen Sie im ersten Nummernfeld die <code class="quelltext">0</code> stehen, wird der gesamte Text importiert. (Dies gilt im Übrigen für jeden Import aus einer in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierten Quelle.) Geben Sie hingegen eine Nummer ein, sucht das Programm in der heruntergeladenen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei zunächst, ob es in dem Text eine Seite findet, die im physischen Original genau diese Nummer hatte. Ist dem nicht der Fall, greift es auf verschiedene Fallback-Lösungen zurück. Prinzipiell sind die Texte <abbr title="zum Beispiel">z.&nbsp;B.</abbr> aus Dingler Online jedoch nicht sonderlich lang, sodass <i class="app-name"></i> gut mit einem komplett importierten Text zurechtkommt. Sie können nach dem Import dann die <a href="#karteikarte-kuerzenBeleg">harte Kürzungsfunktion nutzen</a>, die alle Absätze löscht, in denen keines Ihrer <a href="#menueKartei-lemmata">Karteiwörter</a> auftaucht. Alternativ könnten Sie im gerade importierten Text durch die <a href="#karteikarte-leseansicht">Leseansicht</a> scrollen und nach denjenigen Seiten suchen, die Sie interessieren. Die Seitenumbrüche werden fett hervorgehoben. Der Beginn von Seite 25 wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> so markiert: <code class="quelltext">[:25:]</code>. Sobald Sie wissen, welche Seiten Sie interessieren, können Sie den Import in derselben Karteikarte noch einmal ausführen und dazu die passenden Seitennummern eingeben. Die Datei wird im Hintergrund in einem Cache gespeichert, muss dafür also nicht noch einmal heruntergeladen werden.</p>
 
-          <p>Im Falle von Dingler Online und dem <abbr title="Deutsches Textarchiv">DTA</abbr> können Sie sowohl eine Artikel- <abbr title="beziehungsweise">bzw.</abbr> Textseiten-URL eingeben als auch eine URL, die direkt zur <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei führt. Im Falle von <a href="https://www.hab.de/digitale-editionen/"><abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr></a> müssen Sie zwingend die URL zur XML-Datei eingeben. Wie bei Dingler Online kann auch bei <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Texten die passende Seite nicht automatisch ermittelt werden. Da die Editionen in vielen Fällen sehr lang sind, müssten Sie vorher wissen, welche Seiten oder Blätter Sie importieren möchten.</p>
+          <p>Im Falle von Dingler Online, dem <abbr title="Deutsches Textarchiv">DTA</abbr> <abbr title="und so weiter">usw.</abbr> können Sie sowohl eine Artikel- <abbr title="beziehungsweise">bzw.</abbr> Textseiten-URL eingeben als auch eine URL, die direkt zur <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei führt. Im Falle von <a href="https://www.hab.de/digitale-editionen/"><abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr></a> müssen Sie zwingend die URL zur XML-Datei eingeben. Wie bei Dingler Online kann auch bei <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>-Texten die passende Seite nicht automatisch ermittelt werden. Da die Editionen in vielen Fällen sehr lang sind, müssten Sie vorher wissen, welche Seiten oder Blätter Sie importieren möchten.</p>
 
           <p>Geben Sie für den Import keine Startseite an, lassen Sie das erste Nummernfeld also auf <code class="quelltext">0</code> stehen, wird zwar prinzipiell der gesamte Text importiert. Dies gilt aber nur mit Einschränkungen. Ist die Datei mehr als 400&nbsp;KB groß, wird der Import rundweg abgelehnt. Bei einer Größe von über 200&nbsp;KB werden Sie gewarnt, dass der Import Probleme bereiten könnte. Die gilt auch für den Fall, dass Sie 10 Seiten oder mehr importieren möchten. Der Import von 30 Seiten oder mehr wird gleich ganz unterbunden.</p>
 
-          <p>Aus all diesen Quellen (<abbr title="Deutsches Textarchiv">DTA</abbr>, Dingler Online, <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr>) können Sie den Import nicht nur via URL, sondern auch über eine heruntergeladene <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei anstoßen. Wechseln Sie dazu einfach in die Ansicht <i>Datei</i>. Hier gibt es einen Button, der einen Dateidialog öffnet. Noch schneller geht es für Sie unter Umständen, indem Sie die Datei in Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> kopieren. Fokussieren Sie das Importfeld, wird automatisch der kopierte Dateipfad eingefügt. Sobald Sie <kbd>⏎</kbd> oder den Button <i>Importieren</i> drücken, wird die Datei eingelesen. Auch in diesem Fall wird die Eingabe in den Nummernfeldern, mit denen Sie steuern können, welche Seiten importiert werden sollen, beachtet.</p>
+          <p>Aus all diesen Quellen (<abbr title="Deutsches Textarchiv">DTA</abbr>, Dingler Online, <abbr title="Wolfenbütteler Digitale Bibliothek">WDB</abbr> <abbr title="und so weiter">usw.</abbr>) können Sie den Import nicht nur via URL, sondern auch über eine heruntergeladene <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei anstoßen. Wechseln Sie dazu einfach in die Ansicht <i>Datei</i>. Hier gibt es einen Button, der einen Dateidialog öffnet. Noch schneller geht es für Sie unter Umständen, indem Sie die Datei in Ihrem Dateimanager via <kbd>Strg</kbd>&nbsp;+ <kbd>C</kbd> kopieren. Fokussieren Sie das Importfeld, wird automatisch der kopierte Dateipfad eingefügt. Sobald Sie <kbd>⏎</kbd> oder den Button <i>Importieren</i> drücken, wird die Datei eingelesen. Auch in diesem Fall wird die Eingabe in den Nummernfeldern, mit denen Sie steuern können, welche Seiten importiert werden sollen, beachtet.</p>
 
           <p>Der Vorteil eines Dateiimports ist, dass Sie sich bei Ihrer Arbeit nicht auf die Quellen, aus denen heraus ein URL-Import möglich ist, beschränken müssen. Auf diese Weise können Sie jedes in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Dokument in <i class="app-name"></i> importieren, egal aus welcher Quelle es stammt. Das ganze funktioniert übrigens genauso gut, wenn Sie die Datei öffnen und das komplette <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr> in die Zwischenablage kopieren. Über die Formularansicht <i>Zwischenablage</i> lassen sich die Daten dann so importieren, als wäre sie aus einer Datei eingelesen worden.</p>
 
@@ -2347,6 +2394,16 @@ Mustermann, Erika
             <p>Beim automatischen Import von Literaturtiteln in der <a href="#menueRedaktion-literaturTitelaufnahmeImport">Literaturdatenbank</a> oder in der <a href="#karteikarte-importfunktion">Karteikarte</a> werden Titel und Band von Serien angezeigt, wenn diese Einstellung aktiviert wurde.</p>
 
             <p>Ansonsten gilt dasselbe wie für die Einstellung <a href="#einstellungen-literaturVerlag">Verlag anzeigen</a></p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-literaturWGdStyle">Titel automatisch an das <abbr title="Wortgeschichte digital">WGd</abbr>-Stylesheet anpassen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Beim Import von Literaturtiteln wird die Zitierweise gewisser Zeitschriften automatisch an den Stylesheet von <abbr title="Wortgeschichte digital">WGd</abbr> angepasst.</p>
+
+            <p>Dies betrifft nur wenige Zeitungen und historischen Zeitschriften. Darunter sind <i>Die Gartenlaube, Die Grenzboten</i> die <i>Neue Rheinische Zeitung</i> und das <i>Polytechnische Journal</i>.</p>
           </div>
 
           <h2 id="einstellungen-menue">Menü</h2>
