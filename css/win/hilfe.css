@@ -544,6 +544,27 @@ tr.ztj-alt td p {
   border-color: var(--textExtremHell);
 }
 
+.import {
+  margin-bottom: 10px;
+}
+
+.import :is(th, td) {
+  border-bottom: 1px solid var(--linie);
+  padding: 5px;
+}
+
+.import tr:last-child :is(th, td) {
+  border-bottom: none;
+}
+
+
+.import th {
+  vertical-align: top;
+  background-color: var(--hintergrund);
+  font-style: italic;
+  font-weight: normal;
+}
+
 .tastatur.last {
   margin-bottom: 10px;
 }

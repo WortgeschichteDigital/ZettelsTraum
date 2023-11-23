@@ -805,97 +805,112 @@
 
           <p>Die folgenden <b>Datentypen</b> können automatisch importiert werden. Details zu den einzelnen Importwegen und Datentypen werden weiter unten beschrieben.</p>
 
-          <div class="info">
-            <p><i>Importweg URL</i></p>
+          <table class="import">
+            <tr>
+              <td></td>
+              <th>Importweg<br>URL</th>
+              <th>Importweg<br>Datei/Zwischenablage</th>
+            </tr>
+            <tr>
+              <th><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr></th>
+              <td>
+                <ul>
+                  <li><a href="https://www.deutschestextarchiv.de/">Deutsches Textarchiv</a> (DTA)</li>
 
-            <ul>
-              <li><a href="https://www.deutschestextarchiv.de/">Deutsches Textarchiv</a> (DTA)</li>
+                  <li><a href="https://deutschestextarchiv.github.io/copadocs/">Korpus historischer Patiententexte</a> (CoPaDocs)</li>
 
-              <li><a href="https://deutschestextarchiv.github.io/copadocs/">Korpus historischer Patiententexte</a> (CoPaDocs)</li>
+                  <li><a href="https://github.com/deutschestextarchiv/DiBiLit-Korpus">DiBiLit-Korpus</a></li>
 
-              <li><a href="https://github.com/deutschestextarchiv/DiBiLit-Korpus">DiBiLit-Korpus</a></li>
+                  <li><a href="https://github.com/deutschestextarchiv/DiBiPhil">DiBiPhil-Korpus</a></li>
 
-              <li><a href="https://github.com/deutschestextarchiv/DiBiPhil">DiBiPhil-Korpus</a></li>
+                  <li><a href="https://dingler.bbaw.de/">Polytechnisches Journal</a> (Dingler Online)</li>
 
-              <li><a href="https://dingler.bbaw.de/">Polytechnisches Journal</a> (Dingler Online)</li>
+                  <li><a href="https://humboldt.unibe.ch/text">Sämtliche Schriften von Alexander von Humboldt</a> (Humboldt-Schriften)</li>
 
-              <li><a href="https://humboldt.unibe.ch/text">Sämtliche Schriften von Alexander von Humboldt</a> (Humboldt-Schriften)</li>
+                  <li><a href="https://www.jeanpaul-edition.de/start.html">Briefe von Jean Paul</a></li>
 
-              <li><a href="https://www.jeanpaul-edition.de/start.html">Briefe von Jean Paul</a></li>
+                  <li><a href="https://github.com/deutschestextarchiv/soldatenbriefe">Korpus Soldatenbriefe</a></li>
 
-              <li><a href="https://github.com/deutschestextarchiv/soldatenbriefe">Korpus Soldatenbriefe</a></li>
+                  <li><a href="https://github.com/deutschestextarchiv/stimm-los">Korpus stimm-los</a></li>
 
-              <li><a href="https://github.com/deutschestextarchiv/stimm-los">Korpus stimm-los</a></li>
+                  <li><a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitale Bibliothek</a> (WDB)</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>DTA</li>
 
-              <li><a href="https://www.hab.de/digitale-editionen/">Wolfenbütteler Digitale Bibliothek</a> (WDB)</li>
-            </ul>
+                  <li>CoPaDocs</li>
 
-            <p><i>Importweg Datei/Zwischenablage</i></p>
+                  <li>DiBiLit</li>
 
-            <div class="eingerueckt">
-              <p><i><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-<abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+                  <li>DiBiPhil</li>
 
-              <ul>
-                <li>DTA</li>
+                  <li>Dingler Online</li>
 
-                <li>CoPaDocs</li>
+                  <li>Humboldt-Schriften</li>
 
-                <li>DiBiLit</li>
+                  <li>Briefe von Jean Paul</li>
 
-                <li>DiBiPhil</li>
+                  <li>Soldatenbriefe</li>
 
-                <li>Dingler Online</li>
+                  <li>stimm-los</li>
 
-                <li>Humboldt-Schriften</li>
+                  <li>WDB</li>
 
-                <li>Briefe von Jean Paul</li>
+                  <li>jede in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Datei</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><abbr title="Extensible Markup Language" lang="en">XML</abbr></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsnippet aus den Korpora des <a href="https://www.dwds.de/r">Digitalen Wörterbuchs der deutschen Sprache</a> (DWDS)</li>
 
-                <li>Soldatenbriefe</li>
+                  <li><a href="#xml" class="link-dokumentation">Belegsnippet</a> von <a href="https://wortgeschichten.zdl.org">Wortgeschichte digital</a> (WGd)</li>
 
-                <li>stimm-los</li>
+                  <li><a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema"><abbr title="Metadata Object Description Schema">MODS</abbr></a> (nur Titeldaten)</li>
 
-                <li>WDB</li>
+                  <li><a href="#xml-fundstelle" class="link-dokumentation">Fundstellen-Snippet</a> von <abbr title="Wortgeschichte digital">WGd</abbr> (nur Titeldaten)</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><abbr title="JavaScript Object Notation" lang="en">JSON</abbr></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsammlung aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th><span class="bibtex"><span>Bib</span>T<span>E</span>X</span></th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>jede Quelle (nur Titeldaten)</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <th>Sonstiges</th>
+              <td></td>
+              <td>
+                <ul>
+                  <li>Belegsammlung aus <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/">COSMAS II</a> (<abbr title="Deutschen Referenzkorpus">DeReKo</abbr>)</li>
 
-                <li>jede in <abbr title="Text Encoding Initiative" lang="en">TEI</abbr> kodierte Datei</li>
-              </ul>
+                  <li><abbr title="Pica-Produktionsnummer">PPN</abbr> (<abbr title="Metadata Object Description Schema">MODS</abbr>-Download aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a>, nur Titeldaten)</li>
 
-              <p><i><abbr title="Extensible Markup Language" lang="en">XML</abbr></i></p>
+                  <li><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (nur Beleg)</li>
 
-              <ul>
-                <li>Belegsnippet aus den Korpora des <a href="https://www.dwds.de/r">Digitalen Wörterbuchs der deutschen Sprache</a> (DWDS)</li>
-
-                <li><a href="#xml" class="link-dokumentation">Belegsnippet</a> von <a href="https://wortgeschichten.zdl.org">Wortgeschichte digital</a> (WGd)</li>
-
-                <li><a href="https://en.wikipedia.org/wiki/Metadata_Object_Description_Schema"><abbr title="Metadata Object Description Schema">MODS</abbr></a> (nur Titeldaten)</li>
-
-                <li><a href="#xml-fundstelle" class="link-dokumentation">Fundstellen-Snippet</a> von <abbr title="Wortgeschichte digital">WGd</abbr> (nur Titeldaten)</li>
-              </ul>
-
-              <p><i><abbr title="JavaScript Object Notation" lang="en">JSON</abbr></i></p>
-
-              <ul>
-                <li>Belegsammlung aus den Korpora des <abbr title="Digitalen Wörterbuchs der deutschen Sprache">DWDS</abbr></li>
-              </ul>
-
-              <p><i><span class="bibtex"><span>Bib</span>T<span>E</span>X</span></i></p>
-
-              <ul>
-                <li>jede Quelle (nur Titeldaten)</li>
-              </ul>
-
-              <p><i>Sonstiges</i></p>
-
-              <ul>
-                <li>Belegsammlung aus <a href="https://cosmas2.ids-mannheim.de/cosmas2-web/">COSMAS II</a> (<abbr title="Deutschen Referenzkorpus">DeReKo</abbr>)</li>
-
-                <li><abbr title="Pica-Produktionsnummer">PPN</abbr> (<abbr title="Metadata Object Description Schema">MODS</abbr>-Download aus dem <a href="https://kxp.k10plus.de/DB=2.1/">GVK</a>; nur Titeldaten)</li>
-
-                <li><abbr title="Hypertext Markup Language" lang="en">HTML</abbr> (nur Beleg)</li>
-
-                <li>jeder unstrukturierte Plain-Text (nur Beleg)</li>
-              </ul>
-            </div>
-          </div>
+                  <li>jeder unstrukturierte Plain-Text (nur Beleg)</li>
+                </ul>
+              </td>
+            </tr>
+          </table>
 
           <p class="add-navi-details" id="karteikarte-teiImport"><b><abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Import:</b> Am bequemsten funktioniert der Import aus dem <a href="https://www.deutschestextarchiv.de/"><abbr title="Deutsches Textarchiv">DTA</abbr></a>, aus <a href="https://dingler.bbaw.de/">Dingler Online</a> und den anderen Importquellen, die via URL zur Verfügung stehen. Geben Sie eine URL aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> in das Importfeld ein, wird automatisch ermittelt, um welche Faksimile-Seite des Werks es sich handelt. Die Felder für den Seitenimport werden dann genau so eingestellt, dass exakt die Seite als Beleg importiert wird, auf die die URL zeigt. Möchten Sie mehrere Seiten importieren, müssen Sie im zweiten Nummernfeld (<i>bis Seite</i>) die Seite angeben, bis zu deren Beginn der Text importiert werden soll.</p>
 
