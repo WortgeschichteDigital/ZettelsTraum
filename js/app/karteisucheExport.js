@@ -174,7 +174,7 @@ td.umbruch {
 tr:nth-child(even of :not(.off)) td {
   background-color: #f6f6f6;
 }
-tr:hover td {
+tr:is(:nth-child(even), :nth-child(odd)):hover td {
   background-color: #ffffcd;
 }
 .nebenlemmata {
