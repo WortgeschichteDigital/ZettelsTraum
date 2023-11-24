@@ -98,13 +98,13 @@
           <!-- Download Quelltext -->
           <h2 id="framework-download">Download des Quelltexts</h2>
 
-          <p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">master</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
+          <p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">main</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
 
           <p>Bequemer ist es natürlich das GitHub-Repository einfach zu klonen:</p>
 
           <pre>$ git clone https://github.com/WortgeschichteDigital/ZettelsTraum.git zettelstraum</pre>
 
-          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">master</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
+          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">main</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
 
           <p>Eine weitere Möglichkeit, um an den Quelltext zu gelangen: Er ist auch in den <a href="#framework-quelltext">paketierten Versionen der App</a> enthalten und dort in einem speziellen Archiv im Programmordner zu finden.</p>
 
@@ -203,7 +203,7 @@ $ npm install --save-dev electron-packager</pre>
 
           <p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
-          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
+          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/main/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
           <p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./installer/packager.js</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden. Gibt man den Build-Ordner explizit an (drittes Argument), wird dieser anstelle von <span class="datei">../build</span> genutzt.</p>
 
@@ -229,7 +229,7 @@ $ npm install --save-dev electron-packager</pre>
 
           <p>Dabei ist wichtig, dass die <span lang="en">working directory</span> das Wurzelverzeichnis der App ist. Andernfalls findet das Script die Node-Module nicht.</p>
 
-          <p>Die mitgelieferten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
+          <p>Die mitgelieferten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://github.com/electron-userland/electron-packager/blob/main/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
 
           <p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span>, <span class="datei">zettelstraum-win32-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-darwin-x64</span>. Die Unterordner enthalten eine ausführbare Datei, über die die App gestartet werden kann:</p>
 
