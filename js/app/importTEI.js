@@ -262,6 +262,10 @@ const importTEI = {
       const key = k.replace(/[0-9]$/, "");
       while (item) {
         if (/datumEntstehung[0-9]/.test(k)) {
+          if (data.datumEntstehung) {
+            item = v.iterateNext();
+            continue;
+          }
           // @when, @notBefore, @notAfter
           const when = item.getAttribute("when");
           if (!data.datumEntstehung && when) {
