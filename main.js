@@ -1618,6 +1618,19 @@ if (cliCommandFound || !locked) {
 
 /* LISTENER (ipcMain) ***************************/
 
+// Sicherheit: WebContents, die eine Anfrage stellen, müssen zwingend eine lokale Datei geladen haben
+function validSender (evt) {
+  try {
+    const validURL = new URL(evt.senderFrame.url);
+    if (validURL.protocol !== "file:") {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+  return true;
+}
+
 // ***** PROGRAMMFEHLER *****
 // Fehler aus Renderer-Prozess empfangen
 ipcMain.on("fehler", (evt, err) => fehler.push(err));
@@ -1629,6 +1642,9 @@ ipcMain.handle("fehler-senden", () => fehler);
 // ***** INIT *****
 // Infos zu App und Fenster senden
 ipcMain.handle("infos-senden", evt => {
+  if (!validSender(evt)) {
+    return {};
+  }
   const bw = BrowserWindow.fromWebContents(evt.sender);
   return {
     appInfo: {
@@ -1668,6 +1684,10 @@ ipcMain.handle("popup", (evt, items) => popup.make(evt.sender, items));
 // ***** OPTIONEN *****
 // Optionen empfangen und speichern
 ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
+  if (!validSender(evt)) {
+    return;
+  }
+
   // Optionen übernehmen
   if (optionen.data.zuletzt &&
       optionen.data.zuletzt.join(",") !== opt.zuletzt.join(",")) {
@@ -1865,6 +1885,9 @@ ipcMain.handle("kartei-schon-offen", (evt, kartei) => {
 
 // die übergebene Kartei laden (in einem neuen oder bestehenden Hauptfenster)
 ipcMain.on("kartei-laden", (evt, kartei, in_leerem_fenster = true) => {
+  if (!validSender(evt)) {
+    return;
+  }
   if (in_leerem_fenster) {
     for (const [ id, val ] of Object.entries(win)) {
       if (val.typ === "index" && !val.kartei) {
@@ -1904,8 +1927,11 @@ ipcMain.handle("fenster-hauptfenster", (evt, idFrage) => {
   return false;
 });
 
-// Daten an das Fenster mit der übergebenen mit der übergebenen Web-Content-ID schicken
+// Daten an das Fenster mit der übergebenen Web-Content-ID schicken
 ipcMain.handle("webcontents-bridge", (evt, data) => {
+  if (!validSender(evt)) {
+    return;
+  }
   const contents = webContents.fromId(data.id);
   contents.send(data.channel, data.data);
 });
@@ -2014,6 +2040,9 @@ ipcMain.handle("ztj-cache-status-get", () => ztjCacheStatus);
 const downloads = [];
 
 ipcMain.handle("downloads-cache-save", (evt, data) => {
+  if (!validSender(evt)) {
+    return;
+  }
   if (downloads.length > 40) {
     downloads.pop();
   }
@@ -2021,6 +2050,9 @@ ipcMain.handle("downloads-cache-save", (evt, data) => {
 });
 
 ipcMain.handle("downloads-cache-get", (evt, id) => {
+  if (!validSender(evt)) {
+    return false;
+  }
   const idx = downloads.findIndex(i => i.id === id);
   if (idx === -1) {
     return false;
@@ -2044,10 +2076,18 @@ ipcMain.handle("cli-return-code", (evt, returnCode) => {
 
 // ***** QUODLIBETICA *****
 // Befehle in den Menüpunkten "Bearbeiten" und "Ansicht" ausführen
-ipcMain.handle("quick-roles", (evt, befehl) => dienste.quickRoles(evt.sender, befehl));
+ipcMain.handle("quick-roles", (evt, befehl) => {
+  if (!validSender(evt)) {
+    return;
+  }
+  dienste.quickRoles(evt.sender, befehl);
+});
 
 // Dateidialoge öffnen
 ipcMain.handle("datei-dialog", async (evt, args) => {
+  if (!validSender(evt)) {
+    return null;
+  }
   const result = await dienste.dateiDialog(args);
   return result;
 });
