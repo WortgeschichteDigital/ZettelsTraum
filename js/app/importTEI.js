@@ -453,9 +453,8 @@ const importTEI = {
     td.url.push(data.url);
 
     // make and return title
-    let title = importShared.makeTitle(td);
+    let title = importShared.makeTitle(td, importTEI.data.ds);
     title = title.normalize("NFC");
-    title = importShared.changeTitleStyle(title);
     return title;
   },
 
