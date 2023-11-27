@@ -121,6 +121,9 @@ const importTEI = {
     // fill in missing card values
     // date
     let da = data.cit.datumEntstehung;
+    if (data.cit.datumEntstehung === data.cit.datumDruck) {
+      data.cit.datumDruck = "";
+    }
     if (!da && data.cit.datumDruck) {
       da = data.cit.datumDruck;
     } else if (data.cit.datumDruck) {
