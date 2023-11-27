@@ -91,7 +91,7 @@ $ sudo dpkg -i zettelstraum_1.0.0_amd64.deb
 
 Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Datei `/usr/share/applications/zettelstraum.desktop` erzeugt, das Programm sollte sich also über das Startmenü Ihrer Distribution aufrufen lassen. Es wird automatisch eine Verknüpfung zwischen der Dateiendung `.ztj` und *Zettel’s Traum* angelegt, sodass Wortkarteien durch Doppelklick im Dateimanager Ihrer Wahl geöffnet werden können.
 
-**Unterstützung:** Distributionen ab Ubuntu 14.04, Fedora 24, Debian 8 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 22.04 basiert. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
+**Unterstützung:** Distributionen ab Ubuntu 14.04, Fedora 24, Debian 8 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 22.04 basiert. 32-Bit-Versionen können nicht gebaut werden.
 
 ### macOS
 
@@ -142,16 +142,23 @@ Starten der App:
 $ npm start
 ```
 
-Electron-Packager installieren:
+Electron-Builder und Electron-Packager installieren:
 
 ```
+$ npm install --save-dev electron-builder
 $ npm install --save-dev electron-packager
 ```
 
 Paketieren:
 
 ```
-$ node installer/packager.js [win32|linux|darwin]
+$ node build/build.mjs [win32|linux|darwin]
+```
+
+Hilfe:
+
+```
+$ node build/build.mjs --help
 ```
 
 ## Lizenzen
