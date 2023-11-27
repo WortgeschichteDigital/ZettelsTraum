@@ -212,7 +212,6 @@ vorbereiten() {
   # Release taggen
   read -p "  Nächste Aufgabe \"Release taggen\" (Enter) . . ."
   echo -e "\n  \033[1;32m*\033[0m Release taggen\n"
-  declare -A typen
   typen[1]="Feature-Release v${version}"
   typen[2]="Release v${version}, Fixes"
   typen[3]="Release v${version}, Electron-Update"
