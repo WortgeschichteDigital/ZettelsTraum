@@ -258,7 +258,8 @@ const importTEI = {
       datumEntstehung: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='creation']"),
       datumEntstehung2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:date"),
       datumEntstehung3: evaluator("//t:profileDesc/t:creation/t:date[@type='sent']"),
-      datumEntstehung4: evaluator("//t:sourceDesc/t:biblFull/t:publicationStmt/t:date"),
+      datumEntstehung4: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='firstPublication']"),
+      datumEntstehung5: evaluator("//t:biblFull/t:publicationStmt/t:date"),
     };
     for (const [ k, v ] of Object.entries(pub)) {
       let item = v.iterateNext();
