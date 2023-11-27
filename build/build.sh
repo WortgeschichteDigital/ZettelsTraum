@@ -334,7 +334,7 @@ makeChangelog() {
       fi
     fi
   done
-  
+
   echo "$output"
 }
 
@@ -416,7 +416,7 @@ execJob() {
   if [ "$type" = "installer" ]; then
     echo -e "  \033[1;32m*\033[0m Installer ausführen"
     cd "${dir}/../"
-    node ./installer/installer-${os}.js $pkg $(getMail)
+    node build/build.mjs builder $(sysName) $pkg "$build" $(getMail)
     if (( $? > 0 )); then
       echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
       cd "$dir"
@@ -428,7 +428,7 @@ execJob() {
   if [ "$type" = "packager" ]; then
     echo -e "  \033[1;32m*\033[0m Packager ausführen"
     cd "${dir}/../"
-    node ./installer/packager.js "$(sysName)" "${build}"
+    node build/build.mjs packager $(sysName) "$build"
     if (( $? > 0 )); then
       echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Installer-Script abgebrochen"
       cd "$dir"
@@ -521,7 +521,7 @@ presetsExec() {
     echo -e " \033[1;33mJob $[i + 1]/${#array[@]}\033[0m\n"
     execJob "${array[$i]}"
   done
-  
+
   # Jobs erledigt
   echo -e "\n  \033[1;32m*\033[0m Preset \"${presets[$presetNr]}\": \033[1;32mErledigt!\033[0m"
 }
