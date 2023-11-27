@@ -126,9 +126,9 @@ const importTEI = {
     } else if (data.cit.datumDruck) {
       da += ` (Publikation von ${data.cit.datumDruck})`;
     }
-    beleg.data.da = da;
+    data.ds.da = da;
     // author
-    beleg.data.au = data.cit.autor.join("/") || "N.\u00A0N.";
+    data.ds.au = data.cit.autor.join("/") || "N.\u00A0N.";
     // citation
     data.ds.qu = importTEI.makeQu();
     // text class
@@ -152,7 +152,7 @@ const importTEI = {
           textclass.add(ts);
         }
       }
-      beleg.data.ts = [ ...textclass ].join("\n");
+      data.ds.ts = [ ...textclass ].join("\n");
     }
 
     // get quotation
