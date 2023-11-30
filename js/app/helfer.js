@@ -1045,7 +1045,7 @@ const helfer = {
     let resources = process.resourcesPath;
     if (/node_modules/.test(resources)) {
       // App ist nicht paketiert => resourcesPath zeigt auf die resources von Electron
-      resources = `${resources.replace(/node_modules.+/, "")}resources`;
+      resources = modules.path.join(__dirname, "resources");
     }
     return resources;
   },
