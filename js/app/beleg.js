@@ -2162,7 +2162,9 @@ const beleg = {
     beleg.formularImport({ src: "url", autoFill: false });
     if (beleg.data.bb && beleg.data.bv) {
       document.querySelector("#beleg-import-von").value = beleg.data.bv;
-      document.querySelector("#beleg-import-bis").value = beleg.data.bb;
+      const bis = document.querySelector("#beleg-import-bis")
+      bis.value = beleg.data.bb;
+      bis.select();
     }
   },
 
