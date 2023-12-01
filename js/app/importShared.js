@@ -1249,8 +1249,12 @@ const importShared = {
       src: "url",
       autoFill: false,
     });
-    document.querySelector("#beleg-import-von").value = seiteVon;
-    document.querySelector("#beleg-import-bis").value = seiteBis;
+    if (source.type !== "tei-dta") {
+      // beim DTA wird die zu importierende Seite aus der URL abgeleitet;
+      // dies würde die via beleg.formularImport() ermittelten Import-Seiten überschreiben
+      document.querySelector("#beleg-import-von").value = seiteVon;
+      document.querySelector("#beleg-import-bis").value = seiteBis;
+    }
     importShared.startImport();
     return true;
   },
