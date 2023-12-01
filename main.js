@@ -962,9 +962,8 @@ const fenster = {
       webPreferences: {
         contextIsolation: false,
         nodeIntegration: true,
-        enableRemoteModule: false,
         devTools: devtools,
-        defaultEncoding: "utf-8",
+        defaultEncoding: "UTF-8",
         spellcheck: false,
       },
     });
@@ -1139,9 +1138,8 @@ const fenster = {
       webPreferences: {
         contextIsolation: false,
         nodeIntegration: true,
-        enableRemoteModule: false,
         devTools: devtools,
-        defaultEncoding: "utf-8",
+        defaultEncoding: "UTF-8",
         spellcheck: false,
       },
     };
@@ -1313,9 +1311,8 @@ const fenster = {
       webPreferences: {
         contextIsolation: false,
         nodeIntegration: true,
-        enableRemoteModule: false,
         devTools: devtools,
-        defaultEncoding: "utf-8",
+        defaultEncoding: "UTF-8",
         spellcheck: false,
       },
     });
