@@ -63,6 +63,14 @@
         <h3>Verbesserungen</h3>
 
         <ul>
+          <li>
+            <p>Das Verhalten der Kürzungsfunktionen wurde modifiziert. Dies betrifft sowohl die <a href="#karteikarte-kuerzenBeleg" class="link-handbuch">harte</a> als auch die <a href="#belegliste-kuerzung" class="link-handbuch">dynamische</a> Variante. Bisher war es so, dass <em>alle</em> als Hauptlemma markierten Formvarianten in einem Absatz auftauchen mussten, um diesen vor einer Kürzung zu schützen. Von nun an genügt es, wenn eines der in den <a href="#menueKartei-formvarianten" class="link-handbuch">Formvarianten</a> zu findenden Wörter in einem Absatz auftaucht. Dabei ist es egal, ob es als Haupt- oder Nebenlemma markiert ist.</p>
+
+            <p>Absätze, in denen allein Formvarianten auftauchen, die mit <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch"><i>nur markieren</i></a> konfiguriert wurden, werden nach wie vor gekürzt.</p>
+
+            <p>Das ursprüngliche Verhalten stammt aus der Frühphase der App, in der davon ausgegangen wurde, dass in einem Karteikasten nur Belege zu einem einzigen Hauptlemma gesammelt werden. Wenn es sich hierbei um einen Merhwortausdruck handelte, wäre es durchaus sinnvoll, dass <em>alle</em> aktiven Formvarianten in einem Absatz auftauchen müssen. Der neue <a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Dialog</a> legt für Mehrwortausdrücke wie <i>kleine Leute</i> immer mehrere Formvarianten an: <q>kleine Leute</q>, <q>kleine</q> und <q>Leute</q>. Bei der ersten Variante müssen Sie künftig darauf achten, flektierte Formen in den Belegen manuell zu ergänzen: <q>kleinen Leuten</q>, <q>kleiner Leute</q> <abbr title="und so weiter">usw.</abbr>, weil diese nicht automatisch ermittelt werden können.</p>
+          </li>
+
           <li>Beim Import eines Belegs aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> wird im Zuge der <a href="#einstellungen-literaturWGdStyle" class="link-handbuch">Anpassung an den Zitierstil von <abbr title="Wortgeschichte digital">WGd</abbr></a> nun auch das Belegdatum korrigiert, wenn der Beleg aus der <i>Neuen Rheinischen Zeitung</i> stammt.</li>
 
           <li>Das Auslesen der Titeldaten aus einer <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Datei wurde verbessert.</li>
