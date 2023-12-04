@@ -121,14 +121,17 @@ const importTEI = {
     // fill in missing card values
     // date
     let da = data.cit.datumEntstehung;
+    if (data.cit.datumEntstehung === data.cit.datumDruck) {
+      data.cit.datumDruck = "";
+    }
     if (!da && data.cit.datumDruck) {
       da = data.cit.datumDruck;
     } else if (data.cit.datumDruck) {
       da += ` (Publikation von ${data.cit.datumDruck})`;
     }
-    beleg.data.da = da;
+    data.ds.da = da;
     // author
-    beleg.data.au = data.cit.autor.join("/") || "N.\u00A0N.";
+    data.ds.au = data.cit.autor.join("/") || "N.\u00A0N.";
     // citation
     data.ds.qu = importTEI.makeQu();
     // text class
@@ -152,7 +155,7 @@ const importTEI = {
           textclass.add(ts);
         }
       }
-      beleg.data.ts = [ ...textclass ].join("\n");
+      data.ds.ts = [ ...textclass ].join("\n");
     }
 
     // get quotation
@@ -255,13 +258,18 @@ const importTEI = {
       datumEntstehung: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='creation']"),
       datumEntstehung2: evaluator("//t:profileDesc/t:correspDesc/t:correspAction[@type='sent']/t:date"),
       datumEntstehung3: evaluator("//t:profileDesc/t:creation/t:date[@type='sent']"),
-      datumEntstehung4: evaluator("//t:sourceDesc/t:biblFull/t:publicationStmt/t:date"),
+      datumEntstehung4: evaluator("//t:biblFull/t:publicationStmt/t:date[@type='firstPublication']"),
+      datumEntstehung5: evaluator("//t:biblFull/t:publicationStmt/t:date"),
     };
     for (const [ k, v ] of Object.entries(pub)) {
       let item = v.iterateNext();
       const key = k.replace(/[0-9]$/, "");
       while (item) {
         if (/datumEntstehung[0-9]/.test(k)) {
+          if (data.datumEntstehung) {
+            item = v.iterateNext();
+            continue;
+          }
           // @when, @notBefore, @notAfter
           const when = item.getAttribute("when");
           if (!data.datumEntstehung && when) {
@@ -449,9 +457,8 @@ const importTEI = {
     td.url.push(data.url);
 
     // make and return title
-    let title = importShared.makeTitle(td);
+    let title = importShared.makeTitle(td, importTEI.data.ds);
     title = title.normalize("NFC");
-    title = importShared.changeTitleStyle(title);
     return title;
   },
 

@@ -1249,8 +1249,12 @@ const importShared = {
       src: "url",
       autoFill: false,
     });
-    document.querySelector("#beleg-import-von").value = seiteVon;
-    document.querySelector("#beleg-import-bis").value = seiteBis;
+    if (source.type !== "tei-dta") {
+      // beim DTA wird die zu importierende Seite aus der URL abgeleitet;
+      // dies würde die via beleg.formularImport() ermittelten Import-Seiten überschreiben
+      document.querySelector("#beleg-import-von").value = seiteVon;
+      document.querySelector("#beleg-import-bis").value = seiteBis;
+    }
     importShared.startImport();
     return true;
   },
@@ -1360,7 +1364,9 @@ const importShared = {
   // Titelaufnahme: aus übergebenen Daten zusammensetzen
   //   td = object
   //     (Datensatz mit den Titeldaten)
-  makeTitle (td) {
+  //   data = object | undefined
+  //     (Datenobjekt für die Karteikarte)
+  makeTitle (td, data = null) {
     let titel = "";
 
     // Autor
@@ -1507,7 +1513,7 @@ const importShared = {
     // Titel typographisch verbessern und zurückgeben
     titel = helfer.textTrim(titel, true);
     titel = helfer.typographie(titel);
-    titel = importShared.changeTitleStyle(titel);
+    titel = importShared.changeTitleStyle(titel, data);
     return titel;
 
     // feststellen, ob eine Person bereits im Titel genannt wird
@@ -1569,7 +1575,9 @@ const importShared = {
 
   // Format des Titesl ggf. anpassen
   //   titel = string
-  changeTitleStyle (titel) {
+  //   data = object | undefined
+  //     (Datenobjekt für die Karteikarte)
+  changeTitleStyle (titel, data = null) {
     // Titel nicht anpassen
     if (!optionen.data.einstellungen["literatur-wgd-style"]) {
       return titel;
@@ -1632,6 +1640,13 @@ const importShared = {
       } else if (g?.name === "Neue Rheinische Zeitung") {
         const monat = monate.indexOf(g.month) >= 0 ? monate.indexOf(g.month) + 1 : g.month;
         titel = `${g.name}, ${g.day}.\u00A0${monat}. ${g.year}, ${g.no}`;
+        if (data) {
+          if (/^[0-9]+$/.test(monat)) {
+            data.da = `${g.day}. ${monat}. ${g.year}`;
+          } else {
+            data.da = g.year;
+          }
+        }
         updated = true;
       } else if (/Dingler['’]?s [pP]olytechnisches Journal/.test(g?.name)) {
         titel = `Polytechnisches Journal ${g.no} (${g.year})`;

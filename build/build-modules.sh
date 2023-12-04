@@ -110,7 +110,7 @@ installModules() {
   for (( i=0; i<${#modules[@]}; i++ )); do
     moduleBase=${modules[$i]%%@*}
     echo -e "\n*** ${moduleBase} ***"
-    
+
     # nicht installiert => installieren
     lokal="node_modules/${moduleBase}/package.json"
     if ! test -e "$lokal"; then

@@ -63,7 +63,21 @@
         <h3>Verbesserungen</h3>
 
         <ul>
-          <li></li>
+          <li>
+            <p>Das Verhalten der Kürzungsfunktionen wurde modifiziert. Dies betrifft sowohl die <a href="#karteikarte-kuerzenBeleg" class="link-handbuch">harte</a> als auch die <a href="#belegliste-kuerzung" class="link-handbuch">dynamische</a> Variante. Bisher war es so, dass <em>alle</em> als Hauptlemma markierten Formvarianten in einem Absatz auftauchen mussten, um diesen vor einer Kürzung zu schützen. Von nun an genügt es, wenn eines der in den <a href="#menueKartei-formvarianten" class="link-handbuch">Formvarianten</a> zu findenden Wörter in einem Absatz auftaucht. Dabei ist es egal, ob es als Haupt- oder Nebenlemma markiert ist.</p>
+
+            <p>Absätze, in denen allein Formvarianten auftauchen, die mit <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch"><i>nur markieren</i></a> konfiguriert wurden, werden nach wie vor gekürzt.</p>
+
+            <p>Das ursprüngliche Verhalten stammt aus der Frühphase der App, in der davon ausgegangen wurde, dass in einem Karteikasten nur Belege zu einem einzigen Hauptlemma gesammelt werden. Wenn es sich hierbei um einen Merhwortausdruck handelte, wäre es durchaus sinnvoll, dass <em>alle</em> aktiven Formvarianten in einem Absatz auftauchen müssen. Der neue <a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Dialog</a> legt für Mehrwortausdrücke wie <i>kleine Leute</i> immer mehrere Formvarianten an: <q>kleine Leute</q>, <q>kleine</q> und <q>Leute</q>. Bei der ersten Variante müssen Sie künftig darauf achten, flektierte Formen in den Belegen manuell zu ergänzen: <q>kleinen Leuten</q>, <q>kleiner Leute</q> <abbr title="und so weiter">usw.</abbr>, weil diese nicht automatisch ermittelt werden können.</p>
+          </li>
+
+          <li>Beim Import eines Belegs aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> wird im Zuge der <a href="#einstellungen-literaturWGdStyle" class="link-handbuch">Anpassung an den Zitierstil von <abbr title="Wortgeschichte digital">WGd</abbr></a> nun auch das Belegdatum korrigiert, wenn der Beleg aus der <i>Neuen Rheinischen Zeitung</i> stammt.</li>
+
+          <li>Das Auslesen der Titeldaten aus einer <abbr title="Text Encoding Initiative" lang="en">TEI</abbr>-Datei wurde verbessert.</li>
+
+          <li>Die Sicherheit der App wurde verbessert.</li>
+
+          <li>Für Entwickler: Die Build-Scripts wurden alle in den Ordner <code class="quelltext">build</code> verschoben. Die einzelnen Node-Scripts zum Paketieren der App, sind in das Script <code class="quelltext">build.mjs</code> aufgegangen. Hilfe zur Benutzung gibt es via <code class="quelltext">node build.mjs --help</code>.</li>
         </ul>
 
         <h3>Updates</h3>
@@ -74,7 +88,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li></li>
@@ -125,7 +139,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Anpassung der Seitenzahl in der Quellenangabe war bei der harten Kürzung eines Belegs nicht korrekt</li>
@@ -144,7 +158,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>auf (relativ) langsamen Rechnern konnte ein bereits gefülltes XML-Fenster beim Öffnen nicht mehr korrekt aufgebaut werden</li>
@@ -191,7 +205,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die automatische Ermittlung der passenden Seiteneinstellungen einer via URL zu importierenden Quelle funktionierte nicht, wenn in den Feldern <i>Seite von</i> und <i>Seite bis</i> schon ein Wert stand</li>
@@ -220,7 +234,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die XSL-Dateien wurden beim Bauen der App nicht mit gepackt</li>
@@ -317,7 +331,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>30 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>30 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li><code class="quelltext">&lt;sub&gt;</code> und <code class="quelltext">&lt;sup&gt;</code> im Belegtext führten zu einer unschönen Sprengung der Zeilendurchschüsse</li>
@@ -478,7 +492,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Spalten in der Karteikarte waren nicht unter allen Umständen gleichmäßig breit</li>
@@ -655,7 +669,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>im XML-Fenster wurden mitunter illegale Artikel-IDs vorgeschlagen</li>
@@ -693,7 +707,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>mitunter wurden vom XML-Redaktionsfenster falsche Dateinamen vorgeschlagen</li>
@@ -786,7 +800,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurden in einem Belegdatum mehrere Jahrhundertangaben durch / voneinander getrennt (<q>16./17. Jh.</q>) konnte der Karteikasten nicht mehr geöffnet werden</li>
@@ -849,7 +863,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>der Hintergrund automatisch hervorgehobener Wörter im Belegtext, denen eine vom Standard abweichende Hintergrundfarbe zugewiesen wurde, wurde in der Druckfunktion nicht ausgegraut</li>
@@ -870,7 +884,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>ein nicht-typographisches Apostroph war in den Formvarianten verboten</li>
@@ -911,7 +925,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>Lemmata mit vorgestellten Homographenziffern wurden in der Karteisuche falsch sortiert</li>
@@ -1080,7 +1094,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wenn sehr helle Elemente dunkler dargestellt werden, gab es einen unpassenden Farbverlauf in der Literaturdatenbank</li>
@@ -1141,7 +1155,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>RTF-Dokumente wurden nicht als gültige Artikeldatei erkannt, sodass auch dann eine Erinnerung angezeigt wurde, den Artikel anzuhängen, wenn dies schon geschehen war</li>
@@ -1166,7 +1180,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurden im Karteiwort durch einen Slash abgetrennte Varianten mit angegeben, schlug die Ermittlung der Formvarianten für die einzelnen Wörter fehl</li>
@@ -1233,7 +1247,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>bei einer Karteisuche im Cache wurden auch Dateien in deaktivierten <abbr title="beziehungsweise">bzw.</abbr> bereits entfernten Pfaden durchsucht</li>
@@ -1264,7 +1278,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>unter gewissen Umständen wurde in den Suchergebnissen bei Nebenlemmata aufgeführt, mit welchen anderen Nebenlemmata sie zusammen behandelt werden</li>
@@ -1295,7 +1309,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das Fenster mit den Redaktionsmetdaten wurde nicht korrekt geladen, wenn in der Kartei Taggingkategorien zu finden waren, die bereits entfernt worden sind</li>
@@ -1334,7 +1348,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>eine Änderung im Framework führte dazu, dass die Hintergrundfarbe von Programmfenstern beim Öffnen stark flackerte</li>
@@ -1395,7 +1409,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>gewisse Funktionen waren fehlerhaft, wenn ein Bedeutungsgerüst nicht mehr existente diasystematische Angaben enthielt</li>
@@ -1466,7 +1480,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>im Redaktionsfenster für Wortinformationen wurden Leerzeichen im Feld Verweisziel unnötigerweise maskiert</li>
@@ -1493,7 +1507,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Liste mit Titelaufnahmen im Versionen-Popup der Literaturdatenbank ließ sich nicht mehr scrollen</li>
@@ -1526,7 +1540,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurde die App durch Klick auf eine ZTJ-Datei geöffnet, wurde diese ZTJ-Datei nach dem Schließen in einem neuen leeren Fenster (ZT > Neues Fenster) direkt wieder geöffnet</li>
@@ -1549,7 +1563,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das in v0.59.0 eingeführte Datenfeld für Nebenlemmata wurde beim Erstellen neuer Karteien nicht erzeugt</li>
@@ -1686,7 +1700,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>aus Belegen mit einer URL ohen Protokoll konnte kein XML-Snippet erstellt werden</li>
@@ -1725,7 +1739,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Filtern nach Redaktionsereignissen wurden nicht in allen Fällen die Redaktionsdaten der übergeordneten Kartei berücksichtigt</li>
@@ -1774,7 +1788,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>6 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>6 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>in der Alphabetleiste der Karteisuche wurden für Wörter, die mit Ziffern beginnen, die verschiedenen Ziffern einzeln aufgelistet</li>
@@ -1799,7 +1813,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>Karteien, in denen das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster noch nicht ausgefüllt wurde, konnten nicht mehr geöffnet werden</li>
@@ -1830,7 +1844,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien mit mehreren Themenfeldern werden nun korrekt in das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster importiert</li>
@@ -1859,7 +1873,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Ändern des Karteiworts wurden die Formvarianten zurückgesetzt, sodass auch manuell hinzugefügte Varianten verloren gingen</li>
@@ -1880,7 +1894,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>unter Windows funktionierte das automatische Exportieren der Literaturdatenbank via Kommandozeilenbefehl nicht, wenn die Zieldatei noch nicht existierte</li>
@@ -1958,7 +1972,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Einfügen von Text in die Karteikarte wurden Zeilenumbrüche in <code class="quelltext">&lt;pre&gt;</code>-Containern eliminiert</li>
@@ -1987,7 +2001,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>war das Datum des ältesten Belegs einer Kartei eine Jahrhundertangabe, konnte die Kartei nach dem Speichern nicht mehr geöffnet werden</li>
@@ -2035,7 +2049,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>Leerzeichen wurden im XML-Redaktionssystem unnötigerweise kodiert</li>
@@ -2056,7 +2070,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das Löschen eines leeren Abschnitts im XML-Redaktionsfenster führte zu einem Fehler</li>
@@ -2092,7 +2106,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>im Redaktionsfenster wurde unter gewissen Umständen eine illegale <abbr title="Extensible Markup Language" lang="en">XML</abbr>-ID erzeugt</li>
@@ -2140,7 +2154,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das <abbr title="Deutsches Textarchiv">DTA</abbr> ist fortan nur noch via https zu erreichen, weswegen der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import nicht mehr funktionierte</li>
@@ -2167,7 +2181,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>der <abbr title="Deutsches Textarchiv">DTA</abbr>-Import funktionierte nicht mehr</li>
@@ -2215,7 +2229,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>bei einer Suche in der Literaturdatenbank wurden in der Trefferliste unter Umständen auch Suchtreffer innerhalb von Tags, die zur Markierung der gefundenen Suchwörter dienen, markiert, was in der Ausgabe Zeichensalat produzierte</li>
@@ -2318,7 +2332,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wenn die App durch Klick auf eine <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei gestartet wurde, war es schwierig mithilfe von <i>Kartei&nbsp;&gt; Erstellen</i> eine neue Wortkartei zu erstellen</li>
@@ -2337,7 +2351,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Aufrufdaten von im <a href="#menueRedaktion-xml" class="link-handbuch"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> automatisch getaggten Links bekamen ein illegales Format, sodass die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Dateien nicht mehr validierten</li>
@@ -2358,7 +2372,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>bei der typographischen Aufbereitung von Datumsangaben wurden führende Nullen nicht eliminiert</li>
@@ -2397,7 +2411,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>6 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>6 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die durch das Redaktionsfenster erzeugte <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei war unter gewissen Umständen nicht wohlgeformt</li>
@@ -2455,7 +2469,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>unter gewissen Umständen wurden illegale Werte für Zahlenfelder in den Einstellungen gespeichert</li>
@@ -2502,7 +2516,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>4 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>unter Windows funktionierte das automatische Ergänzen der Anhänge nicht</li>
@@ -2549,7 +2563,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Ausrücken von Bedeutungen auf eine untergeordnete Ebene konnte das Bedeutungsgerüst korrumpiert werden</li>
@@ -2564,7 +2578,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>es war nicht mehr möglich, neue Karteien zu erstellen</li>
@@ -2587,7 +2601,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die automatische Hervorhebung des Karteiworts über Trennungs- oder Umbruchsmarkierungen ([¬] bzw. [:SEITE:]) funktionierte nicht mehr</li>
@@ -2608,7 +2622,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Erstellen einer neuen Kartei wurde die Datenstrukturen für Wortinformationen nicht initialisiert</li>
@@ -2623,7 +2637,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurde ein neues Bedeutungsgerüst erstellt und wurden danach in eben diesem neuen Bedeutungsgerüst eine oder mehrere neue Bedeutungen hinzugefügt, ohne dass zuvor in ein anderes Bedeutungsgerüst gewechselt wurde, wurden IDs von Bedeutungen unter Umständen doppelt vergeben, das Gerüst somit korrumpiert</li>
@@ -2653,7 +2667,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>App-Versionen auf der Basis von Electron&nbsp;9 konnten auf macOS nicht mehr gestartet werden</li>
@@ -2686,7 +2700,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>9 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>9 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>in der Bedeutungsgerüstfunktion wurde Text, der aus einem Office-Dokument in ein Bedeutungsfeld kopiert wurde, nicht korrekt bereinigt</li>
@@ -2709,7 +2723,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Filter unter Wortbildungen, Synonyme, Korpora und Textsorten trafen unter gewissen Umständen auf Karteikarten zu, auf die sie gar nicht zutreffen sollten</li>
@@ -2758,7 +2772,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das Einfärben der Klammerungen von Belegen, die zum Schneiden vorbereitet wurden, hat nicht immer korrekt funktioniert</li>
@@ -2805,7 +2819,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurde in der Literaturdatenbank der Dialog, der warnt, dass Änderungen noch nicht gespeichert wurden, abgebrochen, wurde dieser Abbruch wie ein Nein bewertet; die Änderungen wurden nicht gespeichert</li>
@@ -2838,7 +2852,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>3 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>unter gewissen Umständen wurden gelöschte Titelaufnahmen der Literaturdatenbank umgehend wieder hinzugefügt</li>
@@ -2869,7 +2883,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das Speichern der Literaturdatenbank führte unter sehr besonderen Umständen zu einem schweren Fehler, sodass der Speichervorgang nicht abgeschlossen werden konnte</li>
@@ -2914,7 +2928,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>das Kopieren eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Belegschnitts funktionierte nicht mehr</li>
@@ -2955,7 +2969,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Einstellungen wurden unter Electron 8.2.4 nicht mehr geladen</li>
@@ -2970,7 +2984,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>wurde beim Starten der App zugleich eine Kartei geöffnet, gingen alle Einstellungen verloren</li>
@@ -3013,7 +3027,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>lag der Fokus im Filtertyp-Feld der Karteisuche, konnte die Suche nicht via <kbd>⏎</kbd> angestoßen werden</li>
@@ -3084,7 +3098,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>gewisse Tags wurden beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets ignoriert</li>
@@ -3125,7 +3139,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>bei langen <abbr title="Uniform Resource Locator" lang="en">URL</abbr>s in Notizenfeldern konnte im Druckfenster eine unschöne, horizontale Scroll-Leiste erscheinen</li>
@@ -3192,7 +3206,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Datumsfelder waren auf nicht deutschen Betriebsystemen zu schmal</li>
@@ -3250,7 +3264,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurde <i>1 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>beim Rechtsklick auf einem Dateianhang wurde mitunter ein falsches Menü aufgebaut</li>
@@ -3289,7 +3303,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li>die Höhe des <a href="#menueKartei-notizen" class="link-handbuch">Notizen-Fensters</a> wurde nur angepasst, wenn es im Vordergrund war</li>
@@ -3347,7 +3361,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden insgesamt <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden insgesamt <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
         
         <ul>
           <li>Höhe des <a href="#karteikarte-beleg" class="link-handbuch">Belegfeldes der Karteikarte</a> wurde nach Benutzung eines Text-Tools nicht angepasst</li>
@@ -3402,7 +3416,7 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden insgesamt <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden insgesamt <i>8 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
         
         <ul>
           <li>beim Einfügen von <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> ins Belegfeld verschwanden mitunter Leerzeichen</li>
@@ -3417,7 +3431,7 @@
 
           <li>falsches Rechtsklickmenü bei Klick auf Anhang in <a href="#menueKartei-anhaenge" class="link-handbuch"><i>Kartei &gt; Anhänge</i></a></li>
 
-          <li>Abbruch der Auswahl eines Presets in der <a href="#ordner-installer" class="link-dokumentation datei">build.sh</a> korrigiert</li>
+          <li>Abbruch der Auswahl eines Presets in der <a href="#ordner-build" class="link-dokumentation datei">build.sh</a> korrigiert</li>
 
           <li>Über-Fenster waren unter Windows und macOS zu flach</li>
         </ul>
@@ -3493,7 +3507,7 @@
 
             <p>Zum anderen wird fortan beim Aufrufen des <code class="quelltext">fs</code>-Moduls in den Node-Scripts in allen Fällen auf <code class="quelltext">fsPromises</code>-Varianten zurückgegriffen. Dabei wurden <span class="fr">en passant</span> ein paar Fehler behoben.</p>
 
-            <p>Schließlich gibt es nun im Ordner <span class="datei">./installer/</span> zwei neue Build-Scripts: <span class="datei">build.sh</span> und <span class="datei">build-modules.sh</span>, die einem das Bauen erheblich erleichtern. Mit ihnen können unter <i>Linux</i> die benötigten Module installiert <abbr title="beziehungsweise">bzw.</abbr> mit Updates versorgt oder die App komfortabel gebaut werden. <a href="#ordner-installer" class="link-dokumentation">Details zu diesen Scripts in der technischen Dokumentation</a>.</p>
+            <p>Schließlich gibt es nun im Ordner <span class="datei">./installer/</span> zwei neue Build-Scripts: <span class="datei">build.sh</span> und <span class="datei">build-modules.sh</span>, die einem das Bauen erheblich erleichtern. Mit ihnen können unter <i>Linux</i> die benötigten Module installiert <abbr title="beziehungsweise">bzw.</abbr> mit Updates versorgt oder die App komfortabel gebaut werden. <a href="#ordner-build" class="link-dokumentation">Details zu diesen Scripts in der technischen Dokumentation</a>.</p>
           </li>
         </ul>
 

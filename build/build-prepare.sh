@@ -107,23 +107,15 @@ EOF
 prepareRelease() {
   cd "${dir}/../"
 
-  local version=$(grep '"version":' "package.json" | sed -r 's/.+: "(.+?)",/\1/')
-  local versionStart=$(echo "$version" | sed -r "s/(.+\.)[0-9]+$/\1/")
-  local versionPatch=$(echo "$version" | sed -r "s/.+\.([0-9]+)$/\1/")
-  (( versionPatch++ ))
-
-  echo -e "  \033[1;32m*\033[0m neue ZT-Version vorbereiten (\033[1;33m${versionStart}${versionPatch}\033[0m)"
+  echo -e "  \033[1;32m*\033[0m neue ZT-Version vorbereiten"
 
   # neuen Versionen-Block in den Changelog schreiben
   sed -i "s|<main>|${versionen_block//$'\n'/\\n}|" "win/changelog.html"
 
-  # Versionsnummer in der package.json hochzählen und als Beta-Version markieren
-  local versionZeile="  \"version\": \"${versionStart}${versionPatch}-beta.1\","
-  sed -i "s/  \"version\".*/${versionZeile}/" "package.json"
-
   # Commit erstellen
   git status
   echo ""
+  local version=$(grep '"version":' "package.json" | sed -r 's/.+: "(.+?)",/\1/')
   git commit -am "Vorbereitung für v${version}+"
   echo ""
   git status

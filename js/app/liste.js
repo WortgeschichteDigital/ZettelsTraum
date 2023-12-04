@@ -1218,7 +1218,8 @@ const liste = {
     let transparent = 0;
     for (const m of marks) {
       if (m.closest(".farbe0")) {
-        // Dieser Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist, deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
+        // Dieser Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist,
+        // deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
         transparent++;
       }
     }
@@ -1232,23 +1233,19 @@ const liste = {
       }
       return true; // alles okay (das Wort taucht auf und soll berücksichtigt werden)
     }
-    // 4. Test: Enthält der Absatz ein Nebenlemma?
-    if (div.querySelector(".nebenlemma")) {
-      return true; // Absätze mit min. einem Nebenlemma immer anzeigen
-    }
-    // 5. Test: Sollen hier überhaupt Wörter berücksichtigt werden?
+    // 4. Test: Sollen überhaupt Wörter berücksichtigt werden?
     const woerter = [];
     for (const i of helfer.formVariRegExpRegs) {
-      if (data.fv[i.wort].ma || data.fv[i.wort].nl) {
+      if (data.fv[i.wort].ma) {
         woerter.push(true);
       } else {
         woerter.push(false);
       }
     }
-    if (woerter.every(i => i === true)) {
+    if (woerter.every(i => i)) {
       return false; // keine Wörter zu berücksichtigen
     }
-    // 6. Test: Tauchen alle Wörter eines mehrgliedrigen Karteiworts auf?
+    // 5. Test: Taucht mindestens eines der zur berücksichtigenden Karteiwörter auf?
     const alleMarks = div.querySelectorAll(".wort.hauptlemma");
     for (let i = 0, len = alleMarks.length; i < len; i++) {
       let treffer = alleMarks[i].textContent;
@@ -1261,9 +1258,8 @@ const liste = {
       for (let j = 0, len = helfer.formVariRegExpRegs.length; j < len; j++) {
         const formVari = helfer.formVariRegExpRegs[j];
         let reg;
-        if (data.fv[formVari.wort].ma || data.fv[formVari.wort].nl) {
-          // ma: Wort nur markieren, sonst nicht berücksichtigen
-          // nl: Nebenlemmata für diese Operation nicht berücksichtigen
+        if (data.fv[formVari.wort].ma) {
+          // ma = Wort nur markieren, sonst nicht berücksichtigen
           continue;
         }
         if (!data.fv[formVari.wort].tr) { // nicht trunkiert
@@ -1272,11 +1268,8 @@ const liste = {
           reg = new RegExp(formVari.reg, "i");
         }
         if (reg.test(treffer)) {
-          woerter[j] = true;
+          return true;
         }
-      }
-      if (!woerter.includes(false)) {
-        return true; // es wurden alle Karteiwörter gefunden (hier testen, um unnötige Durchläufe zu sparen)
       }
     }
     return false; // manche Karteiwörter wurden nicht gefunden

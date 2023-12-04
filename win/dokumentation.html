@@ -85,7 +85,7 @@
           <!-- Electron -->
           <h2 id="framework-electron"><i>Electron</i>-Framework</h2>
 
-          <p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination der Rendering-Bibliothek von <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, und <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
+          <p><i class="app-name"></i> läuft auf dem <a href="https://electronjs.org/"><i>Electron</i></a>-Framework. <i>Electron</i> ist eine Kombination der Rendering-Bibliothek von <a href="https://www.chromium.org/Home"><i>Chromium</i></a>, dem Open-Source-Browser, auf dem <i>Google Chrome</i> basiert, <a href="https://nodejs.org/"><i>Node.js</i></a>, einer JavaScript-Laufzeitumgebung mit der Implementierung <i>V8</i>, und den Electron APIs. Das Framework kann komplett via JavaScript gesteuert werden, weswegen zum Programmieren der App Kenntnisse in den Sprachen <abbr title="Hyptertext Markup Language" lang="en">HTML</abbr>, <abbr title="Cascading Style Sheets" lang="en">CSS</abbr> und JavaScript vollkommen ausreichen.</p>
 
           <p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenstermanager die einzelnen Programmfenster, in denen eine auf die Rendering-Bibliothek eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenstermenüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 
@@ -93,18 +93,18 @@
 
           <p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können relativ leicht <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
 
-          <p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://electronjs.org/docs">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://electronjs.org/docs/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
+          <p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://www.electronjs.org/docs/latest/api/app">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://www.electronjs.org/docs/latest/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
 
           <!-- Download Quelltext -->
           <h2 id="framework-download">Download des Quelltexts</h2>
 
-          <p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">master</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
+          <p>Mit jedem <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/releases">Release</a> von <i class="app-name"></i> wird ein Tarball veröffentlicht, in dem sich ein Snapshot des Quellcodes befindet, wie er zum Zeitpunkt des Releases im Branch <code class="quelltext">main</code> aussah. Möchte man den Quelltext bearbeiten, kann man auf der Basis der archivierten Ordner und Dateien arbeiten.</p>
 
           <p>Bequemer ist es natürlich das GitHub-Repository einfach zu klonen:</p>
 
           <pre>$ git clone https://github.com/WortgeschichteDigital/ZettelsTraum.git zettelstraum</pre>
 
-          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">master</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
+          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">main</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
 
           <p>Eine weitere Möglichkeit, um an den Quelltext zu gelangen: Er ist auch in den <a href="#framework-quelltext">paketierten Versionen der App</a> enthalten und dort in einem speziellen Archiv im Programmordner zu finden.</p>
 
@@ -144,19 +144,21 @@ $ npm install --save-dev electron</pre>
           <p>Welche <i>Electron</i>-Version im App-Ordner installiert ist, kann man dem Fenster <a href="#" class="ueber-electron"><i>Über Electron</i></a> (auch aufzurufen über das Menü <i>Hilfe</i> im Hauptfenster von <i class="app-name"></i>) oder der <span class="datei">./package.json</span> entnehmen:</p>
 
           <pre class="quelltext">"devDependencies": {
-  "electron": "^4.1.4",
+  "electron": "^27.1.2",
   ...
 }</pre>
+
+          <p>Soll eine neue Major-Version installiert werden, muss an dieser Stelle der Wert des Schlüssels <code class="quelltext">electron</code> geändert werden. <code class="quelltext">^28</code> ermöglicht bspw. die Installation der Electron-Version&nbsp;28.</p>
 
           <p>Über die aktuelle Version im <i>Node.js</i>-Respository gibt der Paketmanager Auskunft:</p>
 
           <pre>$ npm show electron version</pre>
 
-          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://electronjs.org/docs/tutorial/support#supported-versions">für 36&nbsp;Wochen</a>, <abbr title="das heißt">d.&nbsp;h.</abbr> über drei Major-Release-Zyklen hinweg. Danach erreicht ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr>.</p>
+          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://www.electronjs.org/docs/latest/tutorial/electron-timelines">für einige Monate</a> ehe ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr> erreicht.</p>
 
-          <p>Möchte man nicht gleich mit dem ersten Release eines neuen Zweiges auf diesen wechseln, muss man den Releasezweig angeben, von dem man Updates beziehen will. Um es <abbr title="beispielsweise">bspw.</abbr> zu vermeiden, die Version&nbsp;5.0.x zu benutzen, muss man den Update-Befehl etwas anpassen, um weiterhin Updates des Release-Zweigs&nbsp;4.1.x zu bekommen:</p>
+          <p>Man muss nicht notwendigerweise die neuste Electron-Version nutzen. Es ist durchaus möglich einen bestimmten Release-Zweig zu installieren oder upzudaten. Um <abbr title="beispielsweise">bspw.</abbr> die Version&nbsp;25.0.x zu verwenden, müsste die Eingabe so aussehen:</p>
 
-          <pre>$ npm install --save-dev electron@4-1-x</pre>
+          <pre>$ npm install --save-dev electron@25-x-y</pre>
 
           <p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
 
@@ -164,14 +166,14 @@ $ npm install --save-dev electron</pre>
 
           <p>All das, was hier erklärt wurde, brauchen Sie nicht unbedingt händisch ausführen. Es genügt im Grunde, wenn Sie <i>Node.js</i> installieren. Danach können Sie es sich leicht machen und ein mitgeliefertes Script aufrufen, das den Rest für Sie übernimmt – zumindest wenn Ihre Entwicklungsumgebung unter <i>Linux</i> läuft:</p>
 
-          <pre>$ bash ./installer/build-modules.sh</pre>
+          <pre>$ bash ./build/build-modules.sh</pre>
 
           <p>Installiert werden dabei die nötigen Module zum Ausführen und Bauen von <i class="app-name"></i>. Sind diese bereits installiert, wird ein Update angestoßen – falls noch eins aussteht. Das Ausführen des Scripts erzeugt den Ordner <span class="datei">node_modules</span> und die Datei <span class="datei">package-lock.json</span> im App-Verzeichnis. In der <span class="datei">package.json</span> werden die Werte in <code class="quelltext">"devDependencies"</code> aufgefrischt.</p>
 
           <!-- Starten -->
           <h2 id="framework-starten">Starten der App</h2>
 
-          <p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz nämlich auch Scripts zum Starten und Paketieren von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p>
+          <p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz nämlich auch Scripts zum Starten von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p>
 
           <pre class="quelltext">"main": "main.js",</pre>
 
@@ -181,7 +183,7 @@ $ npm install --save-dev electron</pre>
   "start": "electron ."
 }</pre>
 
-          <p>(An diese Stelle könnte man auch Scripts zum <a href="#framework-paketieren">Paketieren der App</a> schreiben. Das geht aber mittlerweile deutlich komfortabler und variabler mit einem Node-Script.)
+          <p>(An dieser Stelle könnte man auch Scripts zum <a href="#framework-paketieren">Paketieren der App</a> einfügen. Hierfür steht allerdings ein mitgeliefertes, deutlich komfortableres Node-Script zur Verfügung.)
 
           <p>Für den Start der App ist bereits alles eingerichtet. Nach der Installation von <i>Electron</i> muss man im Programmordner nur noch den folgenden Befehl ausführen:</p>
 
@@ -192,7 +194,7 @@ $ npm install --save-dev electron</pre>
           <!-- Paketieren -->
           <h2 id="framework-paketieren">Paketieren der App</h2>
 
-          <p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron-userland/electron-packager/">Packager von <i>Electron</i></a> installiert werden (haben Sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
+          <p>Das Paketieren von <i class="app-name"></i> ist denkbar einfach. Zunächst muss der <a href="https://github.com/electron/packager">Packager von <i>Electron</i></a> installiert werden (haben Sie das Script <span class="datei">build-modules.sh</span> ausgeführt, ist dies bereits geschehen):</p>
 
           <pre>$ cd ./
 $ npm install --save-dev electron-packager</pre>
@@ -203,33 +205,31 @@ $ npm install --save-dev electron-packager</pre>
 
           <p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
-          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
+          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://electron.github.io/packager/main/interfaces/electronpackager.options.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
-          <p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./installer/packager.js</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden. Gibt man den Build-Ordner explizit an (drittes Argument), wird dieser anstelle von <span class="datei">../build</span> genutzt.</p>
+          <p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./build/build.mjs</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden. Gibt man den Build-Ordner explizit an, wird dieser anstelle von <span class="datei">../build</span> genutzt. (Die Reihenfolge der Argumente kann frei gewählt werden</p>
 
           <ul>
             <li>
               <p>Für <i>Linux</i>:</p>
 
-              <pre>$ node installer/packager.js linux [Build-Ordner]</pre>
+              <pre>$ node build/build.mjs packager linux [Build-Ordner]</pre>
             </li>
 
             <li>
               <p>Für <i>Windows</i>:</p>
 
-              <pre>$ node installer/packager.js win32 [Build-Ordner]</pre>
+              <pre>$ node build/build.mjs packager win32 [Build-Ordner]</pre>
             </li>
 
             <li>
               <p>Für <i>macOS</i>:</p>
 
-              <pre>$ node installer/packager.js darwin [Build-Ordner]</pre>
+              <pre>$ node build/build.mjs packager darwin [Build-Ordner]</pre>
             </li>
           </ul>
 
-          <p>Dabei ist wichtig, dass die <span lang="en">working directory</span> das Wurzelverzeichnis der App ist. Andernfalls findet das Script die Node-Module nicht.</p>
-
-          <p>Die mitgelieferten Scripts erstellen Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://github.com/electron-userland/electron-packager/blob/master/docs/api.md"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
+          <p>Das mitgelieferte Script erstellt Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://electron.github.io/packager/main/interfaces/electronpackager.options.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
 
           <p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span>, <span class="datei">zettelstraum-win32-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-darwin-x64</span>. Die Unterordner enthalten eine ausführbare Datei, über die die App gestartet werden kann:</p>
 
@@ -238,60 +238,56 @@ $ npm install --save-dev electron-packager</pre>
 
             <li><i>Windows</i>: <span class="datei">zettelstraum-win32-x64/zettelstraum.exe</span></li>
 
-            <li><i>macOS</i>: <span class="datei">zettelstraum-darwin-x64/zettelstraum.app/Contents/MacOS/zettelstraum</span></li>
+            <li><i>macOS</i>: <span class="datei">zettelstraum-darwin-x64/Zettel’s Traum.app/Contents/MacOS/zettelstraum</span></li>
           </ul>
 
-          <p>Unter <i>macOS</i> ist die angegebene ausführbare Datei nur interessant, wenn das Programm über die Kommandozeile (also via <i>Terminal</i>) gestartet werden soll. Ansonsten reicht natürlich ein Doppelklick auf den Ordner <span class="datei">zettelstraum.app</span>. Das System erkennt automatisch, dass dahinter ein Programm der Ausführung harrt und startet es.</p>
+          <p>Unter <i>macOS</i> ist die angegebene ausführbare Datei nur interessant, wenn das Programm über die Kommandozeile (also via <i>Terminal</i>) gestartet werden soll. Ansonsten reicht natürlich ein Doppelklick auf den Ordner <span class="datei">Zettel’s Traum.app</span>. Das System erkennt automatisch, dass dahinter ein Programm der Ausführung harrt und startet es.</p>
 
           <p>Auch wenn die ausführbare Programmdatei (im Falle von <i>Linux</i> und <i>Windows</i>) um die 100&nbsp;Megabyte groß ist – ohne die anderen Dateien und Verzeichnisse, die sich im Paketordner befinden, kann die App nicht gestartet werden. Möchte man sie auf ein anderes Betriebssystem kopieren, muss also immer der gesamte Ordner mit allen Dateien mitgenommen werden.</p>
 
-          <p>Wenn Sie unter <i>Linux</i> arbeiten: Die <span class="datei">packager.js</span> kann durch das <a href="#framework-buildScript">Build-Script</a> gesteuert werden. Dort besteht auch die Option, das Paket zu archivieren.</p>
+          <p>Wenn Sie unter <i>Linux</i> arbeiten: Die <span class="datei">build.mjs</span> kann durch das <a href="#framework-bashScript">Bash-Script</a> gesteuert werden. Dort besteht auch die Option, das Paket in einem Archiv zu komprimieren.</p>
 
           <!-- Installer -->
           <h2 id="framework-installer">Installer bauen</h2>
 
           <p>Ein bisschen schwieriger als die alleinige Paketierung ist das Bauen von Installern für die verschiedenen Betriebssysteme und Architekturen. Im Folgenden wird beschrieben, wie man mithilfe von <a href="https://github.com/electron-userland/electron-builder">electron-builder</a> Installer für <i>Windows</i> (<abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>), <i>macOS</i> (<abbr title="Apple Disk Image" lang="en">DMG</abbr>)  und <i>Linux</i> (DEB <abbr title="oder">od.</abbr> RPM) erzeugt.</p>
 
-          <p>Zunächst einmal muss der Builder via <code>npm</code> installiert werden:</p>
+          <p>Zunächst muss der Builder via <code>npm</code> installiert werden:</p>
 
           <pre>$ cd ./
 $ npm install --save-dev electron-builder</pre>
 
-          <p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages gibt es bereits fertige Node-Scripts, die sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedienen und einem die Konfigurationsarbeit bereits abgenommen haben: <span class="datei">./installer/installer-(linux|mac|win).js</span>. Alle Scripts erstellen Installer für eine 64-Bit-Architektur. Gemeinsam genutzte Funktionen der Installer-Scripts stehen im Modul <span class="datei">./installer/installer.js</span>.</p>
-
-          <p>Ausgeführt werden die Installer-Scripts mit <code>node</code>:</p>
+          <p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages ist in dem mitgelieferten Node-Script, das sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedient, bereits alles eingerichtet:</p>
 
           <ul>
             <li>
               <p><i>Linux</i>:</p>
 
-              <pre>$ node installer/installer-linux.js [appImage|deb|rpm]</pre>
+              <pre>$ node build/build.mjs builder linux [appImage|deb|rpm]  [Build-Ordner]</pre>
             </li>
 
             <li>
               <p><i>Windows</i>:</p>
 
-              <pre>$ node installer/installer-win.js [nsis]</pre>
+              <pre>$ node build/build.mjs builder win32 [nsis] [Build-Ordner]</pre>
             </li>
 
             <li>
               <p><i>macOS</i>:</p>
 
-              <pre>$ node installer/installer-mac.js [dmg]</pre>
+              <pre>$ node build/build.mjs builder darwin [dmg] [Build-Ordner]</pre>
             </li>
           </ul>
 
-          <p>Dabei ist wichtig, dass die <span lang="en">working directory</span> das Wurzelverzeichnis der App ist. Andernfalls finden die Scripts die Node-Module nicht.</p>
+          <p><abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur unter <i>macOS</i> gebaut werden, wo man sich zunächst natürlich die entsprechende Entwicklungsumgebung eingerichtet haben muss. Darum konnte <span class="obacht">nicht getestet</span> werden, ob der Installer wirklich funktionstüchtige Images auswirft.</p>
 
-          <p><abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur unter <i>macOS</i> gebaut werden, wo man sich zunächst natürlich die entsprechende Entwicklungsumgebung eingerichtet haben muss. Darum konnte <span class="obacht">nicht getestet</span> werden, ob der Installer wirklich funktionstüchtige Images auswirft. Bei Korrekturbedarf gerne <a href="#" class="ueber-app">kontaktieren</a>.</p>
+          <p>Wird kein Argument angegeben, das den Pakettyp spezifiziert, baut das Script für Linux ein DEB-Paket, für Windows einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer und für macOS ein <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket.</p>
 
-          <p>Wird kein Argument angegeben, das den Pakettyp spezifiziert, baut das <i>Linux</i>-Script ein DEB-Paket, das <i>Windows</i>-Script einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer und das <i>macOS</i>-Script ein <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket.</p>
+          <p>Wenn kein Build-Ordner übergeben wurde, wird vor dem Start des eigentlichen Bauvorgangs überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
 
-          <p>Vor dem Start des eigentlichen Bauvorgangs wird überprüft, ob eine Ebene oberhalb des App-Verzeichnisses ein Ordner namens <span class="datei">build</span> existiert. Er wird <abbr title="gegebenenfalls">ggf.</abbr> automatisch erzeugt.</p>
+          <p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Werden die Linux-Pakete mit der <a href="#framework-bashScript"><span class="datei">./build/build.sh</span></a> gebaut, wird automatisch versucht, mit den Daten im lokalen Git-Repository einen Changelog zu erstellen. Ist kein Repository vorhanden, wird auch in diesem Fall allein eine leere Datei namens <span class="datei">changelog</span> erzeugt.</p>
 
-          <p>Der Linux-Installer erwartet für DEB- und RPM-Pakete, dass in <span class="datei">../build</span> eine Plain-Text-Datei mit dem Namen <span class="datei">changelog</span> liegt. Ist kein Changelog vorhanden, wird automatisch eine leere Datei erzeugt. Werden die Linux-Pakete mit der <a href="#framework-buildScript"><span class="datei">./installer/build.sh</span></a> gebaut, wird automatisch versucht, mit den Daten im lokalen Git-Repository einen Changelog zu erstellen. Ist kein Repository vorhanden, wird auch in diesem Fall allein eine leere Datei namens <span class="datei">changelog</span> erzeugt.</p>
-
-          <p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Installer erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
+          <p>Nach <abbr title="circa">ca.</abbr> ein, zwei Minuten (die genaue Zeit hängt natürlich vom Rechner, aber auch vom gewählten Installer ab), sollte eine Meldung wie <code>Linux-Paketierung erstellt!</code> erscheinen. Kommt diese Meldung, kann es eigentlich nicht zu größeren Fehlern gekommen sein. Im Verzeichnis <span class="datei">../build</span> befinden sich nun ein Ordner und mehrere Dateien. Interessant ist natürlich nur die Installer-Datei:</p>
 
           <p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|dmg|exe|rpm)</p>
 
@@ -313,20 +309,20 @@ $ npm install --save-dev electron-builder</pre>
 
           <p>Bei der Installation unter <i>Linux</i> werden übrigens auch Dateityp-Icons abgelegt: <span class="datei">/usr/share/icons/hicolor/*/mimetypes/application-x-ztj.png</span>, und zwar jeweils in den Unterordnern <span class="datei">16x16</span>, <span class="datei">22x22</span>, <span class="datei">32x32</span>, <span class="datei">48x48</span>, <span class="datei">64x64</span> und <span class="datei">128x128</span>.</p>
 
-          <h2 id="framework-buildScript">Build-Script</h2>
+          <h2 id="framework-bashScript">Bash-Script</h2>
 
-          <p>Die Installer und auch die <a href="#framework-paketieren"><span class="datei">packager.js</span></a> lassen sich über ein mitgeliefertes Build-Script steuern:</p>
+          <p>Das Node-Script <span class="datei">./build/build.mjs</span> lässt sich über ein mitgeliefertes Bash-Script ausführen:</p>
 
-          <pre>$ bash installer/build.sh</pre>
+          <pre>$ bash build/build.sh</pre>
 
-          <p>Nach dem Aufruf kann man das Script über Texteingaben steuern. Das Ergebnis eines Bauvorgangs wird im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Optionen und Fragen im Script sind reichlich knapp gehalten, vielleicht sogar kryptisch. Darum hier ein paar kurze Erläuterungen.</p>
+          <p>Nach dem Aufruf kann man das Script über Texteingaben steuern. Das Ergebnis eines Bauvorgangs wird standardmäßig im erwähnten Ordner <span class="datei">../build/</span> abgelegt. Die Optionen und Fragen im Script sind reichlich knapp gehalten. Darum hier ein paar kurze Erläuterungen.</p>
 
           <p>Aufgaben, die ausgeführt werden können:</p>
 
           <ul>
-            <li><i>job:</i> Startet die Konfiguration eines einzelnen Build-Jobs. Das Script fragt nach und nach ab, was genau getan werden soll und führt den Job dann aus.</li>
+            <li><i>job:</i> Startet die Konfiguration eines einzelnen Build-Jobs. Das Script fragt nach und nach ab, was genau getan werden soll, und führt den Job dann aus.</li>
 
-            <li><i>release:</i> Führt <code>bash installer/build-release.sh</code> aus. Das Script bereitet verschiedene Dateien und das lokale Git-Repository nach und nach für ein Release vor, führt das Release selbst aber nicht durch.</li>
+            <li><i>release:</i> Führt <code>bash build/build-release.sh</code> aus. Das Script bereitet verschiedene Dateien und das lokale Git-Repository nach und nach für ein Release vor, führt das Bauen von Paketen aber nicht durch.</li>
 
             <li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das durchaus auch aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
 
@@ -334,7 +330,7 @@ $ npm install --save-dev electron-builder</pre>
 
             <li><i>config:</i> Startet die Konfigurationsabfrage, aber keinen Job. Stattdessen wird nur der Konfigurationsstring ausgeworfen. Hilfreich, wenn man sich einen Preset anlegen möchte.</li>
 
-            <li><i>modules:</i> Führt <code>bash installer/build-modules.sh</code> aus. Das Script installiert die benötigten Node-Module oder führt ein Update bereits installierter Module aus.</li>
+            <li><i>modules:</i> Führt <code>bash build/build-modules.sh</code> aus. Das Script installiert die benötigten Node-Module oder führt ein Update bereits installierter Module aus.</li>
 
             <li><i>exit:</i> Verlässt das Script.</li>
           </ul>
@@ -342,7 +338,7 @@ $ npm install --save-dev electron-builder</pre>
           <p>Zu den Abfragen, die beim Konfigurieren eines Jobs gestellt werden:</p>
 
           <ul>
-            <li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Für die Installer werden die Dateien <span class="datei">installer-(linux|mac|win).js</span> ausgeführt, für die Pakete die <span class="datei">packager.js</span>. Außerdem kann ein Tarball mit dem Quellcode erzeugt werden. Hierfür muss jedoch <a href="https://git-scm.com/">Git</a> eingerichtet sein.</li>
+            <li><i>Typ:</i> Hier geht es darum, ob Installer erstellt werden sollen oder portable Pakete. Außerdem kann ein Tarball mit dem Quellcode erzeugt werden. Hierfür muss jedoch <a href="https://git-scm.com/">Git</a> eingerichtet sein.</li>
 
             <li><i>OS:</i> Das Betriebssystem, auf dem Paket oder Installer laufen soll.</li>
 
@@ -409,11 +405,11 @@ $ npm install --save-dev electron-builder</pre>
 
           <p><a href="https://github.com/electron/asar">Asar</a> ist das Archiv-Programm von <i>Electron</i>, das ähnlich wie <code>tar</code> funktioniert: Der Inhalt ist nicht komprimiert, es werden schlicht Ordner und Dateien in einem Archiv zusammengefasst.</p>
 
-          <p>Entpacken lässt es sich via:</p>
+          <p>Entpacken lässt das Archiv sich via:</p>
 
           <pre>$ npx asar extract app.asar [ZIELORDNER]</pre>
 
-          <p>Das Archiv enthält den vollständigen Quelltext von <i class="app-name"></i>. Allerdings fehlen in der installierten App die Dateien aus dem Ordner <span class="datei">./resources/*</span>. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
+          <p>Enthalten ist der vollständige Quelltext von <i class="app-name"></i>. Allerdings fehlen in der installierten App die Dateien aus dem Ordner <span class="datei">./resources/*</span>. Sie liegen bereits entpackt im selben Ordner wie die <span class="datei">app.asar</span>.</p>
         </section>
 
         <!-- ORDNER UND DATEIEN -->
@@ -433,6 +429,39 @@ $ npm install --save-dev electron-builder</pre>
             <li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 
             <li><span class="datei">./README.md</span>: Markdown-Datei mit den wichtigsten Infos zu <i class="app-name"></i>. Sie wurde für die Anzeige im <a href="https://github.com/WortgeschichteDigital/ZettelsTraum">GitHub-Repository</a> erstellt.</li>
+          </ul>
+
+          <!-- Build -->
+          <h2 class="datei" id="ordner-build">./build/</h2>
+
+          <p>Scripts und Resourcen, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
+
+          <ul>
+            <li>
+              <p><span class="datei">./build/build.sh</span>: Build-Script, mit dem die App komfortabel paketiert werden kann. Das Script kann unter <i>Linux</i> via <code>bash build.sh</code> ausgeführt werden. Die Parameter werden über Texteingaben abgefragt.</p>
+
+              <p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets kann man in die ersten Zeilen der Datei schreiben; Muster sind bereits enthalten.</p>
+            </li>
+
+            <li><span class="datei">./build/build-modules.sh</span>: Der Aufruf des Scripts installiert die nötigen <i>Electron</i>-Module im App-Ordner. Sind sie bereits installiert, führt es ein Update aus. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
+
+            <li><span class="datei">./build/build-release.sh</span>: Das Script bereitet verschiedene Dateien und das lokale Git-Repository für ein Release vor. Dafür muss natürlich <a href="https://git-scm.com/">Git</a> installiert und ein Repository vorhanden sein. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
+
+            <li>
+              <p><span class="datei">./build/build.mjs</span>: Node-Script, das die Paketierung der App übernimmt. Welche Argumente übergeben werden können, steht in der Hilfe:</p>
+
+              <pre>$ node build.mjs --help</pre>
+            </li>
+
+            <li>
+              <p><span class="datei">./build/linux-after-install.sh</span>: Shell-Befehle, die beim Erstellen von DEB- und RPM-Paketen mit eingebunden und während der Installation ausgeführt werden können. Sie erzeugen einen Symlink zum Programm und führen die Dateityp-Assoziierung durch.</p>
+
+              <p>Die Scripts sind <span class="obacht">nur für dieses Szenario</span> gedacht! Wollen Sie die Dateityp-Assoziierung wieder aufheben oder neu erstellen, nutzen Sie lieber die Scripts im <a href="#ordner-resources">Filetype-Ordner</a>.</p>
+            </li>
+
+            <li><span class="datei">./build/linux-after-remove.sh</span>: Shell-Befehle, die von DEB- und RPM-Paketen nach der Deinstallation ausgeführt werden.</li>
+
+            <li><span class="datei">./build/mac-brackground.png</span>: Hintergrundbild für <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete. Es wird vom entsprechenden Installer-Script genutzt.</li>
           </ul>
 
           <!-- CSS -->
@@ -466,50 +495,6 @@ $ npm install --save-dev electron-builder</pre>
             <li><span class="datei">./img/readme/*.png</span>: Bilddateien, die in der <span class="datei">./README.md</span> angezeigt werden</li>
 
             <li><span class="datei">./img/win/*.png</span>: Bilddateien, die nur von Nebenfenstern (<a href="#" class="link-handbuch">Handbuch</a>, diese Dokumentation <abbr title="und so weiter">usw.</abbr>) geladen werden</li>
-          </ul>
-
-          <!-- Installer -->
-          <h2 class="datei" id="ordner-installer">./installer/</h2>
-
-          <p>Scripts und Resourcen, die für das Bauen von Installern genutzt werden (können). Sie werden im laufenden Betrieb von <i class="app-name"></i> nicht ausgeführt.</p>
-
-          <ul>
-            <li>
-              <p><span class="datei">./installer/build.sh</span>: Build-Script, mit dem die App komfortabel paketiert werden kann. Das Script kann unter <i>Linux</i> via <code>bash build.sh</code> ausgeführt werden. Die Parameter werden über Texteingaben abgefragt.</p>
-
-              <p>Im Script können auch Presets angelegt werden, um mehrere Pakete verschiedener Natur mit einem Befehl zu bauen. Die Presets kann man in die ersten Zeilen der Datei schreiben; Muster sind bereits enthalten.</p>
-            </li>
-
-            <li><span class="datei">./installer/build-modules.sh</span>: Der Aufruf des Scripts installiert die nötigen <i>Electron</i>-Module im App-Ordner. Sind sie bereits installiert, führt es ein Update aus. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
-
-            <li><span class="datei">./installer/build-release.sh</span>: Das Script bereitet verschiedene Dateien und das lokale Git-Repository für ein Release vor. Dafür muss natürlich <a href="https://git-scm.com/">Git</a> installiert und ein Repository vorhanden sein. Das Script kann auch aus der Datei <span class="datei">build.sh</span> heraus aufgerufen werden.</li>
-
-            <li><span class="datei">./installer/installer.js</span>: ein gemeinsam genutztes Modul für die Node-Scripts, die Installer erzeugen sowie für die <a href="#ordner-packager">packager.js</a></li>
-
-            <li>
-              <p><span class="datei">./installer/installer-linux.js</span>: Node-Script, das ein DEB- oder RPM-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>Debian</i>/<i>Ubuntu</i> <abbr title="beziehungsweise">bzw.</abbr> Distributionen, die auf RPM setzen, installiert werden kann.</p>
-
-              <p>Dieses und die folgenden Installer-Scripts (auch die <span class="datei">packager.js</span>) müssen aus dem App-Ordner heraus aufgerufen werden. Andernfalls finden Sie die Node-Module nicht:</p>
-
-              <pre>$ cd ./
-$ node installer/installer-linux.js deb</pre>
-            </li>
-
-            <li><span class="datei">./installer/installer-mac.js</span>: Node-Script, das einen <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Paket erzeugt, mit dem <i class="app-name"></i> auf <i>macOS</i> installiert werden kann. <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete können nur in <i>macOS</i> gebaut werden, darum wurde <span class="obacht">nicht getestet</span>, ob das Paket, das das Script erzeugen können sollte, wirklich funktioniert.</li>
-
-            <li><span class="datei">./installer/installer-win.js</span>: Node-Script, das einen <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installer erzeugt mit dem <i class="app-name"></i> auf <i>Windows</i> installiert werden kann.</li>
-
-            <li>
-              <p><span class="datei">./installer/linux-after-install.sh</span>: Shell-Befehle, die beim Erstellen von DEB- und RPM-Paketen mit eingebunden und während der Installation ausgeführt werden. Sie erzeugen einen Symlink zum Programm und führen die Dateityp-Assoziierung durch.</p>
-
-              <p>Die Scripts sind <span class="obacht">nur für dieses Szenario</span> gedacht! Wollen Sie die Dateityp-Assoziierung wieder aufheben oder neu erstellen, nutzen Sie lieber die Scripts im <a href="#ordner-resources">Filetype-Ordner</a>.</p>
-            </li>
-
-            <li><span class="datei">./installer/linux-after-remove.sh</span>: Shell-Befehle, die von DEB- und RPM-Paketen nach der Deinstallation ausgeführt werden.</li>
-
-            <li><span class="datei">./installer/mac-brackground.png</span>: Hintergrundbild für <abbr title="Apple Disk Image" lang="en">DMG</abbr>-Pakete. Es wird vom entsprechenden Installer-Script genutzt.</li>
-
-            <li id="ordner-packager"><span class="datei">./packager.js</span>: Node-Script, mit dem die App für <i>Windows, macOS</i> oder <i>Linux</i> paketiert werden kann; dabei werden keine Installer, sondern portable Ordner erzeugt, in denen eine ausführbare Datei zu finden ist. Details dazu unter <a href="#framework-paketieren">Paketieren der App</a>.</li>
           </ul>
 
           <!-- JavaScript -->
