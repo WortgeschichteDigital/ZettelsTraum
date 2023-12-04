@@ -48,18 +48,6 @@
       <div>
         <h2><span>Version 1.0.0-beta</span><time datetime="2019-12-24">24. Dezember 2019</time></h2>
 
-        <h3>Entfernte Funktionen</h3>
-
-        <ul>
-          <li></li>
-        </ul>
-
-        <h3>Neue Funktionen</h3>
-
-        <ul>
-          <li></li>
-        </ul>
-
         <h3>Verbesserungen</h3>
 
         <ul>
@@ -68,7 +56,9 @@
 
             <p>Absätze, in denen allein Formvarianten auftauchen, die mit <a href="#menueKartei-formvariantenNurMarkieren" class="link-handbuch"><i>nur markieren</i></a> konfiguriert wurden, werden nach wie vor gekürzt.</p>
 
-            <p>Das ursprüngliche Verhalten stammt aus der Frühphase der App, in der davon ausgegangen wurde, dass in einem Karteikasten nur Belege zu einem einzigen Hauptlemma gesammelt werden. Wenn es sich hierbei um einen Merhwortausdruck handelte, wäre es durchaus sinnvoll, dass <em>alle</em> aktiven Formvarianten in einem Absatz auftauchen müssen. Der neue <a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Dialog</a> legt für Mehrwortausdrücke wie <i>kleine Leute</i> immer mehrere Formvarianten an: <q>kleine Leute</q>, <q>kleine</q> und <q>Leute</q>. Bei der ersten Variante müssen Sie künftig darauf achten, flektierte Formen in den Belegen manuell zu ergänzen: <q>kleinen Leuten</q>, <q>kleiner Leute</q> <abbr title="und so weiter">usw.</abbr>, weil diese nicht automatisch ermittelt werden können.</p>
+            <p>Das ursprüngliche Verhalten stammte aus der Frühphase der App, in der davon ausgegangen wurde, dass in einem Karteikasten nur Belege zu einem einzigen Hauptlemma gesammelt werden. Wenn es sich hierbei um einen Merhwortausdruck handelte, wäre es durchaus sinnvoll, dass <em>alle</em> aktiven Formvarianten in einem Absatz auftauchen müssen.</p>
+
+            <p>Der neue <a href="#menueKartei-lemmata" class="link-handbuch">Lemmata-Dialog</a> legt für Mehrwortausdrücke wie <i>kleine Leute</i> immer mehrere Formvarianten an: <q>kleine Leute</q>, <q>kleine</q> und <q>Leute</q>. Bei der ersten Variante müssen Sie künftig darauf achten, flektierte Formen in den Belegen manuell zu ergänzen: <q>kleinen Leuten</q>, <q>kleiner Leute</q> <abbr title="und so weiter">usw.</abbr>, weil diese nicht automatisch ermittelt werden können.</p>
           </li>
 
           <li>Beim Import eines Belegs aus dem <abbr title="Deutsches Textarchiv">DTA</abbr> wird im Zuge der <a href="#einstellungen-literaturWGdStyle" class="link-handbuch">Anpassung an den Zitierstil von <abbr title="Wortgeschichte digital">WGd</abbr></a> nun auch das Belegdatum korrigiert, wenn der Beleg aus der <i>Neuen Rheinischen Zeitung</i> stammt.</li>
@@ -88,10 +78,18 @@
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
+        <p>Es wurden <i>5 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
-          <li></li>
+          <li>wenn man bei einem DWDS-Snippet mit einem Beleg aus dem DTA auf Nachfrage den TEI-Import angestoßen hat, wurde nicht die Seite, auf die die URL zeigt, sondern das ganze Dokument importiert</li>
+
+          <li>wenn man die Import-URL über das entsprechende Icon für einen Reimport in das Formular geladen hat und die zu importierenden Seiten bekannt waren, wurde nicht das Feld <i>Seite bis</i> fokussiert</li>
+
+          <li>wenn in einer TEI-Datei sowohl ein Entstehungs- als auch ein Druckdatum zu finden ist, wurden die Daten auch dann beide in das Datumsfeld eingefügt, wenn sie identisch sind</li>
+
+          <li>beim Importieren einer TEI-Datei wurden mitunter die falschen Datenobjekte befüllt</li>
+
+          <li>in den nach HTML exportierten Ergebnislisten einer Karteisuche änderte sich bei farblich bereits hinterlegten Zeilen die Hintergrundfarbe nicht mehr, wenn man mit der Maus über der Zeile schwebte</li>
         </ul>
       </div>
 
