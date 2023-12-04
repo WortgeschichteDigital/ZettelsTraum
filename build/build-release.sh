@@ -45,9 +45,9 @@ if (( $? > 0 )); then
   exit 1
 fi
 
-# nicht in Branch 'master'
-if [ "$(git branch --show-current)" != "master" ]; then
-  echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'"
+# nicht in Branch 'main'
+if [ "$(git branch --show-current)" != "main" ]; then
+  echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'main'"
   exit 1
 fi
 

@@ -59,11 +59,11 @@ if command -v git >/dev/null 2>&1; then
   fi
 fi
 
-# Git-Repository vorhanden, aber nicht in Branch 'master'
-if (( repository > 0 )) && [ "$(git branch --show-current)" != "master" ]; then
-  echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'master'\n"
+# Git-Repository vorhanden, aber nicht in Branch 'main'
+if (( repository > 0 )) && [ "$(git branch --show-current)" != "main" ]; then
+  echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m nicht in Branch 'main'\n"
   while : ; do
-    read -ep "checkout 'master' (j/n): " checkout
+    read -ep "checkout 'main' (j/n): " checkout
     if [ "$checkout" = "j" ]; then
       echo ""
       # Working Tree nicht clean
@@ -71,10 +71,10 @@ if (( repository > 0 )) && [ "$(git branch --show-current)" != "master" ]; then
         echo -e "\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m Working Tree nicht clean"
         exit 1
       fi
-      # checkout 'master'
-      git checkout master
+      # checkout 'main'
+      git checkout main
       if (( $? > 0 )); then
-        echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m checkout 'master' misslungen"
+        echo -e "\n\033[1;31mFehler!\033[0m\n  \033[1;31m*\033[0m checkout 'main' misslungen"
         exit 1
       fi
       break

@@ -95,7 +95,7 @@ read -r -d '' versionen_block << EOF
 
         <h3>Behobene Fehler</h3>
 
-        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/master">Commit-Messages</a>.</p>
+        <p>Es wurden <i>2 Fehler</i> behoben. Details in den <a href="https://github.com/WortgeschichteDigital/ZettelsTraum/commits/main">Commit-Messages</a>.</p>
 
         <ul>
           <li></li>
