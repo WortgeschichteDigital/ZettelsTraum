@@ -8,9 +8,9 @@ const fsp = require("fs").promises;
 const path = require("path");
 
 // eigene Module
-const dienste = require("./js/main/dienste");
-const i18n = require("./js/main/i18n");
-const popup = require("./js/main/popup");
+const dienste = require("./js/main/dienste.cjs");
+const i18n = require("./js/main/i18n.cjs");
+const popup = require("./js/main/popup.cjs");
 
 // Speicher-Objekt für die Fenster; Format der Einträge:
 //   "Fenster-ID" (numerischer String, beginnend mit 1; wird von Electron vergeben)

@@ -1,5 +1,3 @@
-"use strict";
-
 const { BrowserWindow, Menu, MenuItem } = require("electron");
 const path = require("path");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 const { BrowserWindow, dialog } = require("electron");
 const fsP = require("fs").promises;
 const path = require("path");
