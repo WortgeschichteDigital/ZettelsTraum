@@ -4168,6 +4168,9 @@ const xml = {
     if (!d.le.length) {
       fehlstellen.push("• min. ein Lemma angeben");
     }
+    if (d.ab?.[0]?.ct?.[0]?.it !== "Überschrift") {
+      fehlstellen.push("• Überschrift im „Kurz gefasst“ ergänzen");
+    }
     const bloecke = [
       {
         obj: d.ab,
