@@ -1645,6 +1645,7 @@ ipcMain.handle("infos-senden", evt => {
   const bw = BrowserWindow.fromWebContents(evt.sender);
   return {
     appInfo: {
+      appPath: app.getAppPath(),
       documents: app.getPath("documents"),
       name: app.name,
       packaged: !devtools,
