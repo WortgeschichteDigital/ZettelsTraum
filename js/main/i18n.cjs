@@ -1,5 +1,3 @@
-"use strict";
-
 const i18n = {
   en: {
     "app-neues-fenster": "New Window",
