@@ -4,7 +4,7 @@
 
 #red-wi > div {
   margin-top: 40px;
-  max-width: 650px;
+  max-width: 1000px;
 }
 
 
@@ -46,12 +46,12 @@
 
 #red-wi-text > input:first-child,
 #red-wi-intern > input:first-child {
-  width: calc(38% - 29px - 2px - 5px); /* padding, border, margin / 2 */
+  width: calc(25% - 29px - 2px - 5px); /* padding, border, margin / 2 */
 }
 
 #red-wi-text > input:nth-child(3),
 #red-wi-intern > input:nth-child(3) {
-  width: calc(38% - 10px - 2px - 5px); /* padding, border, margin / 2 */
+  width: calc(51% - 10px - 2px - 5px); /* padding, border, margin / 2 */
 }
 
 #red-wi-text .dropdown-cont,
