@@ -1246,7 +1246,7 @@ const liste = {
       return false; // keine Wörter zu berücksichtigen
     }
     // 5. Test: Taucht mindestens eines der zur berücksichtigenden Karteiwörter auf?
-    const alleMarks = div.querySelectorAll(".wort.hauptlemma");
+    const alleMarks = div.querySelectorAll(".wort.hauptlemma, .wort.nebenlemma");
     for (let i = 0, len = alleMarks.length; i < len; i++) {
       let treffer = alleMarks[i].textContent;
       if (alleMarks[i].classList.contains("wort-kein-ende")) {
