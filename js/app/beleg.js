@@ -1474,10 +1474,10 @@ const beleg = {
         if (!i) {
           return;
         }
-        text += `<p>${helfer.escapeHtml(i)}</p>`;
+        text += `<p><small>${helfer.escapeHtml(i)}</small></p>`;
       });
       if (obj.ul) {
-        text += `<p>${obj.ul}<br>(Aufrufdatum: ${helfer.datumFormat(obj.ud, "einfach")})</p>`;
+        text += `<p><small>${obj.ul}<br>(Aufrufdatum: ${helfer.datumFormat(obj.ud, "einfach")})</small></p>`;
       }
     } else {
       text += "\n\n---\n\n";
