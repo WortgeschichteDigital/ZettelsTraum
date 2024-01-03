@@ -485,13 +485,21 @@ const helfer = {
       hervorhebungen.push(".user");
     }
     if (hervorhebungen.length) {
-      // Layout festlegen
-      let style = "font-weight: bold";
-      if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
-        style += "; background-color: #e5e5e5";
-      }
       // verbliebene Karteiwort-Hervorhebungen umwandeln
-      helfer.clipboardHtmlErsetzen(cont, hervorhebungen.join(", "), "span", style);
+      cont.querySelectorAll(hervorhebungen.join(", ")).forEach(i => {
+        i.innerHTML = `<b>${i.innerHTML}</b>`;
+      });
+      if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
+        // <mark> durch <span> mit @style ersetzen
+        helfer.clipboardHtmlErsetzen(cont, hervorhebungen.join(", "), "span", "background-color: #e5e5e5");
+      } else {
+        // <mark> entfernen
+        const template = document.createElement("template");
+        cont.querySelectorAll(hervorhebungen.join(", ")).forEach(i => {
+          template.innerHTML = i.innerHTML;
+          i.parentNode.replaceChild(template.content, i);
+        });
+      }
     }
     // Annotierungen endgültig löschen
     helfer.clipboardHtmlErsetzen(cont, ".annotierung-wort");
