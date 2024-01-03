@@ -743,8 +743,8 @@ const filter = {
   //     (Daten zum Filter)
   aufbauenFilter (f, obj) {
     // Muss der Filter wirklich gedruckt werden?
-    if (/^bedeutungen-/.test(f)) {
-      if (obj.wert === 0 && f === "bedeutungen-undefined") {
+    if (/^(bedeutungen|lemmata)-/.test(f)) {
+      if (obj.wert === 0 && (f === "bedeutungen-undefined" || f === "lemmata-undefined")) {
         return [ null ];
       }
     } else if (!obj.wert && !filter.exklusivAktiv.includes(f)) {
@@ -777,7 +777,7 @@ const filter = {
     input.type = "checkbox";
     filter.anwenden(input);
     p.appendChild(input);
-    if (!obj.wert && /^bedeutungen-/.test(f)) {
+    if (!obj.wert && /^(bedeutungen|lemmata)-/.test(f)) {
       input.disabled = true;
     }
 
