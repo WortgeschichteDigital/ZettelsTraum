@@ -492,10 +492,17 @@ const helfer = {
       if (optionen.data.einstellungen["textkopie-wort-hinterlegt"]) {
         // <mark> durch <span> mit @style ersetzen
         helfer.clipboardHtmlErsetzen(cont, hervorhebungen.join(", "), "span", "background-color: #e5e5e5");
-      } else {
-        // <mark> entfernen
+      }
+      // <mark> entfernen
+      let sicherung = 0;
+      while (cont.querySelector("mark")) {
+        if (sicherung > 25) {
+          // nur für den Fall, dass irgendetwas ganz doll schiefgehen sollte
+          break;
+        }
+        sicherung++;
         const template = document.createElement("template");
-        cont.querySelectorAll(hervorhebungen.join(", ")).forEach(i => {
+        cont.querySelectorAll("mark").forEach(i => {
           template.innerHTML = i.innerHTML;
           i.parentNode.replaceChild(template.content, i);
         });
