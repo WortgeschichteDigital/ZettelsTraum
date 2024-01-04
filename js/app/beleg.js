@@ -1400,25 +1400,60 @@ const beleg = {
   toolsKopierenKlammern ({ text, html = false }) {
     // Bindestriche einfügen
     text = text.replace(/\[¬\]([A-ZÄÖÜ])/g, (m, p1) => `-${p1}`);
+
     // technische Klammern entfernen
     text = text.replace(/\[¬\]|\[:.+?:\]/g, "");
+
     // Autorenzusatz, Löschung, Streichung
     const farben = {
       autorenzusatz: "#0a0",
       loeschung: "#f00",
       streichung: "#00f",
     };
-    text = text.replace(/<span class="klammer-(autorenzusatz|loeschung|streichung)">(.+?)<\/span>/g, (m, typ, text) => {
-      let r = `[${text}]`;
-      if (typ === "loeschung" && !optionen.data.einstellungen["textkopie-klammern-loeschung"] ||
-          typ === "streichung" && !optionen.data.einstellungen["textkopie-klammern-streichung"]) {
-        r = "[…]";
+    const selektoren = [
+      ".klammer-autorenzusatz",
+      ".klammer-loeschung",
+      ".klammer-streichung",
+    ];
+
+    const cont = document.createElement("div");
+    cont.innerHTML = text;
+    let s = 0;
+    while (cont.querySelector(selektoren.join(", "))) {
+      if (s > 10) {
+        // zur Sicherheit, für den Fall, dass ich irgendetwas nicht bedacht habe
+        break;
       }
-      if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
-        r = `<span style="color: ${farben[typ]}">${r}</span>`;
+      s++;
+      cont.querySelectorAll(selektoren.join(", ")).forEach(i => {
+        const typ = typErmitteln(i);
+        let r = `[${i.innerHTML}]`;
+        if (typ === "loeschung" && !optionen.data.einstellungen["textkopie-klammern-loeschung"] ||
+            typ === "streichung" && !optionen.data.einstellungen["textkopie-klammern-streichung"]) {
+          r = "[…]";
+        }
+        if (html && optionen.data.einstellungen["textkopie-klammern-farbe"]) {
+          r = `<span style="color: ${farben[typ]}">${r}</span>`;
+        }
+        const template = document.createElement("template");
+        template.innerHTML = r;
+        i.parentNode.replaceChild(template.content, i);
+      });
+    }
+
+    text = cont.innerHTML;
+
+    function typErmitteln (n) {
+      if (n.classList.contains("klammer-autorenzusatz")) {
+        return "autorenzusatz";
+      } else if (n.classList.contains("klammer-loschung")) {
+        return "loeschung";
+      } else if (n.classList.contains("klammer-streichung")) {
+        return "streichung";
       }
-      return r;
-    });
+      return "";
+    }
+
     // Ergebnis zurückgeben
     return helfer.textTrim(text, true);
   },
