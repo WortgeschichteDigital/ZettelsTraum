@@ -122,6 +122,7 @@ const xml = {
     }
 
     // Belegtext aufbereiten
+    //   - identische Klammerungen, die direkt ineinander verschachtelt sind, korrigieren
     //   - Klammerungen aufbereiten
     //   - Leerzeichen vor <Streichung> ergänzen (werden beim Auflösen wieder entfernt)
     //   - überflüssige Versauszeichnungen am Ende ersetzen (kann bei wilder Auswahl passieren)
@@ -130,6 +131,18 @@ const xml = {
     //   - Text trimmen (durch Streichungen können doppelte Leerzeichen entstehen)
     //   - verschachtelte Hervorhebungen zusammenführen
     //   - Versauszeichnungen komplettieren/korrigieren
+    for (const i of [ "Autorenzusatz", "Loeschung", "Streichung" ]) {
+      const regTest = new RegExp(`<${i}><${i}>|</${i}></${i}>`);
+      const regRep = new RegExp(`<${i}><${i}>|</${i}></${i}>`, "g");
+      while (regTest.test(text)) {
+        text = text.replace(regRep, m => {
+          if (/^<\//.test(m)) {
+            return `</${i}>`;
+          }
+          return `<${i}>`;
+        });
+      }
+    }
     text = klammernTaggen(text);
     text = text.replace(/([^\s])(<Streichung>[,;:/])/g, (m, p1, p2) => p1 + " " + p2);
     text = text.replace(/(<\/Vers><Vers>\s?)+$/, "");
