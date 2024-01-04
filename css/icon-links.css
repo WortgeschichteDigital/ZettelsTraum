@@ -15,126 +15,101 @@
 }
 
 .icon-bedeutung {
-  -webkit-mask-image: url(../img/bedeutung.svg);
   mask-image: url(../img/bedeutung.svg);
 }
 
 .icon-auge {
-  -webkit-mask-image: url(../img/auge.svg);
   mask-image: url(../img/auge.svg);
 }
 
 .icon-auge-durchgestrichen {
-  -webkit-mask-image: url(../img/auge-durchgestrichen.svg);
   mask-image: url(../img/auge-durchgestrichen.svg);
 }
 
 .icon-einfuegen {
-  -webkit-mask-image: url(../img/einfuegen.svg);
   mask-image: url(../img/einfuegen.svg);
 }
 
 .icon-entkoppeln {
-  -webkit-mask-image: url(../img/x-dick.svg);
   mask-image: url(../img/x-dick.svg);
 }
 
 .icon-exportieren {
-  -webkit-mask-image: url(../img/dokument-export.svg);
   mask-image: url(../img/dokument-export.svg);
 }
 
 .icon-kreis-fragezeichen {
-  -webkit-mask-image: url(../img/kreis-fragezeichen.svg);
   mask-image: url(../img/kreis-fragezeichen.svg);
 }
 
 .icon-kreis-info {
-  -webkit-mask-image: url(../img/kreis-info.svg);
   mask-image: url(../img/kreis-info.svg);
 }
 
 .icon-link-link {
-  -webkit-mask-image: url(../img/link.svg);
   mask-image: url(../img/link.svg);
 }
 
 .icon-lupe {
-  -webkit-mask-image: url(../img/lupe.svg);
   mask-image: url(../img/lupe.svg);
 }
 
 .icon-muelleimer {
-  -webkit-mask-image: url(../img/muelleimer.svg);
   mask-image: url(../img/muelleimer.svg);
 }
 
 .icon-oeffnen {
-  -webkit-mask-image: url(../img/oeffnen.svg);
   mask-image: url(../img/oeffnen.svg);
 }
 
 .icon-pfeil-gerade-hoch {
-  -webkit-mask-image: url(../img/pfeil-gerade-hoch.svg);
   mask-image: url(../img/pfeil-gerade-hoch.svg);
 }
 
 .icon-pfeil-gerade-links {
-  -webkit-mask-image: url(../img/pfeil-gerade-links.svg);
   mask-image: url(../img/pfeil-gerade-links.svg);
 }
 
 .icon-pfeil-gerade-rechts {
-  -webkit-mask-image: url(../img/pfeil-gerade-rechts.svg);
   mask-image: url(../img/pfeil-gerade-rechts.svg);
 }
 
 .icon-pfeil-gerade-runter {
-  -webkit-mask-image: url(../img/pfeil-gerade-runter.svg);
   mask-image: url(../img/pfeil-gerade-runter.svg);
 }
 
 .icon-pfeil-kreis {
-  -webkit-mask-image: url(../img/pfeil-kreis.svg);
   mask-image: url(../img/pfeil-kreis.svg);
 }
 
 .icon-plus-dick {
-  -webkit-mask-image: url(../img/plus-dick.svg);
   mask-image: url(../img/plus-dick.svg);
 }
 
 .icon-speichern {
-  -webkit-mask-image: url(../img/speichern.svg);
   mask-image: url(../img/speichern.svg);
 }
 
 .icon-speichern-unter {
-  -webkit-mask-image: url(../img/speichern-unter.svg);
   mask-image: url(../img/speichern-unter.svg);
 }
 
 .icon-stift {
-  -webkit-mask-image: url(../img/stift.svg);
   mask-image: url(../img/stift.svg);
 }
 
 .icon-stern {
-  -webkit-mask-image: url(../img/stern.svg);
   mask-image: url(../img/stern.svg);
 }
 
 .icon-uhr {
-  -webkit-mask-image: url(../img/uhr.svg);
   mask-image: url(../img/uhr.svg);
 }
 
 .icon-x-dick {
-  -webkit-mask-image: url(../img/x-dick.svg);
   mask-image: url(../img/x-dick.svg);
 }
 
 .icon-xml {
-  -webkit-mask-image: url(../img/xml.svg);
   mask-image: url(../img/xml.svg);
 }

@@ -7,7 +7,6 @@
 }
 
 .icon-h-notizen {
-  -webkit-mask-image: url(../../img/stift.svg);
   mask-image: url(../../img/stift.svg);
 }
 

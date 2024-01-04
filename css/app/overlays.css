@@ -50,12 +50,10 @@
 }
 
 .icon-schliessen {
-  -webkit-mask-image: url(../../img/x.svg);
   mask-image: url(../../img/x.svg);
 }
 
 .icon-handbuch {
-  -webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
   mask-image: url(../../img/kreis-fragezeichen.svg);
   right: 34px !important;
 }

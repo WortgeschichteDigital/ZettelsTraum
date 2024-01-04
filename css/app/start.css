@@ -40,7 +40,6 @@
 }
 
 .icon-h-zuletzt {
-  -webkit-mask-image: url(../../img/uhr.svg);
   mask-image: url(../../img/uhr.svg);
 }
 

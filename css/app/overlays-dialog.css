@@ -23,17 +23,14 @@
 }
 
 .prompt .icon-h {
-  -webkit-mask-image: url(../../img/kreis-info.svg);
   mask-image: url(../../img/kreis-info.svg);
 }
 
 .confirm .icon-h {
-  -webkit-mask-image: url(../../img/kreis-fragezeichen.svg);
   mask-image: url(../../img/kreis-fragezeichen.svg);
 }
 
 .alert .icon-h {
-  -webkit-mask-image: url(../../img/kreis-ausrufezeichen.svg);
   mask-image: url(../../img/kreis-ausrufezeichen.svg);
 }
 

@@ -8,7 +8,6 @@
 }
 
 .icon-h-geruestwechseln {
-  -webkit-mask-image: url(../../img/geruest-zahnrad.svg);
   mask-image: url(../../img/geruest-zahnrad.svg);
 }
 

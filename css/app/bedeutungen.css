@@ -81,7 +81,6 @@
 
 #bedeutungen-gerueste-config {
   margin-left: 5px;
-  -webkit-mask-image: url(../../img/zahnrad.svg);
   mask-image: url(../../img/zahnrad.svg);
   background-color: var(--iconHell);
 }
@@ -312,82 +311,66 @@ a[class*="icon-windrose"] {
 }
 
 .icon-windrose_ {
-  -webkit-mask-image: url(../../img/windrose_.svg);
   mask-image: url(../../img/windrose_.svg);
 }
 
 .icon-windrose_l-u-r-d {
-  -webkit-mask-image: url(../../img/windrose_l-u-r-d.svg);
   mask-image: url(../../img/windrose_l-u-r-d.svg);
 }
 
 .icon-windrose_l-u-r {
-  -webkit-mask-image: url(../../img/windrose_l-u-r.svg);
   mask-image: url(../../img/windrose_l-u-r.svg);
 }
 
 .icon-windrose_l-u-d {
-  -webkit-mask-image: url(../../img/windrose_l-u-d.svg);
   mask-image: url(../../img/windrose_l-u-d.svg);
 }
 
 .icon-windrose_l-u {
-  -webkit-mask-image: url(../../img/windrose_l-u.svg);
   mask-image: url(../../img/windrose_l-u.svg);
 }
 
 .icon-windrose_l-r-d {
-  -webkit-mask-image: url(../../img/windrose_l-r-d.svg);
   mask-image: url(../../img/windrose_l-r-d.svg);
 }
 
 .icon-windrose_l-r {
-  -webkit-mask-image: url(../../img/windrose_l-r.svg);
   mask-image: url(../../img/windrose_l-r.svg);
 }
 
 .icon-windrose_l-d {
-  -webkit-mask-image: url(../../img/windrose_l-d.svg);
   mask-image: url(../../img/windrose_l-d.svg);
 }
 
 .icon-windrose_l {
-  -webkit-mask-image: url(../../img/windrose_l.svg);
   mask-image: url(../../img/windrose_l.svg);
 }
 
 .icon-windrose_u-r-d {
-  -webkit-mask-image: url(../../img/windrose_u-r-d.svg);
   mask-image: url(../../img/windrose_u-r-d.svg);
 }
 
 .icon-windrose_u-r {
-  -webkit-mask-image: url(../../img/windrose_u-r.svg);
   mask-image: url(../../img/windrose_u-r.svg);
 }
 
 .icon-windrose_u-d {
-  -webkit-mask-image: url(../../img/windrose_u-d.svg);
   mask-image: url(../../img/windrose_u-d.svg);
 }
 
 .icon-windrose_u {
-  -webkit-mask-image: url(../../img/windrose_u.svg);
   mask-image: url(../../img/windrose_u.svg);
 }
 
 .icon-windrose_r-d {
-  -webkit-mask-image: url(../../img/windrose_r-d.svg);
   mask-image: url(../../img/windrose_r-d.svg);
 }
 
 .icon-windrose_r {
-  -webkit-mask-image: url(../../img/windrose_r.svg);
   mask-image: url(../../img/windrose_r.svg);
 }
 
 .icon-windrose_d {
-  -webkit-mask-image: url(../../img/windrose_d.svg);
   mask-image: url(../../img/windrose_d.svg);
 }
 
@@ -405,7 +388,6 @@ a[class*="icon-windrose"] {
 }
 
 #bedeutungen-cont .icon-loeschen {
-  -webkit-mask-image: url(../../img/muelleimer.svg);
   mask-image: url(../../img/muelleimer.svg);
   background-color: transparent;
 }
@@ -415,7 +397,6 @@ a[class*="icon-windrose"] {
 }
 
 #bedeutungen-cont .icon-verschmelzen {
-  -webkit-mask-image: url(../../img/pfeil-verbinden-rechts.svg);
   mask-image: url(../../img/pfeil-verbinden-rechts.svg);
   background-color: transparent;
 }

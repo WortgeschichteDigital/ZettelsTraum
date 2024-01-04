@@ -15,7 +15,6 @@
 }
 
 .icon-schliessen {
-  -webkit-mask-image: url(../../img/x.svg);
   mask-image: url(../../img/x.svg);
 }
 

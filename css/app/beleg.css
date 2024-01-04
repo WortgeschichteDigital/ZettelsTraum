@@ -453,152 +453,122 @@ span#beleg-bewertung {
 }
 
 .icon-tools-aufrufdatum {
-  -webkit-mask-image: url(../../img/uhr.svg);
   mask-image: url(../../img/uhr.svg);
 }
 
 .icon-tools-auszug {
-  -webkit-mask-image: url(../../img/pfeil-doppelt-links.svg);
   mask-image: url(../../img/pfeil-doppelt-links.svg);
 }
 
 .icon-tools-buchen {
-  -webkit-mask-image: url(../../img/buch.svg);
   mask-image: url(../../img/buch.svg);
 }
 
 .icon-tools-gebucht {
-  -webkit-mask-image: url(../../img/buch-check-gruen.svg);
   mask-image: url(../../img/buch-check-gruen.svg);
 }
 
 .icon-tools-einfuegen {
-  -webkit-mask-image: url(../../img/einfuegen.svg);
   mask-image: url(../../img/einfuegen.svg);
 }
 
 .icon-tools-einzug {
-  -webkit-mask-image: url(../../img/pfeil-doppelt-rechts.svg);
   mask-image: url(../../img/pfeil-doppelt-rechts.svg);
 }
 
 .icon-tools-kopieren {
-  -webkit-mask-image: url(../../img/kopieren.svg);
   mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-tools-antiqua {
-  -webkit-mask-image: url(../../img/text-antiqua.svg);
   mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-bold {
-  -webkit-mask-image: url(../../img/text-fett.svg);
   mask-image: url(../../img/text-fett.svg);
 }
 
 .icon-tools-br {
-  -webkit-mask-image: url(../../img/text-br.svg);
   mask-image: url(../../img/text-br.svg);
 }
 
 .icon-tools-caps {
-  -webkit-mask-image: url(../../img/text-kapitaelchen.svg);
   mask-image: url(../../img/text-kapitaelchen.svg);
 }
 
 .icon-tools-clear {
-  -webkit-mask-image: url(../../img/pinsel.svg);
   mask-image: url(../../img/pinsel.svg);
 }
 
 .icon-tools-header-an {
-  -webkit-mask-image: url(../../img/auge.svg);
   mask-image: url(../../img/auge.svg);
 }
 
 .icon-tools-header-aus {
-  -webkit-mask-image: url(../../img/auge-durchgestrichen.svg);
   mask-image: url(../../img/auge-durchgestrichen.svg);
 }
 
 .icon-tools-heading {
-  -webkit-mask-image: url(../../img/text-antiqua.svg);
   mask-image: url(../../img/text-antiqua.svg);
 }
 
 .icon-tools-italic {
-  -webkit-mask-image: url(../../img/text-kursiv.svg);
   mask-image: url(../../img/text-kursiv.svg);
 }
 
 .icon-tools-kuerzen {
-  -webkit-mask-image: url(../../img/kuerzung.svg);
   mask-image: url(../../img/kuerzung.svg);
 }
 
 .icon-tools-list-unordered {
-  -webkit-mask-image: url(../../img/liste-bullets-gross.svg);
   mask-image: url(../../img/liste-bullets-gross.svg);
 }
 
 .icon-tools-list-ordered {
-  -webkit-mask-image: url(../../img/liste-zahlen-gross.svg);
   mask-image: url(../../img/liste-zahlen-gross.svg);
 }
 
 .icon-tools-mark {
-  -webkit-mask-image: url(../../img/text-markiert.svg);
   mask-image: url(../../img/text-markiert.svg);
 }
 
 .icon-tools-meta-plus {
-  -webkit-mask-image: url(../../img/plus.svg);
   mask-image: url(../../img/plus.svg);
 }
 
 .icon-tools-meta-minus {
-  -webkit-mask-image: url(../../img/minus.svg);
   mask-image: url(../../img/minus.svg);
 }
 
 .icon-tools-save {
-  -webkit-mask-image: url(../../img/speichern.svg);
   mask-image: url(../../img/speichern.svg);
 }
 
 .icon-tools-size {
-  -webkit-mask-image: url(../../img/text-gross.svg);
   mask-image: url(../../img/text-gross.svg);
 }
 
 .icon-tools-sonderzeichen {
-  -webkit-mask-image: url(../../img/pi.svg);
   mask-image: url(../../img/pi.svg);
 }
 
 .icon-tools-spacing {
-  -webkit-mask-image: url(../../img/text-gesperrt.svg);
   mask-image: url(../../img/text-gesperrt.svg);
 }
 
 .icon-tools-strike {
-  -webkit-mask-image: url(../../img/text-durchgestrichen.svg);
   mask-image: url(../../img/text-durchgestrichen.svg);
 }
 
 .icon-tools-superscript {
-  -webkit-mask-image: url(../../img/text-hochgestellt.svg);
   mask-image: url(../../img/text-hochgestellt.svg);
 }
 
 .icon-tools-subscript {
-  -webkit-mask-image: url(../../img/text-tiefgestellt.svg);
   mask-image: url(../../img/text-tiefgestellt.svg);
 }
 
 .icon-tools-underline {
-  -webkit-mask-image: url(../../img/text-unterstrichen.svg);
   mask-image: url(../../img/text-unterstrichen.svg);
 }
 

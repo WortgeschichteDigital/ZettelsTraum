@@ -376,7 +376,6 @@ nav li a.aktiv:focus {
   right: 5px;
   width: 24px;
   height: 24px;
-  -webkit-mask-image: url(../../img/plus-dick.svg);
   mask-image: url(../../img/plus-dick.svg);
   background-color: transparent;
 }
@@ -386,7 +385,6 @@ a.aktiv .nav-details-toggle {
 }
 
 .nav-details-toggle-aus {
-  -webkit-mask-image: url(../../img/minus-dick.svg);
   mask-image: url(../../img/minus-dick.svg);
 }
 

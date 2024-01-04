@@ -498,13 +498,11 @@ p.leer {
   width: 24px;
   height: 24px;
   background-color: var(--iconHell);
-  -webkit-mask-image: url(../../img/check.svg);
   mask-image: url(../../img/check.svg);
 }
 
 .warn.aktiv {
   background-color: var(--textWarnung);
-  -webkit-mask-image: url(../../img/kreis-info.svg);
   mask-image: url(../../img/kreis-info.svg);
 }
 

@@ -8,7 +8,6 @@
 }
 
 .icon-h-stamm {
-  -webkit-mask-image: url(../../img/formvarianten.svg);
   mask-image: url(../../img/formvarianten.svg);
 }
 
@@ -54,7 +53,6 @@
 }
 
 #stamm-kopf .konfig {
-  -webkit-mask-image: url(../../img/zahnrad.svg);
   mask-image: url(../../img/zahnrad.svg);
   margin-left: 2px;
   background-color: var(--iconHell);
@@ -271,6 +269,5 @@
 }
 
 .icon-entfernen {
-  -webkit-mask-image: url(../../img/x-dick.svg);
   mask-image: url(../../img/x-dick.svg);
 }

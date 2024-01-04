@@ -8,7 +8,6 @@
 }
 
 .icon-h-einstellungen {
-  -webkit-mask-image: url(../../img/zahnrad.svg);
   mask-image: url(../../img/zahnrad.svg);
 }
 
@@ -346,12 +345,10 @@ p#quick-config-presets a {
 }
 
 .icon-loeschen {
-  -webkit-mask-image: url(../../img/muelleimer.svg);
   mask-image: url(../../img/muelleimer.svg);
 }
 
 .icon-reload {
-  -webkit-mask-image: url(../../img/pfeil-kreis.svg);
   mask-image: url(../../img/pfeil-kreis.svg);
 }
 

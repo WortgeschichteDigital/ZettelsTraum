@@ -13,12 +13,10 @@
 }
 
 .icon-h-kopieren {
-  -webkit-mask-image: url(../../img/kopieren.svg);
   mask-image: url(../../img/kopieren.svg);
 }
 
 .icon-h-einfuegen {
-  -webkit-mask-image: url(../../img/einfuegen.svg);
   mask-image: url(../../img/einfuegen.svg);
 }
 

@@ -7,7 +7,6 @@
 }
 
 .icon-h-updates {
-  -webkit-mask-image: url(../../img/pfeil-kreis.svg);
   mask-image: url(../../img/pfeil-kreis.svg);
 }
 
