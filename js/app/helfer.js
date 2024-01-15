@@ -49,6 +49,9 @@ const helfer = {
       "anhaenge-cont": {
         queries: [],
       },
+      "buchung-results": {
+        queries: [],
+      },
       "dialog-text": {
         queries: [ "#dialog-prompt", "#dialog-ok", "#dialog-confirm" ],
       },

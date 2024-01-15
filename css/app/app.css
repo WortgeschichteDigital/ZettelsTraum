@@ -388,6 +388,10 @@ input[type="button"][value^="Zurücksetzen"] {
   background-image: url(../../img/pfeil-kreis-weiss.svg);
 }
 
+input[type="button"][value^="Zwischenablage"] {
+  background-image: url(../../img/einfuegen-weiss.svg);
+}
+
 input[type="checkbox"],
 input[type="radio"] {
   position: relative;

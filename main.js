@@ -296,6 +296,13 @@ const layoutMenu = [
         click: () => appMenu.befehl("belege-zwischenablage"),
         id: "belege-zwischenablage",
       },
+      { type: "separator" },
+      {
+        label: "Buchung überprüfen",
+        icon: path.join(__dirname, "img", "menu", "buch-check.png"),
+        click: () => appMenu.befehl("belege-buchung"),
+        id: "belege-buchung",
+      },
     ],
   },
   {

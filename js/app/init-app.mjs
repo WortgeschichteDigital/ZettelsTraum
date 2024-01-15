@@ -89,6 +89,7 @@ window.addEventListener("load", async () => {
   modules.ipc.on("belege-kopieren", () => kopieren.init());
   modules.ipc.on("belege-einfuegen", () => kopieren.einfuegen());
   modules.ipc.on("belege-zwischenablage", () => liste.kopierenAlleBelege());
+  modules.ipc.on("belege-buchung", () => belegeBuchung.open());
   modules.ipc.on("hilfe-demo", () => helfer.demoOeffnen());
   modules.ipc.on("hilfe-updates", () => updates.fenster());
   // Kopierfunktion
@@ -148,6 +149,7 @@ window.addEventListener("load", async () => {
     helfer.resizeTimeout = setTimeout(() => {
       const elemente = [
         "anhaenge-cont",
+        "buchung-results",
         "dialog-text",
         "drucken-cont",
         "einstellungen-sec-allgemeines",
@@ -436,6 +438,8 @@ window.addEventListener("load", async () => {
       redMeta.aktionText(i);
     }
   });
+  // Buchung-überprüfen-Fenster
+  document.getElementById("buchung-read").addEventListener("click", () => belegeBuchung.read());
   // Literaturdatenbank
   document.querySelectorAll("#red-lit-pfad a").forEach(a => redLit.dbListener(a));
   document.querySelectorAll("#red-lit-nav input").forEach(i => redLit.navListener(i));
