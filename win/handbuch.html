@@ -4700,6 +4700,22 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
             <p>Nach dem Kopieren, liegen die Belegtexte in der Zwischenablage in zwei verschiedenen Formaten vor: in einem unformatierten Text- und im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format. Fügen Sie den Text in ein Office-Programm ein, wird die <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Fassung, fügen Sie ihn in einen Plain-Text-Editor ein, wird die unformatierte Textfassung verwendet.</p>
           </div>
+
+          <p class="erklaerung-icon-menues" id="menueBelege-buchung"><img src="../img/kopieren.svg" width="24" height="24" alt="">Buchung überprüfen</p>
+
+          <div class="info">
+            <p>Das Tool gleicht die <a href="#belegliste-kopfleisteBelegreferenz">Belegreferenzen</a>, die es im Text der Zwischenablage finden kann, mit dem aktuellen Karteikasten ab. Es gibt drei verschiedene Fehlermeldungen:</p>
+
+            <ul>
+              <li><b>Belegreferenz im Text, aber nicht im Karteikasten:</b> Listet alle Belegreferenzen auf, die im Text der Zwischenablage gefunden wurden, im aktuellen Karteikasten aber keine Entsprechung haben. Die App versucht ähnliche Belege zu finden und gibt diese <abbr title="gegebenenfalls">ggf.</abbr> an. Ein Ähnlichkeitskriterium ist die Karteikarten-ID (letzte Ziffer der Belegreferenz), ein anderes die Kombination aus AutorIn und Jahr.</li>
+
+              <li><b>Belegreferenz gebucht, aber nicht im Text:</b> Listet alle Belege auf, die zwar mit dem <a href="#karteikarte-tags">Tag</a> <i>Buchung</i> versehen wurden, im Text der Zwischenablage aber nicht auftauchen. Durch Klick auf das Icon <img src="../img/buch-check.svg" width="20" height="20" alt=""> können Sie den Buchungsstatus eines Belegs direkt im Dialogfenster umschalten.</li>
+
+              <li><b>Belegreferenz im Text, aber nicht gebucht:</b> Listet alle Belegreferenzen auf, für die es zwar einem Beleg gibt, die den Tag <i>Buchung</i> aber nicht haben. Der Buchungsstatus kann durch Klick auf das Icon <img src="../img/buch.svg" width="20" height="20" alt=""> direkt im Dialogfenster geändert werden. Wenn in dieser Kategorie mehr als ein Beleg gelistet wird, erscheint direkt unter der Überschrift der Link <i>alle Belege buchen</i>, um den Vorgang zu beschleunigen.</li>
+            </ul>
+
+            <p>Hintergrund des Tools ist, dass der <a href="#menueRedaktion-autotagger">Auto-Tagger</a> des <a href="#menueRedaktion-xml">XML-Redaktionsfensters</a> solche Belegreferenzen in einem Text erkennen und automatisch taggen kann. Damit die Referenzen auf einen tatsächlich vorhandenen Belege zeigen, bietet es sich an, den Text vor dem Taggen mit diesem Tool zu überprüfen.</p>
+          </div>
         </section>
 
         <!-- MENÜPUNKT REDAKTION -->
@@ -5251,7 +5267,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
             <p>Neue Abschnitte können auch mit dem Tastaturkürzel <kbd>Strg</kbd> + <kbd>N</kbd> hinzugefügt werden. Ob der Abschnitt unter <i>Kurz gefasst</i> oder unter <i>Wortgeschichte</i> hinzugefügt wird, hängt primär davon ab, wo der Fokus liegt. Liegt der Fokus irgendwo in einem der beiden Bereiche, wird in genau dem Bereich ein neuer Abschnitt hinzugefügt, in dem der Fokus liegt. Liegt der Fokus woanders, wird der Abschnitt normalerweise bei <i>Wortgeschichte</i> ergänzt. Es sei denn, <i>Kurz gefasst</i> ist noch leer, hat also noch keinen Abschnitt. Dann wird er dort ergänzt.</p>
 
-            <p>Beim Einfügen und/oder Speichern von Text nimmt die App zahlreiche Ersetzungsoperationen vor. Dazu gehören einige typographische Anpassungen (drei Punkte zu horizontaler Ellipse, das Einfügen von geschützten Leerzeichen <abbr title="und dos weiter">usw.</abbr>), aber auch das automatische Taggen des Texts. Folgende Phänomene werden getaggt:</p>
+            <p id="menueRedaktion-autotagger">Beim Einfügen und/oder Speichern von Text nimmt die App zahlreiche Ersetzungsoperationen vor. Dazu gehören einige typographische Anpassungen (drei Punkte zu horizontaler Ellipse, das Einfügen von geschützten Leerzeichen <abbr title="und dos weiter">usw.</abbr>), aber auch das automatische Taggen des Texts. Folgende Phänomene werden getaggt:</p>
 
             <ul>
               <li><b>_Text_</b> wird zu <code class="quelltext xml-pretty-print">&lt;Stichwort&gt;Text&lt;/Stichwort&gt;</code></li>
