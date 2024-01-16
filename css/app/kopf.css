@@ -151,6 +151,10 @@
   mask-image: url(../../img/einfuegen.svg);
 }
 
+#quick-belege-buchung {
+  mask-image: url(../../img/buch-check.svg);
+}
+
 #quick-bearbeiten-rueckgaengig {
   mask-image: url(../../img/pfeil-rund-links.svg);
 }
