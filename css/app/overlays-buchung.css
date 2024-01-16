@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+/* BUCHUNG-ÜBERPRÜFEN-FENSTER ------------------- */
+
+#buchung > div {
+  margin-top: 40px;
+  max-width: 500px;
+}
+
+.icon-h-buchung {
+  mask-image: url(../../img/buch-check.svg);
+}
+
+#buchung-cont > p {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#buchung-cont p#buchung-message {
+  margin: 0;
+  font-style: italic;
+}
+
+.buchung-message-error {
+  color: var(--textWarnung);
+  font-weight: bold;
+}
+
+#buchung-cont {
+  padding: 20px 10px;
+}
+
+#buchung-results {
+  margin-top: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#buchung-results:empty {
+  margin-top: 0;
+}
+
+#buchung-results h3 {
+  margin-bottom: 5px;
+}
+
+#buchung-results p {
+  margin: 10px 0;
+}
+
+#buchung-results ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#buchung-results li {
+  margin-bottom: 5px;
+  padding-left: 44px;
+  text-indent: -44px;
+}
+
+#buchung-results li:last-child {
+  margin-bottom: 0;
+}
+
+#buchung-results a {
+  color: var(--text);
+}
+
+#buchung-results a.buchung-all {
+  color: var(--farbeBlau);
+}
+
+#buchung-results a:not(.icon-link):is(:hover, :focus) {
+  text-decoration: underline;
+}
+
+#buchung-results :is(a.icon-link, img) {
+  vertical-align: top;
+  margin-right: 5px;
+}
