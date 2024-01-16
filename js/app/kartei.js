@@ -254,6 +254,8 @@ const kartei = {
     await overlay.alleSchliessen();
     // alle Filter zurücksetzen (wichtig für Text- und Zeitraumfilter)
     filter.ctrlReset(false);
+    // Buchung-überprüfen-Fenster zurücksetzen
+    belegeBuchung.reset();
     // Okay! Content kann eingelesen werden
     data = JSON.parse(content);
     // Sicherheit: potenziell gefährliche Daten aus Karteikartenfeldern löschen

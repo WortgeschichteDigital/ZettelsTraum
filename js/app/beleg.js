@@ -1446,7 +1446,7 @@ const beleg = {
     function typErmitteln (n) {
       if (n.classList.contains("klammer-autorenzusatz")) {
         return "autorenzusatz";
-      } else if (n.classList.contains("klammer-loschung")) {
+      } else if (n.classList.contains("klammer-loeschung")) {
         return "loeschung";
       } else if (n.classList.contains("klammer-streichung")) {
         return "streichung";

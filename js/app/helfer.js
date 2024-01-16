@@ -49,6 +49,9 @@ const helfer = {
       "anhaenge-cont": {
         queries: [],
       },
+      "buchung-results": {
+        queries: [],
+      },
       "dialog-text": {
         queries: [ "#dialog-prompt", "#dialog-ok", "#dialog-confirm" ],
       },
@@ -1270,11 +1273,7 @@ const helfer = {
       });
     } catch (err) {
       feedback.fetchOk = false;
-      if (err.name === "AbortError") {
-        feedback.fehler = "Timeout-Fehler";
-      } else {
-        feedback.fehler = `${err.name}: ${err.message}`;
-      }
+      fehler(err);
       return feedback;
     }
     // Antwort des Servers fehlerhaft
@@ -1283,9 +1282,21 @@ const helfer = {
       return feedback;
     }
     // Antworttext auslesen
-    feedback.text = await response.text();
+    try {
+      feedback.text = await response.text();
+    } catch (err) {
+      fehler(err);
+    }
     // Feedback auswerfen
     return feedback;
+    // Fehler eintragen
+    function fehler (err) {
+      if (err.name === "AbortError") {
+        feedback.fehler = "Timeout-Fehler";
+      } else {
+        feedback.fehler = `${err.name}: ${err.message}`;
+      }
+    }
   },
 
   // öffnet den Dateimanager im Ordner der übergebenen Datei
