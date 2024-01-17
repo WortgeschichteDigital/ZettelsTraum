@@ -53,7 +53,9 @@ const belegeBuchung = {
     const reg = /(?<!##(?:\p{Lowercase}|-)*)[\p{Lowercase}-]+-[0-9]{4}-[0-9]+(?!##)/ug;
     const text = modules.clipboard.readText();
     for (const id of text.match(reg) || []) {
-      this.data.cb.push(id);
+      if (!this.data.cb.includes(id)) {
+        this.data.cb.push(id);
+      }
     }
 
     // show results
