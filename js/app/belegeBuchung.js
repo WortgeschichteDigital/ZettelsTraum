@@ -53,7 +53,9 @@ const belegeBuchung = {
     const reg = /(?<!##(?:\p{Lowercase}|-)*)[\p{Lowercase}-]+-[0-9]{4}-[0-9]+(?!##)/ug;
     const text = modules.clipboard.readText();
     for (const id of text.match(reg) || []) {
-      this.data.cb.push(id);
+      if (!this.data.cb.includes(id)) {
+        this.data.cb.push(id);
+      }
     }
 
     // show results
@@ -134,25 +136,28 @@ const belegeBuchung = {
       h3.textContent = h;
 
       // book all unbooked quotations
-      if (type === "not-booked" && arr.length > 1) {
+      if ((type === "not-booked" || type === "not-in-text") && arr.length > 1) {
         const p = document.createElement("p");
         res.appendChild(p);
         const a = document.createElement("a");
         p.appendChild(a);
         a.classList.add("buchung-all");
+        a.dataset.type = type;
         a.href = "#";
-        a.textContent = "alle Belege buchen";
+        a.textContent = type === "not-booked" ? "alle Belege buchen" : "alle Belege entbuchen";
         a.addEventListener("click", function (evt) {
           evt.preventDefault();
-          document.querySelectorAll('#buchung-results ul[data-type="not-booked"] a.icon-link').forEach(i => {
-            if (!i.classList.contains("icon-tools-gebucht")) {
+          const type = this.dataset.type;
+          document.querySelectorAll(`#buchung-results ul[data-type="${this.dataset.type}"] a.icon-link`).forEach(i => {
+            if (type === "not-booked" && !i.classList.contains("icon-tools-gebucht") ||
+                type === "not-in-text" && i.classList.contains("icon-tools-gebucht")) {
               i.click();
             }
           });
         });
         const img = document.createElement("img");
         a.insertBefore(img, a.firstChild);
-        img.src = "img/buch-check.svg";
+        img.src = type === "not-booked" ? "img/buch-check.svg" : "img/buch.svg";
         img.width = "24";
         img.height = "24";
       }

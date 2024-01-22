@@ -163,6 +163,11 @@ const quick = {
       short: "",
       img: "kopieren.svg",
     },
+    "belege-buchung": {
+      title: "Belege > Buchung überprüfen",
+      short: "",
+      img: "buch-check.svg",
+    },
     "bearbeiten-rueckgaengig": {
       title: "Bearbeiten > Rückgängig",
       short: `${tastatur.shortcutsTextAktuell("Strg")} + Z`,
@@ -476,6 +481,9 @@ const quick = {
           break;
         case "belege-zwischenablage":
           liste.kopierenAlleBelege();
+          break;
+        case "belege-buchung":
+          belegeBuchung.open();
           break;
       }
     });
