@@ -160,9 +160,9 @@ const beleg = {
     for (let i = 0, len = felder.length; i < len; i++) {
       const feld = felder[i];
       const name = feld.id.replace(/^beleg-/, "");
-      if (name === "import-feld") {
+      if (name === "import-feld" && !imp) {
         feld.value = "";
-      } else if (/^import-(von|bis)$/.test(name)) {
+      } else if (/^import-(von|bis)$/.test(name) && !imp) {
         feld.value = "0";
       } else if (feld.classList.contains("beleg-form-data")) {
         feld.value = beleg.data[name];
