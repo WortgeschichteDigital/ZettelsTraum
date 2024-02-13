@@ -2197,7 +2197,7 @@ const beleg = {
     beleg.formularImport({ src: "url", autoFill: false });
     if (beleg.data.bb && beleg.data.bv) {
       document.querySelector("#beleg-import-von").value = beleg.data.bv;
-      const bis = document.querySelector("#beleg-import-bis")
+      const bis = document.querySelector("#beleg-import-bis");
       bis.value = beleg.data.bb;
       bis.select();
     }
@@ -2271,8 +2271,8 @@ const beleg = {
     }
 
     // Seitenzahl in der Quelle anpassen
-    const seiteStart = pb[ kurzErhalten[0] ][0];
-    const seiteEnde = pb[ kurzErhalten.at(-1) ].at(-1);
+    const seiteStart = pb[kurzErhalten[0]][0];
+    const seiteEnde = pb[kurzErhalten.at(-1)].at(-1);
     if (!seiteStart) {
       return;
     }
@@ -2287,7 +2287,7 @@ const beleg = {
       const zaehlung = seitenMatch[1];
       qu[0] = qu[0].replace(seitenReg, ", " + zaehlung + seiten + ".");
       beleg.data.qu = qu.join("\n");
-      const feldQu = document.getElementById("beleg-qu")
+      const feldQu = document.getElementById("beleg-qu");
       feldQu.value = beleg.data.qu;
       helfer.textareaGrow(feldQu);
     }
