@@ -31,6 +31,9 @@ const importLit = {
     // Titeldaten in Zwischenspeicher für Dateiimporte schreiben
     importShared.fileData.data = titel;
 
+    // Abgleich mit der alten Datei
+    importShared.fileDataSchonImportiert();
+
     // Import anstoßen
     const result = await importShared.fileDataImport();
     return result;

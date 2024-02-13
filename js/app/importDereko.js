@@ -65,6 +65,9 @@ const importDereko = {
     }
     pushBeleg();
 
+    // Abgleich mit der alten Datei
+    importShared.fileDataSchonImportiert();
+
     // Beleg pushen
     function pushBeleg () {
       if (!quelle || !beleg.length) {

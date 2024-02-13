@@ -434,6 +434,9 @@ const importDWDS = {
       ds.bi = "xml-dwds";
       ds.bx = new XMLSerializer().serializeToString(xmlDocIndent);
     }
+
+    // Abgleich mit der alten Datei
+    importShared.fileDataSchonImportiert();
   },
 
   // Korrekturen

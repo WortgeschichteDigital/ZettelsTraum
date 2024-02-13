@@ -62,6 +62,7 @@ const importBibtex = {
 
     // Import anstoßen
     importShared.fileData.data = titel;
+    importShared.fileDataSchonImportiert();
     const result = await importShared.fileDataImport();
     return result;
 
