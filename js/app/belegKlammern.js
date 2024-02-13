@@ -71,7 +71,7 @@ const belegKlammern = {
       for (const ch of n.childNodes) {
         if (ch.nodeType === Node.ELEMENT_NODE) {
           if (ch.nodeName === "SPAN" && ch.classList.contains("klammer-technisch") ||
-              ch.nodeName === "MARK" && (ch.classList.contains("wort") || ch.classList.contains("such"))) {
+              ch.nodeName === "MARK" && (ch.classList.contains("wort") || ch.classList.contains("suche"))) {
             const parent = ch.parentNode;
             const template = document.createElement("template");
             template.innerHTML = ch.innerHTML;
