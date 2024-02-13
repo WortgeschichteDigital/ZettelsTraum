@@ -659,7 +659,9 @@ const importShared = {
       properties: [ "openFile" ],
     };
 
-    if (optionen.data.letzter_pfad) {
+    if (importShared.fileData.path) {
+      opt.defaultPath = importShared.fileData.path;
+    } else if (optionen.data.letzter_pfad) {
       opt.defaultPath = optionen.data.letzter_pfad;
     }
 
@@ -682,6 +684,7 @@ const importShared = {
     }
 
     // Dateiname in Import-Feld eintragen
+    importShared.fileDataReset();
     document.getElementById("beleg-import-feld").value = "file://" + result.filePaths[0];
     document.getElementById("beleg-import-von").select();
   },
@@ -764,6 +767,8 @@ const importShared = {
   fileData: {
     // Belege
     data: [],
+    // Belege (vorherige Datei)
+    dataOld: [],
     // gemeinsame Metadaten für alle Belege
     meta: "",
     // Pfad zur Datei
@@ -776,8 +781,14 @@ const importShared = {
 
   // Dateidaten zurücksetzen
   fileDataReset () {
-    for (const k of Object.keys(importShared.fileData)) {
-      if (Array.isArray(importShared.fileData[k])) {
+    if (importShared.fileData.data.length) {
+      importShared.fileData.dataOld = structuredClone(importShared.fileData.data);
+    }
+    for (const [ k, v ] of Object.entries(importShared.fileData)) {
+      if (k === "dataOld") {
+        continue;
+      }
+      if (Array.isArray(v)) {
         importShared.fileData[k].length = 0;
       } else {
         importShared.fileData[k] = "";
@@ -831,6 +842,34 @@ const importShared = {
       });
     }
     return importieren;
+  },
+
+  // Dateidaten: Abgleich mit der alten Datei, ob Belege bereits importiert wurden
+  fileDataSchonImportiert () {
+    // in der alten Datei sind keine importierten Belege
+    if (!importShared.fileData.dataOld.some(i => i.importiert)) {
+      return;
+    }
+
+    // ggf. SHA1-IDs in den alten Belegdaten ergänzen
+    for (const beleg of importShared.fileData.dataOld) {
+      if (!beleg.sha1) {
+        const ds = { ...beleg.ds };
+        ds.di = "";
+        beleg.sha1 = modules.crypto.createHash("sha1").update(JSON.stringify(ds)).digest("hex");
+      }
+    }
+
+    // in der neuen Datei Belege ggf. als importiert markieren
+    for (const beleg of importShared.fileData.data) {
+      const ds = { ...beleg.ds };
+      ds.di = "";
+      const sha1 = modules.crypto.createHash("sha1").update(JSON.stringify(ds)).digest("hex");
+      const belegOld = importShared.fileData.dataOld.find(i => i.sha1 === sha1);
+      if (belegOld?.importiert) {
+        beleg.importiert = true;
+      }
+    }
   },
 
   // Dateidaten: Antwort des Import-Fensters
