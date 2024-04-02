@@ -153,6 +153,7 @@ const xml = {
       }
       return m;
     });
+    text = text.replace(/ +<\/(Stichwort|Markierung)>/g, (...args) => `</${args[1]}> `);
     text = text.replace(/<\/Stichwort><Stichwort>|<\/Markierung><Markierung>/g, "");
     text = helfer.textTrim(text, true);
     text = xml.mergeHervorhebungen({ text });
