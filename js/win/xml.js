@@ -1232,7 +1232,7 @@ const xml = {
     });
     // Stringify + Namespaces entfernen
     let xmlStr = new XMLSerializer().serializeToString(xmlDoc);
-    xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
+    xmlStr = xmlStr.replace(/ xmlns(:.+?)?=".+?"/g, "");
     xmlStr = xmlStr.replace(/[a-z0-9]+:Ziel/g, "Ziel");
     xmlStr = xmlStr.replace(/><\/Textreferenz>/g, "/>");
     // Daten auffrischen
@@ -4418,7 +4418,7 @@ const xml = {
     const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, helferXml.nsResolver, XPathResult.ANY_TYPE, null);
     const normierer = snippet => {
       let xmlStr = new XMLSerializer().serializeToString(snippet);
-      xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
+      xmlStr = xmlStr.replace(/ xmlns(:.+?)?=".+?"/g, "");
       xmlStr = xmlStr.replace(/(\n\s*\n)+/g, "\n"); // Leerzeilen entfernen
       const n = xmlStr.split("\n");
       const m = n[n.length - 1].match(/^\s+/);

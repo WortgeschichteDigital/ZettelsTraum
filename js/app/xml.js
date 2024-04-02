@@ -347,7 +347,7 @@ const xml = {
 
     // Text in String umwandeln und aufbereiten
     let xmlStr = new XMLSerializer().serializeToString(schnitt);
-    xmlStr = xmlStr.replace(/ xmlns=".+?"/g, "");
+    xmlStr = xmlStr.replace(/ xmlns(:.+?)?=".+?"/g, "");
     const zeichen = new Map([
       [ "&amp;amp;", "&amp;" ],
       [ "&amp;lt;", "&lt;" ],

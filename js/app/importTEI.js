@@ -895,7 +895,7 @@ const importTEI = {
     str = decoder.value;
 
     // trim a last time and normalize unicode
-    str = str.trim().normalize("NFC")
+    str = str.trim().normalize("NFC");
 
     // return result
     return str;
@@ -1240,7 +1240,7 @@ const importTEI = {
 
     // <teiHeader> to string
     let header = xmlDoc?.querySelector("teiHeader")?.outerHTML || "";
-    header = header.replace(/ xmlns=".+?"/g, "");
+    header = header.replace(/ xmlns(:.+?)?=".+?"/g, "");
 
     // clean-up operations
     header = header.replace(/^\s+/gm, "");
