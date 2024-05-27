@@ -460,10 +460,6 @@
     <name>Imkerei</name>
   </item>
   <item>
-    <id>116</id>
-    <name>Policey</name>
-  </item>
-  <item>
     <id>117</id>
     <name>Technik</name>
   </item>
@@ -502,5 +498,9 @@
   <item>
     <id>126</id>
     <name>Pferdesport</name>
+  </item>
+  <item>
+    <id>127</id>
+    <name>Lebenswissenschaften</name>
   </item>
 </sachgebiete>
