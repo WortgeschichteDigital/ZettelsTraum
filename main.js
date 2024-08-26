@@ -879,7 +879,7 @@ const optionen = {
     try {
       optionen.data = JSON.parse(content);
       return true;
-    } catch (err) {
+    } catch {
       // kann die Optionen-Datei nicht eingelesen werden, ist sie wohl korrupt => löschen
       fsp.unlink(optionen.pfad);
     }

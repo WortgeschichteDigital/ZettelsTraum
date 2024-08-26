@@ -334,7 +334,7 @@ const builder = {
     if (config.platform === "linux" && config.packageType !== "appImage") {
       const changelog = path.join(config.outDir, "changelog");
       if (!await shared.exists(changelog)) {
-        await fs.writeFile(changelog, "")
+        await fs.writeFile(changelog, "");
       }
     }
 
