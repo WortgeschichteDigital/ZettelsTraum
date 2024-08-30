@@ -91,7 +91,7 @@ $ sudo dpkg -i zettelstraum_1.0.0_amd64.deb
 
 Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Datei `/usr/share/applications/zettelstraum.desktop` erzeugt, das Programm sollte sich also über das Startmenü Ihrer Distribution aufrufen lassen. Es wird automatisch eine Verknüpfung zwischen der Dateiendung `.ztj` und *Zettel’s Traum* angelegt, sodass Wortkarteien durch Doppelklick im Dateimanager Ihrer Wahl geöffnet werden können.
 
-**Unterstützung:** Distributionen ab Ubuntu 14.04, Fedora 24, Debian 8 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 22.04 basiert. 32-Bit-Versionen können nicht gebaut werden.
+**Unterstützung:** Distributionen ab Ubuntu 18.04, Fedora 32, Debian 10 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 24.04 basiert. 32-Bit-Versionen können nicht gebaut werden.
 
 ### macOS
 
@@ -101,7 +101,7 @@ Entpacken Sie die Datei durch Doppelklick. Zum Starten wechseln Sie in den Ordne
 
 Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen den Ordner `zettelstraum-darwin-x64`. Verpassen Sie ein Update, können Sie immer direkt die neueste Version nehmen.
 
-**Unterstützung:** Version 10.11 (El Capitan) und später mit 64-Bit-Architektur. 32-Bit-Versionen können nicht gebaut werden.
+**Unterstützung:** Version 11.0 (Big Sur) und später mit 64-Bit-Architektur. 32-Bit-Versionen können nicht gebaut werden.
 
 Da die App bisher nicht zertifiziert ist, wird macOS vermutlich das reibungslose Starten der Paketierung auf Ihrem Rechner unterbinden. Erhalten Sie die Meldung, dass *Zettel’s Traum* nicht gestartet werden könne, „da es von einem nicht verifizierten Entwickler stammt“, können Sie die Sicherheitseinstellungen anpassen, um die App dennoch auszuführen. Unter *Systemeinstellungen > Sicherheit > Allgemein* finden Sie den Punkt „App-Download erlauben von“ und darunter den Button „Dennoch öffnen“. Starten Sie die App, nachdem Sie auf „Dennoch öffnen“ geklickt haben, werden Sie zwar noch einmal gefragt, ob Sie das Programm wirklich öffnen möchten, können es mit dem Button „Öffnen“ aber problemlos starten.
 
