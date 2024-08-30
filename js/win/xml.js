@@ -1496,7 +1496,7 @@ const xml = {
     div.appendChild(warn);
     warn.classList.add("warn");
     if (!textKopf || textKopf !== "abschnitt") {
-      let xmlStr = "";
+      let xmlStr;
       if (key === "re") {
         xmlStr = xml.data.xl.md.re[slot].xl;
       } else if (key === "wi") {
@@ -1605,7 +1605,7 @@ const xml = {
         if (/<Literaturreferenz/.test(xl)) {
           const id = xl.match(/Ziel="(.+?)"/)[1];
           const i = xml.data.xl.lt.find(i => i.id === id);
-          let text = "";
+          let text;
           if (i) {
             text = i.si;
           } else {
@@ -1788,7 +1788,7 @@ const xml = {
       } else if (key !== "bg") {
         slot = xml.data.xl[key].findIndex(i => i.id === id);
       }
-      let xmlStr = "";
+      let xmlStr;
       if (key === "re") {
         xmlStr = xml.data.xl.md.re[slot].xl;
       } else if (key === "wi") {
@@ -1871,7 +1871,7 @@ const xml = {
       }
       // Leermeldung erzeugen oder Ansicht auffrischen
       if (/^(re|le|wi|nw|tf)$/.test(key)) {
-        let id = "";
+        let id;
         if (key === "re") {
           id = "md";
         } else if (/^(nw|tf)$/.test(key)) {
@@ -2157,7 +2157,7 @@ const xml = {
     } else if (typ === "Liste") {
       data.ty = xml.dropdown.listenTypen[0];
     }
-    let slotBlock = -1;
+    let slotBlock;
     if (typ === "Überschrift") {
       xml.data.xl[key][slot].ct.unshift(data);
       slotBlock = 0;
@@ -3617,7 +3617,7 @@ const xml = {
     let slotBlock = null;
     const slotOri = slot;
     let slotNeu = -1;
-    let arr = [];
+    let arr;
     let slotKlon;
     let illustration = false;
     if (kopf.dataset.slotBlock) {
