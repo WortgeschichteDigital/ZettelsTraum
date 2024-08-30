@@ -60,6 +60,7 @@ const belegeBuchung = {
 
     // show results
     this.results();
+    helfer.animation("wrap");
 
     // determine maximal height of content
     helfer.elementMaxHeight({
