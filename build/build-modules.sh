@@ -3,7 +3,7 @@
 modules=(
   "electron"
   "electron-builder"
-  "electron-packager"
+  "@electron/packager"
 )
 
 if [ "$1" != "inc" ]; then

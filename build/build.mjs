@@ -1,7 +1,7 @@
 // ***** SHARED MODULES AND VARIABLES *****
 
 import electronBuilder from "electron-builder";
-import electronPackager from "electron-packager";
+import electronPackager from "@electron/packager";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { URL } from "node:url";
