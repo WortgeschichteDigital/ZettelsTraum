@@ -1203,7 +1203,7 @@ const beleg = {
     }
     // Text bereinigen und pasten
     evt.preventDefault();
-    let text = "";
+    let text;
     if (clipHtml) {
       text = clipHtml;
       text = beleg.toolsEinfuegenHtml(text);
@@ -1480,7 +1480,7 @@ const beleg = {
       return text;
     }
     // Überschrift vorbereiten
-    let hText = "";
+    let hText;
     if (h.length > 1) {
       hText = `${h[0]} (${h[1]})`;
     } else {

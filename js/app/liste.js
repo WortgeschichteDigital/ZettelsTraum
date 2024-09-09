@@ -349,7 +349,7 @@ const liste = {
     }
     // Anzahl der Belege anzeigen
     cont.classList.remove("aus");
-    let anzahl = "";
+    let anzahl;
     let text = "Beleg";
     if (gesamt !== gefiltert) {
       if (gesamt !== 1) {
@@ -860,8 +860,8 @@ const liste = {
       }
       // ID, Absätze und Text ermitteln
       const id = this.dataset.id ? this.dataset.id : "";
-      let absaetze = [];
-      let text = "";
+      let absaetze;
+      let text;
       if (id) {
         absaetze = liste.belegErstellenPrepP(data.ka[id].bs).split("\n");
       } else {
@@ -1572,7 +1572,7 @@ const liste = {
   //   beleg_id = String | Object
   //     (ID des Belegs; soll die aktuelle Karteikarte gedruckt werden ist es ein Object)
   detailAnzeigenH3 (beleg_id) {
-    let obj = {};
+    let obj;
     let nr = beleg_id;
     if (typeof beleg_id === "string") {
       obj = data.ka[beleg_id];
