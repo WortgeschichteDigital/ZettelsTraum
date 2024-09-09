@@ -233,6 +233,9 @@ const liste = {
       if (optionen.data.einstellungen["belegliste-referenz"]) {
         const span = document.createElement("span");
         span.classList.add("liste-referenz");
+        if (data.ka[id].tg.includes("unzutreffend")) {
+          span.classList.add("liste-unzutreffend");
+        }
         span.textContent = xml.belegId({ data: data.ka[id], id });
         div.appendChild(span);
       }
@@ -246,6 +249,9 @@ const liste = {
         span.title = data.ka[id].da;
         span.classList.add("liste-jahr-hinweis");
         liste.detailAnzeigen(span);
+      }
+      if (data.ka[id].tg.includes("unzutreffend")) {
+        span.classList.add("liste-unzutreffend");
       }
       div.appendChild(span);
 

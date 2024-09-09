@@ -630,6 +630,7 @@ const beleg = {
   tags: {
     unvollständig: "kreis-unvollstaendig.svg",
     ungeprüft: "verboten.svg",
+    unzutreffend: "fahne-rot.svg",
     "Kontext?": "kontext.svg",
     Bücherdienst: "buch.svg",
     Buchung: "buch-check-gruen.svg",
