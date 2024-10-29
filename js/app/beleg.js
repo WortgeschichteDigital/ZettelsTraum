@@ -2498,7 +2498,8 @@ const beleg = {
           // Absatz ggf. kürzen
           if (key === "bs" &&
               optionen.data.beleg.kuerzen &&
-              !liste.wortVorhanden(text)) {
+              !liste.wortVorhanden(text) &&
+              !liste.annotierungVorhanden(text)) {
             if (zuletzt_gekuerzt) {
               cont.removeChild(cont.lastChild);
             } else {

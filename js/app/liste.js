@@ -752,6 +752,7 @@ const liste = {
     let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
     for (let i = 0, len = p_prep.length; i < len; i++) {
       const wortVorhanden = liste.wortVorhanden(p_prep[i]);
+      const annotierungVorhanden = liste.annotierungVorhanden(p_prep[i]);
       const p = document.createElement("p");
       div.appendChild(p);
       p.dataset.pnumber = i;
@@ -793,10 +794,10 @@ const liste = {
       } else if (kuerzungMoeglich &&
           optionen.data.belegliste.beleg_kuerzen &&
           !wortVorhanden &&
-          !(filter.aktiveFilter["verschiedenes-annotierung"] && /annotierung-wort/.test(p_prep[i]))) {
+          !annotierungVorhanden) {
         // ggf. kürzen, wenn
         //   - Wort nicht enthalten
-        //   - Annotierungsfilter aktiv und Annotierung nicht vorhanden
+        //   - Annotierung nicht vorhanden
         if (zuletzt_gekuerzt) {
           div.removeChild(div.lastChild);
         } else {
@@ -1223,7 +1224,9 @@ const liste = {
     const marks = div.querySelectorAll(".wort:not(.wort-kein-start)");
     let transparent = 0;
     for (const m of marks) {
-      if (m.closest(".farbe0")) {
+      const annot = m.closest(".annotierung-wort");
+      if (annot?.classList?.contains("farbe0") ||
+          annot?.dataset?.nichtTaggen) {
         // Dieser Test ist nur problematisch, wenn ein Karteiwort in eine Textmarkierung eingeschlossen ist,
         // deren Hintergrundfarbe transparent gesetzt wurde; nur: Wer macht sowas?
         transparent++;
@@ -1279,6 +1282,26 @@ const liste = {
       }
     }
     return false; // manche Karteiwörter wurden nicht gefunden
+  },
+
+  // überprüft, ob im übergebenen Text eine Annotierung steht, die nicht ausgeblendet wurde
+  //   text = String
+  //     (Text, der auf die Existenz einer Annotierung überprüft werden soll)
+  annotierungVorhanden (text) {
+    const div = document.createElement("div");
+    div.innerHTML = text;
+    for (const i of div.querySelectorAll(".annotierung-wort, mark.user")) {
+      if (i.nodeName === "MARK" && !i.closest(".annotierung-wort") ||
+          i.nodeName === "SPAN" && (!i.classList.contains("farbe0") && !i.dataset.nichtTaggen || filter.aktiveFilter["verschiedenes-annotierung"])) {
+        // Annotierung vorhanden, wenn
+        //   - umschließender Annotierungstag fehlt
+        //     (Markierung wurde über die Texttools in der Karteikarte hinzugefügt)
+        //   - Annotierungsfarbe nicht auf transparent gesetzt wurde
+        //   - Annotierung nicht mit "nicht taggen" markiert wurde
+        return true;
+      }
+    }
+    return false;
   },
 
   // Suchtreffer hervorheben
