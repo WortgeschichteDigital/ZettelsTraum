@@ -35,6 +35,11 @@ const xml = {
     "Die ZEIT",
   ],
 
+  // Belege aus DWDS-Korpora, die nicht aus dem DWDS stammen ;-)
+  noDWDS: [
+    "bestseller",
+  ],
+
   // markierten Belegschnitt aufbereiten
   schnitt () {
     const data = popup.referenz.data;
@@ -48,7 +53,7 @@ const xml = {
 
     // @Fundort
     // (wird schon hier benötigt, um die Absätze in DWDS-Belgen in Leerzeichen zu verwandeln)
-    let fundort = "";
+    let fundort;
     if (/^DTA/i.test(data.kr) ||
         /deutschestextarchiv\.de\//.test(data.ul)) {
       fundort = "DTA";
@@ -279,6 +284,13 @@ const xml = {
     // <Fundort>
     const fo = document.createElementNS(ns, "Fundort");
     fundstelle.appendChild(fo);
+    if (fundort === "DWDS") {
+      // Fundort von DWDS-Belegen, die keine DWDS-Belege sind, korrigieren
+      const korpus = data.kr.split(": ")?.[1];
+      if (xml.noDWDS.includes(korpus)) {
+        fundort = "Bibliothek";
+      }
+    }
     fo.appendChild(document.createTextNode(fundort));
 
     // <Datum>
