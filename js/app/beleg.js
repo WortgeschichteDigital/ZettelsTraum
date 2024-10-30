@@ -1799,6 +1799,10 @@ const beleg = {
         start: '<span class="klammer-autorenzusatz">',
         ende: "</span>",
       },
+      belegschnitt: {
+        start: '<span class="belegschnitt">',
+        ende: "</span>",
+      },
       bold: {
         start: "<b>",
         ende: "</b>",
@@ -2499,7 +2503,8 @@ const beleg = {
           if (key === "bs" &&
               optionen.data.beleg.kuerzen &&
               !liste.wortVorhanden(text) &&
-              !liste.annotierungVorhanden(text)) {
+              !liste.annotierungVorhanden(text) &&
+              !/class="belegschnitt"/.test(text)) {
             if (zuletzt_gekuerzt) {
               cont.removeChild(cont.lastChild);
             } else {

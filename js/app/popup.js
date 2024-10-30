@@ -38,7 +38,10 @@ const popup = {
   // das angeklickte Anhang-Icon steht in der Detailansicht eines Belegs
   anhangDateiListe: false,
 
-  // speichert die Klammerung, auf die ein Rechtsklick erfolgte
+  // speichert die Auswahl für einen Belegschnitt, auf die ein Rechtsklick erfolgte
+  belegschnitt: null,
+
+  // speichert die Auswahl für eine Klammerung, auf die ein Rechtsklick erfolgte
   klammern: null,
 
   // speichert die Datei aus der Liste zu verwendeter Dateien, der gelöscht werden soll
@@ -62,19 +65,34 @@ const popup = {
     if (!target) {
       return;
     }
+
     // Menü entwerfen
+    let xmlCopy = [ "xmlReferenz" ];
+    let textCopy = [ "textReferenz" ];
+    if (popup.belegID) {
+      xmlCopy = [ "xmlBelegComplete", "xmlReferenz" ];
+      textCopy = [ "textComplete", "textReferenz" ];
+    }
     let items = [];
     if (target === "kopieren") {
       const selInBeleg = popup.selInBeleg();
       if (selInBeleg) {
         items.push("markieren");
+        let anchor = window.getSelection().anchorNode;
+        if (anchor.nodeType !== Node.ELEMENT_NODE) {
+          anchor = anchor.parentNode;
+        }
+        if (!anchor.classList.contains("belegschnitt") &&
+            !anchor.closest(".belegschnitt")) {
+          items.push("belegschnitt");
+        }
         items.push({ name: "klammern", sub: [ "klammernStreichung", "klammernLoeschung", "klammernAutorenzusatz" ] });
       }
       items.push({ name: "text", sub: [ "kopieren", "textReferenz" ] });
       if (selInBeleg) {
         items.push({ name: "xml", sub: [ "xmlBeleg", "xmlReferenz" ] }, "xmlFenster");
       } else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
-        items.push({ name: "xml", sub: [ "xmlReferenz" ] });
+        items.push({ name: "xml", sub: xmlCopy });
       }
       if (overlay.oben() === "drucken") {
         items.push("sep", "schliessen", "sep", "belegHinzufuegen");
@@ -144,9 +162,9 @@ const popup = {
           items.splice(items.indexOf("titelAufnahmen"), 1, "titelLoeschen");
         }
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf");
+        items.push("link", "sep", { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy }, "sep", "karteikarteConf", "importConf");
       } else if (helfer.hauptfunktion === "liste") {
-        items.push("link", "sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+        items.push("link", "sep", { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
       } else {
         items.push("link");
       }
@@ -161,9 +179,15 @@ const popup = {
       items = [ "beleglisteConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
     } else if (target === "beleg-moddel") {
-      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen" ];
+      items = [ { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy } ];
+      if (popup.belegID) {
+        items.push("xmlFensterComplete");
+      }
+      items.push("sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf", "sep", "belegHinzufuegen");
       if (popup.klammern) {
         items.unshift("klammernEntfernen", "sep");
+      } else if (popup.belegschnitt) {
+        items.unshift("belegschnittDemarkieren", "sep");
       }
       popup.belegeAuflisten(items);
     } else if (target === "anhang") {
@@ -171,11 +195,11 @@ const popup = {
       if (popup.anhangDateiKopf) {
         items.push("sep", "anhaengeFenster", "anhaengeAutoErgaenzen", "sep", "kopfIconsConf");
       } else if (popup.anhangDateiListe) {
-        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
+        items.push("sep", { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy }, "sep", "belegBearbeiten", "belegLoeschen", "belegZwischenablage", "belegDuplizieren", "sep", "beleglisteConf");
       } else if (overlay.oben() === "anhaenge") {
         items.push("sep", "schliessen");
       } else if (helfer.hauptfunktion === "karte") {
-        items.push("sep", { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf");
+        items.push("sep", { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy }, "sep", "karteikarteConf", "importConf");
       }
       items.push("sep", "belegHinzufuegen");
       popup.belegeAuflisten(items);
@@ -217,9 +241,15 @@ const popup = {
     } else if (target === "beleg-conf") {
       popup.referenz.data = beleg.data;
       popup.referenz.id = "" + beleg.id_karte;
-      items = [ { name: "text", sub: [ "textReferenz" ] }, { name: "xml", sub: [ "xmlReferenz" ] }, "sep", "karteikarteConf", "importConf", "sep", "belegHinzufuegen" ];
+      items = [ { name: "text", sub: textCopy }, { name: "xml", sub: xmlCopy } ];
+      if (popup.belegID) {
+        items.push("xmlFensterComplete");
+      }
+      items.push("sep", "karteikarteConf", "importConf", "sep", "belegHinzufuegen");
       if (popup.klammern) {
         items.unshift("klammernEntfernen", "sep");
+      } else if (popup.belegschnitt) {
+        items.unshift("belegschnittDemarkieren", "sep");
       }
       popup.belegeAuflisten(items);
     } else if (target === "bedeutungen-conf") {
@@ -249,7 +279,14 @@ const popup = {
       return "kopieren";
     }
     // alle Elemente im Pfad durchgehen
+    popup.belegID = "";
     for (let i = 0, len = pfad.length; i < len; i++) {
+      // ggf. Beleg-ID ermitteln, um einen Rechtsklick auf dem Beleg zu detektieren
+      if (pfad[i].classList.contains("liste-bs")) {
+        popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
+      } else if (pfad[i].id === "beleg-lese-bs") {
+        popup.belegID = beleg.id_karte;
+      }
       // Textfelder:
       //   - <input type="date|text"> + nicht readonly
       //   - <textarea>
@@ -402,11 +439,15 @@ const popup = {
     return "kartei";
     // Klick auf Klammer entdecken
     function klickAufKlammern (i) {
+      popup.belegschnitt = null;
       popup.klammern = null;
       while (i >= 0) {
         i--;
-        if (/klammer-(autorenzusatz|loeschung|streichung)/.test(pfad[i]?.getAttribute("class"))) {
-          // Nicht abbrechen! Der Klick könnte auf einer verschachtelten Klammer sein.
+        // Bei Treffer nicht abbrechen!
+        // Der Klick könnte auf einer verschachtelten Klammer liegen.
+        if (/belegschnitt/.test(pfad[i]?.getAttribute("class"))) {
+          popup.belegschnitt = pfad[i];
+        } else if (/klammer-(autorenzusatz|loeschung|streichung)/.test(pfad[i]?.getAttribute("class"))) {
           popup.klammern = pfad[i];
         }
       }
@@ -427,7 +468,7 @@ const popup = {
     let bereich = false;
     let ele = sel.anchorNode;
     let bs = false; // true, wenn die Textauswahl innerhalb des Belegs ist
-    let obj = {};
+    let karte = {};
     const container = {
       umfeld: "",
       id: "",
@@ -446,7 +487,7 @@ const popup = {
           bs = true;
         }
         const id = div.parentNode.previousSibling.dataset.id;
-        obj = data.ka[id];
+        karte = data.ka[id];
         popup.referenz.data = data.ka[id]; // für xml.referenz();
         popup.referenz.id = id;
         break;
@@ -456,7 +497,7 @@ const popup = {
         // feststellen, ob der markierte Text Teil des Belegtexts ist
         if (ele.querySelector("td").id === "beleg-lese-bs") {
           bs = true;
-          obj = beleg.data;
+          karte = beleg.data;
         }
         popup.referenz.data = beleg.data; // für xml.referenz();
         popup.referenz.id = "" + beleg.id_karte;
@@ -494,56 +535,140 @@ const popup = {
       const range = sel.getRangeAt(0);
       const container = document.createElement("div");
       container.appendChild(range.cloneContents());
-      // Text aufbereiten
-      let text = container.innerHTML.replace(/<br>/g, "__br__");
-      text = text.replace(/<\/p><p[^>]*>/g, "\n");
-      if (!bs) {
-        // ansonsten werden an dieser Stelle die Markierungen für die Klammern entfernt
-        text = text.replace(/<.+?>/g, "");
-      }
-      text = text.replace(/\n/g, "\n\n");
-      text = text.replace(/__br__/g, "\n");
-      // HTML aufbereiten
-      let html = "";
-      let xml = "";
-      if (container.firstChild.nodeType === 1 &&
-          container.firstChild.nodeName === "P") {
-        html = container.innerHTML;
-      } else {
-        html = `<p>${container.innerHTML}</p>`;
-      }
-      xml = html;
-      if (optionen.data.einstellungen["textkopie-wort"] &&
-          !container.querySelector(".wort")) {
-        html = liste.belegWortHervorheben(html, true);
-      }
-      html = helfer.clipboardHtml(html);
-      if (!container.querySelector(".wort")) {
-        xml = liste.belegWortHervorheben(xml, true);
-      }
-      xml = helfer.clipboardXml(xml);
-      if (bs) {
-        text = beleg.toolsKopierenKlammern({ text });
-        text = text.replace(/<.+?>/g, "");
-        text = helfer.typographie(text);
-        text = beleg.toolsKopierenAddQuelle(text, false, obj);
-        text = beleg.toolsKopierenAddJahr(text, false);
-        html = beleg.toolsKopierenKlammern({ text: html, html: true });
-        html = helfer.typographie(html);
-        html = beleg.toolsKopierenAddQuelle(html, true, obj);
-        html = beleg.toolsKopierenAddJahr(html, true);
-        if (optionen.data.einstellungen["textkopie-notizen"]) {
-          html = beleg.toolsKopierenAddNotizen(html, true, obj);
-          text = beleg.toolsKopierenAddNotizen(text, false, obj);
-        }
-      }
-      popup.textauswahl.text = helfer.escapeHtml(text, true);
-      popup.textauswahl.html = html;
-      popup.textauswahl.xml = xml;
+      popup.textauswahlPrep({
+        bs,
+        container,
+        karte,
+      });
       return true;
     }
     // keine Kopieranweisung geben
     return false;
+  },
+
+  // Textauswahl eines gesamten Belegs kopieren
+  //   copy = boolean
+  //     (Belegtext direkt in die Zwischenablage kopieren)
+  textauswahlComplete (copy) {
+    const bs = true;
+    const karte = data.ka[popup.belegID];
+
+    // Belegtext aufbereiten
+    let container;
+    if (/class="belegschnitt"/.test(karte.bs)) {
+      container = xml.belegSchnittPrep(popup.belegID, false);
+    } else {
+      container = document.createElement("div");
+      const absaetze = karte.bs.replace(/\n\s*\n/g, "\n").split(/\n/);
+      for (const i of absaetze) {
+        const p = document.createElement("p");
+        p.innerHTML = i;
+        container.appendChild(p);
+      }
+    }
+
+    // DWDS-Belege aufbereiten
+    // (im DWDS werden Absatzgrenzen nicht markiert => mehrere Absätze vereinen)
+    if (/^DWDS/.test(karte.kr) &&
+        container.childNodes.length > 1) {
+      let html = "";
+      for (let i = 0, len = container.childNodes.length; i < len; i++) {
+        if (i > 0) {
+          html += " ";
+        }
+        html += container.childNodes[i].innerHTML;
+      }
+
+      html = html.replace(/<span class="klammer-loeschung">…<\/span> <span class="klammer-loeschung">…<\/span>/g, '<span class="klammer-loeschung">…</span>');
+      html = html.replace(/ {2,}/g, " ");
+
+      const p = document.createElement("p");
+      p.innerHTML = html;
+      container = document.createElement("div");
+      container.appendChild(p);
+    }
+
+    // Belegtext aufbereiten
+    popup.textauswahlPrep({
+      bs,
+      container,
+      karte,
+    });
+
+    // Abbruch, weil nicht kopiert werden soll
+    if (!copy) {
+      return;
+    }
+
+    // Belegtext kopieren
+    modules.clipboard.write({
+      text: popup.textauswahl.text,
+      html: popup.textauswahl.html,
+    });
+
+    // Feedback
+    helfer.animation("zwischenablage");
+  },
+
+  // Textauswahl aus übergebenem Container aufbereiten
+  //   bs = boolean
+  //     (es soll ein Belegschnitt aufbereitet werden)
+  //   container = node
+  //     (temporärer Container mit dem zu kopierenden HTML)
+  //   karte = object
+  //     (Zeiger auf die aktuelle Karteikarte)
+  textauswahlPrep ({ bs, container, karte }) {
+    // Text aufbereiten
+    let text = container.innerHTML.replace(/<br>/g, "__br__");
+    text = text.replace(/<\/p><p[^>]*>/g, "\n");
+    if (!bs) {
+      // ansonsten werden an dieser Stelle die Markierungen für die Klammern entfernt
+      text = text.replace(/<.+?>/g, "");
+    }
+    text = text.replace(/\n/g, "\n\n");
+    text = text.replace(/__br__/g, "\n");
+
+    // HTML und XML aufbereiten
+    let html;
+    let xml;
+    if (container.firstChild.nodeType === Node.ELEMENT_NODE &&
+        container.firstChild.nodeName === "P") {
+      html = container.innerHTML;
+    } else {
+      html = `<p>${container.innerHTML}</p>`;
+    }
+    xml = html;
+    if (optionen.data.einstellungen["textkopie-wort"] &&
+        !container.querySelector(".wort")) {
+      html = liste.belegWortHervorheben(html, true);
+    }
+    html = helfer.clipboardHtml(html);
+    if (!container.querySelector(".wort")) {
+      xml = liste.belegWortHervorheben(xml, true);
+    }
+    xml = helfer.clipboardXml(xml);
+
+    // Text und HTML in einem Belegschnitt aufbereiten
+    if (bs) {
+      text = beleg.toolsKopierenKlammern({ text });
+      text = text.replace(/<.+?>/g, "");
+      text = helfer.typographie(text);
+      text = beleg.toolsKopierenAddQuelle(text, false, karte);
+      text = beleg.toolsKopierenAddJahr(text, false);
+      html = beleg.toolsKopierenKlammern({ text: html, html: true });
+      html = helfer.typographie(html);
+      html = beleg.toolsKopierenAddQuelle(html, true, karte);
+      html = beleg.toolsKopierenAddJahr(html, true);
+      if (optionen.data.einstellungen["textkopie-notizen"]) {
+        html = beleg.toolsKopierenAddNotizen(html, true, karte);
+        text = beleg.toolsKopierenAddNotizen(text, false, karte);
+      }
+    }
+
+    // Ergebnis zwischenspeichern
+    popup.textauswahl.text = helfer.escapeHtml(text, true);
+    popup.textauswahl.html = html;
+    popup.textauswahl.xml = xml;
   },
 
   // ermittelt, ob eine Selection innerhalb des Belegtextes ist (Belegliste oder Leseansicht)

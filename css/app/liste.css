@@ -741,6 +741,14 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   margin-bottom: 0;
 }
 
+.liste-bs:has(.belegschnitt) p:not(.gekuerzt) {
+  color: var(--textSehrHell);
+}
+
+.liste-bs p .belegschnitt {
+  color: var(--text);
+}
+
 #liste-belege-cont .gekuerzt,
 .beleg-lese p.gekuerzt {
   cursor: default;

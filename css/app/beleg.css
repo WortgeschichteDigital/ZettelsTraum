@@ -437,7 +437,7 @@ span#beleg-bewertung {
 
 .text-tools-beleg a:first-child,
 .text-tools-beleg a:nth-child(2),
-.text-tools-beleg a:nth-child(5) {
+.text-tools-beleg a:nth-child(6) {
   margin-right: 24px;
 }
 
@@ -605,6 +605,14 @@ span#beleg-bewertung {
 .beleg-lese p.einblenden {
   overflow: hidden;
   transition: height .5s ease;
+}
+
+#beleg-lese-bs:has(.belegschnitt) p:not(.gekuerzt) {
+  color: var(--textSehrHell);
+}
+
+#beleg-lese-bs p .belegschnitt {
+  color: var(--text);
 }
 
 #beleg .beleg-lese td {

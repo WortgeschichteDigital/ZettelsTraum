@@ -411,7 +411,7 @@
 
           <p class="erklaerung-icon" id="karteikarte-kuerzen"><img src="../img/kuerzung.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>K</kbd>; nur <i>Leseansicht</i>; Belegkontext kürzen <abbr title="beziehungsweise">bzw.</abbr> komplett anzeigen</p>
 
-          <p class="info">Mit dieser Funktion lassen sich Absätze ausblenden, in denen das Karteiwort nicht auftaucht und in denen keine Annotierung vorhanden ist, die getaggt werden soll. Anstelle der ausgeblendeten Absätze wird eine Auslassungsmarkierung gedruckt: <q>[…]</q>. Weitere <a href="#belegliste-kuerzung">Details dazu im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
+          <p class="info">Mit dieser Funktion lassen sich Absätze ausblenden, die keine Belegschnittmarkierung haben, in denen das Karteiwort nicht auftaucht und in denen keine Annotierung vorhanden ist, die getaggt werden soll. Anstelle der ausgeblendeten Absätze wird eine Auslassungsmarkierung gedruckt: <q>[…]</q>. Weitere <a href="#belegliste-kuerzung">Details dazu im <abbr title="Kapitel">Kap.</abbr> <i>Belegliste</i></a>.</p>
 
           <p class="erklaerung-icon" id="karteikarte-trennung"><img src="../img/trennzeichen.svg" width="24" height="24" alt="">Tastaturkürzel <kbd>Strg</kbd> + <kbd>T</kbd>; nur <i>Leseansicht</i>; Silbentrennung ein- <abbr title="beziehungsweise">bzw.</abbr> ausblenden</p>
 
@@ -639,20 +639,20 @@
 
             <p>Ein letztes noch zu diesem Punkt: Es ist vollkommen gleichgültig, mit welcher Methode Sie Text in das Beleg-Feld einfügen. Die automatische Bereinigung wird angestoßen, wenn Sie das Einfüge-Icon <img src="../img/einfuegen.svg" width="20" height="20" alt=""> verwenden, wenn Sie via <kbd>Strg</kbd> + <kbd>V</kbd> Text einfügen, via <i>Rechtsklick &gt; Einfügen</i> oder über über den Menüpunkt <a href="#menueBearbeiten-einfuegen"><i>Bearbeiten &gt; Einfügen</i></a>.</p>
 
-            <p id="karteikarte-belegKlammern">Für den Beleg steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie einen Belegschnitt für den späteren Export vorbereiten können, ohne dass Sie den Belegtext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswirft, die Sie wünschen.</p>
+            <p id="karteikarte-belegKlammern">Für den Beleg steht Ihnen ein ausdifferenziertes System an <b>Klammern</b> zur Verfügung, mit dem Sie einen Belegschnitt markieren und für den späteren Export vorbereiten können, ohne dass Sie den weiteren Belegkontext wirklich löschen müssten. Das System dient dazu, Streichungen und Ergänzungen so vorzubereiten, dass Ihnen die App beim Export oder Kopieren des Textes den Belegschnitt in just der Form auswirft, die Sie wünschen.</p>
 
-            <p>In der <a href="#belegliste">Belegliste</a> und der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> sieht es zwar so aus, als sei der Text eingklammert. Tatsächlich wird der Text aber in spezielle <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags eingefasst. Sie haben zwei Möglichkeiten, diese Tags in den Text einzufügen:</p>
+            <p>Haben Sie eine Klammer gesetzt, sieht es in der <a href="#belegliste">Belegliste</a> und der <a href="#karteikarte-leseansicht">Leseansicht der Karteikarte</a> zwar so aus, als sei der Text eingeklammert. Tatsächlich wird der Text aber in spezielle <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags eingefasst. Sie haben zwei Möglichkeiten, diese Tags in den Text einzufügen:</p>
 
             <ol>
-              <li>Markieren Sie in der Belegliste oder der Leseansicht der Karteikarte den Text, der eingeklammert werden soll. Klicken Sie mit der rechten Maustaste auf der Auswahl und wählen Sie den gewünschten Klammertyp im Menüpunkt <i>Klammern setzen</i> aus.</li>
+              <li>Markieren Sie in der Belegliste oder der Leseansicht der Karteikarte den Text, der eingeklammert werden soll. Klicken Sie mit der rechten Maustaste auf der Auswahl und wählen Sie entweder <i>Belegschnitt markieren</i> oder den gewünschten Klammertyp im Menüpunkt <i>Klammern setzen</i> aus.</li>
 
-              <li id="karteikarte-belegKlammernTools">Markieren Sie den Text im <i>Beleg</i>-Feld der Formularansicht der Karteikarte. Über dem Feld, wo auch die übrigen Text-Tools zu finden sind, finden Sie drei Icons, die zum Hinzufügen der Klammern dienen: <b>[…]</b> (Streichung), <b>[[…]]</b> (Löschung) und <b>{…}</b> (Autorenzusatz). Diese Icons funktionieren genauso wie die übrigen Text-Tools.</li>
+              <li id="karteikarte-belegKlammernTools">Markieren Sie den Text im <i>Beleg</i>-Feld der Formularansicht der Karteikarte. Über dem Feld, wo auch die übrigen Text-Tools zu finden sind, finden Sie vier Icons, die zum Hinzufügen der Klammern dienen: <b>&lt;…&gt;</b> (Belegschnitt), <b>[…]</b> (Streichung), <b>[[…]]</b> (Löschung) und <b>{…}</b> (Autorenzusatz). Diese Icons funktionieren genauso wie die übrigen Text-Tools.</li>
             </ol>
 
             <div class="bilder">
               <figure title="zum Vergrößern anklicken">
                 <img src="../img/win/karteikarte-klammern-beleg.png" alt="">
-                <figcaption>farbig hervorgehobene Klammern in einem Beleg</figcaption>
+                <figcaption>farbig hervorgehobene Klammern in einem Belegschnitt</figcaption>
               </figure>
 
               <figure title="zum Vergrößern anklicken">
@@ -661,9 +661,11 @@
               </figure>
             </div>
 
-            <p>Die Klammer-Tags werden beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert. Dabei werden die drei Klammertypen unterschiedslos in einfache eckige Klammern gesetzt. Auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets werden die Tags aufgelöst (<abbr title="vergleiche">vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>).</p>
+            <p>Die Klammer-Tags werden beim <a href="#karteikarte-kopieren">Kopieren</a> von Text, der zum Einfügen in ein Textprogramm dient, transformiert. Dabei werden die drei Klammertypen unterschiedslos in einfache eckige Klammern gesetzt. Der Belegschnitt wird dann nicht mehr eigens ausgezeichnet. Auch beim Erstellen eines <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippets werden die Tags aufgelöst (<abbr title="vergleiche">vgl.</abbr> dazu den entsprechenden <a href="#xml-belegschnitt" class="link-dokumentation"><abbr title="Abschnitt">Abschn.</abbr> in der technischen Dokumentation</a>).</p>
 
             <p>Dies geschieht im Einzelnen, wenn der Text kopiert wird:</p>
+
+            <p><b>&lt;Text&gt;</b> → <b>Text</b> = Belegschnitt. Nur der markierte Belegtext wird exportiert (es sei denn, Sie haben eine vom markierten Schnitt abweichende Auswahl vorgenommen).</p>
 
             <p><b>{Text}</b> → <b>[Text]</b> = Autorenzusatz. Der markierte Belegtext bleibt beim Export immer erhalten.</p>
 
@@ -1390,7 +1392,7 @@
 
           <ul>
             <li>
-              <p>Sie können den <a href="#belegliste-kuerzung">Kontext der Belege dynamisch kürzen</a>, sodass nur Absätze aufgebaut werden, in denen das Karteiwort enthalten ist.</p>
+              <p>Sie können den <a href="#belegliste-kuerzung">Kontext der Belege dynamisch kürzen</a>, sodass nur Absätze aufgebaut werden, in denen <abbr title="zum Beispiel">z.&nbsp;B.</abbr> das Karteiwort enthalten ist.</p>
 
               <p class="info">Zum Kürzen dient das Icon <img src="../img/kuerzung.svg" width="20" height="20" alt=""> im Kopf der Belegliste. Es ist ein Leichtes, die Kürzung spontan und punktuell rückgängig zu machen: Klicken Sie auf das Kürzungszeichen <q>[…]</q>, um einen zum angezeigten Text angrenzenden Absatz einzublenden.</p>
             </li>
@@ -1454,6 +1456,8 @@
           <div class="info">
             <p>Ist die dynamische Kürzung aktiviert, versucht die App, lange Belege sinnvoll zu kürzen. <abbr title="das heißt">D.&nbsp;h.</abbr> konkret: Absätze, in denen das Karteiwort nicht auftaucht und in denen keine Annotierung ist, die getaggt werden soll, werden durch ein Kürzungszeichen ersetzt: <q>[…]</q>. Folgen mehrere gekürzte Absätze aufeinander, erscheint nur ein Kürzungszeichen.</p>
 
+            <p>Haben Sie in einem Beleg eine <a href="#belegliste-belegschnitt">Schnittmarkierung</a> vorgenommen, spielen Karteiwort und Annotierung für die Kürzungsfunktion allerdings keine Rolle mehr. Der Beleg wird dann bis auf diejenigen Absätze gekürzt, die als Teil des Belegschnitts markiert wurden.</p>
+
             <p>Eine automatisch erfolgte Kürzung kann man durch Klick auf den gekürzten Absatz nach und nach rückgängig machen, um mehr Kontext zu erhalten. Pro Klick wird ein zum angezeigten Text benachbarter Absatz eingeblendet. Ist an der zuvor gekürzten Stelle der komplette Text sichtbar, verschwindet das Kürzungszeichen.</p>
 
             <p>Um das Karteiwort möglichst zuverlässig zu erkennen, werden beim Erstellen einer Kartei automatisch Formvarianten des <abbr title="Deutsches Textarchiv">DTA</abbr> geladen (<a href="#menueKartei-formvarianten"><i>Kartei&nbsp;&gt; Formvarianten</i></a>). Sollte das Karteiwort im Belegtext nicht erkannt oder sollten sogar falsche Wörter hervorgehoben werden, können Sie das Problem vielleicht dadurch beheben, dass Sie die Liste der Formvarianten modifizieren, also ergänzen oder bereinigen. Bestand zum Zeitpunkt des Erstellens der Kartei keine Internetverbindung, sollten Sie das Laden der Formvarianten noch einmal manuell anstoßen. Dafür gibt es einen Button im <a href="#menueKartei-formvarianten">Formvarianten-Fenster</a>.</p>
@@ -1495,7 +1499,7 @@
 
             <p id="belegliste-annotieren">Die Annotierungsfunktion kann nicht nur für Karteiwörter benutzt werden. Im Prinzip können Sie mit ihr einen beliebigen <b>Abschnitt im Belegtext markieren</b>. Hierzu müssen Sie nur den Text mit der Maus auswählen, der markiert werden soll, auf dem ausgewählten Text rechtsklicken und <i>Textauswahl markieren</i> wählen. Klicken Sie auf die Markierung, öffnet sich das gleiche Popup-Fenster wie beim Klick auf ein Karteiwort. Der einzige Unterschied zur Annotierung von Karteiwörtern: Die Markierung wird in diesem Fall gelöscht, wenn die Farbe transparent gesetzt wird.</p>
 
-            <p>Das Annotieren von Teilen des Belegtextes kann fehlschlagen. In solchen Fällen erscheint eine Fehlermeldung. In der Regel wird der Grund sein, dass Sie gewisse Elemente im Text nur zum Teil ausgewählt haben. Ändern Sie in solchen Fällen die Textauswahl mit der Maus und versuchen Sie es erneut!</p>
+            <p>Das Annotieren von Teilen des Belegtextes kann fehlschlagen. In solchen Fällen erscheint eine Fehlermeldung. Wählen Sie den Text in einem Element nur teilweise aus, würde dies zu einer sogenannten illegalen Verschachtelung führen. Darum wird in solchen Fällen die Annotierung automatisch auf das gesamte Element ausgedehnt. Das Annotieren über eine Absatzgrenze hinweg, geht leider nicht. Erzeugen Sie für einen solchen Fall einfach mehrere Annotierungen.</p>
 
             <p id="belegliste-nesting">(Hintergrund: <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Tags dürfen nicht über Kreuz verschachtelt werden. Der Code <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/b&gt; ein&lt;/i&gt; Text</code> wäre eine illegale Verschachtelung, weil der <code class="quelltext">&lt;i&gt;</code>-Container den <code class="quelltext">&lt;b&gt;</code>-Container über Kreuz schneidet. Korrekt sähe der Code so aus: <code class="quelltext long">&lt;b&gt;das &lt;i&gt;ist&lt;/i&gt;&lt;/b&gt; &lt;i&gt;ein&lt;/i&gt; Text</code>. Für die Annotierung heißt das konkret, dass Sie Textteile, die <abbr title="zum Beispiel">z.&nbsp;B.</abbr> gefettet sind, nicht nur teilweise, sondern komplett auswählen müssen – es sei denn, Sie bleiben mit Ihrer Auswahl innerhalb dieses Textteils.)</p>
 
@@ -1647,7 +1651,7 @@
 
           <p id="belegliste-bedeutungsgeruest">Arbeiten Sie mit mehreren <a href="#bedeutungsgeruest">Bedeutungsgerüsten</a>, wird in der Überschrift <i>Bedeutung</i> angegeben, aus welchem Gerüst die angezeigte Bedeutung stammt. Diese Überschrift ist klicksensitiv; über sie kann die Funktion <a href="#menueKartei-bedeutungsgeruestWechseln"><i>Kartei&nbsp;&gt; Bedeutungsgerüst wechseln</i></a> aufgerufen werden.</p>
 
-          <p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext steht ein <b>Kopier-Icon</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Mit ihm kann man mit nur einem Klick den Belegtext mit Quellenangabe in die Zwischenablage des Rechners schieben, um diesen in ein anderes (Textverarbeitungs-)Programm einzufügen. Normalerweise wird der komplette Belegtext kopiert, und zwar auch, wenn der Kontext dynamisch gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">). Wurde allerdings ein Teil des Belegtextes mit der Maus markiert, wird nur dieser kopiert (<abbr title="siehe unten">s.&nbsp;u.</abbr>).</p>
+          <p id="belegliste-kopierenIcon">Am linken Rand neben Belegtext steht ein <b>Kopier-Icon</b>: <img src="../img/kopieren.svg" width="24" height="24" alt="">. Mit ihm kann man mit nur einem Klick den Belegtext mit Quellenangabe in die Zwischenablage des Rechners schieben, um diesen in ein anderes (Textverarbeitungs-)Programm einzufügen. Normalerweise wird der komplette Belegtext kopiert, und zwar auch, wenn der Kontext dynamisch gekürzt wurde (Funktion <img src="../img/kuerzung.svg" width="24" height="24" alt="">). Haben Sie allerdings einen Teil des Belegs mit einer <a href="#belegliste-belegschnitt">Schnittmarkierung</a> versehen, wird nur dieser Teil berücksichtigt. <abbr title="Eventuell">Evtl.</abbr> im Text vorhandene Trennzeichen und Seitenumbrüche sind in der Kopie sichtbar, selbst wenn Sie in der aktuellen Anzeige ausgeschaltet wurden (Funktion <img src="../img/trennzeichen.svg" width="24" height="24" alt="">). Haben Sie einen Teil des Belegtextes zuvor mit der Maus markiert, wird nur dieser kopiert, selbst wenn Sie im Beleg eine Schnittmarkierung gesetzt haben (<abbr title="siehe unten">s.&nbsp;u.</abbr>).</p>
 
           <p id="belegliste-buchungsIcon">Auf Wunsch lässt sich an dieser Stelle zusätzlich ein Buchungs-Icon einblenden (<abbr title="siehe">s.</abbr> die <a href="#einstellungen-beleglisteBuchungsIcon">entsprechende Option</a>, die zunächst aktiviert werden muss). Mit ihm kann der Buchungsstatus des Belegs umgestellt werden: Auf Klick kann ein ungebuchter Beleg als gebucht und ein gebuchter Beleg als ungebucht markiert werden. Die Form des Icons passt sich dabei an: <img src="../img/buch.svg" width="24" height="24" alt=""> für ungebucht <abbr title="respektive">resp.</abbr> <img src="../img/buch-check-gruen.svg" width="24" height="24" alt=""> für gebucht.</p>
 
@@ -1725,9 +1729,19 @@
 
           <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. <a href="#belegliste-karteiwortHervorheben">Details zur Annotierungsfunktion</a> finden Sie weiter oben.</p>
 
+          <p class="erklaerung-icon" id="belegliste-belegschnitt"><img src="../img/klammern-schnitt.svg" width="24" height="24" alt="">Belegschnitt markieren</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Mit dieser Funktion können Sie den markierten Text als Belegschnitt markieren. Dazu können Sie auch mehrere Absätze gleichzeitig auswählen oder mehrere, unzusammenhängende Schnitt in einem langen Belegtext auszeichnen. Beim Export in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet werden in diesem Fall zwischen den einzelnen Schnittmarkierungen automatisch Auslassungszeichen eingefügt. Der nicht als Schnitt markierte Belegtext wird ausgegraut.</p>
+
+          <p class="info">Die Belegschnittmarkierung ist ein harter Marker für die <a href="#belegliste-kuerzung">dynamische Kürzungsfunktion</a>: Sobald in einem Beleg eine Schnittmarkierung vorhanden ist, werden andere Maßstäbe, nach denen dynamisch gekürzt wird, nämlich ignoriert.</p>
+
+          <p class="erklaerung-icon" id="belegliste-belegschnittEntfernen"><img src="../img/klammern-schnitt-entfernen.svg" width="24" height="24" alt="">Belegschnitt demarkieren</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf einem als Belegschnitt markierten Textteil. Mit dieser Funktion können Sie einen als Teil des Schnitts markierten Text demarkieren.</p>
+
           <p class="erklaerung-icon" id="belegliste-klammern"><img src="../img/klammern.svg" width="24" height="24" alt="">Klammern setzen</p>
 
-          <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Mit dieser Funktion können Sie den markierten Text in Klammern einfassen, was zur Vorbereiten des Belegschnitts für das Kopieren des Belegs oder für den Export in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet dient. <a href="#karteikarte-belegKlammern">Details zu den Klammern</a> finden Sie weiter oben.</p>
+          <p class="info">Erscheint nur beim Rechtsklick auf markiertem Belegtext. Mit dieser Funktion können Sie den markierten Text in Klammern einfassen, was zur Vorbereitung des Belegschnitts für das Kopieren des Belegs oder für den Export in ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet dient. Solche Klammern können auch innerhalb einer Belegschnittmarkierung vorgenommen werden. <a href="#karteikarte-belegKlammern">Details zu den Klammern</a> finden Sie weiter oben.</p>
 
           <p class="erklaerung-icon" id="belegliste-klammernEntfernen"><img src="../img/klammern-entfernen.svg" width="24" height="24" alt="">Klammern entfernen</p>
 
@@ -1744,6 +1758,10 @@
 
             <p>Die Aktion lässt sich übrigens auch aus dem <a href="#menueBearbeiten-kopieren">Kopierfenster</a> heraus anstoßen, das nach dem Drücken von <kbd>Strg</kbd> + <kbd>C</kbd> erscheint.</p>
           </div>
+
+          <p class="erklaerung-icon"><img src="../img/beleg.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Beleg</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf dem Beleg. Der Befehl kopiert den Belegtext in die Zwischenablage, und zwar in derselben Weise, wie es auch das <a href="#belegliste-kopierenIcon">Kopier-Icon</a> tut. Ist eine <a href="#belegliste-belegschnitt">Belegschnittmarkierung</a> vorhanden, wird nur der markierte Schnitt kopiert.</p>
 
           <p class="erklaerung-icon no-navi-details" id="belegliste-textZwischenablageReferenz"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt="">Text in Zwischenablage &gt; Referenz</p>
 
@@ -1763,13 +1781,21 @@
             <p> Die Aktion lässt sich übrigens auch aus dem <a href="#menueBearbeiten-kopieren">Kopierfenster</a> heraus anstoßen, das nach dem Drücken von <kbd>Strg</kbd> + <kbd>C</kbd> erscheint.</p>
           </div>
 
+          <p class="erklaerung-icon"><img src="../img/beleg.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Beleg</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf dem Beleg, wenn keine Textauswahl vorgenommen wurde. Der Befehl erzeugt aus dem Beleg ein <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Snippet, das auch einige Metainformationen zum Beleg enthält. Als Belegtext wird entweder der <a href="#belegliste-belegschnitt">markierte Schnitt</a> oder gesamte Beleg genommen.</p>
+
           <p class="erklaerung-icon"><img src="../img/link-pfeil-runter.svg" width="24" height="24" alt=""><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Referenz</p>
 
           <p class="info">Analog zum Befehl <a href="#belegliste-textZwischenablageReferenz"><i>Text in Zwischenablage &gt; Referenz</i></a> wird auch in diesem Fall eine ID des Belegs erzeugt und kopiert. Der Unterschied ist, dass sie in einem leeren <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Element steht, das als Anker für einen zuvor kopierten Belegschnitt dienen kann.</p>
 
-          <p class="erklaerung-icon" id="belegliste-xmlBelegschnittFenster"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt in <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+          <p class="erklaerung-icon" id="belegliste-xmlBelegschnittFenster"><img src="../img/xml.svg" width="24" height="24" alt="">Belegschnitt an <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
 
           <p class="info">Erscheint nur beim Rechtsklick auf markiertem <em>Beleg-</em>Text. Die Funktion erzeugt ein XML-Snippet in derselben Weise wie <a href="#belegliste-xmlZwischenablageBelegschnitt"><i><abbr title="Extensible Markup Language" lang="en">XML</abbr> in Zwischenablage &gt; Belegschnitt</i></a>. Der einzige Unterschied besteht darin, dass das Snippet nicht in die Zwischenablage kopiert, sondern direkt ans <a href="#menueRedaktion-xml"><abbr title="Extensible Markup Language" lang="en">XML</abbr>-Redaktionsfenster</a> geschickt wird.</p>
+
+          <p class="erklaerung-icon"><img src="../img/xml.svg" width="24" height="24" alt="">Beleg an <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster</p>
+
+          <p class="info">Erscheint nur beim Rechtsklick auf dem Beleg, wenn keine Textauswahl vorgenommen wurde. Der Befehl ist identisch mit dem vorhergehendem, allerdings wird entweder der gesamte Belegtext oder ausschließlich der Text innerhalb einer <a href="#belegliste-belegschnitt">Schnittmarkierung</a> an das <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Fenster geschickt.</p>
 
           <p class="erklaerung-icon" id="belegliste-linkKopieren"><img src="../img/link.svg" width="24" height="24" alt="">Link kopieren</p>
 
@@ -4700,7 +4726,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
             <p>Es werden nur die Texte derjenigen Belege kopiert, die gerade in der Belegliste sichtbar sind. Wurden <a href="#filter">Filter</a> angewendet, werden diejenigen Belege, auf die die Filter nicht zutreffen von der Funktion somit ignoriert.</p>
 
-            <p>Die Belegtexte werden immer komplett kopiert, also so, wie sie in der <a href="#karteikarte">Karteikarte</a> stehen. Dabei werden alle weiteren Informationen in der Karteikarte ignoriert, außer der <a href="#karteikarte-quelle">Quellenangabe</a>, die automatisch an den Belegtext angehängt wird. Die Funktion kopiert den Beleg also so, wie es das <a href="#belegliste-textZwischenablage">Kopier-Icon neben dem Belegtext</a> tun würde, nur dass alle Belege auf einmal kopiert werden.</p>
+            <p>Wenn eine <a href="#belegliste-belegschnitt">Belegschnittmarkierung</a> vorhanden ist, wird nur der Text innerhalb dieser Markierung kopiert. Ansonsten werden die Belegtexte komplett kopiert, also so, wie sie in der <a href="#karteikarte">Karteikarte</a> stehen. Dabei werden alle weiteren Informationen in der Karteikarte ignoriert, außer der <a href="#karteikarte-quelle">Quellenangabe</a>, die automatisch an den Belegtext angehängt wird. Die Funktion kopiert den Beleg also so, wie es das <a href="#belegliste-textZwischenablage">Kopier-Icon neben dem Belegtext</a> tun würde, nur dass alle Belege auf einmal kopiert werden.</p>
 
             <p>Nach dem Kopieren, liegen die Belegtexte in der Zwischenablage in zwei verschiedenen Formaten vor: in einem unformatierten Text- und im <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Format. Fügen Sie den Text in ein Office-Programm ein, wird die <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Fassung, fügen Sie ihn in einen Plain-Text-Editor ein, wird die unformatierte Textfassung verwendet.</p>
           </div>
@@ -5360,7 +5386,7 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
 
             <p>Es werden nur die Belege verschickt, die aktuell in der <a href="#belegliste">Belegliste</a> angezeigt werden. Man kann also <a href="#filter">filtern</a>, welche Belege an das Fenster geschickt werden sollen.</p>
 
-            <p>Als Belegschnitt wird immer der <em>komplette</em> Belegtext der jeweiligen Karteikarte genutzt, vom ersten bis zum letzten Zeichen. Die Belege sollten also vor der Verwendung dieser Funktion sehr gut vorbereitet werden.</p>
+            <p>Als Belegschnitt wird entweder der <a href="#belegliste-belegschnitt">markierte Schnitt</a> oder – wenn keine Schnittmarkierung vorhanden ist – der komplette Belegtext der jeweiligen Karteikarte genommen. Die Belege sollten also vor der Verwendung dieser Funktion sehr gut vorbereitet werden.</p>
           </div>
         </section>
 

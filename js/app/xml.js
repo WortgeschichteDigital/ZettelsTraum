@@ -75,10 +75,13 @@ const xml = {
 
     // Belegschnitt typographisch aufbereiten
     // (sollte hier passieren, weil später automatisch XML-Ersetzungen reinkommen)
+    if (!popup.textauswahl.xml) {
+      popup.textauswahl.xml = xml.belegSchnittPrep(popup.belegID, true);
+    }
     cont.innerHTML = helfer.typographie(popup.textauswahl.xml);
 
-    // technische Klammern entfernen (Hervorhebung von Seitenumbrüchen, Trennstrichen usw.)
-    helfer.clipboardHtmlErsetzen(cont, ".klammer-technisch");
+    // technische Klammern (Hervorhebung von Seitenumbrüchen, Trennstrichen usw.) und Belegschnittklammern entfernen
+    helfer.clipboardHtmlErsetzen(cont, ".klammer-technisch, .belegschnitt");
 
     // .klammer-(autorenzusatz|loeschung|streichung) in Tags umwandeln
     // (da Klammern verschachtelt sein könnten, braucht es eine rekursive Funktion)
@@ -127,7 +130,7 @@ const xml = {
     }
 
     // Belegtext aufbereiten
-    //   - identische Klammerungen, die direkt ineinander verschachtelt sind, korrigieren
+    //   - identische Klammerungen korrigieren, die direkt ineinander verschachtelt sind oder aufeinanderfolgen (ggf. Ellipsen in den Klammern verschmelzen)
     //   - Klammerungen aufbereiten
     //   - Leerzeichen vor <Streichung> ergänzen (werden beim Auflösen wieder entfernt)
     //   - überflüssige Versauszeichnungen am Ende ersetzen (kann bei wilder Auswahl passieren)
@@ -147,6 +150,10 @@ const xml = {
           return `<${i}>`;
         });
       }
+      const regSpaces = new RegExp(`</${i}> *<${i}>`, "g");
+      text = text.replace(regSpaces, " ");
+      const regEllipsis = new RegExp(`<${i}>… …</${i}>`, "g");
+      text = text.replace(regEllipsis, `<${i}>…</${i}>`);
     }
     text = klammernTaggen(text);
     text = text.replace(/([^\s])(<Streichung>[,;:/])/g, (m, p1, p2) => p1 + " " + p2);
@@ -408,18 +415,30 @@ const xml = {
   },
 
   // markierten Belegschnitt in die Zwischenablage kopieren
-  schnittInZwischenablage () {
+  //   complete = boolen
+  //     (ganzen Beleg oder getaggten Belegschnitt an das XML-Fenster schicken)
+  schnittInZwischenablage (complete) {
+    // ganzen Beleg kopieren
+    if (complete) {
+      popup.textauswahl.xml = "";
+    }
+
+    // Daten zusammentragen
     const xmlStr = xml.schnitt();
+
     // Text kopieren
     modules.clipboard.write({
       text: xmlStr,
     });
+
     // Animation
     helfer.animation("zwischenablage");
   },
 
   // markierten Belegschnitt an das XML-Fenster schicken
-  schnittInXmlFenster () {
+  //   complete = boolen
+  //     (ganzen Beleg oder getaggten Belegschnitt an das XML-Fenster schicken)
+  schnittInXmlFenster (complete) {
     // Karteikarte noch nicht gespeichert?
     if (helfer.hauptfunktion === "karte" && !data.ka[popup.referenz.id]) {
       dialog.oeffnen({
@@ -428,6 +447,7 @@ const xml = {
       });
       return;
     }
+
     // Sind Stichwort und Trennzeichen sichtbar?
     if (helfer.hauptfunktion === "karte" && !optionen.data.beleg.trennung) {
       dialog.oeffnen({
@@ -454,9 +474,16 @@ const xml = {
       });
       return;
     }
+
+    // ganzen Beleg oder getaggten Belegschnitt an das XML-Fenster schicken
+    if (complete) {
+      popup.textauswahl.xml = "";
+    }
+
     // Daten zusammentragen
     const xmlStr = xml.schnitt();
     const datum = helferXml.datumFormat({ xmlStr });
+
     // Datensatz an XML-Fenster schicken
     const xmlDatensatz = {
       key: "bl",
@@ -480,10 +507,12 @@ const xml = {
       });
       return;
     }
+
     // Ist die Belegliste sichtbar?
     if (!liste.listeSichtbar({ funktion: "Redaktion &gt; Belege in XML-Fenster" })) {
       return;
     }
+
     // keine Belege in der Liste
     const belege = document.querySelectorAll("#liste-belege .liste-kopf");
     if (!belege.length) {
@@ -493,6 +522,7 @@ const xml = {
       });
       return;
     }
+
     // Sicherheitsfrage
     let numerus = `Sollen die <i>${belege.length} Belege</i> aus der Belegliste wirklich alle`;
     if (belege.length === 1) {
@@ -508,27 +538,21 @@ const xml = {
     if (!senden) {
       return;
     }
+
     // Ist das XML-Redaktionsfenster schon offen?
     if (!redXml.contentsId) {
       await redXml.oeffnenPromise();
     }
+
     // Belege an XML-Fenster
     for (const i of belege) {
       const id = i.dataset.id;
       popup.referenz.data = data.ka[id];
       popup.referenz.id = id;
-      // Absätzen erzeugen
-      const container = document.createElement("div");
-      const bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n").split("\n");
-      for (const i of bs) {
-        const p = document.createElement("p");
-        p.dataset.pnumber = 0; // wegen xml.schnitt()
-        p.innerHTML = i;
-        container.appendChild(p);
-      }
-      // Text aufbereiten
-      const html = liste.belegWortHervorheben(container.innerHTML, true);
-      popup.textauswahl.xml = helfer.clipboardXml(html);
+
+      // Belegschnitt vorbereiten
+      popup.textauswahl.xml = xml.belegSchnittPrep(id, true);
+
       // Datensatz umwandeln an XML-Fenster schicken
       const xmlStr = xml.schnitt();
       const datum = helferXml.datumFormat({ xmlStr });
@@ -542,9 +566,115 @@ const xml = {
         },
       };
       redXml.datensatz({ xmlDatensatz });
+
       // kurz warten
       await new Promise(resolve => setTimeout(() => resolve(true), 100));
     }
+  },
+
+  // Beleg für das Tagging vorbereiten
+  //   id = string
+  //     (Beleg-ID)
+  //   xmlPrep = boolean
+  //     (der Schnitt muss nur für XML aufbereitet werden)
+  belegSchnittPrep (id, xmlPrep) {
+    const bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n");
+    const bsP = bs.split("\n");
+
+    const schnitt = {
+      // Indexnummern der markierten Absätez
+      markiert: [],
+
+      // Indexnummer des letzten übernommenen Absatzes
+      letzter: -1,
+    };
+
+    for (let i = 0, len = bsP.length; i < len; i++) {
+      const p = bsP[i];
+      if (/class="belegschnitt"/.test(p)) {
+        schnitt.markiert.push(i);
+      }
+    }
+
+    // Absätze erzeugen
+    const container = document.createElement("div");
+    for (let i = 0, len = bsP.length; i < len; i++) {
+      // Abbruch, weil Absatz mit letztem Schnitt erreicht
+      if (i > schnitt.markiert.at(-1)) {
+        break;
+      }
+
+      // aktueller Absatz
+      let p = bsP[i];
+
+      // Beleg mit Belegschnittmarkierung, aber keine Markierung im aktuellen Absatz
+      if (schnitt.markiert.length && !schnitt.markiert.includes(i)) {
+        if (i > schnitt.markiert[0] && schnitt.letzter === i - 1) {
+          absatz('<span class="klammer-loeschung">…</span>');
+        }
+        continue;
+      }
+
+      // ggf. nur Belegschnittmarkierung(en) übernehmen
+      if (/class="belegschnitt"/.test(p)) {
+        const contTmp = document.createElement("div");
+        contTmp.innerHTML = p;
+        const schnitte = contTmp.querySelectorAll(".belegschnitt");
+        const markierungen = [];
+        for (const i of schnitte) {
+          markierungen.push(i.innerHTML);
+        }
+
+        // Absatz neu zusammenbauen
+        p = "";
+        for (let j = 0, len = markierungen.length; j < len; j++) {
+          if (j > 0) {
+            p += ' <span class="klammer-loeschung">…</span> ';
+          }
+          p += markierungen[j];
+        }
+
+        // Schnittmarkierung beginnt nicht am Anfang des Absatzes
+        // (nur ergänzen, wenn dies nicht der erste Absatz mit Schnittmarkierung ist)
+        if (schnitt.markiert[0] !== i &&
+            !contTmp.firstChild?.classList?.contains("belegschnitt")) {
+          p = '<span class="klammer-loeschung">…</span> ' + p;
+        }
+
+        // Schnittmarkierung geht nicht bis zum Ende des Absatzes
+        // (Löschung nur automatisch ergänzen, wenn der aktuelle nicht der letzte markierte Absatz ist)
+        if (schnitt.markiert.at(-1) !== i &&
+            !contTmp.lastChild?.classList?.contains("belegschnitt")) {
+          p += ' <span class="klammer-loeschung">…</span>';
+        }
+
+        // Bereinigung doppelter Leerzeichen
+        p = p.replace(/ {2,}/g, " ");
+      }
+
+      // Absatz aufnehmen
+      absatz(p);
+
+      // Nummer des letzten Absatzes merken
+      schnitt.letzter = i;
+    }
+
+    function absatz (i) {
+      const p = document.createElement("p");
+      // pnumber = 0 wegen xml.schnitt()
+      p.dataset.pnumber = 0;
+      p.innerHTML = i;
+      container.appendChild(p);
+    }
+
+    // XML aufbereiten und zurückgeben
+    if (xmlPrep) {
+      const html = liste.belegWortHervorheben(container.innerHTML, true);
+      return helfer.clipboardXml(html);
+    }
+
+    // Container mit aufbereitetem Beleg zurückgeben
+    return container;
   },
 
   // Referenztag des Belegs in die Zwischenablage kopieren
