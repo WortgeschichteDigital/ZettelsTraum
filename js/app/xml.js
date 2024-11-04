@@ -35,8 +35,8 @@ const xml = {
     "Die ZEIT",
   ],
 
-  // Belege aus DWDS-Korpora, die nicht aus dem DWDS stammen ;-)
-  noDWDS: [
+  // Belege aus internen DWDS-Korpora
+  DWDSi: [
     "bestseller",
   ],
 
@@ -285,10 +285,10 @@ const xml = {
     const fo = document.createElementNS(ns, "Fundort");
     fundstelle.appendChild(fo);
     if (fundort === "DWDS") {
-      // Fundort von DWDS-Belegen, die keine DWDS-Belege sind, korrigieren
+      // Fundort für interne DWDS-Korpora
       const korpus = data.kr.split(": ")?.[1];
-      if (xml.noDWDS.includes(korpus)) {
-        fundort = "Bibliothek";
+      if (xml.DWDSi.includes(korpus)) {
+        fundort = "DWDSi";
       }
     }
     fo.appendChild(document.createTextNode(fundort));
