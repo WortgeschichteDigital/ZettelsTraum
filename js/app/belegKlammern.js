@@ -1,9 +1,9 @@
 "use strict";
 
 const belegKlammern = {
-  // Klammerung ausführen
-  //   type = string
-  make (type) {
+  // Klammerung starten
+  //   cl = string
+  make (cl) {
     // Trennzeichen nicht eingeschaltet
     if (helfer.hauptfunktion === "liste" && !optionen.data.belegliste.trennung ||
         helfer.hauptfunktion !== "liste" && !optionen.data.beleg.trennung) {
@@ -15,6 +15,23 @@ const belegKlammern = {
     }
 
     // Klammerung vornehmen
+    const result = belegKlammern.surround("span", cl, "klammern");
+    if (!result[0]) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Das Setzen von Klammern kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n" + result[1],
+      });
+    }
+  },
+
+  // Klammerung vornahmen
+  //   tag = string
+  //     (Name des umschließenden Tags)
+  //   cl = string
+  //     (class des umschließenden Tags)
+  //   type = string
+  //     (klammern | annotierung)
+  surround (tag, cl, type) {
     function getIdxNo (ancestor, container) {
       while (container.parentNode !== ancestor) {
         container = container.parentNode;
@@ -63,13 +80,30 @@ const belegKlammern = {
           p.childNodes.length === 1 &&
           p.firstChild.firstChild.nodeType === Node.ELEMENT_NODE &&
           p.firstChild.childNodes.length === 1 &&
-          p.firstChild.firstChild.classList.contains(type)) {
+          p.firstChild.firstChild.nodeName === tag.toUpperCase() &&
+          p.firstChild.firstChild.classList.contains(cl)) {
         const contents = p.firstChild.firstChild.innerHTML;
         p.firstChild.innerHTML = contents;
-        const span = document.createElement("span");
-        span.classList.add(type);
-        span.innerHTML = p.innerHTML;
-        p.replaceChild(span, p.firstChild);
+        const cont = document.createElement(tag);
+        cont.classList.add(cl);
+        cont.innerHTML = p.innerHTML;
+        p.replaceChild(cont, p.firstChild);
+      }
+
+      // Annotierungs-Events anhängen
+      annotieren.init(p);
+    }
+
+    function update (p, cont) {
+      switch (type) {
+        case "klammern":
+          correctNesting(p);
+          belegKlammern.update(p);
+          break;
+        case "annotierung":
+          annotieren.mod(cont);
+          annotieren.ausfuehren();
+          break;
       }
 
       // Annotierungs-Events anhängen
@@ -77,7 +111,6 @@ const belegKlammern = {
     }
 
     try {
-      // Daten ermitteln
       const sel = window.getSelection();
       const range = sel.getRangeAt(0);
 
@@ -85,11 +118,10 @@ const belegKlammern = {
       if (ancestor.nodeType === Node.ELEMENT_NODE &&
           !ancestor.closest(".liste-bs") &&
           !ancestor.closest("#beleg-lese-bs")) {
-        dialog.oeffnen({
-          typ: "alert",
-          text: "Das Setzen von Klammern kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nüber den Belegtext hinausreichende Textauswahl",
-        });
-        return;
+        return [
+          false,
+          "Textauswahl überschreitet Belegtext",
+        ];
       }
 
       const data = {
@@ -116,12 +148,18 @@ const belegKlammern = {
       if (data.startP === data.endP) {
         // Range liegt innerhalb eines Absatzes
         const range = newRange(data);
-        const span = document.createElement("span");
-        span.classList.add(type);
-        range.surroundContents(span);
+        const cont = document.createElement(tag);
+        cont.classList.add(cl);
+        range.surroundContents(cont);
         range.collapse();
-        correctNesting(data.startP);
-        belegKlammern.update(data.startP);
+        update(data.startP, cont);
+      } else if (type === "annotierung") {
+        // Range erstreckt sich über mehrere Absätze,
+        // was bei Annotierungen verboten ist
+        return [
+          false,
+          "Textauswahl überschreitet Absatzgrenze",
+        ];
       } else {
         // Range erstreckt sich über mehrere Absätze
         const childs = data.ancestor.childNodes;
@@ -181,12 +219,11 @@ const belegKlammern = {
           }
 
           // Klammer setzen
-          const span = document.createElement("span");
-          span.classList.add(type);
-          range.surroundContents(span);
+          const cont = document.createElement(tag);
+          cont.classList.add(cl);
+          range.surroundContents(cont);
           range.collapse();
-          correctNesting(childs[i]);
-          belegKlammern.update(childs[i]);
+          update(childs[i], cont);
 
           // End-Container erreicht => Abbruch
           if (childs[i] === data.endP) {
@@ -194,11 +231,17 @@ const belegKlammern = {
           }
         }
       }
-    } catch {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Das Setzen von Klammern kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung",
-      });
+
+      // Feedback
+      return [
+        true,
+        "",
+      ];
+    } catch (err) {
+      return [
+        false,
+        `${err.name}: ${err.message}`,
+      ];
     }
   },
 

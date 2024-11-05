@@ -3,27 +3,21 @@
 const annotieren = {
   // versucht ein <mark class="user"> im markierten Text zu erzeugen
   makeUser () {
+    // Annotierung unmöglich
     if (helfer.hauptfunktion === "liste" && !optionen.data.belegliste.trennung ||
         helfer.hauptfunktion !== "liste" && !optionen.data.beleg.trennung) {
       annotieren.unmoeglich();
       return;
     }
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    const mark = document.createElement("mark");
-    mark.classList.add("user");
-    try {
-      range.surroundContents(mark);
-    } catch (err) {
+
+    // Annotierung vornehmen
+    const result = belegKlammern.surround("mark", "user", "annotierung");
+    if (!result[0]) {
       dialog.oeffnen({
         typ: "alert",
-        text: "Die Annotierung kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\nillegale Verschachtelung",
+        text: "Die Annotierung kann mit dieser Textauswahl nicht vorgenommen werden.\n<h3>Fehlermeldung</h3>\n" + result[1],
       });
-      return;
     }
-    range.collapse();
-    annotieren.mod(mark);
-    annotieren.ausfuehren();
   },
 
   // Meldung, dass das Annotieren nicht möglich ist
@@ -75,7 +69,6 @@ const annotieren = {
     // ersten und letzten Mark ermitteln
     const marks = p.querySelectorAll(`mark.${annotieren.data.cl}`);
     let posStart = -1;
-    let posEnde = -1;
     for (let i = 0, len = marks.length; i < len; i++) {
       if (marks[i] === w) {
         posStart = i;
@@ -85,7 +78,7 @@ const annotieren = {
     while (marks[posStart].classList.contains(`${annotieren.data.cl}-kein-start`)) {
       posStart--;
     }
-    posEnde = posStart;
+    let posEnde = posStart;
     while (marks[posEnde].classList.contains(`${annotieren.data.cl}-kein-ende`)) {
       posEnde++;
     }
@@ -209,7 +202,7 @@ const annotieren = {
 
     // Position der UI festlegen
     const pos = [];
-    let knoten = null;
+    let knoten;
     if (annotieren.data.start.offsetLeft < 187) { // links neben der Markierung
       pos.push("links");
       knoten = annotieren.data.start;
