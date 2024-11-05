@@ -551,7 +551,7 @@ const popup = {
   //     (Belegtext direkt in die Zwischenablage kopieren)
   textauswahlComplete (copy) {
     const bs = true;
-    const karte = data.ka[popup.belegID];
+    const karte = data.ka[popup.belegID] || beleg.data;
 
     // Belegtext aufbereiten
     let container;

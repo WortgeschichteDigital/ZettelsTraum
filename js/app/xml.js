@@ -578,7 +578,8 @@ const xml = {
   //   xmlPrep = boolean
   //     (der Schnitt muss nur für XML aufbereitet werden)
   belegSchnittPrep (id, xmlPrep) {
-    const bs = data.ka[id].bs.replace(/\n\s*\n/g, "\n");
+    const karte = data.ka[id] || beleg.data;
+    const bs = karte.bs.replace(/\n\s*\n/g, "\n");
     const bsP = bs.split("\n");
 
     const schnitt = {

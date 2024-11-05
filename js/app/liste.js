@@ -733,7 +733,7 @@ const liste = {
     const a = document.createElement("a");
     div.appendChild(a);
     a.classList.add("icon-link", "icon-tools-kopieren");
-    a.dataset.ds = `${id}|bs`;
+    a.dataset.id = id;
     liste.kopieren(a);
     // ggf. Buchungslink erzeugen
     if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
@@ -2067,14 +2067,22 @@ const liste = {
   kopieren (icon) {
     icon.addEventListener("click", function (evt) {
       evt.preventDefault();
-      const ds = this.dataset.ds.split("|");
-      const text = data.ka[ds[0]][ds[1]];
-      beleg.toolsKopierenExec({
-        ds: ds[1],
-        obj: data.ka[ds[0]],
-        text,
-        ele: this,
-      });
+      const id = this.dataset.id;
+      if (window.getSelection().toString() &&
+          popup.getTargetSelection([ this.parentNode ])) {
+        // Textauswahl kopieren
+        modules.clipboard.write({
+          text: popup.textauswahl.text,
+          html: popup.textauswahl.html,
+        });
+        helfer.animation("zwischenablage");
+      } else {
+        // gesamten Beleg kopieren
+        popup.belegID = id;
+        popup.referenz.data = data.ka[id];
+        popup.referenz.id = id;
+        popup.textauswahlComplete(true);
+      }
     });
   },
 
