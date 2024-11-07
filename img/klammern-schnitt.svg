@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<metadata>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:creator="Nico Dorn" dc:publisher="Akademie der Wissenschaften zu Göttingen, „Wortgeschichte digital“ („Zentrum für digitale Lexikographie der deutschen Sprache“)" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
+</metadata>
+<path transform="matrix(.98797 0 0 1.0122 -.85118 9.0952e-8)" d="m10.983 16.795-9.1096-4.0195v-1.3148l9.1096-4.5454v2.1976l-6.2734 2.9113 6.2734 2.5732z" fill="#212121"/>
+<path transform="matrix(-.98797 0 0 -1.0122 24.851 24)" d="m10.983 16.795-9.1096-4.0195v-1.3148l9.1096-4.5454v2.1976l-6.2734 2.9113 6.2734 2.5732z" fill="#212121"/>
+</svg>

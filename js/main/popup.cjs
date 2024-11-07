@@ -99,6 +99,16 @@ const punkte = {
       optionen.sektionWechseln(document.getElementById("einstellungen-link-belegliste"));
     `,
   },
+  belegschnitt: {
+    label: "Belegschnitt markieren",
+    icon: "klammern-schnitt.png",
+    click: 'belegKlammern.make("belegschnitt")',
+  },
+  belegschnittDemarkieren: {
+    label: "Belegschnitt demarkieren",
+    icon: "klammern-schnitt-entfernen.png",
+    click: 'belegKlammern.remove("belegschnitt")',
+  },
   erinnerungen: {
     label: "Erinnerungen",
     icon: "kreis-info.png",
@@ -156,22 +166,22 @@ const punkte = {
   klammernAutorenzusatz: {
     label: "Autorenzusatz",
     icon: "klammern-autorenzusatz.png",
-    click: 'belegKlammern.make("autorenzusatz")',
+    click: 'belegKlammern.make("klammer-autorenzusatz")',
   },
   klammernEntfernen: {
     label: "Klammern entfernen",
     icon: "klammern-entfernen.png",
-    click: "belegKlammern.remove()",
+    click: 'belegKlammern.remove("klammern")',
   },
   klammernLoeschung: {
     label: "Löschung",
     icon: "klammern-loeschung.png",
-    click: 'belegKlammern.make("loeschung")',
+    click: 'belegKlammern.make("klammer-loeschung")',
   },
   klammernStreichung: {
     label: "Streichung",
     icon: "klammern-streichung.png",
-    click: 'belegKlammern.make("streichung")',
+    click: 'belegKlammern.make("klammer-streichung")',
   },
   kopfIconsConf: {
     label: "Icon-Einstellungen",
@@ -311,6 +321,11 @@ const punkte = {
     label: "Text in Zwischenablage",
     icon: "kopieren.png",
   },
+  textComplete: {
+    label: "Beleg",
+    icon: "beleg.png",
+    click: "popup.textauswahlComplete(true)",
+  },
   textReferenz: {
     label: "Referenz",
     icon: "link-pfeil-runter.png",
@@ -385,12 +400,22 @@ const punkte = {
   xmlBeleg: {
     label: "Belegschnitt",
     icon: "beleg.png",
-    click: "xml.schnittInZwischenablage()",
+    click: "xml.schnittInZwischenablage(false)",
+  },
+  xmlBelegComplete: {
+    label: "Beleg",
+    icon: "beleg.png",
+    click: "xml.schnittInZwischenablage(true)",
   },
   xmlFenster: {
     label: "Belegschnitt an XML-Fenster",
     icon: "xml.png",
-    click: "xml.schnittInXmlFenster()",
+    click: "xml.schnittInXmlFenster(false)",
+  },
+  xmlFensterComplete: {
+    label: "Beleg an XML-Fenster",
+    icon: "xml.png",
+    click: "xml.schnittInXmlFenster(true)",
   },
   xmlReferenz: {
     label: "Referenz",

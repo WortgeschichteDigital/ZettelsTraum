@@ -1304,60 +1304,22 @@ const beleg = {
     }
     // Kein Text ausgewählt => das gesamte Feld wird kopiert
     if (ds === "bs") { // Beleg
-      const p = text.replace(/\n\s*\n/g, "\n").split("\n");
-      let html = "";
-      p.forEach(text => {
-        text = beleg.toolsKopierenKlammern({ text, html: true });
-        if (optionen.data.einstellungen["textkopie-wort"]) {
-          text = liste.belegWortHervorheben(text, true);
-        }
-        html += `<p>${text}</p>`;
-      });
-      // Referenz vorbereiten
+      // Beleg aufbereiten
+      popup.belegID = beleg.id_karte;
       popup.referenz.data = obj;
-      if (cb) {
-        let eleListe;
-        let eleKarte;
-        if (!ele) {
-          // wenn die Leseansicht noch nie aufgebaut wurde,
-          // kann ele === null sein; dann erfolgt das Kopieren immer
-          // aus dem Karteikartenformular heraus
-          eleKarte = true;
-        } else if (ele) {
-          eleListe = ele.closest(".liste-details");
-          eleKarte = ele.closest("tr");
-        }
-        if (eleListe) {
-          popup.referenz.id = eleListe.previousSibling.dataset.id;
-        } else if (eleKarte) {
-          popup.referenz.id = "" + beleg.id_karte;
-        }
-      }
-      // Texte aufbereiten
-      html = helfer.clipboardHtml(html);
-      html = helfer.typographie(html);
-      html = beleg.toolsKopierenAddQuelle(html, true, obj);
-      html = beleg.toolsKopierenAddJahr(html, true);
-      text = text.replace(/<br>/g, "\n");
-      text = text.replace(/<.+?>/g, "");
-      text = beleg.toolsKopierenKlammern({ text });
-      text = helfer.typographie(text);
-      text = beleg.toolsKopierenAddQuelle(text, false, obj);
-      text = beleg.toolsKopierenAddJahr(text, false);
-      if (optionen.data.einstellungen["textkopie-notizen"]) {
-        html = beleg.toolsKopierenAddNotizen(html, true, obj);
-        text = beleg.toolsKopierenAddNotizen(text, false, obj);
-      }
+      popup.referenz.id = beleg.id_karte;
+      popup.textauswahlComplete(false);
+
       // Text in Zwischenablage oder Text zurückgeben
       if (cb) {
         modules.clipboard.write({
-          text,
-          html,
+          text: popup.textauswahl.text,
+          html: popup.textauswahl.html,
         });
       } else {
         return {
-          html,
-          text,
+          html: popup.textauswahl.html,
+          text: popup.textauswahl.text,
         };
       }
     } else if (ds === "bd") { // Bedeutung
@@ -1797,6 +1759,10 @@ const beleg = {
       },
       autorenzusatz: {
         start: '<span class="klammer-autorenzusatz">',
+        ende: "</span>",
+      },
+      belegschnitt: {
+        start: '<span class="belegschnitt">',
         ende: "</span>",
       },
       bold: {
@@ -2499,7 +2465,8 @@ const beleg = {
           if (key === "bs" &&
               optionen.data.beleg.kuerzen &&
               !liste.wortVorhanden(text) &&
-              !liste.annotierungVorhanden(text)) {
+              !liste.annotierungVorhanden(text) &&
+              !/class="belegschnitt"/.test(text)) {
             if (zuletzt_gekuerzt) {
               cont.removeChild(cont.lastChild);
             } else {

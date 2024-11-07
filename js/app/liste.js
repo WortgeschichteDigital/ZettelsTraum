@@ -733,7 +733,7 @@ const liste = {
     const a = document.createElement("a");
     div.appendChild(a);
     a.classList.add("icon-link", "icon-tools-kopieren");
-    a.dataset.ds = `${id}|bs`;
+    a.dataset.id = id;
     liste.kopieren(a);
     // ggf. Buchungslink erzeugen
     if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
@@ -747,12 +747,12 @@ const liste = {
       liste.buchen(a);
     }
     // Absätze erzeugen
+    const belegschnittMarkiert = /class="belegschnitt"/.test(data.ka[id].bs);
     const prep = liste.belegErstellenPrepP(data.ka[id].bs);
     const p_prep = prep.split("\n");
     let zuletzt_gekuerzt = false; // true, wenn der vorherige Absatz gekürzt wurde
     for (let i = 0, len = p_prep.length; i < len; i++) {
       const wortVorhanden = liste.wortVorhanden(p_prep[i]);
-      const annotierungVorhanden = liste.annotierungVorhanden(p_prep[i]);
       const p = document.createElement("p");
       div.appendChild(p);
       p.dataset.pnumber = i;
@@ -793,8 +793,8 @@ const liste = {
         continue;
       } else if (kuerzungMoeglich &&
           optionen.data.belegliste.beleg_kuerzen &&
-          !wortVorhanden &&
-          !annotierungVorhanden) {
+          (!belegschnittMarkiert && !wortVorhanden && !liste.annotierungVorhanden(p_prep[i]) ||
+          belegschnittMarkiert && !/class="belegschnitt"/.test(p_prep[i]))) {
         // ggf. kürzen, wenn
         //   - Wort nicht enthalten
         //   - Annotierung nicht vorhanden
@@ -2067,14 +2067,22 @@ const liste = {
   kopieren (icon) {
     icon.addEventListener("click", function (evt) {
       evt.preventDefault();
-      const ds = this.dataset.ds.split("|");
-      const text = data.ka[ds[0]][ds[1]];
-      beleg.toolsKopierenExec({
-        ds: ds[1],
-        obj: data.ka[ds[0]],
-        text,
-        ele: this,
-      });
+      const id = this.dataset.id;
+      if (window.getSelection().toString() &&
+          popup.getTargetSelection([ this.parentNode ])) {
+        // Textauswahl kopieren
+        modules.clipboard.write({
+          text: popup.textauswahl.text,
+          html: popup.textauswahl.html,
+        });
+        helfer.animation("zwischenablage");
+      } else {
+        // gesamten Beleg kopieren
+        popup.belegID = id;
+        popup.referenz.data = data.ka[id];
+        popup.referenz.id = id;
+        popup.textauswahlComplete(true);
+      }
     });
   },
 
@@ -2088,35 +2096,36 @@ const liste = {
       });
       return;
     }
+
     // Ist die Belegliste sichtbar?
     if (!liste.listeSichtbar({ funktion: "Belege &gt; Belegtexte in Zwischenablage" })) {
       return;
     }
+
     // Daten sammeln
     const text = [];
     const html = [];
     for (const i of document.querySelectorAll("#liste-belege .liste-kopf")) {
       const id = i.dataset.id;
-      popup.referenz.id = id; // popup.referenz.data wird in beleg.toolsKopierenExec() gesetzt
-      const texte = beleg.toolsKopierenExec({
-        ds: "bs",
-        obj: data.ka[id],
-        text: data.ka[id].bs,
-        ele: null,
-        cb: false,
-      });
-      text.push(texte.text);
-      html.push(texte.html);
+      popup.belegID = id;
+      popup.referenz.data = data.ka[id];
+      popup.referenz.id = id;
+      popup.textauswahlComplete(false);
+      text.push(popup.textauswahl.text);
+      html.push(popup.textauswahl.html);
     }
+
     // Margin vor Absatz
     for (let i = 0, len = html.length; i < len; i++) {
       html[i] = html[i].replace(/^<p>/, '<p style="margin-top: 18pt">');
     }
+
     // Daten => Clipboard
     modules.clipboard.write({
       text: text.join("\n".repeat(4)),
       html: html.join(""),
     });
+
     // Feedback
     helfer.animation("zwischenablage");
   },
@@ -2306,13 +2315,13 @@ const liste = {
         helfer.animation("zwischenablage");
         break;
       case "3":
-        xml.schnittInZwischenablage();
+        xml.schnittInZwischenablage(false);
         break;
       case "4":
         xml.referenz();
         break;
       case "5":
-        xml.schnittInXmlFenster();
+        xml.schnittInXmlFenster(false);
         break;
     }
   },

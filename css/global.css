@@ -44,18 +44,26 @@
   color: var(--farbeB);
 }
 
-:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::before {
-  content: "{";
+:is(.belegschnitt, .klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::before {
+  content: "<";
   margin-left: 2px;
   font-weight: bold;
   letter-spacing: 2px;
 }
 
-:is(.klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::after {
-  content: "}";
+:is(.belegschnitt, .klammer-autorenzusatz, .klammer-streichung, .klammer-loeschung)::after {
+  content: ">";
   padding-left: 2px;
   font-weight: bold;
   letter-spacing: 2px;
+}
+
+.klammer-autorenzusatz::before {
+  content: "{";
+}
+
+.klammer-autorenzusatz::after {
+  content: "}";
 }
 
 .klammer-loeschung::before {
