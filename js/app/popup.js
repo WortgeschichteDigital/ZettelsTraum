@@ -78,12 +78,14 @@ const popup = {
       const selInBeleg = popup.selInBeleg();
       if (selInBeleg) {
         items.push("markieren");
-        let anchor = window.getSelection().anchorNode;
+        const sel = window.getSelection();
+        let anchor = sel.anchorNode;
         if (anchor.nodeType !== Node.ELEMENT_NODE) {
           anchor = anchor.parentNode;
         }
         if (!anchor.classList.contains("belegschnitt") &&
-            !anchor.closest(".belegschnitt")) {
+            !anchor.closest(".belegschnitt") &&
+            !sel.getRangeAt(0)?.cloneContents()?.querySelector(".belegschnitt")) {
           items.push("belegschnitt");
         }
         items.push({ name: "klammern", sub: [ "klammernStreichung", "klammernLoeschung", "klammernAutorenzusatz" ] });
