@@ -186,9 +186,13 @@ const xml = {
     // leere <Hervorhebung> entfernen
     schnitt.querySelectorAll("Hervorhebung").forEach(i => {
       if (!i.attributes.length) {
-        const template = document.createElement("template");
-        template.innerHTML = i.innerHTML;
-        i.parentNode.replaceChild(template.content, i);
+        const frag = document.createDocumentFragment();
+        const clone = i.cloneNode(true);
+        for (const n of clone.childNodes) {
+          const nc = n.cloneNode(true);
+          frag.appendChild(nc);
+        }
+        i.parentNode.replaceChild(frag, i);
       }
     });
 
