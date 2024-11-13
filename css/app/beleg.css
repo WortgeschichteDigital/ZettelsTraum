@@ -460,6 +460,10 @@ span#beleg-bewertung {
   mask-image: url(../../img/pfeil-doppelt-links.svg);
 }
 
+.icon-tools-belegschnitt {
+  mask-image: url(../../img/klammern-schnitt.svg);
+}
+
 .icon-tools-buchen {
   mask-image: url(../../img/buch.svg);
 }

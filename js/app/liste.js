@@ -729,13 +729,27 @@ const liste = {
     // <div> für Beleg
     const div = document.createElement("div");
     div.classList.add("liste-bs");
-    // Kopierlink erzeugen
-    const a = document.createElement("a");
-    div.appendChild(a);
-    a.classList.add("icon-link", "icon-tools-kopieren");
-    a.dataset.id = id;
-    liste.kopieren(a);
-    // ggf. Buchungslink erzeugen
+
+    // ggf. Kopieren-Icon erzeugen
+    if (optionen.data.einstellungen["belegliste-kopierenicon"]) {
+      const a = document.createElement("a");
+      div.appendChild(a);
+      a.classList.add("icon-link", "icon-tools-kopieren");
+      a.dataset.id = id;
+      a.title = "Kopieren";
+      liste.kopieren(a);
+    }
+
+    // ggf. Belegschnitt-Icon erzeugen
+    if (optionen.data.einstellungen["belegliste-belegschnitticon"]) {
+      const a = document.createElement("a");
+      div.appendChild(a);
+      a.classList.add("icon-link", "icon-tools-belegschnitt");
+      a.title = "Belegschnitt";
+      liste.belegschnitt(a);
+    }
+
+    // ggf. Buchungs-Icon erzeugen
     if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
       const a = document.createElement("a");
       div.appendChild(a);
@@ -744,8 +758,16 @@ const liste = {
         a.classList.add("icon-tools-gebucht");
       }
       a.dataset.id = id;
+      a.title = "Buchung";
       liste.buchen(a);
     }
+
+    // classes für Icon-Tools erzeugen
+    const icons = div.childNodes;
+    for (let i = 0, len = icons.length; i < len; i++) {
+      icons[i].classList.add("icon-tools-beleg" + (i + 1));
+    }
+
     // Absätze erzeugen
     const belegschnittMarkiert = /class="belegschnitt"/.test(data.ka[id].bs);
     const prep = liste.belegErstellenPrepP(data.ka[id].bs);
@@ -2029,6 +2051,45 @@ const liste = {
         break;
       }
     }
+  },
+
+  // Belegschnitt taggen
+  //   icon = Element
+  //     (Belegschnitt-Icon neben dem Belegtext)
+  belegschnitt (icon) {
+    icon.addEventListener("click", function (evt) {
+      evt.preventDefault();
+
+      // Textauswahl im Beleg?
+      const sel = window.getSelection();
+      if (!sel.toString() ||
+          sel?.anchorNode?.parentNode?.closest(".liste-bs") !== this.parentNode) {
+        return;
+      }
+
+      // common ancestor ermitteln
+      let ancestor = sel?.getRangeAt(0)?.commonAncestorContainer;
+      if (!ancestor) {
+        return;
+      }
+      if (ancestor.nodeType !== Node.ELEMENT_NODE) {
+        ancestor = ancestor.parentNode;
+      }
+
+      // Pfad ermitteln
+      const pfad = [ ancestor ];
+      let n = ancestor;
+      while (n.nodeName !== "BODY") {
+        n = n.parentNode;
+        pfad.push(n);
+      }
+
+      // Klickziel für den Pseudo-Rechtsklick ermitteln
+      popup.getTarget(pfad);
+
+      // Belegschnitt taggen
+      belegKlammern.make("belegschnitt");
+    });
   },
 
   // Beleg als gebucht markieren
