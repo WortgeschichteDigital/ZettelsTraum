@@ -241,10 +241,10 @@ const optionen = {
       "anzeige-icons-immer-an": false,
       // neben dem Belegtext soll ein Kopier-Icon angezeigt werden
       "belegliste-kopierenicon": true,
-      // neben dem Belegtext soll ein Belegschnitt-Icon angezeigt werden
-      "belegliste-belegschnitticon": false,
       // neben dem Belegtext soll ein Buchungs-Icon angezeigt werden
       "belegliste-buchungsicon": false,
+      // neben dem Belegtext soll ein Belegschnitt-Icon angezeigt werden
+      "belegliste-belegschnitticon": false,
       // Belegreferenz (ID des Belegs) in den Kopf der Belegliste eintragen
       "belegliste-referenz": false,
       // Markierung (Sterne) in den Kopf der Belegliste eintragen

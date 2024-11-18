@@ -740,15 +740,6 @@ const liste = {
       liste.kopieren(a);
     }
 
-    // ggf. Belegschnitt-Icon erzeugen
-    if (optionen.data.einstellungen["belegliste-belegschnitticon"]) {
-      const a = document.createElement("a");
-      div.appendChild(a);
-      a.classList.add("icon-link", "icon-tools-belegschnitt");
-      a.title = "Belegschnitt";
-      liste.belegschnitt(a);
-    }
-
     // ggf. Buchungs-Icon erzeugen
     if (optionen.data.einstellungen["belegliste-buchungsicon"]) {
       const a = document.createElement("a");
@@ -760,6 +751,15 @@ const liste = {
       a.dataset.id = id;
       a.title = "Buchung";
       liste.buchen(a);
+    }
+
+    // ggf. Belegschnitt-Icon erzeugen
+    if (optionen.data.einstellungen["belegliste-belegschnitticon"]) {
+      const a = document.createElement("a");
+      div.appendChild(a);
+      a.classList.add("icon-link", "icon-tools-belegschnitt");
+      a.title = "Belegschnitt";
+      liste.belegschnitt(a);
     }
 
     // classes für Icon-Tools erzeugen
