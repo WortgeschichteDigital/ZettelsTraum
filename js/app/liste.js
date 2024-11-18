@@ -248,7 +248,6 @@ const liste = {
       if (zeitschnitt_akt.datum.replace(/\u00A0/g, " ") !== data.ka[id].da) {
         span.title = data.ka[id].da;
         span.classList.add("liste-jahr-hinweis");
-        liste.detailAnzeigen(span);
       }
       if (data.ka[id].tg.includes("unzutreffend")) {
         span.classList.add("liste-unzutreffend");
@@ -1600,21 +1599,6 @@ const liste = {
       evt.preventDefault();
       evt.stopPropagation();
       beleg.oeffnen(parseInt(this.parentNode.dataset.id, 10));
-    });
-  },
-
-  // Detail auf Klick anzeigen (wird derzeit nur für das Datum benutzt)
-  //   span = Element
-  //     (<span>, in dem das Detail steht)
-  detailAnzeigen (span) {
-    span.addEventListener("click", function (evt) {
-      evt.stopPropagation();
-      const detail = helfer.escapeHtml(this.title);
-      const beleg_id = this.parentNode.dataset.id;
-      dialog.oeffnen({
-        typ: "alert",
-        text: `<h3>${liste.detailAnzeigenH3(beleg_id)}</h3>\n${detail}`,
-      });
     });
   },
 
