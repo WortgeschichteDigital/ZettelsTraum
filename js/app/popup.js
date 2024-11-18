@@ -70,8 +70,8 @@ const popup = {
     let xmlCopy = [ "xmlReferenz" ];
     let textCopy = [ "textReferenz" ];
     if (popup.belegID) {
-      xmlCopy = [ "xmlBelegComplete", "xmlReferenz" ];
-      textCopy = [ "textComplete", "textReferenz" ];
+      xmlCopy = [ "xmlReferenz", "xmlBelegComplete" ];
+      textCopy = [ "textReferenz", "textComplete" ];
     }
     let items = [];
     if (target === "kopieren") {
@@ -92,7 +92,7 @@ const popup = {
       }
       items.push({ name: "text", sub: [ "kopieren", "textReferenz" ] });
       if (selInBeleg) {
-        items.push({ name: "xml", sub: [ "xmlBeleg", "xmlReferenz" ] }, "xmlFenster");
+        items.push({ name: "xml", sub: [ "xmlReferenz", "xmlBeleg" ] }, "xmlFenster");
       } else if (/^(karte|liste)$/.test(helfer.hauptfunktion)) {
         items.push({ name: "xml", sub: xmlCopy });
       }
