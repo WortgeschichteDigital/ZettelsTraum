@@ -38,6 +38,7 @@ const xml = {
   // Belege aus internen DWDS-Korpora
   DWDSi: [
     "bestseller",
+    "regiolit",
   ],
 
   // markierten Belegschnitt aufbereiten
