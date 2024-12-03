@@ -464,6 +464,10 @@ span#beleg-bewertung {
   mask-image: url(../../img/klammern-schnitt.svg);
 }
 
+.text-tools-beleg .icon-tools-belegschnitt {
+  mask-image: none;
+}
+
 .icon-tools-buchen {
   mask-image: url(../../img/buch.svg);
 }
