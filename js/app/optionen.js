@@ -239,8 +239,10 @@ const optionen = {
       "belegliste-sort-erweitert": false,
       // die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
       "anzeige-icons-immer-an": false,
-      // neben dem Belegtext soll ein Kopier-Icon angezeigt werden
+      // neben dem Belegtext soll ein Kopier-Icon für den Text angezeigt werden
       "belegliste-kopierenicon": true,
+      // neben dem Belegtext soll ein Kopier-Icon für die Referenz angezeigt werden
+      "belegliste-referenzicon": false,
       // neben dem Belegtext soll ein Buchungs-Icon angezeigt werden
       "belegliste-buchungsicon": false,
       // neben dem Belegtext soll ein Belegschnitt-Icon angezeigt werden

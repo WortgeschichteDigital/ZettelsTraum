@@ -484,6 +484,14 @@ span#beleg-bewertung {
   mask-image: url(../../img/kopieren.svg);
 }
 
+.icon-tools-kopieren-referenz {
+  mask-image: url(../../img/kopieren-referenz.svg);
+}
+
+.icon-tools-kopieren-text {
+  mask-image: url(../../img/kopieren-text.svg);
+}
+
 .icon-tools-antiqua {
   mask-image: url(../../img/text-antiqua.svg);
 }

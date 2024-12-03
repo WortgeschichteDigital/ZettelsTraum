@@ -729,14 +729,24 @@ const liste = {
     const div = document.createElement("div");
     div.classList.add("liste-bs");
 
-    // ggf. Kopieren-Icon erzeugen
+    // ggf. Kopieren-Icon für Text erzeugen
     if (optionen.data.einstellungen["belegliste-kopierenicon"]) {
       const a = document.createElement("a");
       div.appendChild(a);
-      a.classList.add("icon-link", "icon-tools-kopieren");
+      a.classList.add("icon-link", "icon-tools-kopieren-text");
       a.dataset.id = id;
-      a.title = "Kopieren";
+      a.title = "Text kopieren";
       liste.kopieren(a);
+    }
+
+    // ggf. Kopieren-Icon für Referenz erzeugen
+    if (optionen.data.einstellungen["belegliste-referenzicon"]) {
+      const a = document.createElement("a");
+      div.appendChild(a);
+      a.classList.add("icon-link", "icon-tools-kopieren-referenz");
+      a.dataset.id = id;
+      a.title = "Referenz kopieren";
+      liste.referenz(a);
     }
 
     // ggf. Buchungs-Icon erzeugen
@@ -2173,6 +2183,24 @@ const liste = {
 
     // Feedback
     helfer.animation("zwischenablage");
+  },
+
+  // Referenz durch Klick auf Icon kopieren
+  //   icon = Element
+  //     (Kopier-Icon, auf das geklickt wurde)
+  referenz (icon) {
+    icon.addEventListener("click", function (evt) {
+      evt.preventDefault();
+
+      const id = this.dataset.id;
+      const referenz = xml.belegId({
+        data: data.ka[id],
+        id,
+      });
+
+      modules.clipboard.writeText(referenz);
+      helfer.animation("zwischenablage");
+    });
   },
 
   // alle in der Belegliste sichtbaren Belege löschen
