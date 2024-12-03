@@ -485,6 +485,7 @@ window.addEventListener("load", async () => {
   // Wortinformationen
   document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach(input => redWi.formListener({ input }));
   redWi.xml({ icon: document.getElementById("red-wi-xml") });
+  redWi.clipboard({ icon: document.getElementById("red-wi-clipboard") });
   // Karteisuche
   document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
   document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

@@ -93,8 +93,14 @@
   margin-left: 0;
 }
 
-/* weitere Styles zu #red-wi-xml → liste.css */
+/* weitere Styles zu #red-wi-xml und #red-wi-clipboard → liste.css */
 #red-wi-xml {
+  position: absolute;
+  right: 39px;
+  top: 6px;
+}
+
+#red-wi-clipboard {
   position: absolute;
   right: 0;
   top: 6px;

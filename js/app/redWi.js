@@ -11,6 +11,14 @@ const redWi = {
     se: [ "Cluster", "Synonym", "Heteronym", "Paronym", "Hyponym", "Hyperonym", "Meronym", "Holonym", "Gegensatz", "Kohyponym" ],
   },
 
+  // Kategorien-Map
+  vtMap: {
+    Wortverbindung: "Wortverbindungen",
+    Wortbildung: "Wortbildungen",
+    Wortfeld: "Wortfeld",
+    Wortfeldartikel: "Wortfeldartikel",
+  },
+
   // Dropdown: Verweistextvorschläge sammeln
   dropdownVerweistexte () {
     const lemmata = helfer.lemmaliste();
@@ -368,12 +376,6 @@ const redWi = {
     cont.parentNode.classList.remove("aus");
     copy.classList.add("aus");
     cont.replaceChildren();
-    const hTxt = {
-      Wortverbindung: "Wortverbindungen",
-      Wortbildung: "Wortbildungen",
-      Wortfeld: "Wortfeld",
-      Wortfeldartikel: "Wortfeldartikel",
-    };
     let h = "";
     for (const i of data.rd.wi) {
       // falsches Bedeutungsgerüst
@@ -384,7 +386,7 @@ const redWi = {
       if (h !== i.vt) {
         const h3 = document.createElement("h3");
         cont.appendChild(h3);
-        h3.textContent = hTxt[i.vt];
+        h3.textContent = redWi.vtMap[i.vt];
         h = i.vt;
       }
       // Eintrag
@@ -560,6 +562,62 @@ const redWi = {
         return;
       }
       redXml.datensatz({ xmlDatensatz });
+    });
+  },
+
+  // Wortinformationen in Zwischenablage kopieren
+  //   icon = Element
+  //     (das XML-Icon)
+  clipboard ({ icon }) {
+    icon.addEventListener("click", evt => {
+      evt.preventDefault();
+
+      // Wortinformationen vorhanden?
+      const gn = document.getElementById("red-wi-gn").value.match(/[0-9]+/)[0];
+      const ds = data.rd.wi.filter(i => i.gn === gn);
+      if (!ds.length) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Sie haben noch keine Wortinformationen eingegeben.",
+        });
+        return;
+      }
+
+      // Kategorien vorbereiten
+      const cats = {};
+      for (const i of redWi.dropdown.vt) {
+        cats[i] = [];
+      }
+
+      // Kategorien füllen
+      for (const i of ds) {
+        let text = i.xl.replace(/<.+?>/g, "").replace(/^\s+|\s+$/g, "");
+        const semantik = i.xl.match(/ Typ="(.+?)"/)?.[1] || "";
+        if (semantik) {
+          text += ` (${semantik})`;
+        }
+        cats[i.vt].push(text);
+      }
+
+      // Kopieren vorbereiten
+      let text = "";
+      let html = "";
+      for (const [ k, v ] of Object.entries(cats)) {
+        if (!v.length) {
+          continue;
+        }
+        text += `\n\n${redWi.vtMap[k]}: ${v.join(", ")}`;
+        html += `\n<p><i>${redWi.vtMap[k]}:</i> ${v.join(", ")}</p>`;
+      }
+      text = text.trim();
+      html = html.trim();
+
+      // Kopieren ausführen
+      modules.clipboard.write({
+        text,
+        html,
+      });
+      helfer.animation("zwischenablage");
     });
   },
 };
