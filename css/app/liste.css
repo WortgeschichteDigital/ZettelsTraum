@@ -385,10 +385,6 @@ p.no-indent + .filter-baum, /* betrifft Verschiedenes > Filterlogik */
   top: 99px;
 }
 
-.icon-kopieren {
-  mask-image: url(../../img/kopieren.svg);
-}
-
 .icon-bearbeiten {
   mask-image: url(../../img/karteikarte.svg);
 }

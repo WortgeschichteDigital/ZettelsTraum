@@ -38,6 +38,10 @@
   mask-image: url(../img/dokument-export.svg);
 }
 
+.icon-kopieren {
+  mask-image: url(../img/kopieren.svg);
+}
+
 .icon-kreis-fragezeichen {
   mask-image: url(../img/kreis-fragezeichen.svg);
 }

@@ -354,7 +354,7 @@ const redLit = {
         throw content;
       }
       // Daten sind in Ordnung => Einleseoperationen durchführen
-      let data_tmp = {};
+      let data_tmp;
       // Folgt die Datei einer wohlgeformten JSON?
       try {
         data_tmp = JSON.parse(content);
@@ -3464,6 +3464,19 @@ const redLit = {
       xml.title = "Titelaufnahme in XML-Fenster";
       redLit.xml({ icon: xml });
     }
+    // Icon: Referenz kopieren
+    if (redLit.anzeige.snippetKontext === "suche") {
+      const cb = document.createElement("a");
+      icons.appendChild(cb);
+      cb.href = "#";
+      cb.classList.add("icon-link", "icon-kopieren");
+      cb.title = "Referenz in Zwischenablage";
+      cb.addEventListener("click", function () {
+        const ds = JSON.parse(this.closest("div").dataset.ds);
+        modules.clipboard.writeText(ds.id);
+        helfer.animation("zwischenablage");
+      });
+    }
     // Icon: Löschen
     if (redLit.anzeige.snippetKontext === "popup") {
       const del = document.createElement("a");
@@ -3906,7 +3919,7 @@ const redLit = {
   xml ({ icon }) {
     icon.addEventListener("click", function (evt) {
       evt.preventDefault();
-      let id = "";
+      let id;
       const snippet = this.closest(".red-lit-snippet");
       if (snippet) {
         // Icon im Snippet
