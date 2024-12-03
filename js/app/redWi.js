@@ -208,7 +208,7 @@ const redWi = {
     if (!text.classList.contains("aus")) {
       // Überprüfungen Textverweis
       const id = text.querySelector('input[id$="id"]');
-      const idVal = helfer.textTrim(id.value, true);
+      let idVal = helfer.textTrim(id.value, true);
       if (!idVal) {
         dialog.oeffnen({
           typ: "alert",
@@ -217,34 +217,16 @@ const redWi = {
         });
         return;
       }
-      const idValNorm = helferXml.normId({
+      idVal = helferXml.normId({
         id: idVal,
         input: id,
       });
-      if (idVal !== idValNorm) {
-        const idOkay = await new Promise(resolve => {
-          dialog.oeffnen({
-            typ: "confirm",
-            text: `Die ID war illegal und wurde automatisch korrigiert zu:\n<i>${idValNorm}</i>\nWollen Sie die Korrektur übernehmen?`,
-            callback: () => {
-              if (!dialog.antwort) {
-                id.value = idVal;
-                id.select();
-              }
-              resolve(dialog.antwort);
-            },
-          });
-        });
-        if (!idOkay) {
-          return;
-        }
-      }
       const typ = checkSemantik(text);
       if (typ === false) {
         return;
       }
       // XML erstellen
-      ds.xl = `<Textreferenz Ziel="${idValNorm}"${typ}>${txVal}</Textreferenz>`;
+      ds.xl = `<Textreferenz Ziel="${idVal}"${typ}>${txVal}</Textreferenz>`;
     } else if (!intern.classList.contains("aus")) {
       // Überprüfungen Verweis intern
       const zl = intern.querySelector('input[id$="zl"]');
