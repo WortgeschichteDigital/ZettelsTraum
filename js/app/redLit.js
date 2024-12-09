@@ -3471,7 +3471,8 @@ const redLit = {
       cb.href = "#";
       cb.classList.add("icon-link", "icon-kopieren");
       cb.title = "Referenz in Zwischenablage";
-      cb.addEventListener("click", function () {
+      cb.addEventListener("click", function (evt) {
+        evt.preventDefault();
         const ds = JSON.parse(this.closest("div").dataset.ds);
         modules.clipboard.writeText(ds.id);
         helfer.animation("zwischenablage");
