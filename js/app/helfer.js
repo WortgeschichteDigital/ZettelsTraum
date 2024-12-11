@@ -373,7 +373,7 @@ const helfer = {
       /[0-9]\.\s?Aufl/g, // Auflage
       /[0-9] Bde/g, // Bände
       /[0-9]\.\s?Hälfte/g,
-      /[0-9]{2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
+      /[0-9]{1,2}\.\s?(Jh\.|Jahrhundert)/g, // Jahrhundertangaben
       /(Abschnitt|Kapitel) ([0-9]|[IVXLC])/g,
       /a\.\s?M\./g, // am Main
       /Abb\.\s?[0-9]+/g, // Abbildung
@@ -1359,7 +1359,7 @@ const helfer = {
           }
           vars.ziel += `${typ.replace(/[/\\]/g, "-")}.${format}`;
         }
-      } catch (err) {
+      } catch {
         modules.ipc.invoke("cli-message", `Fehler: Zugriffsfehler auf Zielpfad (${vars.ziel})`);
         return false;
       }
