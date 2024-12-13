@@ -106,6 +106,7 @@
   mask-image: url(../img/stern.svg);
 }
 
+.icon-datum,
 .icon-uhr {
   mask-image: url(../img/uhr.svg);
 }

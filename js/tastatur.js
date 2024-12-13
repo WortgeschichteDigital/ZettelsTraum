@@ -174,6 +174,8 @@ const tastatur = {
         }
       } else if (m === "Ctrl+Shift" && evt.code === "KeyD") {
         beleg.toolsQuelleURL("ul");
+      } else if (m === "Alt+Ctrl" && evt.code === "KeyD") {
+        beleg.toolsTextdatum(true);
       }
       return;
     }

@@ -1248,6 +1248,8 @@ const beleg = {
         beleg.toolsKopieren(this);
       } else if (this.classList.contains("icon-tools-einfuegen")) {
         beleg.toolsEinfuegen(this);
+      } else if (this.classList.contains("icon-datum")) {
+        beleg.toolsTextdatum();
       } else if (this.classList.contains("icon-uhr")) {
         beleg.toolsAufrufdatum();
       } else if (this.parentNode.classList.contains("text-tools-beleg") ||
@@ -1930,6 +1932,97 @@ const beleg = {
     ud.value = new Date().toISOString().split("T")[0];
     ud.dispatchEvent(new Event("change"));
     ud.focus();
+  },
+
+  // Entstehungsdatum aus dem Quelle-Feld auslesen und ggf. in das Datum-Feld eintragen
+  //   shortcut = true | undefined
+  //     (Tool wurde via Shortcut aufgerufen)
+  async toolsTextdatum (shortcut = false) {
+    // Tagesdatum suchen
+    const monthMap = {
+      Januar: "01",
+      Februar: "02",
+      März: "03",
+      April: "04",
+      Mai: "05",
+      Juni: "06",
+      Juli: "07",
+      August: "08",
+      September: "09",
+      Oktober: "10",
+      November: "11",
+      Dezember: "12",
+    };
+    const date = [];
+    for (const m of beleg.data.qu.matchAll(/([0-9]{1,2})\.\s?([0-9]{1,2}\.|Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s?([0-9]{4})/g)) {
+      // Tagesdatum parsen
+      if (/^[0-9]/.test(m[2])) {
+        // Monat ist eine Zahl
+        m[2] = m[2].replace(/\.$/, "");
+      } else {
+        // Monat ist ausgeschrieben
+        m[2] = monthMap[m[2]];
+      }
+      date.push({
+        dateField: m[1].padStart(2, "0") + "." + m[2].padStart(2, "0") + "." + m[3],
+        dateISO: m[3] + "-" + m[2].padStart(2, "0") + "-" + m[1].padStart(2, "0"),
+      });
+    }
+
+    // Tagesdatum vorhanden?
+    if (!date.length) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "In der Quellenangabe wurde kein Tagesdatum gefunden.",
+        callback: () => {
+          if (!shortcut) {
+            document.getElementById("beleg-qu").focus();
+          }
+        },
+      });
+      return;
+    }
+
+    // entscheiden, was zu tun ist
+    const dateCurrent = beleg.data.da ? helfer.datumGet({
+      datum: beleg.data.da,
+      erstesDatum: true,
+    }).sortier : "";
+    if (date.some(i => i.dateISO === dateCurrent)) {
+      // Tagesdatum steht bereits im Datumsfeld
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Das in der Quellenangabe gefundene Tagesdatum steht bereits im Datumsfeld.",
+        callback: () => {
+          if (!shortcut) {
+            document.getElementById("beleg-qu").focus();
+          }
+        },
+      });
+      return;
+    }
+
+    // Überschreiben des Datumfeldes anbieten
+    const dateField = [];
+    for (const i of date) {
+      dateField.push(i.dateField);
+    }
+    const result = await new Promise(resolve => {
+      dialog.oeffnen({
+        typ: "confirm",
+        text: `Soll das Datumsfeld wie folgt geändert werden?\n${beleg.data.da || "[kein Datum]"}<br>${"\u00A0".repeat(5)}→<br>${dateField.join(" / ")}`,
+        callback: () => resolve(dialog.antwort),
+      });
+    });
+
+    if (result) {
+      beleg.data.da = dateField.join(" / ");
+      document.getElementById("beleg-da").value = dateField.join(" / ");
+      beleg.belegGeaendert(true);
+      beleg.aktionSpeichern();
+    } else if (!shortcut) {
+      document.getElementById("beleg-qu").focus();
+    }
   },
 
   // Inhalt des Quelle-Felds neu laden
