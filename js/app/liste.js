@@ -244,7 +244,15 @@ const liste = {
       const zeitschnitt_akt = liste.zeitschnittErmitteln(data.ka[id].da);
       const span = document.createElement("span");
       span.classList.add("liste-jahr");
-      span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
+      if (optionen.data.einstellungen["belegliste-datum-iso"]) {
+        const datum = helfer.datumGet({
+          datum: data.ka[id].da,
+          erstesDatum: true,
+        });
+        span.innerHTML = liste.suchtreffer(datum.sortier, "da", id);
+      } else {
+        span.innerHTML = liste.suchtreffer(zeitschnitt_akt.datum, "da", id);
+      }
       if (zeitschnitt_akt.datum.replace(/\u00A0/g, " ") !== data.ka[id].da) {
         span.title = data.ka[id].da;
         span.classList.add("liste-jahr-hinweis");

@@ -239,6 +239,8 @@ const optionen = {
       "belegliste-sort-erweitert": false,
       // die Icons, die die Anzeige der Datenfelder in der Belegliste steuern, sollen immer an sein
       "anzeige-icons-immer-an": false,
+      // Datum im Belegkopf im ISO-Format drucken
+      "belegliste-datum-iso": false,
       // neben dem Belegtext soll ein Kopier-Icon für den Text angezeigt werden
       "belegliste-kopierenicon": true,
       // neben dem Belegtext soll ein Kopier-Icon für die Referenz angezeigt werden
