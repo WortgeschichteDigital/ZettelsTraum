@@ -3444,6 +3444,13 @@ const xml = {
       verweis += "\n</Verweis_extern>";
       return verweis;
     });
+    // <Textreferenz>
+    str = str.replace(/\[([^\]]+?)\]\((#.+?)\)/g, (...args) => {
+      args[1] = args[1].trim();
+      args[2] = args[2].trim().substring(1).replace(/\s/g, "_");
+      return `<Textreferenz Ziel=##${args[2]}##>${args[1]}</Textreferenz>`;
+    });
+    str = str.replace(/Abb\. ([0-9]+)/g, (...args) => `<Textreferenz Ziel=##abb-${args[1]}##>${args[0]}</Textreferenz>`);
     // <Verweis>
     str = str.replace(/\[([^\]]+?)\]\((.+?)\)(?:\(([a-zA-Z]+)\))?/g, (...args) => {
       args[1] = args[1].trim();

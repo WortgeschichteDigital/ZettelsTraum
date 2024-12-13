@@ -5379,6 +5379,16 @@ Gerüst 2&nbsp;&gt; Gerüst 1</pre>
                 <p>Die letzte Klammer mit den Angaben zur Semantik ist fakultativ. Sie darf also fehlen.</p>
               </li>
 
+              <li>
+                <p><b>[Text](#Ziel)</b> wird zu</p>
+
+                <pre class="quelltext xml-pretty-print">&lt;Textreferenz Ziel="Ziel"&gt;Text&lt;/Textreferenz&gt;</pre>
+
+                <p>Beginnt der Text in der runden Klammer mit #, wird dies als Marker für einen textinternen Verweis gedeutet.</p>
+              </li>
+
+              <li><b>Abb. 1</b> wird zu <code class="quelltext xml-pretty-print">&lt;Textreferenz Ziel="abb-1"&gt;Abb. 1&lt;/Textreferenz&gt;</code> (dies gilt natürlich nicht nur für die erste, sondern auch alle folgenden Abbildungen)</li>
+
               <li><b>z.&nbsp;B.</b> wird zu <code class="quelltext xml-pretty-print">&lt;Abkuerzung Expansion="zum Beispiel"&gt;z.&nbsp;B.&lt;/Abkuerzung&gt;</code> (dies ist nur ein Beispiel; das automatische Taggen funktioniert mit einer Vielzahl von Abkürzungen)</li>
 
               <li><b>n-n-1859-19</b> wird zu <code class="quelltext xml-pretty-print">&lt;Belegreferenz Ziel="n-n-1859-19"/&gt;</code> (dies ist nur ein Beispiel; es gibt einen Algorithmus, der die IDs von Belegen im Text erkennt; solche IDs können via <a href="#belegliste-textZwischenablageReferenz">Rechtsklick</a> in der <a href="#belegliste">Belegliste</a> in die Zwischenablage kopiert werden)</li>
