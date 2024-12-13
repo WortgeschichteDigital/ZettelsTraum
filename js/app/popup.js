@@ -284,7 +284,7 @@ const popup = {
     popup.belegID = "";
     for (let i = 0, len = pfad.length; i < len; i++) {
       // ggf. Beleg-ID ermitteln, um einen Rechtsklick auf dem Beleg zu detektieren
-      if (pfad[i].classList.contains("liste-bs")) {
+      if (pfad[i].classList?.contains("liste-bs")) {
         popup.belegID = pfad[i].parentNode.previousSibling.dataset.id;
       } else if (pfad[i].id === "beleg-lese-bs") {
         popup.belegID = beleg.id_karte;
