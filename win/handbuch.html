@@ -2362,7 +2362,7 @@ Mustermann, Erika
             <p>Für die <a href="#einstellungen-beleglisteNotizen">Anzeige der ersten Zeile des Notizenfeldes muss eine Einstellung aktiviert</a> werden.</p>
           </div>
 
-          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
+          <p class="erklaerung-option" id="einstellungen-karteikarteUeberpruefen">nach dem Import: überprüfen, ob der Belegtext eines der Karteiwörter enthält</p>
 
           <div class="info">
             <p><i>Standard:</i> aktiviert</p>
@@ -2384,7 +2384,7 @@ Mustermann, Erika
             <p>Wörter, für die die <a href="#menueKartei-formvariantenNurMarkieren">Option <i>nur markieren</i></a> aktiviert wurde, werden in die <a href="#einstellungen-karteikarteUeberpruefen">Überprüfung</a>, ob das Karteiwort vorhanden ist, nicht mit einbezogen. Durch das Aktivieren dieser Option kann man das Verhalten der App in diesem Punkt ändern.</p>
           </div>
 
-          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import den Inhalt der Zwischenablage löschen</p>
+          <p class="erklaerung-option" id="einstellungen-karteikarteClipboardClear">nach dem Import: den Inhalt der Zwischenablage löschen</p>
 
           <div class="info">
             <p><i>Standard:</i> nicht aktiviert</p>
@@ -2394,7 +2394,7 @@ Mustermann, Erika
             <p>Es ist sinnvoll, diese Einstellung zu aktivieren, wenn bei neuen Karteikarten der <a href="#einstellungen-karteikarteFokusBeleg">Fokus standardmäßig im Belegfeld</a> liegen soll.</p>
           </div>
 
-          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import Absätze ohne Karteiwort automatisch löschen</p>
+          <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenAuto">nach dem Import: Absätze ohne Karteiwort automatisch löschen</p>
 
           <div class="info">
             <p><i>Standard:</i> nicht aktiviert</p>
@@ -2402,6 +2402,16 @@ Mustermann, Erika
             <p>Die Karteikarte verfügt über eine <a href="#karteikarte-kuerzenBeleg">Funktion, mit der der Belegtext hart gekürzt</a> werden kann. Ist diese Option aktiviert, wird die Kürzungsfunktion direkt nach dem Import eines Belegs automatisch aufgerufen.</p>
 
             <p>Im Gegensatz zur dynamischen Kürzungsfunktion (in der <a href="#karteikarte-kuerzen">Leseansicht der Karteikarte</a> und der <a href="#belegliste-kuerzung">Belegliste</a>) wird in diesem Fall Belegtext wirklich entfernt.</p>
+          </div>
+
+          <p class="erklaerung-option" id="einstellungen-importTagesdatumAuto">nach dem Import: Tagesdatum in der Quellenangabe suchen und in das Datum-Feld eintragen</p>
+
+          <div class="info">
+            <p><i>Standard:</i> aktiviert</p>
+
+            <p>Nach dem Import eines Beleges wird die <a href="#karteikarte-quelleTagesdatum">Quellenangabe standardmäßig auf ein Tagesdatum gescannt</a>. Wird ein Tagesdatum gefunden und weicht dieses Datum vom Datum im <a href="#karteikarte-datum">Datum-Feld</a> ab, öffnet sich ein Meldungsfenster, das fragt, ob das gefundene Datum für die Karteikarte übernommen werden soll. Wird kein Tagesdatum gefunden oder steht das gefundene Datum bereits im Datum-Feld, erscheint keine Meldung.</p>
+
+            <p>Dieses Verhalten lässt sich unterbinden, indem man diese Einstellung deaktiviert.</p>
           </div>
 
           <p class="erklaerung-option" id="einstellungen-karteikarteTextKuerzenKontext">Kontext beim Löschen der Absätze ohne Karteiwort teilweise erhalten</p>

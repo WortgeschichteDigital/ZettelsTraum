@@ -165,6 +165,8 @@ const optionen = {
       "karteikarte-text-kuerzen-auto": false,
       // Kontext beim Löschen der Absätze ohne Stichwort teilweise erhalten
       "karteikarte-text-kuerzen-kontext": false,
+      // Tagesdatum in der Quellenangabe suchen und in das Datum-Feld eintragen
+      "import-tagesdatum-auto": true,
       // Verlag importieren
       "literatur-verlag": false,
       // Serie importieren

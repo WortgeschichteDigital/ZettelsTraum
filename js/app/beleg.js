@@ -201,6 +201,11 @@ const beleg = {
       beleg.toolsKuerzen();
     }
 
+    // Quellenangaben nach Import auf Tagesdatum scannen und ggf. in das Datum-Feld eintragen
+    if (imp && optionen.data.einstellungen["import-tagesdatum-auto"]) {
+      beleg.toolsTextdatum(true, true);
+    }
+
     // Fokus setzen
     // (hier braucht es eine Verzögerung: Wird die Karte z.B. direkt nach dem
     // Erstellen einer neuen Wortkartei aufgerufen, wird der fokussierte Button
@@ -1937,7 +1942,9 @@ const beleg = {
   // Entstehungsdatum aus dem Quelle-Feld auslesen und ggf. in das Datum-Feld eintragen
   //   shortcut = true | undefined
   //     (Tool wurde via Shortcut aufgerufen)
-  async toolsTextdatum (shortcut = false) {
+  //   autoImport = true | undefined
+  //     (Funktion wurde automatisch nach einem Belegimport angestoßen)
+  async toolsTextdatum (shortcut = false, autoImport = false) {
     // Tagesdatum suchen
     const monthMap = {
       Januar: "01",
@@ -1971,15 +1978,17 @@ const beleg = {
 
     // Tagesdatum vorhanden?
     if (!date.length) {
-      dialog.oeffnen({
-        typ: "alert",
-        text: "In der Quellenangabe wurde kein Tagesdatum gefunden.",
-        callback: () => {
-          if (!shortcut) {
-            document.getElementById("beleg-qu").focus();
-          }
-        },
-      });
+      if (!autoImport) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "In der Quellenangabe wurde kein Tagesdatum gefunden.",
+          callback: () => {
+            if (!shortcut) {
+              document.getElementById("beleg-qu").focus();
+            }
+          },
+        });
+      }
       return;
     }
 
@@ -1990,15 +1999,17 @@ const beleg = {
     }).sortier : "";
     if (date.some(i => i.dateISO === dateCurrent)) {
       // Tagesdatum steht bereits im Datumsfeld
-      dialog.oeffnen({
-        typ: "alert",
-        text: "Das in der Quellenangabe gefundene Tagesdatum steht bereits im Datumsfeld.",
-        callback: () => {
-          if (!shortcut) {
-            document.getElementById("beleg-qu").focus();
-          }
-        },
-      });
+      if (!autoImport) {
+        dialog.oeffnen({
+          typ: "alert",
+          text: "Das in der Quellenangabe gefundene Tagesdatum steht bereits im Datumsfeld.",
+          callback: () => {
+            if (!shortcut) {
+              document.getElementById("beleg-qu").focus();
+            }
+          },
+        });
+      }
       return;
     }
 
@@ -2007,10 +2018,15 @@ const beleg = {
     for (const i of date) {
       dateField.push(i.dateField);
     }
+    if (autoImport) {
+      // beim automatischen Check nach einem Import kurz warten,
+      // damit der "Ja"-Button fokussiert wird
+      await new Promise(resolve => setTimeout(() => resolve(true), 100));
+    }
     const result = await new Promise(resolve => {
       dialog.oeffnen({
         typ: "confirm",
-        text: `Soll das Datumsfeld wie folgt geändert werden?\n${beleg.data.da || "[kein Datum]"}<br>${"\u00A0".repeat(5)}→<br>${dateField.join(" / ")}`,
+        text: `Soll das Datumsfeld wie folgt geändert werden?\n${beleg.data.da || "[kein Datum]"}<br>${"\u00A0".repeat(5)}→<br>${dateField.join(" / ")}\n<i>Quellenangabe:</i><br>${beleg.data.qu}`,
         callback: () => resolve(dialog.antwort),
       });
     });
@@ -2019,7 +2035,9 @@ const beleg = {
       beleg.data.da = dateField.join(" / ");
       document.getElementById("beleg-da").value = dateField.join(" / ");
       beleg.belegGeaendert(true);
-      beleg.aktionSpeichern();
+      if (!autoImport) {
+        beleg.aktionSpeichern();
+      }
     } else if (!shortcut) {
       document.getElementById("beleg-qu").focus();
     }
