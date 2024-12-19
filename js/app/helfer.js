@@ -365,7 +365,7 @@ const helfer = {
     text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (...args) => `${args[1].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[3]}`); // Leerzeichen bei aneinandergeklatschten Daten
     text = text.replace(/ \/(?!>)/g, "\u00A0/"); // geschütztes Leerzeichen vor Virgel
     // Korrekturen
-    text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (...args) => `${args[1]}-${args[2]}-${args[3]}`); // falsche Halbgeviertstriche in ISO 8601-Daten
+    text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (...args) => `${args[3].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[1]}`); // ISO-Daten in das übliche Datumsformat umwandeln
     // geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
     const abk = new Set([
       /[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
