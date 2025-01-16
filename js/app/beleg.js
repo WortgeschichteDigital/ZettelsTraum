@@ -169,6 +169,9 @@ const beleg = {
       }
     }
 
+    // Bedeutung: Add-Feld leeren
+    document.getElementById("beleg-bd").value = "";
+
     // Bedeutung: Label anpassen
     beleg.formularBedeutungLabel();
 
