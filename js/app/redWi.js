@@ -89,10 +89,14 @@ const redWi = {
       input.addEventListener("input", () => redWi.contMake());
     } else if (input.id === "red-wi-lt") {
       input.addEventListener("input", () => {
-        const tx = document.querySelectorAll(redWi.inputs)[0].value;
+        let inputs = document.querySelectorAll(redWi.inputs);
+        const tx1 = inputs[0].value;
+        const tx2 = inputs[1].value;
         redWi.formToggle();
         redWi.formReset();
-        document.querySelectorAll(redWi.inputs)[0].value = tx;
+        inputs = document.querySelectorAll(redWi.inputs);
+        inputs[0].value = tx1;
+        inputs[1].value = tx2;
       });
     }
     if (input.type === "text") {
