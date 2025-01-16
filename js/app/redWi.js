@@ -591,7 +591,13 @@ const redWi = {
 
       // Kategorien füllen
       for (const i of ds) {
-        let text = i.xl.replace(/<.+?>/g, "").replace(/^\s+|\s+$/g, "");
+        let text;
+        if (/<Verweistext>/.test(i.xl)) {
+          text = i.xl.match(/<Verweistext>(.+?)<\/Verweistext>/)[1];
+        } else {
+          text = i.xl.replace(/<.+?>/g, "");
+        }
+        text = text.replace(/^\s+|\s+$/g, "");
         const semantik = i.xl.match(/ Typ="(.+?)"/)?.[1] || "";
         if (semantik) {
           text += ` (${semantik})`;
