@@ -1224,11 +1224,11 @@ const beleg = {
     }
     if (pasten) {
       modules.clipboard.writeText(text);
-      setTimeout(() => {
+      setTimeout(async () => {
         // Der Timeout ist nötig, weil es ein wenig dauert,
         // bis der Text wirklich ins Clipboard geschrieben wurde.
         beleg.pasteBsBlock = true;
-        document.execCommand("paste");
+        await modules.ipc.invoke("exec-paste");
         beleg.pasteBsBlock = false;
       }, 10);
     } else {

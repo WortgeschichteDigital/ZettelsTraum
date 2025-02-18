@@ -2080,6 +2080,14 @@ ipcMain.handle("cli-return-code", (evt, returnCode) => {
 
 
 // ***** QUODLIBETICA *****
+// Paste im webContents triggern
+ipcMain.handle("exec-paste", evt => {
+  if (!validSender(evt)) {
+    return;
+  }
+  evt.sender.paste();
+});
+
 // Befehle in den Menüpunkten "Bearbeiten" und "Ansicht" ausführen
 ipcMain.handle("quick-roles", (evt, befehl) => {
   if (!validSender(evt)) {

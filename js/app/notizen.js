@@ -245,7 +245,7 @@ const notizen = {
   // fängt das Pasten von Text ab und bereinigt den Text
   //   evt = Object
   //     (das Event-Objekt des Paste-Events)
-  paste (evt) {
+  async paste (evt) {
     if (notizen.pasteBlock) {
       return;
     }
@@ -253,7 +253,7 @@ const notizen = {
     text = text.replace(/<.+?>/g, "");
     modules.clipboard.writeText(text);
     notizen.pasteBlock = true;
-    document.execCommand("paste");
+    await modules.ipc.invoke("exec-paste");
     notizen.pasteBlock = false;
   },
 
