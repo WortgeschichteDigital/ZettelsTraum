@@ -4138,6 +4138,8 @@ const xml = {
     }
     // Tabs durch Leerzeichen ersetzen
     xmlStr = xmlStr.replace(/\t/g, " ".repeat(2));
+    // doppelte Leerzeilen ersetzen
+    xmlStr = xmlStr.replace(/\n{3,}/g, "\n\n");
     // Unicode Normalform anpassen: NFD > NFC
     xmlStr = xmlStr.normalize("NFC");
     // Daten exportieren
