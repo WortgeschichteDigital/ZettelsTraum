@@ -224,7 +224,13 @@ const dropdown = {
       dropdown.data = Object.keys(optionen.sprachen);
     } else if (/^redaktion-ereignis/.test(feld_id) ||
         /^karteisuche-redaktion-ereignis-/.test(feld_id)) {
-      dropdown.data = [ ...Object.keys(redaktion.ereignisse) ];
+      dropdown.data = [];
+      for (const [ k, v ] of Object.entries(redaktion.ereignisse)) {
+        if (v.obsolete) {
+          continue;
+        }
+        dropdown.data.push(k);
+      }
       if (/^redaktion-ereignis-/.test(feld_id)) {
         dropdown.data.shift();
       }

@@ -5,55 +5,69 @@ const redaktion = {
   ereignisse: {
     "Kartei erstellt": {
       icon: "dokument-plus.svg",
-      textNaechstes: "",
+      naechstes: "Artikel erstellen",
     },
     "Artikel erstellt": {
       icon: "dokument.svg",
-      textNaechstes: "Artikel erstellen",
+      naechstes: "Redaktion lesen",
     },
     "Redaktion 1 (Kollegium)": {
       icon: "auge.svg",
-      textNaechstes: "Redaktion 1 (durch Kollegium)",
+      naechstes: "Revision 1",
+      obsolete: true,
     },
     "Revision 1": {
       icon: "stift-quadrat.svg",
-      textNaechstes: "Artikel revidieren",
+      naechstes: "Redaktion 2 (Leitung)",
+      obsolete: true,
     },
     "Redaktion 2 (Leitung)": {
       icon: "auge.svg",
-      textNaechstes: "Redaktion 2 (durch Leitung)",
+      naechstes: "Revision 2",
+      obsolete: true,
     },
     "Revision 2": {
       icon: "stift-quadrat.svg",
-      textNaechstes: "Artikel revidieren",
+      naechstes: "Revision 3 (Projektleitung)",
+      obsolete: true,
     },
     "Redaktion 3 (Projektleitung)": {
       icon: "auge.svg",
-      textNaechstes: "Redaktion 3 (durch Projektleitung)",
+      naechstes: "Revision 3",
+      obsolete: true,
     },
     "Revision 3": {
       icon: "stift-quadrat.svg",
-      textNaechstes: "Artikel revidieren",
+      naechstes: "Artikel Korrektur lesen",
+      obsolete: true,
+    },
+    Redaktion: {
+      icon: "auge.svg",
+      naechstes: "Revision einarbeiten",
+    },
+    Revision: {
+      icon: "stift-quadrat.svg",
+      naechstes: "Artikel Korrektur lesen",
     },
     Korrekturlesen: {
       icon: "auge.svg",
-      textNaechstes: "Artikel Korrektur lesen",
+      naechstes: "Artikel fertigstellen",
     },
     "Artikel fertig": {
       icon: "check.svg",
-      textNaechstes: "Artikel fertigstellen",
+      naechstes: "XML auszeichnen",
     },
     "XML-Auszeichnung": {
       icon: "xml.svg",
-      textNaechstes: "XML auszeichnen",
+      naechstes: "Artikel online stellen",
     },
     "Artikel online": {
       icon: "kreis-welt.svg",
-      textNaechstes: "Artikel online stellen",
+      naechstes: "",
     },
     "Artikel überarbeitet": {
       icon: "pfeil-kreis.svg",
-      textNaechstes: "",
+      naechstes: "",
     },
   },
 
@@ -97,7 +111,7 @@ const redaktion = {
     const next = document.getElementById("redaktion-next");
     next.replaceChildren();
     // nächstes Ereignis ermitteln
-    const ereignis = redaktion.naechstesEreignis(false).title;
+    const ereignis = redaktion.naechstesEreignis().title;
     // Anzeige auffrischen
     const strong = document.createElement("strong");
     next.appendChild(strong);
@@ -535,6 +549,7 @@ const redaktion = {
     if (!kartei.wort) {
       return null;
     }
+
     // höchstrangiges Ereignis ermitteln
     let letztesEreignis = -1;
     const ereignisse = Object.keys(redaktion.ereignisse);
@@ -544,18 +559,20 @@ const redaktion = {
         letztesEreignis = idx;
       }
     }
+    if (letztesEreignis === -1) {
+      letztesEreignis = 0;
+    }
+
     // Text ermitteln
     let abgeschlossen = false;
-    let text = [ "Nächstes Redaktionsereignis" ];
-    if (letztesEreignis === -1) {
-      text.push(`${redaktion.ereignisse[ereignisse[0]].textNaechstes}`);
-    } else if (letztesEreignis >= ereignisse.length - 2) {
+    let text = [ "Nächster Schritt" ];
+    if (letztesEreignis >= ereignisse.length - 2) {
       abgeschlossen = true;
-      text = [ "Redaktion abgeschlossen" ];
+      text = [ "Artikel publiziert" ];
     } else {
-      const ereignis = ereignisse[letztesEreignis + 1];
-      text.push(redaktion.ereignisse[ereignis].textNaechstes);
+      text.push(redaktion.ereignisse[ereignisse[letztesEreignis]].naechstes);
     }
+
     // nächstes Ereignis zurückgeben
     return {
       title: text,

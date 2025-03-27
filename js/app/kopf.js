@@ -69,12 +69,12 @@ const kopf = {
   // Redaktion-Icon
   iconRedaktion () {
     const iconRedaktion = document.getElementById("redaktion-icon");
-    const er = redaktion.naechstesEreignis(false);
+    const er = redaktion.naechstesEreignis();
     if (optionen.data.einstellungen["kopf-icon-redaktion"] && kartei.wort) {
       if (er.abgeschlossen) {
         iconRedaktion.title = er.title[0];
       } else {
-        iconRedaktion.title = `Nächstes Redaktionsereignis: ${er.title[1]}`;
+        iconRedaktion.title = `Nächster Schritt: ${er.title[1]}`;
       }
       kopf.iconRedaktionSvg(er.abgeschlossen);
       iconRedaktion.classList.remove("aus");
