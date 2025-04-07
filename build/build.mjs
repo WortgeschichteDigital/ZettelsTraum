@@ -275,8 +275,10 @@ const builder = {
             synopsis: "Wortkartei-App von „Wortgeschichte digital“",
             category: "Science",
             desktop: {
-              Name: "Zettel’s Traum",
-              Keywords: keywords,
+              entry: {
+                Name: "Zettel’s Traum",
+                Keywords: keywords,
+              },
             },
           };
 
