@@ -2375,12 +2375,18 @@ const xml = {
       if (restore) {
         const xmlStr = xml.data.xl[key][slot].ct[slotBlock].xl;
         const xmlDoc = helferXml.parseXML(xmlStr);
+        const bildunterschrift = xmlDoc.querySelector("Bildunterschrift").innerHTML.replace(/<\/?(.+?)>/g, (...args) => {
+          if (args[1] === "Stichwort") {
+            return "_";
+          }
+          return "__";
+        });
         const felder = {
           dateiname: xmlDoc.querySelector("Bildreferenz").getAttribute("Ziel"),
           bildposition: xmlDoc.documentElement.getAttribute("Position"),
           breite: xmlDoc.documentElement.getAttribute("Breite"),
           höhe: xmlDoc.documentElement.getAttribute("Hoehe"),
-          bildunterschrift: xmlDoc.querySelector("Bildunterschrift").textContent,
+          bildunterschrift,
           alternativtext: xmlDoc.querySelector("Bildinhalt").textContent,
           quelle: xmlDoc.querySelector("Fundstelle unstrukturiert").textContent,
           aufrufdatum: xmlDoc.querySelector("Fundstelle Aufrufdatum")?.textContent,
@@ -2528,7 +2534,9 @@ const xml = {
     xl += `\t<Bildreferenz Ziel="${mask(dn.value)}"/>\n`;
     const bu = form.querySelector('[id$="bildunterschrift"]');
     bu.value = helfer.typographie(helfer.textTrim(bu.value, true));
-    xl += `\t<Bildunterschrift>${mask(bu.value)}</Bildunterschrift>\n`;
+    let buXml = bu.value.replace(/__(.+?)__/g, (m, p1) => `<erwaehntes_Zeichen>${p1}</erwaehntes_Zeichen>`);
+    buXml = buXml.replace(/(?<![\p{Letter}.-])_(.+?)_(?![\p{Letter}-])/gu, (m, p1) => `<Stichwort>${p1}</Stichwort>`);
+    xl += `\t<Bildunterschrift>${mask(buXml)}</Bildunterschrift>\n`;
     const at = form.querySelector('[id$="alternativtext"]');
     at.value = helfer.typographie(helfer.textTrim(at.value, true));
     xl += `\t<Bildinhalt>${mask(at.value)}</Bildinhalt>\n`;
