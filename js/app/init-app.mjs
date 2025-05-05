@@ -8,6 +8,7 @@ const modules = {
   os: require("os"),
   path: require("path"),
   shell: require("electron").shell,
+  webu: require("electron").webUtils,
   zlib: require("zlib"),
 };
 window.modules = modules;
@@ -206,7 +207,7 @@ window.addEventListener("load", async () => {
     if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
       return;
     }
-    const pfad = evt.dataTransfer.files[0].path;
+    const pfad = modules.webu.getPathForFile(evt.dataTransfer.files[0]);
     if (/\.ztl$/.test(pfad) && overlay.oben() === "red-lit") {
       redLit.dbCheck(async () => {
         const ergebnis = await redLit.dbOeffnenEinlesen({ pfad });
