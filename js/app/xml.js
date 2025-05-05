@@ -179,8 +179,22 @@ const xml = {
     text = text.replace(/<Absatz>(.+?)<\/Absatz>/g, (m, p1) => {
       if (/<Vers>/.test(p1)) {
         p1 = `<Vers>${p1}</Vers>`;
-        p1 = p1.replace(/<Vers><(Streichung|Loeschung)>/g, (m, p1) => `<${p1}><Vers>`);
-        p1 = p1.replace(/<\/(Streichung|Loeschung)><\/Vers>/g, (m, p1) => `</Vers></${p1}>`);
+        p1 = p1.replace(/<Vers><(Streichung|Loeschung)>(.+)/g, (m, p1, p2) => {
+          const reg = new RegExp(`</${p1}>`);
+          const vers = p2.split(/<\/Vers>/)[0];
+          if (reg.test(vers)) {
+            return m;
+          }
+          return `<${p1}><Vers>${p2}`;
+        });
+        p1 = p1.replace(/(.+)<\/(Streichung|Loeschung)><\/Vers>/g, (m, p1, p2) => {
+          const reg = new RegExp(`<${p2}>`);
+          const vers = p1.split(/<Vers>/)[0];
+          if (reg.test(vers)) {
+            return m;
+          }
+          return `${p1}</Vers></${p2}>`;
+        });
         p1 = p1.replace(/<Vers><\/Absatz>$/, "</Absatz>");
       }
       return `<Absatz>${p1}</Absatz>`;
