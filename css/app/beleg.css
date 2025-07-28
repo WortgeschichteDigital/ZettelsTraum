@@ -33,7 +33,7 @@
   z-index: 1;
   padding-right: 50px;
   width: fit-content;
-  background-image: linear-gradient(to left, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
+  background-image: linear-gradient(to left, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 25px);
 }
 
 #beleg-buttons input:last-child {
@@ -412,12 +412,10 @@ span#beleg-bewertung {
   right: 78px;
 }
 
-@media (max-width: 750px) {
-  .text-tools-beleg {
-    overflow: hidden;
-    width: 320px;
-    white-space: nowrap;
-  }
+.text-tools-beleg {
+  overflow: hidden;
+  width: calc(100% - 200px);
+  white-space: nowrap;
 }
 
 .text-tools a,
