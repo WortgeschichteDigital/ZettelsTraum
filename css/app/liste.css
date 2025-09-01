@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset "UTF-8";
 
 /* LISTENSEKTION -------------------------------- */
 
@@ -26,7 +26,7 @@
   position: relative; /* sonst bekomm ich keine offsetTop-Werte in der Belegliste */
   display: grid;
   grid-template-columns: var(--filter) calc(100% - var(--filter) - 15px); /* minus Breite Filterleiste und Gap */
-  grid-gap: 15px;
+  gap: 15px;
   padding-left: 0;
   width: calc(100% - 10px); /* minus padding-right; diese Width ist für die Animation wichtig */
   height: calc(100vh - 70px);

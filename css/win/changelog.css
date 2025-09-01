@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset "UTF-8";
 
 /* IMPORTS -------------------------------------- */
 
@@ -6,8 +6,10 @@
 @import url(../fonts.css);
 @import url(../global.css);
 @import url(../suchleiste.css);
+@import url(../tooltip.css);
 @import url(../variablen.css);
-@import url(../win/suchleiste-extra.css);
+@import url(suchleiste-extra.css);
+@import url(changelog-drucken.css) print;
 
 
 /* STRUKTUR-ELEMENTE ---------------------------- */

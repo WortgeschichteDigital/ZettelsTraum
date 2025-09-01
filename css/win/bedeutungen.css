@@ -1,11 +1,13 @@
-@charset "utf-8";
+@charset "UTF-8";
 
 /* IMPORTS -------------------------------------- */
 
 @import url(../bedeutungenbaum.css);
 @import url(../fonts.css);
 @import url(../global.css);
+@import url(../tooltip.css);
 @import url(../variablen.css);
+@import url(../app/dropdown.css);
 
 
 /* STRUKTUR-ELEMENTE ---------------------------- */
@@ -86,7 +88,7 @@ h2 {
   top: 2px;
   right: -10px;
   padding: 0 10px 0 50px;
-  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgba(255 255 255 / 100%) 25px);
+  background-image: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255 / 100%) 25px);
 }
 
 .dropdown-feld {

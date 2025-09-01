@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset "UTF-8";
 
 /* FORMVARIANTEN -------------------------------- */
 
@@ -38,7 +38,7 @@
 #stamm-kopf > span > .farbe-kopf {
   vertical-align: top;
   display: inline-block;
-  margin: 5px 5px 0 5px;
+  margin: 5px 5px 0;
   border: 1px solid var(--linie);
   width: 13px;
   height: 13px;

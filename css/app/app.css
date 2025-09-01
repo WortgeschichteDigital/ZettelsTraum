@@ -1,6 +1,6 @@
-@charset "utf-8";
+@charset "UTF-8";
 
-/* IMPORTS -------------------------------------- */
+/* IMPORTS (SHARED) ----------------------------- */
 
 @import url(../animation.css);
 @import url(../fonts.css);
@@ -9,6 +9,48 @@
 @import url(../suchleiste.css);
 @import url(../tooltip.css);
 @import url(../variablen.css);
+
+
+/* IMPORTS (APP) -------------------------------- */
+
+@import url(bedeutungen.css);
+@import url(beleg.css);
+@import url(kopf.css);
+@import url(liste.css);
+@import url(overlays.css);
+@import url(overlays-anhaenge.css);
+@import url(overlays-bearbeiterin.css);
+@import url(overlays-belegeTaggen.css);
+@import url(overlays-buchung.css);
+@import url(overlays-ctrlC.css);
+@import url(overlays-dialog.css);
+@import url(overlays-drucken.css);
+@import url(overlays-einstellungen.css);
+@import url(overlays-gerueste.css);
+@import url(overlays-geruestwechseln.css);
+@import url(overlays-import.css);
+@import url(overlays-karteisuche.css);
+@import url(overlays-karteisucheExport.css);
+@import url(overlays-kopieren.css);
+@import url(overlays-lemmata.css);
+@import url(overlays-lexika.css);
+@import url(overlays-meta.css);
+@import url(overlays-notizen.css);
+@import url(overlays-quickEin.css);
+@import url(overlays-redaktion.css);
+@import url(overlays-redLit.css);
+@import url(overlays-redLitExport.css);
+@import url(overlays-redMeta.css);
+@import url(overlays-redWi.css);
+@import url(overlays-sonderzeichen.css);
+@import url(overlays-stamm.css);
+@import url(overlays-tagger.css);
+@import url(overlays-updatesWin.css);
+@import url(overlays-zeitraumgrafik.css);
+@import url(dropdown.css);
+@import url(dropdown2.css);
+@import url(start.css);
+@import url(drucken.css) print;
 
 
 /* BASIS-ELEMENTE ------------------------------- */

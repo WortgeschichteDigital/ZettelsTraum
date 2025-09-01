@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset "UTF-8";
 
 /* BASIS-ELEMENTE ------------------------------- */
 
@@ -55,7 +55,7 @@ body > header,
 }
 
 #drucken-cont h3 {
-  page-break-before: always;
+  break-before: page;
   margin-top: 0;
   border-top: none;
   padding-top: 0;
@@ -63,5 +63,5 @@ body > header,
 }
 
 #drucken-cont th {
-  page-break-after: avoid;
+  break-after: avoid-page;
 }
