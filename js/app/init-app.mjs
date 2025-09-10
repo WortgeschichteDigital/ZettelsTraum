@@ -1,69 +1,105 @@
-// ELECTRON- und NODE-MODULE
-const modules = {
-  clipboard: require("electron").clipboard,
-  crypto: require("crypto"),
-  cp: require("child_process"),
-  fsp: require("fs").promises,
-  ipc: require("electron").ipcRenderer,
-  os: require("os"),
-  path: require("path"),
-  shell: require("electron").shell,
-  webu: require("electron").webUtils,
-  zlib: require("zlib"),
-};
-window.modules = modules;
 
-// ZT-MODULE
-import konversion from "./konversion.mjs";
-window.konversion = konversion;
+import anhaenge from "./anhaenge.mjs";
+import annotieren from "./annotieren.mjs";
+import bearbeiterin from "./bearbeiterin.mjs";
+import bedeutungen from "./bedeutungen.mjs";
+import bedeutungenGeruest from "./bedeutungenGeruest.mjs";
+import bedeutungenGerueste from "./bedeutungenGerueste.mjs";
+import bedeutungenWin from "./bedeutungenWin.mjs";
+import beleg from "./beleg.mjs";
+import belegeBuchung from "./belegeBuchung.mjs";
+import belegeTaggen from "./belegeTaggen.mjs";
+import belegKlammern from "./belegKlammern.mjs";
+import cli from "./cli.mjs";
+import dropdown2 from "./dropdown2.mjs";
+import drucken from "./drucken.mjs";
+import erinnerungen from "./erinnerungen.mjs";
+import filter from "./filter.mjs";
+import helfer from "./helfer.mjs";
+import importShared from "./importShared.mjs";
+import kartei from "./kartei.mjs";
+import karteisuche from "./karteisuche.mjs";
+import karteisucheExport from "./karteisucheExport.mjs";
+import kopieren from "./kopieren.mjs";
+import lemmata from "./lemmata.mjs";
+import lexika from "./lexika.mjs";
+import liste from "./liste.mjs";
+import meta from "./meta.mjs";
+import notizen from "./notizen.mjs";
+import optionen from "./optionen.mjs";
+import overlayApp from "./overlayApp.mjs";
+import popup from "./popup.mjs";
+import quick from "./quick.mjs";
+import quickEin from "./quickEin.mjs";
+import redaktion from "./redaktion.mjs";
+import redLit from "./redLit.mjs";
+import redMeta from "./redMeta.mjs";
+import redWi from "./redWi.mjs";
+import redXml from "./redXml.mjs";
+import sonderzeichen from "./sonderzeichen.mjs";
+import speichern from "./speichern.mjs";
+import stamm from "./stamm.mjs";
+import tagger from "./tagger.mjs";
+import tastatur from "./tastatur.mjs";
+import updates from "./updates.mjs";
+import xml from "./xml.mjs";
+import zuletzt from "./zuletzt.mjs";
 
+import dd from "../dd.mjs";
+import dialog from "../dialog.mjs";
+import dropdown from "../dropdown.mjs";
+import overlay from "../overlay.mjs";
+import shared from "../shared.mjs";
+import sharedTastatur from "../sharedTastatur.mjs";
+import sharedXml from "../sharedXml.mjs";
+import suchleiste from "../suchleiste.mjs";
+import tooltip from "../tooltip.mjs";
 
 // INITIALISIERUNG DER APP
 window.addEventListener("load", async () => {
   // VARIABLEN ANLEGEN
   // Infos zu App und Fenster erfragen
-  const info = await modules.ipc.invoke("infos-senden");
-  window.appInfo = info.appInfo;
-  window.winInfo = info.winInfo;
-
-  // globales Datenobjekt für Kartei
-  window.data = {};
+  const info = await bridge.ipc.invoke("get-info");
+  dd.app = info.app;
+  dd.win = info.win;
+  await dropdown.modInit();
+  await suchleiste.modInit();
 
   // Liste der Einstellungen für die Quick-Access-Bar ermitteln
   quickEin.optionsDetect();
 
   // IPC-LISTENER INITIALISIEREN
   // Menüpunkte
-  modules.ipc.on("app-karteisuche", () => karteisuche.oeffnen());
-  modules.ipc.on("app-einstellungen", () => optionen.oeffnen());
-  modules.ipc.on("kartei-erstellen", () => kartei.wortErfragen());
-  modules.ipc.on("kartei-oeffnen", (evt, datei) => {
+  bridge.ipc.listen("app-karteisuche", () => karteisuche.oeffnen());
+  bridge.ipc.listen("app-einstellungen", () => optionen.oeffnen());
+  bridge.ipc.listen("kartei-erstellen", () => kartei.wortErfragen());
+  bridge.ipc.listen("kartei-oeffnen", datei => {
     if (datei) {
       kartei.oeffnenEinlesen(datei);
     } else {
       kartei.oeffnen();
     }
   });
-  modules.ipc.on("kartei-speichern", () => speichern.kaskade());
-  modules.ipc.on("kartei-speichern-unter", () => kartei.speichern(true));
-  modules.ipc.on("kartei-schliessen", () => kartei.schliessen());
-  modules.ipc.on("kartei-lemmata", () => lemmata.oeffnen());
-  modules.ipc.on("kartei-formvarianten", () => stamm.oeffnen());
-  modules.ipc.on("kartei-notizen", () => notizen.oeffnen());
-  modules.ipc.on("kartei-anhaenge", () => anhaenge.fenster());
-  modules.ipc.on("kartei-lexika", () => lexika.oeffnen());
-  modules.ipc.on("kartei-metadaten", () => meta.oeffnen());
-  modules.ipc.on("kartei-bedeutungen", () => bedeutungen.oeffnen());
-  modules.ipc.on("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
-  modules.ipc.on("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
-  modules.ipc.on("kartei-suche", () => filter.suche());
-  modules.ipc.on("redaktion-ereignisse", () => redaktion.oeffnen());
-  modules.ipc.on("redaktion-literatur", () => redLit.oeffnen());
-  modules.ipc.on("redaktion-metadaten", () => redMeta.oeffnen());
-  modules.ipc.on("redaktion-wortinformationen", () => redWi.oeffnen());
-  modules.ipc.on("redaktion-xml", () => redXml.oeffnen());
-  modules.ipc.on("redaktion-belege-xml", () => xml.belegeInXmlFenster());
-  modules.ipc.on("belege-hinzufuegen", () => {
+  bridge.ipc.listen("kartei-speichern", () => speichern.kaskade());
+  bridge.ipc.listen("kartei-speichern-unter", () => kartei.speichern(true));
+  bridge.ipc.listen("kartei-schliessen", () => kartei.schliessen());
+  bridge.ipc.listen("kartei-lemmata", () => lemmata.oeffnen());
+  bridge.ipc.listen("kartei-formvarianten", () => stamm.oeffnen());
+  bridge.ipc.listen("kartei-notizen", () => notizen.oeffnen());
+  bridge.ipc.listen("kartei-anhaenge", () => anhaenge.fenster());
+  bridge.ipc.listen("kartei-lexika", () => lexika.oeffnen());
+  bridge.ipc.listen("kartei-metadaten", () => meta.oeffnen());
+  bridge.ipc.listen("kartei-bedeutungen", () => bedeutungen.oeffnen());
+  bridge.ipc.listen("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
+  bridge.ipc.listen("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
+  bridge.ipc.listen("kartei-suche", () => filter.suche());
+  bridge.ipc.listen("redaktion-ereignisse", () => redaktion.oeffnen());
+  bridge.ipc.listen("redaktion-literatur", () => redLit.oeffnen());
+  bridge.ipc.listen("redaktion-metadaten", () => redMeta.oeffnen());
+  bridge.ipc.listen("redaktion-wortinformationen", () => redWi.oeffnen());
+  bridge.ipc.listen("redaktion-xml", () => redXml.oeffnen());
+  bridge.ipc.listen("redaktion-belege-xml", () => xml.belegeInXmlFenster());
+  bridge.ipc.listen("belege-hinzufuegen", () => {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
     if (!kartei.wort) {
       dialog.oeffnen({
@@ -74,7 +110,7 @@ window.addEventListener("load", async () => {
     }
     speichern.checkInit(() => beleg.erstellen());
   });
-  modules.ipc.on("belege-auflisten", () => {
+  bridge.ipc.listen("belege-auflisten", () => {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
     if (!kartei.wort) {
       dialog.oeffnen({
@@ -85,64 +121,159 @@ window.addEventListener("load", async () => {
     }
     speichern.checkInit(() => liste.wechseln());
   });
-  modules.ipc.on("belege-taggen", () => belegeTaggen.oeffnen());
-  modules.ipc.on("belege-loeschen", () => liste.loeschenAlleBelege());
-  modules.ipc.on("belege-kopieren", () => kopieren.init());
-  modules.ipc.on("belege-einfuegen", () => kopieren.einfuegen());
-  modules.ipc.on("belege-zwischenablage", () => liste.kopierenAlleBelege());
-  modules.ipc.on("belege-buchung", () => belegeBuchung.open());
-  modules.ipc.on("hilfe-demo", () => helfer.demoOeffnen());
-  modules.ipc.on("hilfe-updates", () => updates.fenster());
+  bridge.ipc.listen("belege-taggen", () => belegeTaggen.oeffnen());
+  bridge.ipc.listen("belege-loeschen", () => liste.loeschenAlleBelege());
+  bridge.ipc.listen("belege-kopieren", () => kopieren.init());
+  bridge.ipc.listen("belege-einfuegen", () => kopieren.einfuegen());
+  bridge.ipc.listen("belege-zwischenablage", () => liste.kopierenAlleBelege());
+  bridge.ipc.listen("belege-buchung", () => belegeBuchung.open());
+  bridge.ipc.listen("hilfe-demo", () => helfer.demoOeffnen());
+  bridge.ipc.listen("hilfe-updates", () => updates.fenster());
+
   // Kopierfunktion
-  modules.ipc.on("kopieren-basisdaten", () => kopieren.basisdatenSenden());
-  modules.ipc.on("kopieren-basisdaten-empfangen", (evt, daten) => kopieren.einfuegenBasisdatenEintragen(daten));
-  modules.ipc.on("kopieren-daten", () => kopieren.datenSenden());
-  modules.ipc.on("kopieren-daten-empfangen", (evt, daten) => kopieren.einfuegenEinlesen(daten));
+  bridge.ipc.listen("kopieren-basisdaten", () => kopieren.basisdatenSenden());
+  bridge.ipc.listen("kopieren-basisdaten-empfangen", daten => kopieren.einfuegenBasisdatenEintragen(daten));
+  bridge.ipc.listen("kopieren-daten", () => kopieren.datenSenden());
+  bridge.ipc.listen("kopieren-daten-empfangen", daten => kopieren.einfuegenEinlesen(daten));
+
   // Einstellungen
-  modules.ipc.on("optionen-init", (evt, opt) => {
+  bridge.ipc.listen("optionen-init", opt => {
     optionen.einlesen(optionen.data, opt);
     optionen.anwenden();
     zuletzt.aufbauen();
+    bridge.ipc.invoke("init-done", "optInitDone");
   });
-  modules.ipc.on("optionen-empfangen", (evt, data) => optionen.empfangen(data));
-  modules.ipc.on("optionen-zuletzt", (evt, karteien) => zuletzt.update(karteien));
-  modules.ipc.on("optionen-zuletzt-verschwunden", (evt, verschwunden) => zuletzt.verschwundenUpdate(verschwunden));
-  modules.ipc.on("optionen-fenster", (evt, fenster, status) => {
+  bridge.ipc.listen("optionen-empfangen", data => optionen.empfangen(data));
+  bridge.ipc.listen("optionen-zuletzt", karteien => zuletzt.update(karteien));
+  bridge.ipc.listen("optionen-zuletzt-verschwunden", verschwunden => zuletzt.verschwundenUpdate(verschwunden));
+  bridge.ipc.listen("optionen-fenster", (fenster, status) => {
     optionen.data[fenster] = status;
   });
-  modules.ipc.on("optionen-letzter-pfad", (evt, pfad) => optionen.aendereLetzterPfad(pfad));
+  bridge.ipc.listen("optionen-letzter-pfad", pfad => optionen.aendereLetzterPfad(pfad));
+
   // Bedeutungsgerüst-Fenster
-  modules.ipc.on("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
-  modules.ipc.on("bedeutungen-fenster-geschlossen", () => {
+  bridge.ipc.listen("bedeutungen-fenster-daten", () => bedeutungenWin.daten());
+  bridge.ipc.listen("bedeutungen-fenster-geschlossen", () => {
     bedeutungenWin.contentsId = 0;
   });
-  modules.ipc.on("bedeutungen-fenster-drucken", (evt, gn) => {
+  bridge.ipc.listen("bedeutungen-fenster-drucken", gn => {
     drucken.init("bedeutungen-", gn);
-    modules.ipc.invoke("fenster-fokus");
+    bridge.ipc.invoke("fenster-fokus");
   });
-  modules.ipc.on("bedeutungen-fenster-umtragen", (evt, data) => {
+  bridge.ipc.listen("bedeutungen-fenster-umtragen", data => {
     beleg.bedeutungenWin(data.bd, data.eintragen);
-    modules.ipc.invoke("fenster-fokus");
+    bridge.ipc.invoke("fenster-fokus");
   });
+
   // XML-Fenster
-  modules.ipc.on("red-xml-daten", () => redXml.daten());
-  modules.ipc.on("red-xml-speichern", (evt, daten) => redXml.speichern({ daten }));
-  modules.ipc.on("red-xml-geschlossen", () => {
+  bridge.ipc.listen("red-xml-daten", () => redXml.daten());
+  bridge.ipc.listen("red-xml-speichern", daten => redXml.speichern({ daten }));
+  bridge.ipc.listen("red-xml-geschlossen", () => {
     redXml.contentsId = 0;
   });
+
   // Dialog
-  modules.ipc.on("dialog-anzeigen", (evt, text) => {
+  bridge.ipc.listen("dialog-anzeigen", text => {
     dialog.oeffnen({
       typ: "alert",
       text,
     });
   });
+
   // CLI-Operationen
-  modules.ipc.on("cli-command", (evt, commands) => cli.verarbeiten(commands));
+  bridge.ipc.listen("cli-command", commands => cli.verarbeiten(commands));
+
   // Updates suchen
-  modules.ipc.on("updates-check", () => updates.check(true));
+  bridge.ipc.listen("updates-check", () => updates.check(true));
+
   // Before-Unload
-  modules.ipc.on("before-unload", () => helfer.beforeUnload());
+  bridge.ipc.listen("before-unload", () => helfer.beforeUnload());
+
+  // Popup
+  bridge.ipc.listen("popup-anhaenge-auto-ergaenzen", () => anhaenge.addAuto({ fenster: false }));
+  bridge.ipc.listen("popup-anhaenge-fenster", () => anhaenge.fenster());
+  bridge.ipc.listen("popup-anhaenge-oeffnen", arg => anhaenge.oeffnen(popup.anhangDatei, arg));
+  bridge.ipc.listen("popup-beleg-bearbeiten", () => {
+    overlayApp.alleSchliessen();
+    beleg.oeffnen(parseInt(popup.belegID, 10));
+  });
+  bridge.ipc.listen("popup-beleg-duplizieren", () => {
+    const beleg = kopieren.datenBeleg(dd.file.ka[popup.belegID]);
+    kopieren.einfuegenEinlesen([ beleg ], true);
+  });
+  bridge.ipc.listen("popup-beleg-hinzufuegen", () => speichern.checkInit(() => beleg.erstellen()));
+  bridge.ipc.listen("popup-beleg-klammern-make", arg => belegKlammern.make(arg));
+  bridge.ipc.listen("popup-beleg-klammern-remove", arg => belegKlammern.remove(arg));
+  bridge.ipc.listen("popup-beleg-loeschen", () => beleg.aktionLoeschenFrage(popup.belegID));
+  bridge.ipc.listen("popup-beleg-zwischenablage", () => beleg.ctrlZwischenablage(dd.file.ka[popup.belegID]));
+  bridge.ipc.listen("popup-belege-auflisten", () => speichern.checkInit(() => liste.wechseln()));
+  bridge.ipc.listen("popup-erinnerungen", () => erinnerungen.show());
+  bridge.ipc.listen("popup-filter-reset", () => filter.ctrlReset(true));
+  bridge.ipc.listen("popup-kartei-entfernen", () => zuletzt.karteiEntfernen(popup.startDatei));
+  bridge.ipc.listen("popup-kartei-erstellen", () => kartei.wortErfragen());
+  bridge.ipc.listen("popup-kartei-oeffnen", () => popup.karteiLink.click());
+  bridge.ipc.listen("popup-kopieren", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.textauswahl.text,
+      html: popup.textauswahl.html,
+    });
+    shared.animation("zwischenablage");
+  });
+  bridge.ipc.listen("popup-kopieren-code", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
+    });
+  });
+  bridge.ipc.listen("popup-kopieren-id", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.kopfID,
+    });
+  });
+  bridge.ipc.listen("popup-kopieren-nebenfenster", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
+    });
+  });
+  bridge.ipc.listen("popup-kopierfunktion", () => kopieren.uiOff());
+  bridge.ipc.listen("popup-lexika", () => lexika.oeffnen());
+  bridge.ipc.listen("popup-link", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.element.getAttribute("href"),
+    });
+  });
+  bridge.ipc.listen("popup-mail", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: popup.element.getAttribute("href").replace(/^mailto:/, ""),
+    });
+  });
+  bridge.ipc.listen("popup-markieren", () => annotieren.makeUser());
+  bridge.ipc.listen("popup-notizen", () => notizen.oeffnen());
+  bridge.ipc.listen("popup-optionen-oeffnen", arg => {
+    optionen.oeffnen();
+    optionen.sektionWechseln(document.getElementById(arg));
+  });
+  bridge.ipc.listen("popup-ordner", () => helfer.ordnerOeffnen(popup.startDatei));
+  bridge.ipc.listen("popup-ordner-kartei", () => helfer.ordnerOeffnen(popup.karteiPfad));
+  bridge.ipc.listen("popup-redaktion", () => redaktion.oeffnen());
+  bridge.ipc.listen("popup-schliessen", () => {
+    const id = overlay.oben();
+    overlay.schliessen(document.getElementById(id));
+  });
+  bridge.ipc.listen("popup-text-complete", () => popup.textauswahlComplete(true));
+  bridge.ipc.listen("popup-text-referenz", () => {
+    bridge.ipc.invoke("cb", "write", {
+      text: xml.belegId({}),
+    });
+  });
+  bridge.ipc.listen("popup-titel-aufnahmen", () => redLit.anzeigePopup(popup.titelaufnahme.ds));
+  bridge.ipc.listen("popup-titel-bearbeiten", () => redLit.dbCheck(() => redLit.eingabeBearbeiten(popup.titelaufnahme.ds), false));
+  bridge.ipc.listen("popup-titel-loeschen", () => document.querySelector("#red-lit-popup .icon-muelleimer").click());
+  bridge.ipc.listen("popup-titel-xml", () => redLit.xmlDatensatz({ id: popup.titelaufnahme.ds.id }));
+  bridge.ipc.listen("popup-titel-zwischenablage", arg => redLit.titelZwischenablage(arg));
+  bridge.ipc.listen("popup-wort", () => kartei.wortAendern());
+  bridge.ipc.listen("popup-xml-referenz", () => xml.referenz());
+  bridge.ipc.listen("popup-xml-schnitt-cb", arg => xml.schnittInZwischenablage(arg));
+  bridge.ipc.listen("popup-xml-schnitt-win", arg => xml.schnittInXmlFenster(arg));
 
   // EVENTS: RESIZE
   window.addEventListener("resize", () => {
@@ -182,7 +313,7 @@ window.addEventListener("load", async () => {
         "zeitraumgrafik-cont-over",
       ];
       for (const e of elemente) {
-        helfer.elementMaxHeight({
+        shared.elementMaxHeight({
           ele: document.getElementById(e),
         });
       }
@@ -207,7 +338,7 @@ window.addEventListener("load", async () => {
     if (!evt.dataTransfer.files.length) { // wenn z.B. Text gedropt wird
       return;
     }
-    const pfad = modules.webu.getPathForFile(evt.dataTransfer.files[0]);
+    const pfad = bridge.web.getPathForFile(evt.dataTransfer.files[0]);
     if (/\.ztl$/.test(pfad) && overlay.oben() === "red-lit") {
       redLit.dbCheck(async () => {
         const ergebnis = await redLit.dbOeffnenEinlesen({ pfad });
@@ -227,7 +358,7 @@ window.addEventListener("load", async () => {
   // alle <textarea>
   document.querySelectorAll("textarea").forEach(textarea => {
     textarea.addEventListener("input", function () {
-      helfer.textareaGrow(this);
+      shared.textareaGrow(this);
     });
   });
   // alle <input type="number">
@@ -273,7 +404,7 @@ window.addEventListener("load", async () => {
   // Updates-Icon
   document.getElementById("updates").addEventListener("click", () => updates.fenster());
   // Programm-Icon
-  document.getElementById("icon").addEventListener("click", () => modules.ipc.send("ueber-app"));
+  document.getElementById("icon").addEventListener("click", () => bridge.ipc.invoke("ueber-app"));
   // Start-Sektion
   document.getElementById("start-erstellen").addEventListener("click", () => kartei.wortErfragen());
   document.getElementById("start-oeffnen").addEventListener("click", () => kartei.oeffnen());
@@ -311,11 +442,11 @@ window.addEventListener("load", async () => {
   document.getElementById("kopieren-liste-leeren").addEventListener("click", () => kopieren.listeLeeren());
   document.getElementById("kopieren-liste-beenden").addEventListener("click", () => kopieren.uiOff());
   document.getElementById("kopieren-liste-export").addEventListener("click", () => kopieren.exportieren());
-  document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-liste")));
+  document.getElementById("kopieren-liste-schliessen").addEventListener("click", () => overlayApp.schliessen(document.getElementById("kopieren-liste")));
   document.getElementById("kopieren-einfuegen-einfuegen").addEventListener("click", () => speichern.checkInit(() => kopieren.einfuegenAusfuehren()));
   document.getElementById("kopieren-einfuegen-reload").addEventListener("click", () => kopieren.einfuegenBasisdaten(true));
   document.getElementById("kopieren-einfuegen-import").addEventListener("click", () => kopieren.importieren());
-  document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlay.schliessen(document.getElementById("kopieren-einfuegen")));
+  document.getElementById("kopieren-einfuegen-schliessen").addEventListener("click", () => overlayApp.schliessen(document.getElementById("kopieren-einfuegen")));
   document.querySelectorAll("#kopieren-einfuegen-formular input").forEach(i => kopieren.einfuegenDatenfelder(i));
   // Bedeutungen
   document.getElementById("bedeutungen-speichern").addEventListener("click", () => bedeutungen.speichern());
@@ -381,7 +512,7 @@ window.addEventListener("load", async () => {
     lemmata.schliessen();
   });
   document.getElementById("lemmata-wf").addEventListener("change", function () {
-    data.la.wf = this.checked;
+    dd.file.la.wf = this.checked;
     lemmata.geaendert = true;
     lemmata.liste();
   });
@@ -475,14 +606,14 @@ window.addEventListener("load", async () => {
   // Literaturdatenbank: Export
   document.querySelectorAll('#red-lit-export-cont input[type="radio"]').forEach(i => {
     i.addEventListener("keydown", evt => {
-      tastatur.detectModifiers(evt);
-      if (!tastatur.modifiers && evt.key === "Enter") {
+      sharedTastatur.detectModifiers(evt);
+      if (!sharedTastatur.modifiers && evt.key === "Enter") {
         redLit.dbExportieren();
       }
     });
   });
   document.getElementById("red-lit-export-exportieren").addEventListener("click", () => redLit.dbExportieren());
-  document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.getElementById("red-lit-export")));
+  document.getElementById("red-lit-export-abbrechen").addEventListener("click", () => overlayApp.schliessen(document.getElementById("red-lit-export")));
   // Wortinformationen
   document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach(input => redWi.formListener({ input }));
   redWi.xml({ icon: document.getElementById("red-wi-xml") });
@@ -504,25 +635,25 @@ window.addEventListener("load", async () => {
   document.querySelectorAll("#karteisuche-export-vorlagen-tools a").forEach(a => karteisucheExport.vorlagenToolsListener(a));
   document.querySelectorAll("#karteisuche-export-form input").forEach(i => {
     i.addEventListener("keydown", evt => {
-      tastatur.detectModifiers(evt);
-      if (!tastatur.modifiers && evt.key === "Enter") {
+      sharedTastatur.detectModifiers(evt);
+      if (!sharedTastatur.modifiers && evt.key === "Enter") {
         karteisucheExport.exportieren();
       }
     });
   });
   document.getElementById("karteisuche-export-exportieren").addEventListener("click", () => karteisucheExport.exportieren());
-  document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlay.schliessen(document.querySelector("#karteisuche-export")));
+  document.getElementById("karteisuche-export-abbrechen").addEventListener("click", () => overlayApp.schliessen(document.querySelector("#karteisuche-export")));
   // Prompt-Textfeld
   document.getElementById("dialog-prompt-text").addEventListener("keydown", function (evt) {
-    tastatur.detectModifiers(evt);
-    if (!tastatur.modifiers && evt.key === "Enter") {
-      overlay.schliessen(this);
+    sharedTastatur.detectModifiers(evt);
+    if (!sharedTastatur.modifiers && evt.key === "Enter") {
+      overlayApp.schliessen(this);
     }
   });
   // Dialog-Buttons
   [ "dialog-ok-button", "dialog-abbrechen-button", "dialog-ja-button", "dialog-nein-button" ].forEach(button => {
     document.getElementById(button).addEventListener("click", function () {
-      overlay.schliessen(this);
+      overlayApp.schliessen(this);
     });
   });
   // Druck-Links
@@ -532,7 +663,7 @@ window.addEventListener("load", async () => {
   // Updates-Fenster
   document.querySelectorAll("#updatesWin-header input").forEach(i => updates.buttons(i));
   // Schließen-Links von Overlays
-  document.querySelectorAll(".overlay-schliessen").forEach(a => overlay.initSchliessen(a));
+  document.querySelectorAll(".overlay-schliessen").forEach(a => overlayApp.initSchliessen(a));
   // Handbuch-Links von Overlays
   document.querySelectorAll(".icon-handbuch, .link-handbuch").forEach(a => helfer.handbuchLink(a));
   // Rotationsanimationen
@@ -545,30 +676,29 @@ window.addEventListener("load", async () => {
   // VISUELLE ANPASSUNGEN
   // App-Namen eintragen
   document.querySelectorAll(".app-name").forEach(i => {
-    i.textContent = appInfo.name;
+    i.textContent = dd.app.name;
   });
   // Breite Datumsfelder anpassen
-  const lang = helfer.checkLang();
-  if (!/^de/i.test(lang)) {
+  if (!/^de/i.test(dd.app.lang)) {
     document.querySelectorAll('[type="datetime-local"]').forEach(i => {
       i.classList.add("lang-en");
     });
   }
   // macOS
-  if (process.platform === "darwin") {
+  if (dd.app.platform === "darwin") {
     // Option zum Ausblenden der Menüleiste verstecken
     const option = document.getElementById("einstellung-autoHideMenuBar").parentNode;
     option.classList.add("aus");
   }
   // Tastaturkürzel ändern
-  tastatur.shortcutsText();
+  sharedTastatur.shortcutsText();
   // Tooltips initialisieren
   tooltip.init();
 
   // IPC-ANFRAGEN
   // Bilder vorladen
   const bilderPreload = [];
-  const bilder = await modules.ipc.invoke("bilder-senden");
+  const bilder = await bridge.ipc.invoke("bilder-senden");
   for (const b of bilder) {
     const img = new Image();
     img.src = `img/${b}`;
@@ -576,17 +706,28 @@ window.addEventListener("load", async () => {
   }
 
   // XML-INDENT.XSL LADEN
-  await helfer.resourcesLoad({
+  await shared.resourcesLoad({
     file: "xml-indent.xsl",
-    targetObj: helferXml,
+    targetObj: sharedXml,
     targetKey: "indentXsl",
   });
 
   // FENSTER FREISCHALTEN
   updates.hinweis();
-  helfer.fensterGeladen();
+  await shared.fensterGeladen();
+  if (!optionen.data.einstellungen.bearbeiterin) {
+    bearbeiterin.oeffnen();
+  }
 });
 
 // FEHLER AN MAIN SCHICKEN
-window.addEventListener("error", evt => helfer.onError(evt));
-window.addEventListener("unhandledrejection", evt => helfer.onError(evt));
+window.addEventListener("error", evt => shared.onError({
+  evt,
+  file: kartei.pfad,
+  word: kartei.titel,
+}));
+window.addEventListener("unhandledrejection", evt => shared.onError({
+  evt,
+  file: kartei.pfad,
+  word: kartei.titel,
+}));

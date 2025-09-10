@@ -1,3 +1,6 @@
+
+import bedeutungen from "./bedeutungen.mjs";
+
 const konversionen = {
   // Konversion des Dateiformats zu Version 2
   zu2 (data) {
@@ -343,7 +346,7 @@ const konversionen = {
     }
 
     // Datenstruktur "rd.xl" hinzufügen
-    // (Datenstruktur wird ab v17 von helferXml.redXmlData() erzeugt;
+    // (Datenstruktur wird ab v17 von sharedXml.redXmlData() erzeugt;
     // hier aus Kompatibilitätsgründen gespiegelt)
     data.rd.xl = {
       ab: [], // Abstract

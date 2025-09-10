@@ -3,12 +3,12 @@
 /* IMPORTS -------------------------------------- */
 
 @import url(../animation.css);
+@import url(../dropdown.css);
 @import url(../fonts.css);
 @import url(../global.css);
 @import url(../icon-links.css);
 @import url(../tooltip.css);
 @import url(../variablen.css);
-@import url(../app/dropdown.css);
 @import url(../app/overlays.css);
 @import url(../app/overlays-dialog.css);
 

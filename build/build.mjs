@@ -1,3 +1,4 @@
+
 // ***** SHARED MODULES AND VARIABLES *****
 
 import electronBuilder from "electron-builder";

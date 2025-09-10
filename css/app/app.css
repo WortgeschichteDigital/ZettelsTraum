@@ -3,6 +3,7 @@
 /* IMPORTS (SHARED) ----------------------------- */
 
 @import url(../animation.css);
+@import url(../dropdown.css);
 @import url(../fonts.css);
 @import url(../global.css);
 @import url(../icon-links.css);
@@ -47,7 +48,6 @@
 @import url(overlays-tagger.css);
 @import url(overlays-updatesWin.css);
 @import url(overlays-zeitraumgrafik.css);
-@import url(dropdown.css);
 @import url(dropdown2.css);
 @import url(start.css);
 @import url(drucken.css) print;

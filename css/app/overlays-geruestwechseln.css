@@ -16,6 +16,6 @@
   text-align: center;
 }
 
-#geruestwechseln-cont span {
+#geruestwechseln-cont > span {
   display: inline-block;
 }

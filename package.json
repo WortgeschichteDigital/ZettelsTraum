@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/WortgeschichteDigital/ZettelsTraum/issues"
   },
-  "main": "main.js",
+  "main": "main.mjs",
   "scripts": {
     "start": "electron ."
   },
