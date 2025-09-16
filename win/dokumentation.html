@@ -77,11 +77,11 @@
 
           <p><i>Electron</i> übernimmt die schwierigen Aufgaben, die sich beim Programmieren einer Desktop-App stellen. Es kümmert sich um die Integration in das Betriebssystem, ermöglicht also lesende und schreibende Dateizugriffe sowie das Öffnen externer Programme, erzeugt die Dateidialoge zum Öffnen und Speichern der Karteien und verwaltet über den betriebssystemeigenen Fenstermanager die einzelnen Programmfenster, in denen eine auf die Rendering-Bibliothek eingedampfte Variante des <i>Chromium</i>-Browsers für die Anzeige zuständig ist. Jedes Programmfenster läuft in einem eigenen Renderer-Prozess, weswegen die einzelnen Fenster nicht direkt miteinander kommunizieren können. Das Öffnen der Programmfenster und die Darstellung der Fenstermenüs werden im Wesentlichten über den Main-Prozess gesteuert, über den die App initialisiert wird. Dieser wiederum kann mit allen Fenstern kommunizieren.</p>
 
-          <p>Der Main-Prozess wird über die Scripts in der Datei <span class="datei">./main.js</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis, in dem der App-Code liegt, wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse, die diese via <code class="quelltext">ipcRenderer</code> abgeschickt haben (<abbr title="vergleiche">vgl.</abbr> den Code in <span class="datei">./main.js</span> und <span class="datei">./js/app/init-app.js</span>).</p>
+          <p>Der Main-Prozess wird über das Script <span class="datei">./main.mjs</span> im Wurzelverzeichnis des Quellcodes gesteuert (das Wurzelverzeichnis, in dem der App-Code liegt, wird im Folgenden immer durch <span class="datei">./</span> bezeichnet). Vermittelt über diesen Prozess können die Fenster miteinander in Kommunikation treten. Über das Objekt <code class="quelltext">ipcMain</code> hört der Main-Prozess auf Meldungen der Renderer-Prozesse. Über die Kontextbrücke in der Datei <span class="datei">./js/main/preload.cjs</span>, dessen API in der globalen Variable <code class="quelltext">bridge</code> exponiert wird, können via <code class="quelltext">ipcRenderer</code> Kommandos an den Main-Prozess geschichte werden.</p>
 
           <p>Daneben erleichtert <i>Electron</i> das <a href="#framework-paketieren">Paketieren der App</a> für die Betriebssysteme <i>Linux</i>, <i>Windows</i> und <i>macOS</i> enorm. Außerdem können relativ leicht <a href="#framework-installer">Installer</a> für die einzelnen Betriebssysteme gebaut werden.</p>
 
-          <p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://www.electronjs.org/docs/latest/api/app">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das zweiteilige, sehr übersichtliche <a href="https://www.electronjs.org/docs/latest/tutorial/quick-start">Quick-Start-Tutorial</a>.</p>
+          <p>Die <abbr title="Application Programming Interface" lang="en">API</abbr> von <i>Electron</i> ist sehr gut <a href="https://www.electronjs.org/docs/latest/api/app">dokumentiert</a>; das Framework-Motto <q lang="en">It’s easier than you think</q>, somit gar nicht falsch. Für einen raschen Einstieg empfiehlt sich das <a href="https://www.electronjs.org/docs/latest/tutorial/tutorial-prerequisites">Einstiegstutorial</a>.</p>
 
           <!-- Download Quelltext -->
           <h2 id="framework-download">Download des Quelltexts</h2>
@@ -92,7 +92,7 @@
 
           <pre>$ git clone https://github.com/WortgeschichteDigital/ZettelsTraum.git zettelstraum</pre>
 
-          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">main</code>, der gegenwärtig immer auf dem Stand des letzten Releases gehalten wird.</p>
+          <p>Im Repository findet sich ausschließlich der Branch <code class="quelltext">main</code>, der immer auf dem Stand des letzten Releases gehalten wird.</p>
 
           <p>Eine weitere Möglichkeit, um an den Quelltext zu gelangen: Er ist auch in den <a href="#framework-quelltext">paketierten Versionen der App</a> enthalten und dort in einem speziellen Archiv im Programmordner zu finden.</p>
 
@@ -113,7 +113,7 @@
 
           <pre>$ sudo npm install -g [PROGRAMM]</pre>
 
-          <p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d.&nbsp;h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme – so zumindest meine Erfahrung. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u.&nbsp;a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
+          <p><i>Electron</i> sollte allerdings nicht global, sondern lokal, <abbr title="das heißt">d.&nbsp;h.</abbr> im App-Ordern, installiert werden, sonst gibt es bei der späteren Paketierung mitunter Probleme. Das Zeichen für den aktuellen Pfad (<span class="datei">./</span>) steht hier und im Folgenden für das Wurzelverzeichnis der App, in dem <abbr title="unter anderem">u.&nbsp;a.</abbr> die Datei <span class="datei">./package.json</span> liegt. Die Installation ist simpel:</p>
 
           <pre>$ cd ./
 $ npm install --save-dev electron</pre>
@@ -125,7 +125,7 @@ $ npm install --save-dev electron</pre>
           <pre class="quelltext">/node_modules/
 /package-lock.json</pre>
 
-          <p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> alle ein bis zwei Wochen) <a href="https://electronjs.org/releases/stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
+          <p>Da im Herzen von <i>Electron</i> ein Browser schlägt und Browser fortwährend mit Sicherheitsupdates versorgt werden wollen, gibt es sehr häufig (<abbr title="in der Regel">i.&nbsp;d.&nbsp;R.</abbr> alle ein bis zwei Wochen) <a href="https://releases.electronjs.org/release?channel=stable"><i>Electron</i>-Updates</a>. Das Update funktioniert genauso wie die Erstinstallation:</p>
 
           <pre>$ npm install --save-dev electron</pre>
 
@@ -136,19 +136,19 @@ $ npm install --save-dev electron</pre>
   ...
 }</pre>
 
-          <p>Soll eine neue Major-Version installiert werden, muss an dieser Stelle der Wert des Schlüssels <code class="quelltext">electron</code> geändert werden. <code class="quelltext">^28</code> ermöglicht bspw. die Installation der Electron-Version&nbsp;28.</p>
+          <p>Soll eine neue Major-Version installiert werden, muss an dieser Stelle der Wert des Schlüssels <code class="quelltext">electron</code> geändert werden. <code class="quelltext">^28</code> ermöglicht bspw. die Installation der Electron-Version&nbsp;28. Wenn die Versionsnummer nicht manuell angepasst wird, werden nur Dot-Releases installiert.</p>
 
           <p>Über die aktuelle Version im <i>Node.js</i>-Respository gibt der Paketmanager Auskunft:</p>
 
           <pre>$ npm show electron version</pre>
 
-          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://www.electronjs.org/docs/latest/tutorial/electron-timelines">für einige Monate</a> ehe ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr> erreicht.</p>
+          <p>Der jüngste stabile Versionszweig von <i>Electron</i> liefert zum Zeitpunkt der Veröffentlichung immer die aktuelle Ausgabe von <i>Chromium</i> mit, hebt die <i>Chromium</i>-Version mit den folgenden Minor-Releases aber nicht mehr an. Technisch ist der im Framework arbeitende Browser somit zwar meist leicht veraltet, um die notwendigen Sicherheitsupdates kümmert sich das <i>Electron</i>-Team aber <a href="https://www.electronjs.org/docs/latest/tutorial/electron-timelines">für einige Monate</a>, ehe ein Release-Zweig <abbr title="End-of-life" lang="en">EOL</abbr> erreicht.</p>
 
           <p>Man muss nicht notwendigerweise die neuste Electron-Version nutzen. Es ist durchaus möglich einen bestimmten Release-Zweig zu installieren oder upzudaten. Um <abbr title="beispielsweise">bspw.</abbr> die Version&nbsp;25.0.x zu verwenden, müsste die Eingabe so aussehen:</p>
 
           <pre>$ npm install --save-dev electron@25-x-y</pre>
 
-          <p>Darüber, welche Zweige alle zur Verfügung stehen, gibt diese Eingabe Auskunft:</p>
+          <p>Darüber, welche Zweige alle zur Verfügung stehen, gibt dieses Kommando Auskunft:</p>
 
           <pre>$ npm view electron</pre>
 
@@ -163,7 +163,7 @@ $ npm install --save-dev electron</pre>
 
           <p>Wie die App gestartet werden soll, wird in der Datei <span class="datei">./package.json</span> festgelegt. Die <span class="datei">./package.json</span> enthält neben Meta-Informationen zu Programm, Autor und Lizenz nämlich auch Scripts zum Starten von <i class="app-name"></i>. Die folgende Zeile legt fest, über welche Script-Datei der Main-Prozess initialisiert wird:</p>
 
-          <pre class="quelltext">"main": "main.js",</pre>
+          <pre class="quelltext">"main": "main.mjs",</pre>
 
           <p>Und unter <code class="quelltext">"scripts"</code> steht die Information, wie das Programm gestartet werden soll:</p>
 
@@ -193,7 +193,7 @@ $ npm install --save-dev electron-packager</pre>
 
           <p>Der <code>.</code> steht für das Quellverzeichnis und <code>zettelstraum</code> für den App-Namen.</p>
 
-          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://electron.github.io/packager/main/interfaces/electronpackager.options.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
+          <p>Besser ist es jedoch, ihn über ein Node-Script zu steuern. Das macht das Ganze variabler und deutlich übersichtlicher. Über die zur Verfügung stehenden Optionen gibt die <a href="https://electron.github.io/packager/main/modules.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a>-Dokumentation des Packagers ausführlich Auskunft.</p>
 
           <p>Im Prinzip muss man sich mit dieser Dokumentation allerdings nicht weiter beschäftigen, da für das Paketieren bereits alles eingerichtet ist: In der Datei <span class="datei">./build/build.mjs</span> befindet sich ein Node-Script, das das Erstellen von <i>Linux-</i>, <i>Windows-</i> und <i>macOS</i>-Paketen übernimmt. Die paketierte Version von <i class="app-name"></i> wird nach dem Ausführen eine Ebene oberhalb des Wurzelverzeichnisses in einem Ordner namens <span class="datei">build</span> abgelegt. Existiert der Ordner nicht, wird er automatisch erzeugt. Die Option <code class="quelltext">overwrite: true</code> sorgt dafür, dass alte Paketierungen im Ordner <span class="datei">../build</span> vor dem erneuten Paketieren entfernt werden. Das Script kann über die folgenden Befehle ausgeführt werden. Gibt man den Build-Ordner explizit an, wird dieser anstelle von <span class="datei">../build</span> genutzt. (Die Reihenfolge der Argumente kann frei gewählt werden</p>
 
@@ -217,7 +217,7 @@ $ npm install --save-dev electron-packager</pre>
             </li>
           </ul>
 
-          <p>Das mitgelieferte Script erstellt Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://electron.github.io/packager/main/interfaces/electronpackager.options.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
+          <p>Das mitgelieferte Script erstellt Pakete für eine 64-Bit-Architektur. Dies kann natürlich nach Belieben angepasst werden. Wie, darüber gibt die besagte <a href="https://electron.github.io/packager/main/modules.html"><abbr title="Application Programming Interface" lang="en">API</abbr></a> des Packagers Auskunft.</p>
 
           <p>Im Ordner <span class="datei">../build</span> befinden sich nun die Unterordner <span class="datei">zettelstraum-linux-x64</span>, <span class="datei">zettelstraum-win32-x64</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">zettelstraum-darwin-x64</span>. Die Unterordner enthalten eine ausführbare Datei, über die die App gestartet werden kann:</p>
 
@@ -245,13 +245,13 @@ $ npm install --save-dev electron-packager</pre>
           <pre>$ cd ./
 $ npm install --save-dev electron-builder</pre>
 
-          <p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages ist in dem mitgelieferten Node-Script, das sich der <a href="https://www.electron.build/api/electron-builder" lang="en">Programmatic API</a> des Builders bedient, bereits alles eingerichtet:</p>
+          <p>Die richtige Konfiguration des Builders zu finden, ist nicht so leicht, denn er kennt eine Vielzahl an <a href="https://www.electron.build/configuration">Konfigurationsmöglichkeiten</a>. Für das Erstellen von <abbr title="Nullsoft Scriptable Install System" lang="en">NSIS</abbr>-Installern, von <abbr title="Apple Disk Image" lang="en">DMG</abbr>-, DEB- und RPM-Paketen sowie von AppImages ist in dem mitgelieferten Node-Script, das sich der <a href="https://www.electron.build/programmatic-usage" lang="en">Programmatic API</a> des Builders bedient, bereits alles eingerichtet:</p>
 
           <ul>
             <li>
               <p><i>Linux</i>:</p>
 
-              <pre>$ node build/build.mjs builder linux [appImage|deb|rpm]  [Build-Ordner]</pre>
+              <pre>$ node build/build.mjs builder linux [appImage|deb|rpm] [Build-Ordner]</pre>
             </li>
 
             <li>
@@ -279,7 +279,7 @@ $ npm install --save-dev electron-builder</pre>
 
           <p class="datei">zettelstraum_[VERSION]_[ARCHITEKTUR].(AppImage|deb|dmg|exe|rpm)</p>
 
-          <p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows&nbsp;10</i>.)</p>
+          <p>Die ausführbare exe-Datei kann nun auf einen Windows-Rechner kopiert und installiert werden. (Getestet wurde die Installation nur auf <i>Windows&nbsp;10</i> und <i>11</i>.)</p>
 
           <p>Die DEB-Datei kann mit <span lang="en">Debian Package</span> installiert werden:</p>
 
@@ -312,7 +312,7 @@ $ npm install --save-dev electron-builder</pre>
 
             <li><i>release:</i> Führt <code>bash build/build-release.sh</code> aus. Das Script bereitet verschiedene Dateien und das lokale Git-Repository nach und nach für ein Release vor, führt das Bauen von Paketen aber nicht durch.</li>
 
-            <li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das durchaus auch aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
+            <li><i>preset:</i> Startet ein in den ersten Zeilen des Scripts definiertes Preset, das aus mehreren Jobs bestehen kann. Die Presets können natürlich nach Belieben ergänzt oder geändert werden.</li>
 
             <li><i>sha:</i> Erstellt die Datei <span class="datei">../build/sha256sums.txt</span>, in der SHA256-Summen aller zum Zeitpunkt der Erstellung im Ordner <span class="datei">../build/</span> liegenden Ordner und Dateien gespeichert werden.</li>
 
@@ -366,7 +366,7 @@ $ npm install --save-dev electron-builder</pre>
             <li><i>macOS</i>: <span class="datei">~/Library/Application Support/<span class="app-name"></span>/</span></li>
           </ul>
 
-          <p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird von der <span class="datei">./main.js</span> erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.js</span> entnehmen.</p>
+          <p>Die Dateien in dem Ordner werden alle von <i>Electron</i> verwaltet – bis auf die Datei <span class="datei">einstellungen.json</span>. Diese wird durch den Main-Prozess erstellt. In ihr werden die Einstellungen des Hauptfensters der App und die Größe und Position von einigen (aber nicht allen) Programmfenstern gespeichert. Welche Werte die App anlegt, lässt sich dem Objekt <code class="quelltext">optionen.data</code> in der Datei <span class="datei">./js/app/optionen.mjs</span> entnehmen.</p>
 
           <!-- Quelltext -->
           <h2 id="framework-quelltext">Quelltext in der paketierten und installierten App</h2>
@@ -410,9 +410,9 @@ $ npm install --save-dev electron-builder</pre>
           <ul>
             <li><span class="datei">./index.html</span>: <abbr title="Hyptertext Markupt Language" lang="en">HTML</abbr>-Datei, die beim Öffnen des Hauptfensters geladen wird</li>
 
-            <li><span class="datei">./LICENSE.*.txt</span>: Lizenzbestimmungen von <i class="app-name"></i>, den eingebundenen Icons und Fonts</li>
+            <li><span class="datei">./LICENSE*</span>: Lizenzbestimmungen von <i class="app-name"></i>, den eingebundenen Icons und Fonts</li>
 
-            <li><span class="datei">./main.js</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
+            <li><span class="datei">./main.mjs</span>: Node-Script, das die App initialisiert, die Programmfenster öffnet, lädt, verwaltet und für viele andere Dinge zuständig ist, was das Betriebssystem, auf dem <i class="app-name"></i> läuft, direkt betrifft</li>
 
             <li><span class="datei">./package.json</span>: <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Datei mit Meta-Informationen zu Programm, Autor und Lizenz sowie Angaben darüber, wie die App gestartet wird; <abbr title="vergleiche">vgl.</abbr> den Abschnitt <a href="#framework-starten">Starten der App</a></li>
 
@@ -488,47 +488,11 @@ $ npm install --save-dev electron-builder</pre>
           <!-- JavaScript -->
           <h2 class="datei" id="ordner-js">./js/</h2>
 
-          <p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die (fast) ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden. In <span class="datei">./js/main/</span> wiederum finden sich Module, die allein die <span class="datei">main.js</span> benutzt.</p>
+          <p>Der Ordner enthält alle JavaScript-Dateien, die von den Renderer-Prozessen geladen werden. Im Unterordner <span class="datei">./js/app/</span> liegen Dateien, die ausschließlich vom Hauptfenster genutzt werden, und in <span class="datei">./js/win/</span> Dateien, die ausschließlich in Nebenfenstern geladen werden. In <span class="datei">./js/main/</span> wiederum finden sich Module, die allein der Main-Prozess (<span class="datei">main.mjs</span>) benutzt. Auf der obersten Ebene (<span class="datei">./js/</span>) liegen geteilte Scripts, die von mehreren Fenstern genutzt werden, aber nicht vom Main-Prozess.</p>
 
-          <p>Eine Datei des Ordners <span class="datei">./js/app/</span>, die auch in Nebenfenstern genutzt wird, ist die <span class="datei">helfer.js</span>. Sie enthält meist kleinere Methoden, die in vielen verschiedenen Kontexten immer wieder genutzt werden. Analog dazu gibt es die Datei <span class="datei">./js/win/helferWin.js</span>, die allerdings nur von Nebenfenstern geladen wird.</p>
+          <p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei hat. Es gibt allerdings Ausnahmen: Die Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In ihnen werden Events desjeningen Fensters initialisiert, zu dem die Datei gehört. Sie sind zugleich das erste und einzige Modul, das über die jeweilige <abbr title="Hyptertext Markup Language">HTML</abbr>-Datei im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> (und über die <span class="datei">index.html</span>) geladen wird.</p>
 
-          <p>Jede JavaScript-Datei enthält ein Objekt, das denselben Namen wie die Datei trägt. Es gibt allerdings Ausnahmen: Dies sind zum einen die JavaScript-Dateien im <a href="#ordner-root">Wurzelverzeichnis der App</a> und zum anderen Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Events des Fensters initialisiert, zu dem die Datei gehört. Der Name der <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien im <a href="#ordner-win">Ordner <span class="datei">./win/</span></a> steht jeweils anstelle des Asterisks. Eine Ausnahme bildet nur die <span class="datei">init-win.js</span>. Sie wird von allen Nebenfenstern genutzt.</p>
-
-          <p>Die Namen der JavaScript-Dateien zeigen an, welche Funktionalität die Scripts in ihnen bereitstellen. Manchmal ist dies nicht auf Anhieb klar, mitunter auch aus, sagen wir mal, <q class="einfach">historischen</q> Gründen: In einem frühen Programmierstadium wurde eine falsche Entscheidung getroffen, die später nicht revidiert wurde. Auch darum sollen einige der Dateien kurz beschrieben werden:</p>
-
-          <ul>
-            <li><span class="datei">./js/suchleiste.js</span>: alle Funktionen, die die Suchleiste betreffen, die in verschiedenen Fenstern genutzt wird</li>
-
-            <li><span class="datei">./js/tastatur.js</span>: zentrale Funktionen für die Reaktion auf Tastatur-Events, die nicht vom <a href="#framework">Framework</a> verwaltet werden; wird von allen Fenstern genutzt</li>
-
-            <li><span class="datei">./js/app/beleg.js</span>: die Karteikarte betreffende Funktionen, und zwar sowohl die der Formular- als auch die der Leseansicht</li>
-
-            <li><span class="datei">./js/app/dialog.js</span>: Overlay-Fenster, die Meldungen für und Fragen an die NutzerIn ausgeben</li>
-
-            <li><span class="datei">./js/app/dropdown.js</span>: erzeugt das über einen Pfeil oder via Tastaturkürzel zu öffnende Dropdown-Menü, das aus einigen Textfeldern aufgerufen werden kann (<abbr title="zum Beispiel">z.&nbsp;B.</abbr> im Formular der Karteikarte)</li>
-
-            <li><span class="datei">./js/app/kartei.js</span>: regelt das Öffnen und Speichern der Wort-Kartei</li>
-
-            <li><span class="datei">./js/app/konversion.js</span>: konvertiert <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Dateien, sodass sie dem aktuellen <a href="#ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Format</a> entsprechen</li>
-
-            <li><span class="datei">./js/app/liste.js</span>: regelt den Aufbau und die Funktionen der Belegliste; die Filterleiste links neben den Belegen wird allerdings via <span class="datei">./js/app/filter.js</span> gesteuert</li>
-
-            <li><span class="datei">./js/app/optionen.js</span>: Funktionen, die sich um die Programm-Einstellungen und die Speicheraufträge an den Main-Prozess kümmern</li>
-
-            <li><span class="datei">./js/app/overlay.js</span>: ein größeres Helferobjekt, das die Anzeige aller Overlay-Fenster steuert (das sind Fenster, die die Hauptanzeige überlagern und den Hintergrund leicht ausgrauen)</li>
-
-            <li><span class="datei">./js/app/popup.js</span>: baut das Kontextmenü zusammen, das bei Rechtsklick im Hauptfenster erscheint; die Funktion <code class="quelltext">popup.getTargetSelection()</code> wird auch von vielen anderen Methoden genutzt</li>
-
-            <li><span class="datei">./js/app/stamm.js</span>: Anzeigen, Aufbauen und Füllen des Fensters mit den Formvarianten</li>
-
-            <li><span class="datei">./js/app/start.js</span>: regelt die Anzeige der Startseite, die beim Öffnen des Programms und nach dem Schließen einer Kartei angezeigt wird</li>
-
-            <li><span class="datei">./js/app/tagger.js</span>: Overlay-Fenster, über das das Bedeutungsgerüst mit Tags versehen werden kann</li>
-
-            <li><span class="datei">./js/app/io.js</span>: Helfer-Funktionen zum Speichern, Öffnen, Komprimieren und Dekomprimieren von <a href="#ztj-ztj"><abbr title="Zettel’s Traum JSON">ZTJ</abbr>-</a> und <a href="#ztj-ztb"><abbr title="Zettel’s Traum Belege">ZTB</abbr></a>-Dateien</li>
-
-            <li><span class="datei">./js/win/hilfe.js</span>: Funktionen für das <a href="#" class="link-handbuch"><i>Handbuch</i></a> und die <i>technische Dokumentation</i> (also dieses Fenster)</li>
-          </ul>
+          <p>Die Namen der JavaScript-Dateien zeigen im Großen und Ganzen an, welche Funktionalität sie bereitstellen. Da es sich bei allen Scripts um <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">ES-Module</a> handelt, kann man ihre Abhängikeiten anhand der Importanweisungen in den ersten Zeilen erkennen.</p>
 
           <!-- File type -->
           <h2 class="datei" id="ordner-resources">./resources/</h2>
@@ -547,60 +511,83 @@ $ npm install --save-dev electron-builder</pre>
         <section id="sektion-js" class="suche aus">
           <h2 id="js-code">JavaScript-Code</h2>
 
-          <p>Der JavaScript-Code ist <i lang="en">vanilla</i>. Sprich: Es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Programmiert wurde im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>, einer restringierten Variante von JavaScript, die <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Zuweisungsoperationen zu nicht deklarierten Variablen unmöglich macht und vieles mehr unterbindet, was potenziell gefährlich oder einfach schlechter Stil ist. Außerdem verspricht strikter Code Zukunftssicherheit, weil mögliche Ergänzungen in der ECMAScript-Spezifikation bereits bedacht sind.</p>
+          <p>Der JavaScript-Code ist <i lang="en">vanilla;</i> es wurden keine Bibliotheken wie <i>jQuery</i> oder dergleichen verwendet. Da der Code <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">modularisiert</a> ist, befindet sich jedes Script automatisch im <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode"><i lang="en">strict mode</i></a>.</p>
 
-          <p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Event-Handler von JavaScript. Die an Elemente gebundenen Events werden alle über Dateien initialisiert, die <span class="datei">init-*.js</span> heißen.</p>
+          <p>Beim Coden wurde der Grundregel gefolgt, Struktur, Layout und Funktion strikt voneinander zu trennen. In den <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Dateien finden sich darum weder <abbr title="Cascading Style Sheets" lang="en">CSS</abbr>-Style-Attribute noch Inline-Event-Handler. Die an Elemente gebundenen Events werden alle über Module initialisiert, die <span class="datei">init-*.mjs</span> heißen. Diese Dateien sind zugleich die ersten und einzigen Module, die über die <abbr title="Hyptertext Markup Language">HTML</abbr>-Dateien geladen werden.</p>
 
           <p>Der JavaScript-Code wurde extensiv kommentiert. Im Ergebnis sollte immer nachvollziehbar sein, welche Aufgabe das Script an der jeweiligen Stelle erfüllt. So wird <abbr title="zum Beispiel">z.&nbsp;B.</abbr> bei jeder Funktion angegeben, wozu sie dient und welchen Variablentyp die Argumente haben.</p>
 
-          <p>Alle Funktionen stecken in Objekten, um den Namensraum des Dokuments nicht zu vermüllen. Dabei steht in jeder JavaScript-Datei ein Objekt, das exakt denselben Namen wie die Datei trägt. Sucht man also die Methode <code class="quelltext">popup.oeffnen()</code> oder die Eigenschaft <code class="quelltext">popup.belegID</code> muss man nur nach der Datei <span class="datei">popup.js</span> Ausschau halten. Eine Ausnahme von diesem Schema bilden allein die Scripts im Wurzelverzeichnis und Dateien mit dem Namensmuster <span class="datei">init-*.js</span>. In letzteren werden Eventobjekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
+          <p>Die Funktionen sind in aller Regel in Objekte verpackt: In jeder JavaScript-Datei befindet sich ein einziges Objekt, das exakt denselben Namen wie die Datei trägt und zahlreiche Eigenschaften und Methoden hat. Eine Ausnahme von diesem Schema bilden allein die Scripts des Main-Prozesses und Dateien mit dem Namensmuster <span class="datei">init-*.mjs</span>. In letzteren werden Event-Objekte des Fensters initialisiert, zu dem die jeweilige Datei gehört. Das betreffende Fenster lässt sich leicht aus dem Dateinamen ableiten.</p>
 
-          <p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die ausführlicheren Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
+          <p><abbr title="Vergleiche">Vgl.</abbr> zu den JavaScript-Dateien die Anmerkungen im Kapitel <a href="#ordner-js">Ordner und Dateien</a>.</p>
 
-          <p>Drei wichtige Objekte im globalen Namensraum sind:</p>
+          <p>Im globalen Namensraum findet sich die Variable <code class="quelltext">bridge</code>. Sie wird über die Datei <span class="datei">./js/main/preload.cjs</span> initialisiert und stellt Funktionen für den Austausch zwischen <a href="#framework">Main- und Renderer-Prozess</a> zur Verfügung. Dass Electron- und Node-Module in den Renderer-Prozessen nicht importiert werden, sondern alle Anfragen über den Main-Prozess laufen, ist ein wichtiger Baustein in der Sicherheitsarchitektur der App. Ein Beispiel für die Kommunikation zwischen Main- und Renderer-Prozess:</p>
+
+          <p>Im Main-Prozess (<span class="datei">./main.mjs</span>) gibt es Event-Handler, die auf Anfragen über die <i lang="en">context bridge</i> hören. Zum Beispiel:</p>
+
+          <pre class="quelltext">ipcMain.handle("get-info", evt => {
+  // code
+});</pre>
+
+          <p>Aus dem Renderer-Prozess heraus kann eine Anfrage an den Channel (hier <code class="quelltext">get-info</code>) geschickt werden, der durch ein <code class="quelltext">return</code> Daten zurückliefern kann:</p>
+
+          <pre class="quelltext">const info = await bridge.ipc.invoke("get-info");</pre>
+
+          <p>Daneben können im Renderer-Prozess Listener initialisiert werden, die auf Anfragen des Main-Prozesses reagieren:</p>
+
+          <pre class="quelltext">bridge.ipc.listen("popup-link", () => {
+  // code
+});</pre>
+
+          <p>Das in allen Fenstern geladene Modul <span class="datei">./js/dd.mjs</span> stellt einige wichtige Variablen bereit:</p>
 
           <ul>
-            <li><code class="quelltext">data</code>: In diesem <span class="datentyp">Object</span> liegen die Daten der eingelesenen Kartei, also der Inhalt der geöffneten <a href="#ztj-ztj">ZTJ-Datei</a>.</li>
-
             <li>
-              <p><code class="quelltext">appInfo</code>: In diesem <span class="datentyp">Object</span> werden einige Eigenschaften gespeichert, die nur vom Main-Prozess unmittelbar abgefragt werden können. So stehen sie in allen <a href="#kurzanleitung-programmfensterHauptfenster" class="link-handbuch">Haupt-</a> und <a href="#kurzanleitung-programmfensterNebenfenster" class="link-handbuch">Nebenfenstern</a> zur Verfügung. Es handelt sich im Einzelnen um:</p>
+              <p><code class="quelltext">app</code>: In diesem <span class="datentyp">Object</span> werden einige Eigenschaften gespeichert, die nur vom Main-Prozess unmittelbar abgefragt werden können. Auf diese Weise stehen sie unmittelbar in allen <a href="#kurzanleitung-programmfensterHauptfenster" class="link-handbuch">Haupt-</a> und <a href="#kurzanleitung-programmfensterNebenfenster" class="link-handbuch">Nebenfenstern</a> zur Verfügung. Es handelt sich im Einzelnen um:</p>
 
               <ul>
-                <li><code class="quelltext">appInfo.documents</code> (<span class="datentyp">String</span>): Pfad zum Dokumente-Ordner des Rechners;</li>
+                <li><code class="quelltext">app.appPath</code> (<span class="datentyp">String</span>): Pfad zur App;</li>
 
-                <li><code class="quelltext">appInfo.name</code> (<span class="datentyp">String</span>): der Name der App, also <code class="quelltext">"<span class="app-name"></span>"</code>;</li>
+                <li><code class="quelltext">app.documents</code> (<span class="datentyp">String</span>): Pfad zum Dokumente-Ordner des Rechners;</li>
 
-                <li><code class="quelltext">appInfo.packaged</code> (<span class="datentyp">Boolean</span>): die App wurde paketiert;</li>
+                <li><code class="quelltext">app.lang</code> (<span class="datentyp">String</span>): Sprache des Betriebssystems;</li>
 
-                <li><code class="quelltext">appInfo.temp</code> (<span class="datentyp">String</span>): Pfad zum temporären Ordner des Rechners;</li>
+                <li><code class="quelltext">app.name</code> (<span class="datentyp">String</span>): Name der App, also <code class="quelltext">"<span class="app-name"></span>"</code>;</li>
 
-                <li><code class="quelltext">appInfo.userData</code> (<span class="datentyp">String</span>): Pfad zum Konfigurationsordner des Rechners;</li>
+                <li><code class="quelltext">app.os</code> (<span class="datentyp">Object</span>): Informationen zum Betriebsystem: <code class="quelltext">arch</code>, <code class="quelltext">hostname</code>, <code class="quelltext">type</code>, <code class="quelltext">username</code>;</li>
 
-                <li><code class="quelltext">appInfo.version</code> (<span class="datentyp">String</span>): die Versionsnummer der App.</li>
+                <li><code class="quelltext">app.packaged</code> (<span class="datentyp">Boolean</span>): die App wurde paketiert;</li>
+
+                <li><code class="quelltext">app.pathSep</code> (<span class="datentyp">String</span>): Pfad-Separator, also <code class="quelltext">/</code> oder <code class="quelltext">\</code>;</li>
+
+                <li><code class="quelltext">app.platform</code> (<span class="datentyp">String</span>): Platform, auf der die App läuft (<code class="quelltext">darwin&nbsp;| linux&nbsp;| win32</code>);</li>
+
+                <li><code class="quelltext">app.resourcesPath</code> (<span class="datentyp">String</span>): Pfad zum Ressourcenordner;</li>
+
+                <li><code class="quelltext">app.temp</code> (<span class="datentyp">String</span>): Pfad zum temporären Ordner des Rechners;</li>
+
+                <li><code class="quelltext">app.userData</code> (<span class="datentyp">String</span>): Pfad zum Konfigurationsordner des Rechners;</li>
+
+                <li><code class="quelltext">app.version</code> (<span class="datentyp">String</span>): Versionsnummer der App;</li>
+
+                <li><code class="quelltext">app.versions</code> (<span class="datentyp">Object</span>): Versionen von Bestandteilen des Frameworks: <code class="quelltext">chrome</code>, <code class="quelltext">electron</code>, <code class="quelltext">node</code>, <code class="quelltext">v8</code>.</li>
               </ul>
             </li>
 
+            <li><code class="quelltext">file</code>: In diesem <span class="datentyp">Object</span> liegen die Daten der aktuellen Kartei, also die Inhalt der geöffneten <a href="#ztj-ztj">ZTJ-Datei</a>. Dieses Objekt ist naturgemäß nur in Hauptfenstern gefüllt.</li>
+
             <li>
-              <p><code class="quelltext">winInfo</code>: Analog zu <code class="quelltext">appInfo</code> stellt das <span class="datentyp">Object</span> allen Programmfenstern Eigenschaften bereit, die sonst nur im Main-Prozess unmittelbar zugänglich sind. Es handelt sich im Einzelnen um:</p>
+              <p><code class="quelltext">win</code>: Analog zu <code class="quelltext">app</code> stellt das <span class="datentyp">Object</span> allen Programmfenstern Eigenschaften bereit, die sonst nur im Main-Prozess unmittelbar zugänglich sind. Es handelt sich im Einzelnen um:</p>
 
               <ul>
-                <li><code class="quelltext">winInfo.winId</code> (<span class="datentyp">Number</span>): ID des aktuellen Fensters;</li>
+                <li><code class="quelltext">win.winId</code> (<span class="datentyp">Number</span>): ID des aktuellen Fensters;</li>
 
-                <li><code class="quelltext">winInfo.contentsId</code> (<span class="datentyp">Number</span>): ID des WebContents des aktuellen Fensters;</li>
+                <li><code class="quelltext">win.contentsId</code> (<span class="datentyp">Number</span>): ID des WebContents des aktuellen Fensters;</li>
 
-                <li><code class="quelltext">winInfo.typ</code> (<span class="datentyp">String</span>): Typ des Fensters; mögliche Werte: <code class="quelltext">index&nbsp;| bedeutungen&nbsp;| changelog&nbsp;| dokumentation&nbsp;| handbuch&nbsp;| fehlerlog&nbsp;| xml&nbsp;| app&nbsp;| electron</code>.</li>
+                <li><code class="quelltext">win.typ</code> (<span class="datentyp">String</span>): Typ des Fensters: <code class="quelltext">index&nbsp;| bedeutungen&nbsp;| changelog&nbsp;| dokumentation&nbsp;| handbuch&nbsp;| fehlerlog&nbsp;| xml&nbsp;| app&nbsp;| electron</code>.</li>
               </ul>
             </li>
           </ul>
-
-          <h2 id="js-integration">Integration von <i>Electron</i> und <i>Node.js</i></h2>
-
-          <p>Eine Besonderheit des JavaScript-Codes ist, dass auf Objekte, Methoden und Eigenschaften von <i>Electron</i> und <i>Node.js</i> auch in den Renderer-Prozessen zurückgegriffen wird. Hierzu wird die in JavaScript für gewöhnlich nicht vorhandene Methode <code class="quelltext">require()</code> zum Importieren von Modulen benutzt.</p>
-
-          <p>Über <code class="quelltext">const {app} = require("electron").remote</code> <abbr title="zum Beispiel">z.&nbsp;B.</abbr> wird der Zugriff auf das App-Objekt im Main-Prozess ermöglicht. Und via <code class="quelltext">const path = require("path")</code> kann man das Node-Modul <a href="https://nodejs.org/api/path.html"><i>Path</i></a> laden, um sich neben vielem anderen <abbr title="zum Beispiel">z.&nbsp;B.</abbr> Informationen über den <i lang="en">path segment separator</i> im aktuellen Betriebssystem geben zu lassen (nämlich via <code class="quelltext">path.sep</code>). An einer Stelle wird auf diese Weise sogar ein Befehl in der Eingabeaufforderung von <i>Windows</i> ausgeführt:</p>
-
-          <pre class="quelltext">const child_process = require("child_process");
-child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
         </section>
 
         <!-- ZTJ-DATEIFORMAT -->
@@ -2009,33 +1996,6 @@ child_process.spawn("cmd.exe", ["/c", "attrib", "+h", lockfile]);</pre>
           <p>Der Quellpfad muss ein Ordner sein. Der Zielpfad kann der Name der Zieldatei oder ein bestehender Ordner sein, in dem die Zieldatei abgelegt werden soll. Ist der Zielpfad ein Ordner, wird der Pfad automatisch um den Dateinamen <code class="quelltext">Karteiliste.[html|md]</code> ergänzt.</p>
 
           <p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Die Indizes, die hier stehen müssen, sind nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt <abbr title="zum Beispiel">z.&nbsp;B.</abbr> auf die erste Vorlage. Es können auch mehrere, kommagetrennte Indizes angegeben werden, <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code>--karteiliste-vorlage=0,2</code>. In diesem Fall werden zwei Listen exportiert, und zwar mithilfe der ersten und dritten Vorlage.</p>
-
-          <h2 id="verschiedenes-bekannteFehler">Bekannte Fehler</h2>
-
-          <ul>
-            <li>
-              <p>Für die Funktion <a href="#menueAnsicht-anzeigeVergroessern" class="link-handbuch"><i>Ansicht &gt; Anzeige vergrößern</i></a> wurde das Tastaturkürzel <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> registriert, angezeigt wird im Menü aber <kbd class="nochange">Strg</kbd> + <kbd>=</kbd>.<br><a href="https://github.com/electron/electron/issues/5256">Electron-Bugs #5256</a>, <a href="https://github.com/electron/electron/issues/14742">#14742</a>, <a href="https://github.com/electron/electron/issues/15496">#15496</a></p>
-
-              <p class="info"><i>Konsequenzen:</i> Die Bedienung funktioniert je nach Betriebssystem anders. Während unter <i>Linux</i> und <i>Windows</i> trotz der falschen Anzeige <kbd class="nochange">Strg</kbd> + <kbd>+</kbd> gedrückt werden kann, muss unter <i>macOS</i> tatsächlich <kbd>⌘</kbd> + <kbd>=</kbd> gedrückt werden.</p>
-            </li>
-
-            <li>
-              <p>Mitunter werden unter <i>Windows</i> beim Öffnen eines Internetlinks gleich zwei Browserinstanzen erzeugt, wenn der Standardbrowser des Betriebssystems noch nicht gestartet wurde.</p>
-
-              <div class="info">
-                <p><b>Kein Fehler von <i class="app-name"></i>.</b> Der Befehl zum Öffnen des Links wird von der App auch unter <i>Windows</i> definitiv nur einmal abgesetzt. Tritt das Phänomen auf, dürfte ein Konfigurationsproblem des Betriebssystems vorliegen.</p>
-
-                <p><i>Workaround:</i> Öffnen Sie zunächst den Browser über das Programmmenü des Betriebssystems. Die Links öffnen sich dann immer in dieser Instanz.</p>
-              </div>
-            </li>
-
-
-            <li>
-              <p>Unter <i>Windows</i> wird bei Umlauten, die durch a, o, u mit darübergestelltem e dargestellt werden, das e verzerrt.</p>
-
-              <p class="info"><b>Kein Fehler von <i class="app-name"></i>.</b> Es handelt sich offenbar um ein Problem mit der Rendering-Engine, die unter <i>Windows</i> anders agiert als unter <i>Linux</i> und <i>macOS</i> und an dieser Stelle mit der Schriftart <i>Noto Sans</i> ein Problem hat.</p>
-            </li>
-          </ul>
         </section>
       </div>
     </main>
