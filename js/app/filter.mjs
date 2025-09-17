@@ -88,7 +88,7 @@ const filter = {
     filter.typen = {
       lemmata: {
         name: "Lemmata",
-        filter_vorhanden: false,
+        filter_vorhanden: true,
         filter: {
           "lemmata-undefined": {
             name: "(kein Lemma gefunden)",
@@ -179,24 +179,21 @@ const filter = {
       }
       lemmata = lemmata.concat(lemma.sc);
     }
-    if (lemmata.length > 1) {
-      filter.typen.lemmata.filter_vorhanden = true;
-      for (const lemma of lemmata) {
-        const key = "lemmata-" + lemma;
-        const formVari = helfer.formVariRegExpRegs.find(i => i.wort === lemma);
-        let reg = null;
-        if (formVari && dd.file.fv[formVari.wort].tr) {
-          reg = new RegExp(formVari.reg, "i");
-        } else if (formVari) {
-          reg = new RegExp(`(?:^|[${helfer.ganzesWortRegExp.links}])(?:${formVari.reg})(?:[${helfer.ganzesWortRegExp.rechts}]|$)`, "i");
-        }
-        filter.typen.lemmata.filter[key] = {
-          name: lemma,
-          wert: 0,
-          reg,
-        };
-        filter.typen.lemmata.filter_folge.push(key);
+    for (const lemma of lemmata) {
+      const key = "lemmata-" + lemma;
+      const formVari = helfer.formVariRegExpRegs.find(i => i.wort === lemma);
+      let reg = null;
+      if (formVari && dd.file.fv[formVari.wort].tr) {
+        reg = new RegExp(formVari.reg, "i");
+      } else if (formVari) {
+        reg = new RegExp(`(?:^|[${helfer.ganzesWortRegExp.links}])(?:${formVari.reg})(?:[${helfer.ganzesWortRegExp.rechts}]|$)`, "i");
       }
+      filter.typen.lemmata.filter[key] = {
+        name: lemma,
+        wert: 0,
+        reg,
+      };
+      filter.typen.lemmata.filter_folge.push(key);
     }
 
     // alle Bedeutungen aus dem aktuellen Bedeutungsgerüst pushen
