@@ -3,9 +3,8 @@
 
 import electronBuilder from "electron-builder";
 import electronPackager from "@electron/packager";
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import { URL } from "node:url";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
