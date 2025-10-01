@@ -8,7 +8,7 @@ import path from "node:path";
 
 export { dienste as default };
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = import.meta.dirname;
 
 const svg = [];
 

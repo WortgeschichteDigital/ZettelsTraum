@@ -10,7 +10,7 @@ import appMenu from "./appMenu.mjs";
 
 export { popup as default };
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = import.meta.dirname;
 
 // Liste der verfügbaren Menüpunkte
 const punkte = {

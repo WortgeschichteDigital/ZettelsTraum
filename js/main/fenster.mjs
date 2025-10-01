@@ -13,7 +13,7 @@ import optionen from "./optionen.mjs";
 
 export { fenster as default };
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = import.meta.dirname;
 
 const fenster = {
   // Hauptfenster erstellen

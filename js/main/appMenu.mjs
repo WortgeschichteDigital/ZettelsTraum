@@ -14,7 +14,7 @@ import optionen from "./optionen.mjs";
 
 export { appMenu as default };
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = import.meta.dirname;
 
 // Menü-Vorlagen
 const layoutMenu = [
