@@ -31,7 +31,7 @@ const dd = {
   // Developer-Tools sollen angezeigt werden (oder nicht)
   // (wird auch für andere Dinge benutzt, für Testzwecke besser zentral anlegen
   // und nicht überall app.isPackaged abfragen)
-  devtools: !app.isPackaged,
+  devtools: process.argv.includes("--dev") || !app.isPackaged,
 
   // speichert Exceptions im Main-Prozess und in den Renderer-Prozessen
   fehler: [],

@@ -1996,6 +1996,12 @@ $ npm install --save-dev electron-builder</pre>
           <p>Der Quellpfad muss ein Ordner sein. Der Zielpfad kann der Name der Zieldatei oder ein bestehender Ordner sein, in dem die Zieldatei abgelegt werden soll. Ist der Zielpfad ein Ordner, wird der Pfad automatisch um den Dateinamen <code class="quelltext">Karteiliste.[html|md]</code> ergänzt.</p>
 
           <p>Die Angabe der Vorlage ist fakultativ. Wird keine Vorlage angegeben, wird die erste Vorlage für den Export genutzt. Die Indizes, die hier stehen müssen, sind nullbasiert: <code>--karteiliste-vorlage=0</code> zeigt <abbr title="zum Beispiel">z.&nbsp;B.</abbr> auf die erste Vorlage. Es können auch mehrere, kommagetrennte Indizes angegeben werden, <abbr title="zum Beispiel">z.&nbsp;B.</abbr> <code>--karteiliste-vorlage=0,2</code>. In diesem Fall werden zwei Listen exportiert, und zwar mithilfe der ersten und dritten Vorlage.</p>
+
+          <p id="verschiedenes-cliDevTools"><b>Dev-Tools einbinden</b></p>
+
+          <pre>zettelstraum[.exe] --dev</pre>
+
+          <p>Ist die App nicht paketiert, wird das Programmmenü <i>Dev</i>, über das die Dev-Tools aufgerufen werden können, immer erzeugt. Der Schalter dient dazu, die Tools auch in einer paketierten App zur Verfügung zu stellen.</p>
         </section>
       </div>
     </main>

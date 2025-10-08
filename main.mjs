@@ -290,7 +290,7 @@ ipcMain.handle("get-info", evt => {
         type: os.type(),
         username: os.userInfo().username,
       },
-      packaged: !dd.devtools,
+      packaged: app.isPackaged,
       pathSep: path.sep,
       platform: process.platform,
       resourcesPath: process.resourcesPath,
