@@ -247,7 +247,7 @@ input:read-only {
 
 input:read-only::selection {
   background-color: transparent;
-  color: inherit;
+  color: var(--text);
 }
 
 textarea {
