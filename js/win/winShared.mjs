@@ -18,7 +18,13 @@ const winShared = {
   // Listener für Signale des Main-Prozesses
   ipcListener () {
     // helle Elemente dunkler darstellen
-    bridge.ipc.listen("helle-dunkler", () => document.documentElement.classList.add("dunkler"));
+    bridge.ipc.listen("helle-dunkler", dunkler => {
+      if (dunkler) {
+        document.documentElement.classList.add("dunkler");
+      } else {
+        document.documentElement.classList.remove("dunkler");
+      }
+    });
 
     // Abschnitt öffnen (Dokumentation, Handbuch)
     bridge.ipc.listen("oeffne-abschnitt", abschnitt => hilfe.naviSprungAusfuehren(abschnitt));

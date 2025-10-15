@@ -413,9 +413,8 @@ const fenster = {
       }
 
       // ggf. helle Elemente dunkler darstellen
-      if (optionen.data.einstellungen["helle-dunkler"]) {
-        this.send("helle-dunkler");
-      }
+      const dunkler = !!optionen.data?.einstellungen?.["helle-dunkler"];
+      this.send("helle-dunkler", dunkler);
       // ggf. Abschnitt öffnen
       if (abschnitt) {
         this.send("oeffne-abschnitt", abschnitt);

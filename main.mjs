@@ -366,15 +366,20 @@ ipcMain.handle("optionen-speichern", (evt, opt, winId) => {
   }
 
   // Optionen an alle Hauptfenster schicken, mit Ausnahme dem der übergebenen ID
+  // (an Nebenfenster wird nur die Helligkeitseinstellung geschickt)
   for (const [ id, val ] of Object.entries(dd.win)) {
-    if (val.typ !== "index") {
-      continue;
-    }
     const idInt = parseInt(id, 10);
     if (idInt === winId) {
       continue;
     }
-    BrowserWindow.fromId(idInt).webContents.send("optionen-empfangen", optionen.data);
+    if (val.typ === "index") {
+      // Hauptfenster
+      BrowserWindow.fromId(idInt).webContents.send("optionen-empfangen", optionen.data);
+    } else {
+      // Nebenfenster
+      const dunkler = !!optionen.data?.einstellungen?.["helle-dunkler"];
+      BrowserWindow.fromId(idInt).webContents.send("helle-dunkler", dunkler);
+    }
   }
 
   // Optionen nach Timeout in einstellungen.json schreiben
