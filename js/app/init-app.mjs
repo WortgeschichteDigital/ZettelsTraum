@@ -39,6 +39,7 @@ import redXml from "./redXml.mjs";
 import sonderzeichen from "./sonderzeichen.mjs";
 import speichern from "./speichern.mjs";
 import stamm from "./stamm.mjs";
+import stichwortplanung from "./stichwortplanung.mjs";
 import tagger from "./tagger.mjs";
 import tastatur from "./tastatur.mjs";
 import updates from "./updates.mjs";
@@ -390,6 +391,8 @@ window.addEventListener("load", async () => {
   document.getElementById("wort").addEventListener("click", () => kartei.wortAendern());
   // Erinnerungen-Icon
   document.getElementById("erinnerungen-icon").addEventListener("click", () => erinnerungen.show());
+  // Stichwortplanung-Icon
+  document.getElementById("stichwortplanung-icon").addEventListener("click", () => stichwortplanung.showLemmas());
   // Ordner-Icon
   document.getElementById("ordner-icon").addEventListener("click", () => helfer.ordnerOeffnen(kartei.pfad));
   // Redaktion-Icon

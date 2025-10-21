@@ -2,6 +2,7 @@
 import bedeutungen from "./bedeutungen.mjs";
 import helfer from "./helfer.mjs";
 import kartei from "./kartei.mjs";
+import kopf from "./kopf.mjs";
 import optionen from "./optionen.mjs";
 import redMeta from "./redMeta.mjs";
 import speichern from "./speichern.mjs";
@@ -317,6 +318,10 @@ const tagger = {
     });
     // Änderungsmarkierung im Tagger entfernen
     tagger.taggerGeaendert(false);
+    // Stichwortplanung-Icon im Kopf auffrischen
+    if (dataIdx === "red-meta-stichwortplanung") {
+      kopf.iconStichwortplanung();
+    }
     // Fenster ggf. schließen
     schliessen();
     // Rückmeldung, ob das Speichern erfolgreich war

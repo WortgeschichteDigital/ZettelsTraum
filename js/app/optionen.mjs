@@ -131,6 +131,7 @@ const optionen = {
       speichern: "1",
       // Icons im Fensterkopf
       "kopf-icon-erinnerungen": true,
+      "kopf-icon-stichwortplanung": true,
       "kopf-icon-ordner": true,
       "kopf-icon-redaktion": true,
       "kopf-icon-notizen": true,

@@ -14,6 +14,8 @@ const kopf = {
   icons () {
     // Erinnerungen
     kopf.iconErinnerungen();
+    // Stichwortplanung
+    kopf.iconStichwortplanung();
     // Karteiordner
     kopf.iconOrdner();
     // Redaktion
@@ -58,6 +60,17 @@ const kopf = {
     const icon = document.getElementById("erinnerungen-icon");
     if (optionen.data.einstellungen["kopf-icon-erinnerungen"] &&
         !erinnerungen.allesOkay) {
+      icon.classList.remove("aus");
+    } else {
+      icon.classList.add("aus");
+    }
+  },
+
+  // Stichwortplanung-Icon
+  iconStichwortplanung () {
+    const icon = document.getElementById("stichwortplanung-icon");
+    if (optionen.data.einstellungen["kopf-icon-stichwortplanung"] &&
+        dd.file?.rd?.sp?.length) {
       icon.classList.remove("aus");
     } else {
       icon.classList.add("aus");

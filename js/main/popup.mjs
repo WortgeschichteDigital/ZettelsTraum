@@ -266,6 +266,11 @@ const punkte = {
     icon: "personen.png",
     click: () => appMenu.befehl("popup-redaktion"),
   },
+  redMeta: {
+    label: "Redaktionsmetadaten",
+    icon: "zeilen-4,0.png",
+    click: () => appMenu.befehl("redaktion-metadaten"),
+  },
   schliessen: {
     label: "Fenster schließen",
     icon: "x-dick.png",

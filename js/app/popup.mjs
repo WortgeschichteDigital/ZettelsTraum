@@ -138,6 +138,9 @@ const popup = {
     } else if (target === "erinnerungen") {
       items = [ "erinnerungen", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
+    } else if (target === "redMeta") {
+      items = [ "redMeta", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
+      popup.belegeAuflisten(items);
     } else if (target === "karteiordner") {
       items = [ "ordnerKartei", "sep", "kopfIconsConf", "sep", "belegHinzufuegen" ];
       popup.belegeAuflisten(items);
@@ -356,6 +359,8 @@ const popup = {
         return "wort";
       } else if (id === "erinnerungen-icon") {
         return "erinnerungen";
+      } else if (id === "stichwortplanung-icon") {
+        return "redMeta";
       } else if (id === "ordner-icon") {
         popup.karteiPfad = kartei.pfad;
         return "karteiordner";
