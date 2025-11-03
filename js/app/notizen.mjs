@@ -264,7 +264,7 @@ const notizen = {
       return;
     }
     let text = await beleg.pasteBs(evt, false);
-    text = text.replace(/<.+?>/g, "");
+    text = text.replace(/<\/?[a-z1-6]+( .+?)?>/gi, "");
     await bridge.ipc.invoke("cb", "writeText", text);
     notizen.pasteBlock = true;
     await bridge.ipc.invoke("exec-paste");
