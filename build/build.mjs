@@ -2,7 +2,7 @@
 // ***** SHARED MODULES AND VARIABLES *****
 
 import electronBuilder from "electron-builder";
-import electronPackager from "@electron/packager";
+import { packager as electronPackager } from "@electron/packager";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -378,7 +378,6 @@ const packager = {
         this.asar = true;
         this.dir = config.appDir;
         this.executableName = "zettelstraum";
-        this.extraResource = path.join(config.appDir, "resources");
         this.ignore = [
           /node_modules/,
           /package-lock\.json/,
@@ -430,19 +429,20 @@ const packager = {
       }
       await fs.rename(path.join(this.config.out, buildDir), renamePath);
 
-      // copy resources to correct folder
-      let resTarget = path.join(renamePath, "resources");
+      // copy resources
+      // (as of Electron Packager 19, folders cannot be copied anymore via extraResources;
+      //  therefore the copying is done here)
+      const resDir = path.join(config.appDir, "resources");
+      const packageDir = path.join(this.config.out, `zettelstraum-${this.config.platform}-${this.config.arch}`);
+      let resDirPackage;
       if (this.config.platform === "darwin") {
-        resTarget = path.join(renamePath, "Zettel’s Traum.app", "Contents", "Resources");
+        resDirPackage = path.join(packageDir, "Zettel’s Traum.app", "Contents", "Resources");
+      } else {
+        resDirPackage = path.join(packageDir, "resources");
       }
-      const resSource = path.join(resTarget, "resources");
-      const files = await fs.readdir(resSource);
-      for (const i of files) {
-        const source = path.join(resSource, i);
-        const target = path.join(resTarget, i);
-        await fs.rename(source, target);
-      }
-      await fs.rmdir(resSource);
+      await fs.cp(resDir, resDirPackage, {
+        recursive: true,
+      });
     } catch (err) {
       shared.feedbackError(err);
     }
