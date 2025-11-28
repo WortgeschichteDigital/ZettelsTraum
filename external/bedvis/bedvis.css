@@ -56,6 +56,10 @@ svg.bedvis text.definition {
   transition: fill .3s linear;
 }
 
+svg.bedvis.lemma-list text.definition {
+  font-style: italic;
+}
+
 svg.bedvis text.definition tspan {
   font-weight: bold;
 }
@@ -75,11 +79,11 @@ svg.bedvis a:hover text.definition tspan {
 
 /* DEFINITION LINES ----------------------------- */
 
-svg.bedvis line.meaning {
+svg.bedvis line:is(.meaning, .extension) {
   stroke: var(--meaning);
 }
 
-svg.bedvis g:hover line.meaning {
+svg.bedvis g:hover line:is(.meaning, .extension) {
   stroke: var(--hover);
 }
 

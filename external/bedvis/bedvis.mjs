@@ -20,7 +20,7 @@ const shared = {
 
   // calculate timespan of the current data
   calculateTimespan () {
-    const quots = document.querySelectorAll("#wgd-belegauswahl > div");
+    const quots = [ ...document.querySelectorAll("#wgd-belegauswahl > div") ];
 
     // detect first year
     let first = 0;
@@ -39,7 +39,16 @@ const shared = {
     }
 
     // detect last year
-    const last = this.getYear(quots[quots.length - 1].id);
+    let last = this.getYear(quots.at(-1)?.id || quots.at(-1));
+
+    // correct first and last date so the timeline has always a certain length
+    const current = new Date().getFullYear();
+    if (current - last < 10) {
+      last = current < last + 10 ? current : last + 10;
+    }
+    if (last - first < 10) {
+      first = last - 10;
+    }
 
     // calculate pixels per year
     return {
@@ -125,10 +134,19 @@ const make = {
   // visualisation data
   //   description             string (accessibility: alternative text that describes
   //                                   the contents of the graphics)
+  //   lemmaList               boolean (if this value is "true", the visualization does not show
+  //                                    a list of meanings but one of lemmas which changes the
+  //                                    behaviour and semantics of several keys:
+  //                                      * "[LEMMA]": the key's name is always "lemmas" and it is the only one there is
+  //                                      * "meanings": the array is not filled with meaning but lemma entries
+  //                                      * "definition": this field contains the lemma as it is printed above the line
+  //                                      * "showNumbering": is always "false" and can't be changed)
   //   lemmas                  object
   //     [LEMMA]
   //       events              array
   //         description       string
+  //         id                string (ID to reliably address a specific event
+  //                                   in the configuration UI)
   //         name              string (event name, may contain \n for line breaks)
   //         yearFrom          number
   //         yearTo            number
@@ -174,10 +192,21 @@ const make = {
   },
 
   // create SVG
-  svg () {
+  //   config = object
+  //     standalone = boolean (create standalone image)
+  svg (config) {
     // prepare attributes
     const lemmas = Object.keys(this.data.lemmas);
-    const id = lemmas.join(" ").replace(/ /g, "_").toLowerCase();
+    let id;
+    if (this.data.lemmaList) {
+      id = this.data.lemmas.lemmas.meanings.flatMap(i => i.definition);
+    } else {
+      id = lemmas;
+    }
+    id = id
+      .join(" ")
+      .replace(/ /g, "_")
+      .toLowerCase();
     const svgAttr = {
       "aria-labelledby": "bedvis-title-" + id,
       width: shared.dimensions.width,
@@ -188,6 +217,9 @@ const make = {
     };
     if (this.data.description) {
       svgAttr["aria-describedby"] = "bedvis-desc-" + id;
+    }
+    if (this.data.lemmaList) {
+      svgAttr.class = "bedvis lemma-list";
     }
 
     // create SVG
@@ -213,17 +245,17 @@ const make = {
 
     // add meaning groups
     const timespan = shared.calculateTimespan();
-    const top = this.meanings(svg, timespan);
+    const top = this.meanings(svg, timespan, config);
 
     // add timeline
-    const minYear = this.timeline(svg, timespan, top);
+    const timelineData = this.timeline(svg, timespan, top);
 
     // add events to the timeline
     const eventLines = this.events({
       svg,
       timespan,
       top,
-      minYear,
+      timelineData,
     });
 
     // adjust SVG height
@@ -267,10 +299,23 @@ const make = {
   // add meanings
   //   svg = document
   //   timespan = object
-  meanings (svg, timespan) {
+  //   config = object
+  meanings (svg, timespan, config) {
+    // detect articles lemmas
+    const ll = this.data.lemmaList;
+    const artLemmas = {};
+    if (ll) {
+      document.querySelector(".wgd-kopf-hl")?.textContent?.split(/\s·\s/)?.forEach(i => {
+        artLemmas[i] = "";
+      });
+      document.querySelectorAll(".wgd-kopf-nl a").forEach(i => {
+        artLemmas[i.textContent] = i.getAttribute("href");
+      });
+    }
+
+    // add meaning blocks
     const lemmas = Object.keys(this.data.lemmas).length;
     let top = 0;
-
     for (const [ lemma, data ] of Object.entries(this.data.lemmas)) {
       // print lemma
       if (lemmas > 1) {
@@ -294,7 +339,7 @@ const make = {
         // meaning not found
         const m = data.meanings[i];
         const meaning = document.getElementById(m.id);
-        if (!meaning) {
+        if (!meaning && !ll) {
           continue;
         }
 
@@ -313,6 +358,11 @@ const make = {
         }
         if (!quots.length) {
           continue;
+        }
+
+        // increase space between meaning lines for standalone graphics
+        if (i && config.standalone) {
+          top += 15;
         }
 
         // draw meaning group
@@ -347,18 +397,44 @@ const make = {
           "dominant-baseline": "hanging",
           class: "definition",
         });
-        const defText = m.definition || meaning.querySelector("q").textContent;
-        def.textContent = `›${defText}‹`;
-        const defNumber = meaning.querySelector(".wgd-zaehlz")?.textContent;
-        if (data.showNumbering && defNumber) {
-          const numbering = shared.createElement("tspan", {
-            "dominant-baseline": "hanging",
-          });
-          numbering.textContent = defNumber + "\u00A0".repeat(2);
-          def.insertBefore(numbering, def.firstChild);
+        const defText = m.definition || meaning?.querySelector("q")?.textContent || "[keine Angabe]";
+        if (ll) {
+          // lemma list
+          def.textContent = defText;
+        } else {
+          // meaning list
+          def.textContent = `›${defText}‹`;
+          let defNumber = meaning.querySelector(".wgd-zaehlz")?.textContent;
+          let defParent = meaning.parentNode.parentNode;
+          while (defParent.nodeName === "LI") {
+            const zaehlz = defParent.querySelector(".wgd-zaehlz")?.textContent;
+            if (zaehlz) {
+              defNumber = zaehlz + defNumber;
+            }
+            defParent = defParent.parentNode.parentNode;
+          }
+          if (data.showNumbering && defNumber) {
+            const numbering = shared.createElement("tspan", {
+              "dominant-baseline": "hanging",
+            });
+            numbering.textContent = defNumber + "\u00A0".repeat(2);
+            def.insertBefore(numbering, def.firstChild);
+          }
         }
-        const defTarget = meaning.querySelector("a")?.getAttribute("href") || "";
-        if (defTarget && /^#/.test(defTarget)) {
+        let defTarget;
+        if (ll) {
+          // lemma list
+          const lemma = m.definition;
+          if (typeof artLemmas[lemma] !== "undefined") {
+            defTarget = artLemmas[lemma];
+          } else {
+            defTarget = `${window.location.origin}/wb/wortgeschichten/${encodeURIComponent(lemma)}`;
+          }
+        } else {
+          // meaning list
+          defTarget = meaning.querySelector("a")?.getAttribute("href") || "";
+        }
+        if (defTarget && /^(#|http)/.test(defTarget)) {
           const a = shared.createElement("a", {
             href: defTarget,
             tabindex: -1,
@@ -394,25 +470,38 @@ const make = {
             usedFrom = lineStart - 30;
           }
           const x1 = usedFrom > 0 ? usedFrom : 0;
+          const hasRealQuots = quots.some(i => typeof i.id === "string");
           for (let i = 1; i <= 2; i++) {
             const cl = i === 1 ? "extension-norm" : "extension-hover";
-            const gradId = shared.createGradient({
-              svg,
-              x1,
-              x2: x1 + 25,
-              fadeIn: true,
-              cl,
-            });
-            const extension = shared.createElement("line", {
-              x1,
-              y1: lineY,
-              x2: lineStart,
-              y2: lineY,
-              stroke: `url(#${gradId})`,
-              "stroke-dasharray": dasharray,
-              "stroke-width": lineWidth,
-              class: cl,
-            });
+            let extension;
+            if (!hasRealQuots && !ll) {
+              extension = shared.createElement("line", {
+                x1,
+                y1: lineY,
+                x2: lineStart,
+                y2: lineY,
+                "stroke-width": lineWidth,
+                class: "extension " + cl,
+              });
+            } else {
+              const gradId = shared.createGradient({
+                svg,
+                x1,
+                x2: x1 + 25,
+                fadeIn: true,
+                cl,
+              });
+              extension = shared.createElement("line", {
+                x1,
+                y1: lineY,
+                x2: lineStart,
+                y2: lineY,
+                stroke: `url(#${gradId})`,
+                "stroke-dasharray": dasharray,
+                "stroke-width": lineWidth,
+                class: cl,
+              });
+            }
             g.appendChild(extension);
           }
         }
@@ -555,11 +644,21 @@ const make = {
     }));
 
     // print years
-    const minYear = timespan.first - Math.round(35 / timespan.pxYear);
+    const yearsLeft = Math.floor(50 / timespan.pxYear);
+    const minYear = timespan.first - yearsLeft;
+    const minYearX = 50 - yearsLeft * timespan.pxYear;
     let year;
     let step;
-    if (timespan.last - timespan.first < 200) {
-      // lustra
+    if (timespan.last - timespan.first < 30) {
+      // steps: five years
+      year = parseInt(minYear.toString().replace(/[0-9]$/, "0"), 10) - 5;
+      step = 5;
+    } else if (timespan.last - timespan.first < 100) {
+      // steps: ten years
+      year = parseInt(minYear.toString().replace(/[0-9]$/, "0"), 10) - 10;
+      step = 10;
+    } else if (timespan.last - timespan.first < 300) {
+      // steps: fifty years
       year = parseInt(minYear.toString().substring(0, 2), 10) * 100;
       if (parseInt(minYear.toString().substring(2), 10) <= 50) {
         year += 50;
@@ -568,13 +667,18 @@ const make = {
       }
       step = 50;
     } else {
-      // centuries
+      // steps: one hundred years
       year = parseInt(minYear.toString().substring(0, 2), 10) * 100 + 100;
       step = 100;
     }
     do {
+      const x = minYearX + Math.round((year - minYear) * timespan.pxYear);
+      if (x < 15) {
+        year += step;
+        continue;
+      }
       const text = shared.createElement("text", {
-        x: 15 + Math.round((year - minYear) * timespan.pxYear),
+        x,
         y: top + 6,
         "dominant-baseline": "hanging",
         "text-anchor": "middle",
@@ -585,15 +689,19 @@ const make = {
       year += step;
     } while (year < timespan.last);
 
-    return minYear;
+    return {
+      minYear,
+      minYearX,
+    };
   },
 
   // add events to the timeline
   //   svg = document
   //   timespan = object
   //   top = number
-  //   minYear = number
-  events ({ svg, timespan, top, minYear }) {
+  //   timelineData = object
+  events ({ svg, timespan, top, timelineData }) {
+    const { minYear, minYearX } = timelineData;
     let eventLines = 0;
 
     for (const data of Object.values(this.data.lemmas)) {
@@ -610,7 +718,7 @@ const make = {
         shared.pointerEvent(g);
 
         // marker
-        const x = 15 + Math.round((e.yearFrom + Math.floor((e.yearTo - e.yearFrom) / 2) - minYear) * timespan.pxYear);
+        const x = minYearX + Math.round((e.yearFrom + Math.floor((e.yearTo - e.yearFrom) / 2) - minYear) * timespan.pxYear);
         if (e.yearTo === e.yearFrom) {
           g.appendChild(shared.createElement("rect", {
             x: x - 5,
@@ -620,8 +728,8 @@ const make = {
             transform: `rotate(45, ${x}, ${top})`,
           }));
         } else {
-          let spanStart = 15 + Math.round((e.yearFrom - minYear) * timespan.pxYear);
-          let spanEnd = 15 + Math.round((e.yearTo - minYear) * timespan.pxYear);
+          let spanStart = minYearX + Math.round((e.yearFrom - minYear) * timespan.pxYear);
+          let spanEnd = minYearX + Math.round((e.yearTo - minYear) * timespan.pxYear);
           while (spanEnd - spanStart < 10) {
             spanStart--;
             spanEnd++;
@@ -681,10 +789,10 @@ const make = {
 };
 
 export default {
-  makeSVG (data) {
+  makeSVG (data, config = {}) {
     make.data = data;
     make.validateData();
-    const svg = make.svg() || null;
+    const svg = make.svg(config) || null;
     return svg;
   },
 };
