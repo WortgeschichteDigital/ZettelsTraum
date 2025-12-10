@@ -241,6 +241,10 @@ if (cliCommandFound || !locked) {
 
 // Sicherheit: WebContents, die eine Anfrage stellen, müssen zwingend eine lokale Datei geladen haben
 function validSender (evt) {
+  const validIds = Object.values(dd.win).flatMap(i => i.contentsId);
+  if (!validIds.includes(evt.sender.id)) {
+    return false;
+  }
   try {
     const validURL = new URL(evt.senderFrame.url);
     if (validURL.protocol !== "file:") {
