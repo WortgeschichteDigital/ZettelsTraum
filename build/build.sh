@@ -246,97 +246,8 @@ makeChangelog() {
     return
   fi
 
-  # alle Tags ermitteln
-  tags=($(git tag --sort=-creatordate))
-
-  # Variable für den Changelog
-  output=""
-
-  # für jeden Tag einen Release-Block erzeugen
-  for (( i=0; i<${#tags[@]}; i++ )); do
-    # Version, Name, Mail, Datum, Release-Typ ermitteln
-    clVersion=${tags[$i]}
-    clName=""
-    clMail=""
-    clDate=""
-    clRelease="" # wird als Fallback genutzt, wenn keine Liste mit wichtigen Commits vorhanden ist
-    while read z; do
-      if test -z "$z"; then
-        continue
-      elif echo "$z" | egrep -q "^Tagger:"; then
-        clName=$(echo "$z" | sed -r 's/.+?:\s+(.+?)\s<.+/\1/')
-        if [ ${adressen[$clName]+isset} ]; then
-          clMail=${adressen[$clName]/ /@}
-          clMail=${clMail/ /.}
-        else
-          clMail="no-reply@address.com"
-        fi
-      elif echo "$z" | egrep -q "^Date:"; then
-        datum=($(echo "$z" | sed -r 's/.+?:\s+(.+)/\1/'))
-        if [ "$1" = "deb" ]; then
-          clDate="${datum[0]}, ${datum[2]} ${datum[1]} ${datum[4]} ${datum[3]} ${datum[5]}"
-        elif [ "$1" = "rpm" ]; then
-          clDate="${datum[0]} ${datum[1]} ${datum[2]} ${datum[4]}"
-        fi
-      else
-        clRelease=$(echo "$z" | sed -r 's/\sv[0-9]+\.[0-9]+\.[0-9]+//')
-      fi
-    done < <(git show "${tags[$i]}" | head -n 5 | tail -n 4)
-
-    # Commits ermitteln
-    clCommits=() # das Array muss nach jedem Durchlauf geleert werden
-    declare -A clCommits
-    next=$[i + 1]
-    j=0
-    while read z; do
-      IFS=" " read -r sha1 message <<< "$z"
-      clCommits[$j]="$message"
-      (( j++ ))
-    done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --oneline ${tags[$next]}..${tags[$i]})
-
-    # Changelog-Block bauen
-    commitTypen=(Removal Feature Change Update Fix)
-    if [ "$1" = "deb" ]; then
-      output+="zettelstraum (${clVersion}) whatever; urgency=medium\n"
-      output+="\n"
-      if (( ${#clCommits[@]} > 0 )); then
-        for typ in ${!commitTypen[@]}; do
-          for commit in ${!clCommits[@]}; do
-            message=${clCommits[$commit]}
-            if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
-              output+="  * $message\n"
-            fi
-          done
-        done
-      else
-        output+="  * ${clRelease}\n"
-      fi
-      output+="\n"
-      output+=" -- ${clName} <${clMail}> ${clDate}\n"
-      if (( i < ${#tags[@]} - 1 )); then
-        output+="\n"
-      fi
-    elif [ "$1" = "rpm" ]; then
-      output+="* ${clDate} ${clName} <${clMail}> - ${clVersion}\n"
-      if (( ${#clCommits[@]} > 0 )); then
-        for typ in ${!commitTypen[@]}; do
-          for commit in ${!clCommits[@]}; do
-            message=${clCommits[$commit]}
-            if echo "$message" | egrep -q "^${commitTypen[$typ]}"; then
-              output+="- $message\n"
-            fi
-          done
-        done
-      else
-        output+="- ${clRelease}\n"
-      fi
-      if (( i < ${#tags[@]} - 1 )); then
-        output+="\n"
-      fi
-    fi
-  done
-
-  echo "$output"
+  # Changelog erzeugen
+  node build-changelog.mjs $1
 }
 
 makeArchive() {
@@ -410,7 +321,7 @@ execJob() {
   if echo "$pkg" | egrep -q "^(deb|rpm)$" ; then
     echo -e "  \033[1;32m*\033[0m Changelog erstellen"
     cd "$dir"
-    echo -en "$(makeChangelog $pkg)" > "${build}/changelog"
+    makeChangelog $pkg > "${build}/changelog"
   fi
 
   # Installer
@@ -530,8 +441,8 @@ presetsExec() {
 # Starter
 while : ; do
   # Auswahl treffen
-  read -ep "Ausführen (job/release/preset/sha/config/modules/prepare/exit): " action
-  if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|prepare|exit)$"; then
+  read -ep "Ausführen (job/release/preset/sha/config/modules/exit): " action
+  if ! echo "$action" | egrep -q "^(job|release|preset|sha|config|modules|exit)$"; then
     zeilenWeg 1
     continue
   fi
@@ -565,11 +476,6 @@ while : ; do
   elif [ "$action" = "modules" ]; then
     echo -e "\n"
     bash "${dir}/build-modules.sh" inc
-    echo -e "\n"
-  # neue ZT-Version vorbereiten
-  elif [ "$action" = "prepare" ]; then
-    echo -e "\n"
-    bash "${dir}/build-prepare.sh" inc
     echo -e "\n"
   # Script verlassen
   elif [ "$action" = "exit" ]; then

@@ -73,7 +73,6 @@ appVersion() {
 }
 
 # HTML-Update
-#   $1 = Versionsnummer
 updateHtml() {
   # Copyright-Jahr in "Über App" updaten
   local htmlUeber="${dir}/../win/ueberApp.html"
@@ -86,79 +85,14 @@ updateHtml() {
     echo -e "  \033[1;32m*\033[0m Copyright-Jahr auffrischen"
     sed -i "s/copyright-jahr\">.*<\/span>/copyright-jahr\">${copyrightJahr}<\/span>/" "$htmlUeber"
   fi
-
-  # Changelog auffrischen
-  echo -e "  \033[1;32m*\033[0m Changelog auffrischen"
-
-  local htmlChangelog="${dir}/../win/changelog.html"
-
-  local zeileKommentar="<!-- Start Versionsblock ${1} -->"
-  sed -i "0,/<!-- Start Versionsblock .* -->/s/<!-- Start Versionsblock .* -->/${zeileKommentar}/" "$htmlChangelog"
-
-  local zeileVersion="<div class=\"version\">${1}<\/div>"
-  sed -i "0,/<div class=\"version\">.*<\/div>/s/<div class=\"version\">.*<\/div>/${zeileVersion}/" "$htmlChangelog"
-
-  local monate=(
-    "Januar"
-    "Februar"
-    "März"
-    "April"
-    "Mai"
-    "Juni"
-    "Juli"
-    "August"
-    "September"
-    "Oktober"
-    "November"
-    "Dezember"
-  )
-  local tag=$(date +%-d)
-  local monat=$(date +%-m)
-  monat=${monate[$[$monat - 1]]}
-  local heute=$(date +%Y-%m-%d)
-  local zeileH2="<h2><span>Version ${1}<\/span><time datetime=\"${heute}\">${tag}. ${monat} $(date +%Y)<\/time><\/h2>"
-  sed -i "0,/<h2>.*<\/h2>/s/<h2>.*<\/h2>/${zeileH2}/" "$htmlChangelog"
 }
 
 # Release-Notes erstellen
 #   $1 = Versionsnummer
 makeReleaseNotes() {
-  local output="# Release Notes v$1\n"
-
-  # Commits zusammentragen
-  declare -A clCommits
-  j=0
-  while read z; do
-    clCommits[$j]="$z"
-    (( j++ ))
-  done < <(git log -E --grep="^(Removal|Feature|Change|Update|Fix): " --format="%s" $(git describe --abbrev=0)..HEAD)
-
-  # Commits sortieren
-  declare -A clH
-  clH[Removal]="Entfernte Funktionen"
-  clH[Feature]="Neue Funktionen"
-  clH[Change]="Verbesserungen"
-  clH[Update]="Updates"
-  clH[Fix]="Behobene Fehler"
-  local commitTypen=(Removal Feature Change Update Fix)
-  for typ in ${!commitTypen[@]}; do
-    local neuerTyp=1
-    for commit in ${!clCommits[@]}; do
-      local message=${clCommits[$commit]}
-      local aktuellerTyp=${commitTypen[$typ]}
-      if echo "$message" | egrep -q "^${aktuellerTyp}"; then
-        if (( neuerTyp > 0 )); then
-          neuerTyp=0;
-          output+="\n## ${clH[${commitTypen[$typ]}]}\n\n"
-        fi
-        message=$(echo "$message" | sed -r 's/^.+?:\s//')
-        output+="* $message\n"
-      fi
-    done
-  done
-
-  # Release Note schreiben
-  echo -en "$output" > "../releases/v${1}.md"
+  cd "./build"
+  node build-notes.mjs $1 > "../../releases/v${1}.md"
+  cd ".."
 }
 
 # Release vorbereiten
@@ -190,7 +124,7 @@ vorbereiten() {
   # HTML-Update
   read -p "  Nächste Aufgabe \"HTML-Update\" (Enter) . . ."
   echo ""
-  updateHtml $version
+  updateHtml
   echo ""
 
   # Release-Commit erstellen
@@ -198,7 +132,7 @@ vorbereiten() {
   echo -e "\n  \033[1;32m*\033[0m Release-Commit erstellen\n"
   git status
   echo ""
-  git commit -am "Release vorbereitet"
+  git commit -am "release prepared"
   echo ""
   git status
   echo ""
@@ -213,9 +147,8 @@ vorbereiten() {
   read -p "  Nächste Aufgabe \"Release taggen\" (Enter) . . ."
   echo -e "\n  \033[1;32m*\033[0m Release taggen\n"
   typen[1]="Feature-Release v${version}"
-  typen[2]="Release v${version}, Fixes"
-  typen[3]="Release v${version}, Electron-Update"
-  typen[4]="Release v${version}, Electron-Update und Fixes"
+  typen[2]="Maintenance-Release v${version}"
+  typen[3]="Bug-Fix-Release v${version}"
   for j in ${!typen[@]}; do
     echo " [${j}] ${typen[$j]}"
   done
