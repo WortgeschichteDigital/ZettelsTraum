@@ -328,6 +328,14 @@ const helfer = {
   //   format = String | undefined
   //     (steuert die verschiedenen Formatierungstypen)
   datumFormat (datum, format = "") {
+    // Korrektur für den Fall, dass das Jahr größer 9999 ist
+    // (Der Validierungsmechanismus für das Aufrufdatum der URL hat
+    //  in der Karteikarte nicht funktioniert wie gedacht, sodass
+    //  Daten mit mehr als vierstelligen Jahreszahlen in den Code
+    //  wandern konnten.)
+    if (/^[0-9]{5,}-/.test(datum)) {
+      datum = datum.replace(/^[0-9]+/, m => m.substring(0, 4));
+    }
     // Minuten und Sekunden formatieren
     const d = new Date(datum);
     let m = d.getMinutes().toString();

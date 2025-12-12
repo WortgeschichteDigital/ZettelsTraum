@@ -1025,7 +1025,7 @@ const beleg = {
     }
     // Check: Aufrufdatum valide?
     const ud = document.getElementById("beleg-ud");
-    if (document.querySelector("#beleg-ud:invalid")) {
+    if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(ud.value)) {
       beleg.data.ud = "";
       ud.value = "";
     }

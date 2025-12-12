@@ -379,7 +379,9 @@ const xml = {
     }
 
     // <Aufrufdatum>
-    if (data.ud) {
+    // (Das Aufrufdatum konnte eine fünf- oder mehrstellige Jahreszahl haben,
+    //  weswegen es in diesen Fällen nicht ausgewertet werden darf)
+    if (data.ud && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data.ud)) {
       // <Aufrufdatum>
       // (Datum auch taggen, wenn keine URL da ist;
       // dann steht das Datum für den Tag, an dem z.B. der DWDS-Beleg importiert wurde)
