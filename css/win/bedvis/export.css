@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+#export > div {
+  margin-top: 40px;
+  max-width: max-content;
+}
+
+.icon-h-export {
+  mask-image: url(../../../img/dokument-export.svg);
+}
+
+#export-cont {
+  padding: 10px;
+
+  h3 {
+    margin: 0;
+    text-align: center;
+  }
+
+  p {
+    display: flex;
+    justify-content: center;
+  }
+
+  a {
+    flex: 0 0 96px;
+    margin: 10px;
+    border: 1px solid var(--linie);
+    border-radius: 6px;
+    padding: 6px;
+    background-color: var(--hintergrund);
+    color: var(--text);
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 28px;
+    text-align: center;
+    text-decoration: none;
+
+    &:is(:hover, :focus) {
+      outline: 2px solid var(--farbe);
+      outline-offset: 0;
+    }
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+@font-face {
+  font-display: block;
+  font-family: "PT Sans";
+  src: url(../../../fonts/PTSans-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Sans";
+  font-style: italic;
+  src: url(../../../fonts/PTSans-Italic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Sans";
+  font-weight: bold;
+  src: url(../../../fonts/PTSans-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Sans";
+  font-style: italic;
+  font-weight: bold;
+  src: url(../../../fonts/PTSans-BoldItalic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Serif";
+  src: url(../../../fonts/PTSerif-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Serif";
+  font-style: italic;
+  src: url(../../../fonts/PTSerif-Italic.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Serif";
+  font-weight: bold;
+  src: url(../../../fonts/PTSerif-Bold.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: block;
+  font-family: "PT Serif";
+  font-style: italic;
+  font-weight: bold;
+  src: url(../../../fonts/PTSerif-BoldItalic.woff2) format("woff2");
+}

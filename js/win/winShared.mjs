@@ -1,5 +1,6 @@
 
 import bedeutungen from "./bedeutungen.mjs";
+import bedvisData from "./bedvis/data.mjs";
 import helfer from "./helfer.mjs";
 import hilfe from "./hilfe.mjs";
 import popup from "./popup.mjs";
@@ -33,6 +34,15 @@ const winShared = {
     bridge.ipc.listen("daten", daten => {
       bedeutungen.data = daten;
       bedeutungen.aufbauen();
+    });
+
+    // Bedvis-Fenster
+    bridge.ipc.listen("bedvis-cardbox-update", () => bedvisData.mod.load.vis(true));
+    bridge.ipc.listen("bedvis-data-get", data => bedvisData.update(data));
+    bridge.ipc.listen("bedvis-export", type => bedvisData.mod.io.exportDo(type));
+    bridge.ipc.listen("bedvis-xml-data-get", xml => {
+      const target = bedvisData.xmlTarget || bedvisData.vis.xml;
+      target.file = xml;
     });
 
     // XML-Redaktionsfenster: alle XML-Daten empfangen

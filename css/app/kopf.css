@@ -101,6 +101,10 @@
   mask-image: url(../../img/fenster.svg);
 }
 
+#quick-kartei-bedvis {
+  mask-image: url(../../img/bild.svg);
+}
+
 #quick-kartei-suche {
   mask-image: url(../../img/lupe.svg);
 }

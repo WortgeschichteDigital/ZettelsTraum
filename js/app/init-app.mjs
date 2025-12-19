@@ -6,12 +6,12 @@ import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenGeruest from "./bedeutungenGeruest.mjs";
 import bedeutungenGerueste from "./bedeutungenGerueste.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import belegeBuchung from "./belegeBuchung.mjs";
 import belegeTaggen from "./belegeTaggen.mjs";
 import belegKlammern from "./belegKlammern.mjs";
 import cli from "./cli.mjs";
-import dropdown2 from "./dropdown2.mjs";
 import drucken from "./drucken.mjs";
 import erinnerungen from "./erinnerungen.mjs";
 import filter from "./filter.mjs";
@@ -49,6 +49,7 @@ import zuletzt from "./zuletzt.mjs";
 import dd from "../dd.mjs";
 import dialog from "../dialog.mjs";
 import dropdown from "../dropdown.mjs";
+import dropdown2 from "../dropdown2.mjs";
 import overlay from "../overlay.mjs";
 import shared from "../shared.mjs";
 import sharedTastatur from "../sharedTastatur.mjs";
@@ -93,6 +94,7 @@ window.addEventListener("load", async () => {
   bridge.ipc.listen("kartei-bedeutungen", () => bedeutungen.oeffnen());
   bridge.ipc.listen("kartei-bedeutungen-wechseln", () => bedeutungenGeruest.oeffnen());
   bridge.ipc.listen("kartei-bedeutungen-fenster", () => bedeutungenWin.oeffnen());
+  bridge.ipc.listen("kartei-bedvis", () => bedvis.open());
   bridge.ipc.listen("kartei-suche", () => filter.suche());
   bridge.ipc.listen("redaktion-ereignisse", () => redaktion.oeffnen());
   bridge.ipc.listen("redaktion-literatur", () => redLit.oeffnen());
@@ -165,6 +167,14 @@ window.addEventListener("load", async () => {
     beleg.bedeutungenWin(data.bd, data.eintragen);
     bridge.ipc.invoke("fenster-fokus");
   });
+
+  // Bedvis-Fenster
+  bridge.ipc.listen("bedvis-closed", () => {
+    bedvis.visContentsId = 0;
+  });
+  bridge.ipc.listen("bedvis-data-get", data => bedvis.updateData(data));
+  bridge.ipc.listen("bedvis-data-send", () => bedvis.sendData());
+  bridge.ipc.listen("bedvis-xml-data-send", () => bedvis.sendXmlData());
 
   // XML-Fenster
   bridge.ipc.listen("red-xml-daten", () => redXml.daten());
@@ -366,7 +376,7 @@ window.addEventListener("load", async () => {
   document.querySelectorAll('input[type="number"]').forEach(i => {
     i.addEventListener("change", function () {
       const val = this.value;
-      helfer.inputNumber(this);
+      shared.inputNumber(this);
       if (this.value !== val) {
         this.dispatchEvent(new Event("input"));
       }

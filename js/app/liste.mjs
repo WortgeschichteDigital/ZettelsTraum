@@ -3,6 +3,7 @@ import anhaenge from "./anhaenge.mjs";
 import annotieren from "./annotieren.mjs";
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenGeruest from "./bedeutungenGeruest.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import belegKlammern from "./belegKlammern.mjs";
 import filter from "./filter.mjs";
@@ -2155,6 +2156,8 @@ const liste = {
       filter.aufbauen(belege);
       // Kartei geändert
       kartei.karteiGeaendert(true);
+      // Änderungshinweis an das BedVis-Fenster schicken
+      bedvis.cardboxUpdate();
     });
   },
 

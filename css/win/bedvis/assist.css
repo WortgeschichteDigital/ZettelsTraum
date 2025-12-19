@@ -1,0 +1,315 @@
+@charset "UTF-8";
+
+#assist > div {
+  margin-top: 40px;
+  max-width: 600px;
+}
+
+.icon-h-assist {
+  mask-image: url(../../../img/person.svg);
+}
+
+#assist-nav {
+  position: relative;
+  padding: 10px;
+
+  span {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 24px;
+  }
+
+  .disabled {
+    color: var(--textHell);
+    pointer-events: none;
+
+    img {
+      opacity: .5;
+    }
+  }
+
+  #assist-nav-forwards {
+    padding: 0 0 0 4px;
+
+    img {
+      margin: 0 0 0 2px;
+    }
+  }
+}
+
+#assist-wrap {
+  border-top: 1px solid var(--linie);
+  padding: 10px;
+}
+
+#assist-cont {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  max-height: calc(100vh - 40px - 28px - 45px - 2 * 20px);
+
+  > div {
+    flex: 0 0 100%;
+  }
+
+  h3 {
+    margin: 0 0 15px;
+    color: var(--text);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 28px;
+    text-align: center;
+  }
+
+  div.choose-list {
+    margin: 0 auto 8px;
+    width: max-content;
+  }
+
+  .choose {
+    display: block;
+    margin: 8px 0 0;
+    padding: 0 8px;
+    white-space: nowrap;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &::before {
+      content: "";
+      position: relative;
+      top: 6px;
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 8px;
+      border-radius: 6px;
+      width: 12px;
+      height: 12px;
+      background-color: rgb(0 0 0 / 10%);
+    }
+
+    &.chosen::before {
+      background-color: var(--grenzeGruen);
+    }
+  }
+
+  .make-result {
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  .help-img {
+    margin: 10px;
+    border: 2px solid var(--linie);
+    border-radius: 10px;
+    padding: 10px;
+    width: calc(100% - 44px);
+    height: calc(100% - 44px - 33px);
+    max-height: calc(100vh - 250px);
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  #make-hints {
+    interpolate-size: allow-keywords;
+    counter-reset: item;
+    margin: 25px 0 0;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+      margin-bottom: 5px;
+      overflow-y: clip;
+      height: 28px;
+      transition: height .3s ease-out;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.open {
+        height: auto;
+      }
+
+      img {
+        display: block;
+        margin: 5px 0 0 32px;
+        border: 2px solid var(--linie);
+        border-radius: 4px;
+        padding: 4px;
+      }
+    }
+
+    a {
+      display: block;
+      border-radius: 4px;
+      padding: 2px 8px;
+      color: var(--text);
+      text-decoration: none;
+
+      &::before {
+        counter-increment: item;
+        content: counter(item) ".";
+        display: inline-block;
+        width: 24px;
+      }
+    }
+
+    li:hover a {
+      background-color: var(--hover);
+    }
+  }
+
+  #make-lemma-list {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    column-gap: 10px;
+    margin: 25px 24px 0;
+
+    p {
+      margin: 0;
+      color: var(--textSehrHell);
+      font-style: italic;
+      line-height: 28px;
+    }
+  }
+
+  #make-lemma-list-add {
+    position: relative;
+    top: 2px;
+    display: block;
+    width: 24px;
+    height: 24px;
+
+    &:is(:hover, :focus) {
+      outline: 2px solid var(--farbe);
+      outline-offset: 0;
+    }
+
+    img {
+      vertical-align: top;
+    }
+  }
+
+  .make-lemma-list-item {
+    display: block;
+    border-radius: 4px;
+    padding: 2px;
+    color: var(--text);
+    text-decoration: none;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 2px;
+      width: 24px;
+      height: 24px;
+    }
+
+    &:hover::before {
+      background-image: url(../../../img/muelleimer.svg);
+      background-position: top left;
+      background-repeat: no-repeat;
+      background-size: 24px 24px;
+    }
+
+    &:is(:hover, :focus) {
+      background-color: var(--hover);
+    }
+  }
+
+  .meaning-list-link {
+    outline: none;
+    color: var(--textFarbe);
+    text-decoration: none;
+
+    &:is(:hover, :focus) {
+      text-decoration: underline;
+    }
+  }
+
+  #make-choose-lemmas {
+    margin: 25px auto 0;
+    width: min-content;
+
+    p {
+      margin: 0 24px;
+      width: max-content;
+    }
+  }
+
+  #make-choose-lists {
+    margin-top: 25px;
+
+    p {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    table {
+      margin: 0 auto;
+    }
+
+    input {
+      width: 120px;
+    }
+
+    img {
+      vertical-align: top;
+    }
+  }
+
+  #make-choose-meanings {
+    margin-top: 25px;
+
+    table {
+      margin: 0 auto;
+    }
+
+    td:last-child {
+      padding-left: 10px;
+    }
+  }
+
+  #make-summary {
+    margin-top: 25px;
+
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    th {
+      padding: 5px;
+      font-style: italic;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    td {
+      padding: 5px;
+    }
+
+    .border :is(th, td) {
+      border-bottom: 1px solid var(--linie);
+    }
+
+    tr:not(.border) :is(th, td) {
+      padding-bottom: 0;
+    }
+
+    .indent {
+      padding-left: 29px;
+      white-space: nowrap;
+    }
+  }
+}

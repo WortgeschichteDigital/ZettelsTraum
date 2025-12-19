@@ -30,6 +30,15 @@ const popup = {
       items = [ "kopierenCode" ];
     } else if (target === "textfeld") {
       items = [ "bearbeitenRueckgaengig", "bearbeitenWiederherstellen", "sep", "bearbeitenAusschneiden", "bearbeitenKopieren", "bearbeitenEinfuegen", "bearbeitenAlles" ];
+    } else if (target === "bedvis-export") {
+      items.push({
+        name: "bedvisCopy",
+        sub: [ "bedvisExportXml", "bedvisExportJSON" ],
+      });
+      items.push({
+        name: "bedvisSave",
+        sub: [ "bedvisExportSvg", "bedvisExportModule" ],
+      });
     } else if (target === "link") {
       items = [ "link" ];
     } else if (target === "mail") {
@@ -52,7 +61,8 @@ const popup = {
     // alle Elemente im Pfad durchgehen
     for (let i = 0, len = pfad.length; i < len; i++) {
       // Abbruch, wenn <body> erreicht wurde
-      if (pfad[i].nodeName === "BODY") {
+      if (pfad[i].nodeName === "BODY" ||
+          pfad[i].nodeName === "HTML") {
         return "";
       }
       // Textfeld
@@ -72,6 +82,11 @@ const popup = {
           pfad[i].nodeName === "PRE") {
         popup.element = pfad[i];
         return "kopieren-code";
+      }
+      // Bedeutungsvisualisierung
+      if (pfad[i].nodeName === "P" &&
+          pfad[i].classList.contains("bedvis")) {
+        return "bedvis-export";
       }
       // Links
       if (/^http/.test(pfad[i].getAttribute("href"))) {

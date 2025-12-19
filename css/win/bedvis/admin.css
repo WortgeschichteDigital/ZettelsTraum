@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+#admin > div {
+  margin-top: 40px;
+  max-width: 525px;
+}
+
+.icon-h-admin {
+  mask-image: url(../../../img/zahnrad.svg);
+}
+
+#admin-cont {
+  padding: 10px;
+}
+
+#list-admin {
+  margin-bottom: 15px;
+}
+
+#admin-fun {
+  position: relative;
+
+  a:last-child {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+#admin-xml-path {
+  vertical-align: top;
+  display: inline-block;
+  overflow: hidden;
+  border: 1px solid var(--linie);
+  padding: 0 5px;
+  width: calc(100% - 12px - 34px);
+  direction: rtl;
+  font-size: 14px;
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.no-file {
+    color: var(--textHell);
+    direction: ltr;
+  }
+}
+
+#admin-xml-choose {
+  position: relative;
+  top: 1px;
+  margin-left: 10px;
+  padding-right: 0;
+
+  img {
+    margin: 0;
+  }
+}

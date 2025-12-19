@@ -36,7 +36,7 @@ const shared = {
     img.width = "96";
     img.height = "96";
     let cd = "";
-    if (/changelog|fehlerlog|dokumentation|handbuch|xml/.test(dd.win.typ)) {
+    if (/bedvis|changelog|fehlerlog|dokumentation|handbuch|xml/.test(dd.win.typ)) {
       cd = "../";
     }
     if (ziel === "zwischenablage") {
@@ -495,6 +495,13 @@ const shared = {
     }
   },
 
+  // return a random number
+  //   min = number
+  //   max = number
+  rand (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
+
   // Dropdown: Feldtypen
   redWiDropdown: {
     vt: [ "Wortbildung", "Wortverbindung", "Wortfeld", "Wortfeldartikel" ],
@@ -742,6 +749,16 @@ const shared = {
       });
     }
     return text;
+  },
+
+  // überprüft, ob in einem Number-Input eine zulässige Ziffer steht
+  //   i = Element
+  //     (das Number-Feld, das überprüft werden soll)
+  inputNumber (i) {
+    const v = parseInt(i.value, 10);
+    if (isNaN(v) || v < i.min || v > i.max) {
+      i.value = i.defaultValue;
+    }
   },
 
   // mehrzeilige Textfelder automatisch an die Größe des Inhalts anpassen

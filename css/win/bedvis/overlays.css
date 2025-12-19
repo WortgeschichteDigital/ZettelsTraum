@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+.overlay {
+  h2 {
+    margin: 0;
+    padding: 0 0 0 10px;
+    background-color: var(--farbeH);
+    color: #fff;
+    font-size: 14px;
+    line-height: 28px;
+  }
+
+  h2 span:first-child {
+    margin-right: 5px;
+  }
+
+  h3 {
+    margin: 20px 0 10px;
+    color: var(--textFarbe);
+    font-size: 16px;
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  .icon-h {
+    display: inline-block;
+    width: 24px;
+    height: 28px;
+    background-color: #fff;
+    mask-position: center;
+  }
+
+  #dialog-prompt {
+    padding-bottom: 10px;
+  }
+}

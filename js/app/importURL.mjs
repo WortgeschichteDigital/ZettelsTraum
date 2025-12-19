@@ -4,6 +4,7 @@ import importShared from "./importShared.mjs";
 import importTEI from "./importTEI.mjs";
 
 import dialog from "../dialog.mjs";
+import shared from "../shared.mjs";
 
 export { importURL as default };
 
@@ -63,7 +64,7 @@ const importURL = {
     const von = document.getElementById("beleg-import-von");
     const bis = document.getElementById("beleg-import-bis");
     for (const i of [ von, bis ]) {
-      helfer.inputNumber(i);
+      shared.inputNumber(i);
     }
     const pageFrom = parseInt(von.value, 10);
     let pageTo = parseInt(bis.value, 10);

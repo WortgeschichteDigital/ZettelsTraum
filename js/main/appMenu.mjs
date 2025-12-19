@@ -160,6 +160,13 @@ const layoutMenu = [
       },
       { type: "separator" },
       {
+        label: "Visualisierung",
+        icon: path.join(__dirname, "..", "..", "img", "menu", "bild.png"),
+        click: () => appMenu.befehl("kartei-bedvis"),
+        id: "kartei-bedvis",
+      },
+      { type: "separator" },
+      {
         label: "Suche",
         icon: path.join(__dirname, "..", "..", "img", "menu", "lupe.png"),
         click: () => appMenu.befehl("kartei-suche"),
@@ -621,7 +628,7 @@ const appMenu = {
     }
 
     // zu deaktivierende Menüpunkte durchgehen
-    const elemente = [ "kartei-speichern", "kartei-speichern-unter", "kartei-lemmata", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege" ];
+    const elemente = [ "kartei-speichern", "kartei-speichern-unter", "kartei-lemmata", "kartei-formvarianten", "kartei-notizen", "kartei-anhaenge", "kartei-lexika", "kartei-metadaten", "kartei-bedeutungen", "kartei-bedeutungen-wechseln", "kartei-bedeutungen-fenster", "kartei-bedvis", "kartei-suche", "kartei-schliessen", "redaktion-metadaten", "redaktion-ereignisse", "redaktion-wortinformationen", "redaktion-xml", "redaktion-belege-xml", "belege" ];
     for (let j = 0, len = layoutMenu.length; j < len; j++) {
       // sollen vielleicht alle Menüpunkte deaktiviert werden?
       let alle = false;

@@ -1,0 +1,202 @@
+@charset "UTF-8";
+
+input,
+textarea {
+  margin: 0;
+  color: var(--text);
+  font: 16px/24px "Noto Sans", "Noto Sans Symbols2", sans-serif;
+}
+
+input[type="date"],
+input[type="datetime-local"],
+input[type="number"],
+input[type="text"] {
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+}
+
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+input[type="number"]:focus,
+input[type="text"]:focus {
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
+}
+
+input[type="date"],
+input[type="datetime-local"] {
+  height: 24px;
+}
+
+input[type="date"]::-webkit-clear-button,
+input[type="datetime-local"]::-webkit-clear-button {
+  display: none;
+}
+
+input[type="datetime-local"] {
+  width: 190px;
+}
+
+input[type="datetime-local"].lang-en {
+  width: 222px;
+}
+
+input[type="button"] {
+  outline: none;
+  margin: 0 0 0 15px;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 8px 0 33px;
+  background: var(--farbeB) url(../img/check-weiss.svg) no-repeat 4px center;
+  color: #fff;
+}
+
+input[type="button"]:focus {
+  background-color: var(--farbe);
+}
+
+input[type="button"][value="Abbrechen"],
+input[type="button"][value="Schließen"] {
+  background-image: url(../img/x-dick-weiss.svg);
+}
+
+input[type="button"][value^="Datei"] {
+  background-image: url(../img/oeffnen-weiss.svg);
+}
+
+input[type="button"][value="DTA-Import"],
+input[type="button"][value="Importieren"],
+input[type="button"][value^="Personenliste"],
+input[type="button"][value="Tag-Datei laden"] {
+  background-image: url(../img/dokument-import-weiss.svg);
+}
+
+input[type="button"][value="Auto-Ergänzen"],
+input[type="button"][value="Ergänzen"],
+input[type="button"][value="Hinzufügen"] {
+  background-image: url(../img/plus-weiss.svg);
+}
+
+input[type="button"][value="Exportieren"] {
+  background-image: url(../img/dokument-export-weiss.svg);
+}
+
+input[type="button"][value="GitHub"] {
+  background-image: url(../img/github-weiss.svg);
+}
+
+input[type="button"][value="Kopieren"] {
+  background-image: url(../img/kopieren-weiss.svg);
+}
+
+input[type="button"][value="Löschen"] {
+  background-image: url(../img/muelleimer-weiss.svg);
+}
+
+input[type="button"][value="Nein"] {
+  background-image: url(../img/stopp-weiss.svg);
+}
+
+input[type="button"][value="Speichern"] {
+  background-image: url(../img/speichern-weiss.svg);
+}
+
+input[type="button"][value^="Suche"] {
+  background-image: url(../img/lupe-weiss.svg);
+}
+
+input[type="button"]#updatesWin-suchen {
+  background-image: url(../img/pfeil-kreis-weiss.svg);
+}
+
+input[type="button"][value^="Zurücksetzen"] {
+  background-image: url(../img/pfeil-kreis-weiss.svg);
+}
+
+input[type="button"][value^="Zwischenablage"] {
+  background-image: url(../img/einfuegen-weiss.svg);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  position: relative;
+  top: 2px;
+  z-index: 1;
+  box-sizing: content-box;
+  margin: 0 7px 0 0;
+  border: 1px solid var(--linie);
+  padding: 0;
+  width: 13px;
+  height: 13px;
+  appearance: none;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 13px;
+}
+
+input[type="radio"] {
+  border-radius: 6.5px;
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  outline: 1px solid var(--farbe);
+  outline-offset: 0;
+  border-color: var(--farbe);
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  border-color: var(--farbe);
+}
+
+input[type="checkbox"]:checked:focus,
+input[type="radio"]:checked:focus {
+  outline-color: var(--aktiv);
+}
+
+input[type="checkbox"]:checked::before,
+input[type="radio"]:checked::before {
+  position: absolute;
+  display: block;
+  content: "✓";
+  width: 13px;
+  background-color: var(--farbe);
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+input[type="checkbox"]:disabled {
+  background-color: var(--hintergrundDunkel);
+}
+
+input[type="radio"]:checked::before {
+  content: "⬤";
+  border-radius: 6.5px;
+  width: 13px;
+  font-size: 7px;
+  text-align: center;
+}
+
+input:read-only::selection {
+   /* user-select: none funktioniert nicht
+      auf disabled kann ich sie auch nicht stellen, weil dann kein Klick-Event mehr gefeuert wird */
+  background-color: transparent;
+  color: var(--text);
+}
+
+textarea {
+  display: block;
+  margin: 0;
+  border: 1px solid var(--linie);
+  padding: 2px 5px;
+  width: calc(100% - 12px);
+  resize: none;
+}
+
+textarea:focus {
+  outline: 1px solid var(--farbe);
+  border-color: var(--farbe);
+}

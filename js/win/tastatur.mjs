@@ -38,6 +38,10 @@ const tastatur = {
         dropdown.schliessen();
         return;
       }
+      if (document.activeElement.closest(".dropdown2-cont")) {
+        document.activeElement.blur();
+        return;
+      }
       // falls ein Vorschau-Bild angezeigt wird
       if (document.getElementById("bild")) {
         hilfe.bildSchliessen();

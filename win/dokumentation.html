@@ -465,10 +465,15 @@ $ npm install --save-dev electron-builder</pre>
             <li><span class="datei">./css/win/*.css</span>: diese Stylesheets werden nur in den vom Hauptfenster abhängigen Nebenfenstern (also <abbr title="unter anderem">u.&nbsp;a.</abbr> dem <a href="#" class="link-handbuch">Handbuch</a> und diesem Fenster) benötigt</li>
           </ul>
 
+          <!-- External -->
+          <h2 class="datei" id="ordner-external">./external/</h2>
+
+          <p>Der Ordner enthält Module, die außerhalb der App entwickelt werden.</p>
+
           <!-- Fonts -->
           <h2 class="datei" id="ordner-fonts">./fonts/</h2>
 
-          <p>Der Ordner enthält die Schriftarten, die durch die Datei <span class="datei">./css/fonts.css</span> geladen werden.</p>
+          <p>Der Ordner enthält Schriftarten, die durch die Dateien <span class="datei">./css/fonts.css</span> <abbr title="beziehungsweise">bzw.</abbr> <span class="datei">./css/win/bedvis/fonts.css</span> geladen werden.</p>
 
           <!-- Images -->
           <h2 class="datei" id="ordner-img">./img/</h2>
@@ -599,7 +604,7 @@ $ npm install --save-dev electron-builder</pre>
 
           <p>Nach dem Laden einer <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Datei in <i class="app-name"></i> befinden sich die <abbr title="JavaScript Object Notation">JSON</abbr>-Daten im globalen Objekt <code class="quelltext">data</code>. Ihre Werte lassen sich dann in allen Funktionen des Hauptfensters durch einfache Statements wie <code class="quelltext">data.dc</code> lesen oder schreiben.</p>
 
-          <p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version&nbsp;26</span>):</p>
+          <p>Alle Dateien sind gleich aufgebaut (<span class="obacht">Datenformat Version&nbsp;27</span>):</p>
 
           <table class="ztj">
             <tr>
@@ -712,6 +717,69 @@ $ npm install --save-dev electron-builder</pre>
               <td class="datentyp">Array</td>
               <td>eindimensional,<br>mit <span class="datentyp">Strings</span> gefüllt</td>
               <td>BearbeiterInnen, die die Kartei geändert haben;<br><span class="obacht">mit Version&nbsp;13 nach <code class="quelltext">data.rd.be</code> verschoben</span></td>
+            </tr>
+            <tr>
+              <td><p><code class="quelltext">bv</code></p></td>
+              <td class="datentyp">Array</td>
+              <td>eindimensional,<br>mit <span class="datentyp">Objects</span> gefüllt</td>
+              <td>Bedeutungs&shy;visualisierungen;<br><span class="obacht">mit Version&nbsp;27 ergänzt</span></td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td colspan="4"><p>Die <span class="datentyp">Objects</span> in den Slots haben die folgenden Schlüssel und Werte:</p></td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">da</code></p></td>
+              <td class="datentyp">Object</td>
+              <td>&nbsp;</td>
+              <td>Visualisierungsdaten</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">id</code></p></td>
+              <td class="datentyp">String</td>
+              <td><code class="quelltext">/^[0-9a-f]{4}$/</code></td>
+              <td>ID der Visualisierung</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">ll</code></p></td>
+              <td class="datentyp">Boolean</td>
+              <td>&nbsp;</td>
+              <td>Grafik mit Lemmaliste</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">mp</code></p></td>
+              <td class="datentyp">Object</td>
+              <td>&nbsp;</td>
+              <td>Mapping von Lemma und Bedeutungsgerüst</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p>(LEMMA)</p></td>
+              <td class="datentyp">Number</td>
+              <td>&nbsp;</td>
+              <td>Gerüstnummer</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">na</code></p></td>
+              <td class="datentyp">String</td>
+              <td>&nbsp;</td>
+              <td>Name der Visualisierung</td>
+            </tr>
+            <tr class="ztj-ebene1">
+              <td><p><code class="quelltext">qu</code></p></td>
+              <td class="datentyp">Object</td>
+              <td>&nbsp;</td>
+              <td>Quellengrundlage für die Visualisierung</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">pa</code></p></td>
+              <td class="datentyp">String</td>
+              <td>&nbsp;</td>
+              <td>Pfad zur <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei, falls der Quellentyp <code class="quelltext">xml</code> ist</td>
+            </tr>
+            <tr class="ztj-ebene2">
+              <td><p><code class="quelltext">ty</code></p></td>
+              <td class="datentyp">String</td>
+              <td><code class="quelltext">ztj | xml</code></td>
+              <td>Typ der Quelle, wobei <code class="quelltext">ztj</code> für die aktuelle Kartei steht</td>
             </tr>
             <tr>
               <td><code class="quelltext">dc</code></td>

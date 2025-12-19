@@ -10,6 +10,7 @@ const dd = {
   //     typ:         string (Typ des Fensters:
   //       "index"         = Hauptfenster
   //       "bedeutungen"   = Nebenfenster "Bedeutungsgerüst" (eins pro Hauptfenster möglich)
+  //       "bedvis"        = Nebenfenster "Visualisierung" (eins pro Hauptfenster möglich)
   //       "changelog"     = Nebenfenster "Changelog"
   //       "dokumentation" = Nebenfenster "technische Dokumentation"
   //       "handbuch"      = Nebenfenster "Handbuch"

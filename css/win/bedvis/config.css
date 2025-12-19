@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+#config {
+  interpolate-size: allow-keywords;
+
+  label.block {
+    position: relative;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-style: italic;
+
+    img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+      cursor: help;
+    }
+
+    &:hover img {
+      display: block;
+    }
+  }
+
+  h3 {
+    margin: 0 0 10px;
+    color: var(--farbe);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 30px;
+  }
+
+  p {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  textarea {
+    field-sizing: content;
+    width: calc(100% - 13px);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .lemma-cont {
+    margin-top: 30px;
+
+    .meaning-cont:nth-last-child(1 of .meaning-cont),
+    .event-cont:nth-last-child(1 of .event-cont) {
+      border-bottom-width: 1px;
+    }
+  }
+
+  .num-cont {
+    margin-left: 5px;
+
+    input {
+      margin-right: 6px;
+    }
+  }
+
+  .meaning-cont,
+  .event-cont {
+    outline: 1px solid var(--grenzeGruen);
+    outline-offset: -1px;
+    overflow: hidden;
+    border: 1px solid var(--linie);
+    border-bottom-width: 0;
+    padding: 0 5px 10px;
+    height: auto;
+    transition: height .3s ease;
+
+    &.closed {
+      outline: none;
+      height: 20px;
+    }
+
+    p {
+      margin-bottom: 4px;
+    }
+
+    .meaning-header,
+    .event-header {
+      position: relative;
+      overflow: hidden;
+      margin: 0 -5px 5px;
+      padding: 0 5px;
+      height: 30px;
+      background-color: var(--hintergrund);
+      font-size: 14px;
+      line-height: 30px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      .wgd-zaehlz {
+        margin-right: 5px;
+        font-weight: bold;
+      }
+
+      .meaning-del,
+      .event-del {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 30px;
+        padding: 0 5px 0 25px;
+        background-image: linear-gradient(to right, transparent, var(--hintergrund) 20px);
+        opacity: 0;
+
+        img {
+          position: relative;
+          top: 3px;
+          vertical-align: top;
+        }
+      }
+
+      &:hover :is(.meaning-del, .event-del) {
+        opacity: 1;
+      }
+    }
+
+    .config-block input:is([type="text"], [type="number"]),
+    .config-block textarea {
+      display: block;
+      width: calc(100% - 12px);
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .config-block + .config-block {
+      margin-top: 15px;
+    }
+
+    .quot-list {
+      margin-top: 5px;
+
+      a {
+        display: block;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 24px;
+        text-decoration: none;
+
+        &::before {
+          content: "";
+          vertical-align: top;
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          background-image: url(../../../img/kreis-leer.svg);
+          background-position: top left;
+          background-size: 24px 24px;
+          background-repeat: no-repeat;
+        }
+
+        &:is(:hover, :focus) {
+          outline: none;
+          background-color: var(--hover);
+
+          &::before {
+            background-image: url(../../../img/muelleimer.svg);
+          }
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        color: var(--textSehrHell);
+        font-style: italic;
+        text-align: center;
+      }
+    }
+  }
+
+  .event-cont {
+    outline: none;
+  }
+
+  .meaning-cont + .event-cont {
+    margin-top: 15px;
+  }
+}

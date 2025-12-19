@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+#lemmas > div {
+  margin-top: 40px;
+  max-width: max-content;
+}
+
+.icon-h-lemmas {
+  mask-image: url(../../../img/lemmata.svg);
+}
+
+#lemmas-cont {
+  padding: 10px;
+
+  table {
+    margin: 0 auto;
+  }
+
+  td {
+    vertical-align: middle;
+    padding-bottom: 5px;
+    line-height: 30px;
+    white-space: nowrap;
+
+    &:nth-child(2) {
+      padding-left: 10px;
+      padding-right: 10px;
+      text-align: center;
+
+      img {
+        vertical-align: text-top;
+      }
+    }
+
+    .dropdown2-cont {
+      width: 250px;
+    }
+  }
+
+  tr:last-child td {
+    padding-bottom: 0;
+  }
+}

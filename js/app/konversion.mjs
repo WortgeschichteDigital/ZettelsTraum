@@ -707,6 +707,22 @@ const konversionen = {
     // Kartei geändert
     return true;
   },
+
+  // Konversion des Dateiformats zu Version 27
+  zu27 (data) {
+    if (data.ve > 26) {
+      return false;
+    }
+
+    // Datenschlüssel "bv" (Bedeutungsvisualisierung) ergänzen
+    data.bv = [];
+
+    // Versionsnummer hochzählen
+    data.ve++;
+
+    // Kartei geändert
+    return true;
+  },
 };
 
 export default {
@@ -718,7 +734,7 @@ export default {
   //         importShared.fillCard()
   //         importShared.importObject()
   //   2.) Diese Versionsnummer hochzählen!
-  version: 26,
+  version: 27,
 
   // Konversion starten
   //   data = Object

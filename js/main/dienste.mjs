@@ -3,6 +3,7 @@ import {
   BrowserWindow,
   dialog,
 } from "electron";
+import { exec } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -27,6 +28,28 @@ const dienste = {
       svg.push(p);
     }
     return svg;
+  },
+
+  // check if tar is available
+  checkTar () {
+    return new Promise(resolve => {
+      let command;
+      if (process.platform === "win32") {
+        command = "where /q tar";
+      } else {
+        command = "command -v tar";
+      }
+      const opt = {
+        windowsHide: true,
+      };
+      exec(command, opt, err => {
+        if (err) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
   },
 
   // prüft, ob eine Datei existiert

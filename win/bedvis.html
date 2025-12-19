@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+
+    <title>&nbsp;</title>
+
+    <link rel="stylesheet" href="../css/win/bedvis/main.css">
+
+    <script src="../js/win/bedvis/main.mjs" type="module"></script>
+  </head>
+  <body>
+    <!-- LOADING BLOCK -->
+    <div id="fensterladen"><img src="../img/icon-app-weiss-48.svg" width="96" height="96" alt=""></div>
+
+    <!-- HEADER -->
+    <header>
+      <h1>&nbsp;</h1>
+      <img src="../img/icon-app-weiss-48.svg" width="48" height="48" alt="" id="icon">
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <section id="head">
+        <div class="dropdown2-cont" id="list-head"
+          ><input type="text" value="" placeholder="Visualisierung auswählen" class="dropdown2-input" data-dropdown2="listHead" id="list-head-input" readonly
+        ></div>
+
+        <div id="main-fun"
+          ><a href="#" class="fun-link" id="main-fun-assist"><img src="../img/person.svg" width="36" height="36" alt="">Assistent</a
+          ><a href="#" class="fun-link" id="main-fun-admin"><img src="../img/zahnrad.svg" width="36" height="36" alt="">Verwaltung</a
+          ><a href="#" class="fun-link" id="main-fun-import"><img src="../img/dokument-import.svg" width="36" height="36" alt="">Import</a
+          ><a href="#" class="fun-link" id="main-fun-export"><img src="../img/dokument-export.svg" width="36" height="36" alt="">Export</a
+        ></div>
+      </section>
+
+      <section id="quot"
+        ><div class="sec-fun"
+          ><a href="#" class="fun-link" id="quot-fun-filters"><img src="../img/filter.svg" width="24" height="24" alt="">Filter</a
+          ><a href="#" class="fun-link aus" id="quot-fun-reset"><img src="../img/pfeil-rund-links.svg" width="24" height="24" alt=""></a
+        ></div
+      ></section>
+
+      <section id="config"
+        ><div class="sec-fun"
+          ><a href="#" class="fun-link" id="config-fun-lemmas"><img src="../img/lemmata.svg" width="24" height="24" alt="">Lemmata</a
+          ><a href="#" class="fun-link" id="config-fun-meanings"><img src="../img/geruest.svg" width="24" height="24" alt="">Bedeutungen</a
+        ></div
+      ></section>
+
+      <section id="svg"></section>
+    </main>
+
+    <!-- OVERLAY: ASSISTANT -->
+    <div id="assist" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-assist">&nbsp;</span
+        >Assitent<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="assist-nav"
+        ><a href="#" class="fun-link" id="assist-nav-start"><img src="../img/haus.svg" width="24" height="24" alt="">Start</a
+        ><span
+          ><a href="#" class="fun-link" id="assist-nav-backwards"><img src="../img/pfeil-gerade-links.svg" width="24" height="24" alt="">zurück</a
+          ><a href="#" class="fun-link" id="assist-nav-forwards">vorwärts<img src="../img/pfeil-gerade-rechts.svg" width="24" height="24" alt=""></a
+        ></span
+      ></div>
+
+      <div id="assist-wrap">
+        <div id="assist-cont"></div>
+      </div>
+    </div></div>
+
+    <template id="at-start">
+      <h3>Was möchten Sie machen?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="prepareData" data-tile="make-name">ein Visualisierung erstellen</a
+        ><a href="#" class="fun-link choose" data-tile="help">Anleitungen anzeigen</a
+      ></div>
+    </template>
+
+    <template id="at-help">
+      <h3>Wofür brauchen Sie eine Anleitung?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-tile="help-add-meaning">Bedeutung hinzufügen</a
+        ><a href="#" class="fun-link choose" data-tile="help-add-quotation">Belegpunkt hinzufügen</a
+        ><a href="#" class="fun-link choose" data-tile="help-add-event">Ereignis hinzufügen</a
+        ><a href="#" class="fun-link choose" data-tile="help-delete-meaning">Bedeutung löschen</a
+        ><a href="#" class="fun-link choose" data-tile="help-delete-lemma">Lemma löschen</a
+        ><a href="#" class="fun-link choose" data-tile="help-change-list">Bedeutungsgerüst ändern</a
+        ><a href="#" class="fun-link choose" data-tile="help-import-data">Visualisierung importieren</a
+      ></div>
+    </template>
+
+    <template id="at-help-add-meaning">
+      <h3>Bedeutung hinzufügen</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-add-meaning.webp" width="738" height="462" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-add-quotation">
+      <h3>Belegpunkt hinzufügen</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-add-quotation.webp" width="791" height="392" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-add-event">
+      <h3>Ereignis hinzufügen</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-add-event.webp" width="471" height="443" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-delete-meaning">
+      <h3>Bedeutung löschen</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-delete-meaning.webp" width="462" height="454" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-delete-lemma">
+      <h3>Lemma löschen</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-delete-lemma.webp" width="469" height="599" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-change-list">
+      <h3>Bedeutungsgerüst ändern</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-change-list.webp" width="438" height="427" alt=""
+      ></p>
+    </template>
+
+    <template id="at-help-import-data">
+      <h3>Visualisierung importieren</h3>
+      <p class="help-img"
+        ><img src="../img/win/bedvis-import-data.webp" width="667" height="321" alt=""
+      ></p>
+    </template>
+
+    <template id="at-make-name">
+      <h3>Wie soll die Visualisierung heißen?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="chooseName" data-tile="make-type">Namen eingeben</a
+      ></div>
+      <div class="aus make-result"><i>Name:</i><br><b id="make-name"></b></div>
+    </template>
+
+    <template id="at-make-type">
+      <h3>Was soll visualisiert werden?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="chooseType" data-args="meanings" data-tile="make-source">eine Reihe von Bedeutungen</a
+        ><a href="#" class="fun-link choose" data-action="chooseType" data-args="lemmas" data-tile="make-source">eine Reihe von Lemmata</a
+      ></div>
+    </template>
+
+    <template id="at-make-source">
+      <h3>Woher sollen die Daten bezogen werden?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="chooseSource" data-args="ztj" data-intersection="intersection1">aus der aktuellen ZTJ-Kartei</a
+        ><a href="#" class="fun-link choose" data-action="chooseSource" data-args="xml" data-intersection="intersection1">aus einer XML-Datei</a
+      ></div>
+    </template>
+
+    <template id="at-make-ztj" data-prep="ztj">
+      <h3>Bereiten Sie jetzt die ZTJ-Kartei vor!</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-intersection="intersection2">Alles vorbereitet!</a
+      ></div>
+      <ol id="make-hints">
+        <li
+          ><a href="#">Hauptlemmata in der korrekten Reihenfolge anlegen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-lemmas.webp" width="525" height="300" alt=""
+        ></li>
+        <li
+          ><a href="#">Bedeutungsgerüste erstellen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-meanings.webp" width="525" height="300" alt=""
+        ></li>
+        <li
+          ><a href="#">Bedeutungsgerüste nach dem Lemma benennen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-names.webp" width="525" height="300" alt=""
+        ></li>
+        <li
+          ><a href="#">lange Bedeutungsangaben mit einem Alias versehen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-alias.webp" width="525" height="300" alt=""
+        ></li>
+        <li
+          ><a href="#">relevante Belege buchen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-booking.webp" width="525" height="300" alt=""
+        ></li>
+        <li
+          ><a href="#">gebuchte Belege mit Bedeutungen verknüpfen</a
+          ><img src="../img/platzhalter.svg" data-src="../img/win/bedvis-hints-link-meanings.webp" width="525" height="300" alt=""
+        ></li>
+      </ol>
+    </template>
+
+    <template id="at-make-xml">
+      <h3>Welche XML-Datei wollen Sie verwenden?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="chooseXmlFile" data-intersection="intersection2">Datei auswählen</a
+      ></div>
+      <div class="aus make-result"><i>Datei:</i><br><b id="make-xml"></b></div>
+    </template>
+
+    <template id="at-make-lemma-list">
+      <h3>Welche Lemmata sollen in der Grafik erscheinen?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="llCheck" data-tile="make-make">Eingabe beendet!</a
+      ></div>
+      <div id="make-lemma-list">
+        <div
+          ><a href="#" id="make-lemma-list-add"><img src="../img/plus-dick.svg" width="24" height="24" alt=""></a
+        ></div>
+        <div>
+          <p>noch keine Lemmata eingegeben</p>
+        </div>
+      </div>
+    </template>
+
+    <template id="at-make-choose-lemmas" data-prep="lemmas">
+      <h3>Welche Lemmata sollen in der Grafik erscheinen?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="lemmasCheck" data-intersection="intersection3">Auswahl beendet!</a
+      ></div>
+      <div id="make-choose-lemmas"></div>
+    </template>
+
+    <template id="at-make-choose-lists" data-prep="lists">
+      <h3>Welches Bedeutungsgerüst sollen die Lemmata haben?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="listsCheck" data-tile="make-choose-meanings">Auswahl beendet!</a
+      ></div>
+      <div id="make-choose-lists"></div>
+    </template>
+
+    <template id="at-make-choose-meanings" data-prep="meanings">
+      <h3>Welche Bedeutungen sollen in der Grafik erscheinen?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="meaningsCheck" data-tile="make-make">Auswahl beendet!</a
+      ></div>
+      <div id="make-choose-meanings"></div>
+    </template>
+
+    <template id="at-make-make" data-prep="summary">
+      <h3>Soll die Visualisierung jetzt erstellt werden?</h3>
+      <div class="choose-list"
+        ><a href="#" class="fun-link choose" data-action="make" id="make-link">Visualisierung erstellen!</a
+      ></div>
+      <div id="make-summary"></div>
+    </template>
+
+    <!-- OVERLAY: Administration -->
+    <div id="admin" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-admin">&nbsp;</span
+        >Verwaltung<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="admin-cont">
+        <div class="dropdown2-cont" id="list-admin"
+          ><input type="text" value="" placeholder="Visualisierung auswählen" class="dropdown2-input" data-dropdown2="listAdmin" id="list-admin-input" readonly
+        ></div>
+
+        <p id="admin-fun"
+          ><a href="#" class="fun-link" id="admin-add"><img src="../img/plus-dick.svg" width="24" height="24" alt="">hinzufügen</a
+          ><a href="#" class="fun-link" id="admin-rename"><img src="../img/stift.svg" width="24" height="24" alt="">umbennen</a
+          ><a href="#" class="fun-link" id="admin-delete"><img src="../img/muelleimer.svg" width="24" height="24" alt="">löschen</a
+        ></p>
+
+        <p id="admin-config-cont"
+          ><input type="checkbox" id="admin-config-lemma-list"
+            ><label for="admin-config-lemma-list">Visualisierung einer Lemmaliste</label
+        ></p>
+
+        <p id="admin-source-cont"
+          ><input type="radio" name="admin-source" value="ztj" id="admin-source-ztj"
+            ><label for="admin-source-ztj">Daten aus ZTJ-Kartei</label
+          ><input type="radio" name="admin-source" value="xml" id="admin-source-xml"
+            ><label for="admin-source-xml">Daten aus XML-Datei</label
+        ></p>
+
+        <p id="admin-xml-cont"
+          ><span id="admin-xml-path"></span
+          ><a href="#" class="fun-link" id="admin-xml-choose" title="Datei auswählen"
+            ><img src="../img/oeffnen.svg" width="24" height="24" alt=""
+          ></a
+        ></p>
+      </div>
+    </div></div>
+
+    <!-- OVERLAY: Import -->
+    <div id="import" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-import">&nbsp;</span
+        >Import<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="import-cont">
+        <div class="dropdown2-cont" id="list-import"
+          ><input type="text" value="" placeholder="Visualisierung auswählen" class="dropdown2-input" data-dropdown2="listImport" id="list-import-input" readonly
+        ></div>
+
+        <p
+          ><a href="#" class="fun-link" id="import-do"><img src="../img/dokument-import.svg" width="24" height="24" alt="">Import starten</a
+          ><a href="#" class="fun-link" id="import-add"><img src="../img/plus-dick.svg" width="24" height="24" alt="">Visualisierung hinzufügen</a
+        ></p>
+      </div>
+    </div></div>
+
+    <!-- OVERLAY: Export -->
+    <div id="export" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-export">&nbsp;</span
+        >Export<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="export-cont">
+        <h3>Kopieren</h3>
+
+        <p
+          ><a href="#" id="export-xml" title="zum Einfügen in eine XML-Datei"><img src="../img/xml.svg" width="72" height="72" alt="">XML</a
+          ><a href="#" id="export-json" title="zum Weiterverarbeiten in einem anderen Programm"><img src="../img/json.svg" width="72" height="72" alt="">JSON</a
+        ></p>
+
+        <h3>Speichern</h3>
+
+        <p
+          ><a href="#" id="export-svg" title="SVG-Grafik"><img src="../img/bild.svg" width="72" height="72" alt="">SVG</a
+          ><a href="#" id="export-module" title="JavaScript-Modul"><img src="../img/modul.svg" width="72" height="72" alt="">Modul</a
+        ></p>
+      </div>
+    </div></div>
+
+    <!-- OVERLAY: Meanings -->
+    <div id="meanings" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-meanings">&nbsp;</span
+        >Bedeutungen<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="meanings-wrap">
+        <div id="meanings-cont"></div>
+      </div>
+    </div></div>
+
+    <!-- OVERLAY: Lemmas -->
+    <div id="lemmas" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h icon-h-lemmas">&nbsp;</span
+        >Lemmata<a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)"
+        >&nbsp;</a
+      ></h2>
+
+      <div id="lemmas-cont"></div>
+    </div></div>
+
+    <!-- OVERLAY: Dialog -->
+    <div id="dialog" class="overlay aus"><div>
+      <h2
+        ><span class="icon-h">&nbsp;</span
+        ><span id="dialog-h-prompt">Eingabe</span
+        ><span id="dialog-h-confirm">Frage</span
+        ><span id="dialog-h-alert">Meldung</span
+        ><a href="#" class="overlay-schliessen icon-link icon-schliessen" title="Fenster schließen (Esc)">&nbsp;</a
+      ></h2>
+
+      <div id="dialog-rahmen">
+        <div id="dialog-text"></div>
+      </div>
+
+      <div id="dialog-prompt">
+        <p class="input-text"><input type="text" value="" id="dialog-prompt-text"></p>
+      </div>
+
+      <div id="dialog-ok">
+        <p class="button"><input type="button" value="Okay" id="dialog-ok-button"
+          ><input type="button" value="Abbrechen" id="dialog-abbrechen-button"></p>
+      </div>
+
+      <div id="dialog-confirm">
+        <p class="button"><input type="button" value="Ja" id="dialog-ja-button"
+          ><input type="button" value="Nein" id="dialog-nein-button"></p>
+      </div>
+    </div></div>
+  </body>
+</html>

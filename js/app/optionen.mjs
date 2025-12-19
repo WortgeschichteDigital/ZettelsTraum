@@ -41,6 +41,14 @@ const optionen = {
       height: 600,
       maximiert: false,
     },
+    // Status des Bedvis-Fensters
+    "fenster-bedvis": {
+      x: null,
+      y: null,
+      width: null,
+      height: null,
+      maximiert: false,
+    },
     // Karteikarte
     beleg: {
       // Belegkontext in der Leseansicht kürzen
@@ -349,7 +357,7 @@ const optionen = {
   empfangen (data) {
     // Daten bereinigen um alles, was nicht synchronisiert werden soll
     for (const block of Object.keys(data)) {
-      if (!/^(beleg|fenster|fenster-bedeutungen|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
+      if (!/^(beleg|fenster|fenster-bedeutungen|fenster-bedvis|einstellungen|kopieren|tags|personen|letzter_pfad|literatur-db)$/.test(block)) {
         delete data[block];
         // diese Einstellungen werden nicht aus einem anderen Fenster übernommen
         // (das führt nur zu einem unschönen Springen):
@@ -383,7 +391,7 @@ const optionen = {
       if (typeof opt[o] === "undefined") {
         continue;
       }
-      if (typeof obj[o] === "object" && !Array.isArray(obj[o])) {
+      if (typeof obj[o] === "object" && !Array.isArray(obj[o]) && obj[o] !== null) {
         if (o === "tags") {
           optionen.data.tags = { ...opt[o] };
         } else {

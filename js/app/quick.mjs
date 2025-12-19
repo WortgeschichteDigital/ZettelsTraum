@@ -3,6 +3,7 @@ import anhaenge from "./anhaenge.mjs";
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenGeruest from "./bedeutungenGeruest.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import belegeBuchung from "./belegeBuchung.mjs";
 import belegeTaggen from "./belegeTaggen.mjs";
@@ -125,6 +126,11 @@ const quick = {
       title: "Kartei > Bedeutungsgerüst-Fenster",
       short: `${sharedTastatur.shortcutsTextAktuell("Strg")} + Umsch + B`,
       img: "fenster.svg",
+    },
+    "kartei-bedvis": {
+      title: "Kartei > Visualisierung",
+      short: "",
+      img: "bild.svg",
     },
     "kartei-suche": {
       title: "Kartei > Suche",
@@ -475,6 +481,9 @@ const quick = {
           break;
         case "kartei-bedeutungen-fenster":
           bedeutungenWin.oeffnen();
+          break;
+        case "kartei-bedvis":
+          bedvis.open();
           break;
         case "kartei-suche":
           filter.suche();

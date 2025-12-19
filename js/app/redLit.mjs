@@ -3198,7 +3198,7 @@ const redLit = {
     x: while (!id) {
       // ID erstellen
       while (id.length < 10) {
-        id += hex[helfer.zufall(0, 15)];
+        id += hex[shared.rand(0, 15)];
       }
       // ID überprüfen
       for (const v of Object.values(redLit.db.data)) {

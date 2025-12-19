@@ -1,6 +1,7 @@
 
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import kartei from "./kartei.mjs";
 import lemmata from "./lemmata.mjs";
@@ -111,15 +112,6 @@ const helfer = {
     });
   },
 
-  // Zufallsgenerator
-  //   min = Number
-  //     (Minimalwert)
-  //   max = Number
-  //     (Maximalwert)
-  zufall (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  },
-
   // wählt den Text innerhalb des übergebenen Objekts aus
   //   obj = Element
   //     (das Element, in dem der Text komplett markiert werden soll)
@@ -136,16 +128,6 @@ const helfer = {
     const aktiv = document.activeElement;
     if (aktiv.type === "text" || aktiv.nodeName === "TEXTAREA") {
       aktiv.blur();
-    }
-  },
-
-  // überprüft, ob in einem Number-Input eine zulässige Ziffer steht
-  //   i = Element
-  //     (das Number-Feld, das überprüft werden soll)
-  inputNumber (i) {
-    const v = parseInt(i.value, 10);
-    if (isNaN(v) || v < i.min || v > i.max) {
-      i.value = i.defaultValue;
     }
   },
 
@@ -694,6 +676,8 @@ const helfer = {
     }
     // Bedeutungen-Fenster ggf. schließen
     await bedeutungenWin.schliessen();
+    // Bedvis-Fenster ggf. schließen
+    await bedvis.close();
     // XML-Fenster ggf. schließen
     await redXml.schliessen();
     // Kartei entsperren

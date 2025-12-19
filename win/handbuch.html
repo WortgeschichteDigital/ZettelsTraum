@@ -4615,6 +4615,38 @@ Mustermann, Erika
             <p>Da es möglich ist, in <i class="app-name"></i> mit mehreren Wortkarteien gleichzeitig zu arbeiten, können auch <b>mehrere Bedeutungsgerüst-Fenster</b> gleichzeitig geöffnet sein. Diese sind aber immer an die zugehörige Kartei und das Hauptfenster, in dem diese geöffnet ist, gebunden. Es kann also nicht passieren, dass Sie versehentlich eine Bedeutung aus einem der geöffneten Bedeutungsgerüst-Fenster in eine <a href="#karteikarte">Karteikarte</a> eintragen, die sich in einem Fenster mit einem ganze anderen Karteiwort befindet.</p>
           </div>
 
+          <p class="erklaerung-icon-menues" id="menueKartei-visualisierung"><img src="../img/bild.svg" width="24" height="24" alt="">Visualisierung</p>
+
+          <div class="info">
+            <p>Öffnet das Visualisierungs-Fenster.</p>
+
+            <p>In diesem Fenster können Sie eine Visualisierung von Bedeutungs- oder Lemmareihen auf einem Zeitstrahl erstellen. Die Visualisierung kann in unterschiedlichen Formaten exportiert und <abbr title="zum Beispiel">z.&nbsp;B.</abbr> auf einer Webseite eingefügt werden. Das Fenster bietet ein kompliziertes Formular, dessen Hauptfunktionen hier nur summarisch erläutert werden sollen, zumal es eine Assistenzfunktion gibt, die den Einstieg erleichtern sollte.</p>
+
+            <p><b><i>Grundsätzliches:</i></b> Erstellt man eine Visualisierung, wird diese in der aktuellen <abbr title="Zettel’s Traum JSON">ZTJ</abbr>-Kartei gespeichert. Es lassen sich beliebig viele Visualisierungen pro Kartei erstellen. Dabei bietet es sich natürlich an, Visualisierungen zu denjenigen Lemmata zu erstellen, zu denen sich in der Kartei Bedeutungsgerüste und Belege befinden. In dem Fall ist die Kartei eine exzellente Datenquelle, die das Anlegen eine Visualisierung deutlich erleichtert. Prinzipiell lassen sich aber auch Visualisierungen zu anderen Lemmata anlegen – wenn man eine <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei importiert, die allerdings ein spezielles, von <abbr title="Wortgeschichte digital">WGd</abbr> genutztes Format haben muss.</p>
+
+            <p><b><i>Aufbau des Fensters:</i></b> Im oberen Bereich gibt es eine Menüleiste für die Hauptfunktionen. Am linken Rand befindet sich ein Dropdown-Menü, über das Sie eine der Visualisierungen laden können, die Sie zuvor erstellt haben. Der darunterliegende Hauptbereich des Fensters ist dreigeteilt: links eine Belegreihe, in der Mitte das Formular zur Konfiguration der Visualisierung und rechts eine Vorschau, in der die Visualisierung so angezeigt wird, wie man sie schließlich exportieren kann.</p>
+
+            <p><b><i>Funktion <q>Assistent</q>:</i></b> Der <i>Assistent</i> ist ein Dialogfenster mit zwei Funktionen. Man kann mit ihm zum einen eine neue Visualisierung erstellen. Zum anderen bietet er eine Reihe von Anleitungen, aus denen man erfährt, wie bestimmt Bedienvorgänge funktionieren.</p>
+
+            <p><b><i>Funktion <q>Verwaltung</q>:</i></b> In diesem Dialogfenster können Visualisierungen verwaltet werden: Man kann sie umbennen, löschen, die Datenquelle ändern oder auch eine neue Visualisierung hinzufügen, die dann allerdings nur grundlegend konfiguriert ist und darum auch – zunächst einmal – nichts weiter als einen Zeitstrahl anzeigt. Besonders dann, wenn man das Formular noch nicht gut kennt, ist es für das Erstellen einer neuen Visualisierung eher empfehlenswert, den <i>Assistenten</i> zu nutzen.</p>
+
+            <p><b><i>Funktion <q>Import</q>:</i></b> Haben Sie bereits die <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Daten einer Visualisierung können Sie diese mithilfe des Dialogfensters <i>Import</i> laden. Dazu müssen Sie eine bereits bestehende Visualisierung auswählen. Diese wird dann mit den Daten, die Sie zuvor in die Zwischenablage kopieren müssen, überschrieben.</p>
+
+            <p><b><i>Funktion <q>Export</q>:</i></b> Dieser Dialog bietet ihnen vier Möglichkeiten, die Daten der aktuellen Visualisierung zu exportieren:</p>
+
+            <ul>
+              <li><i>Kopieren <abbr title="Extensible Markup Language" lang="en">XML</abbr>:</i> Die Visualisierungsdaten werden in das <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>-Format konvertiert und in einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag gewickelt, der dem von <abbr title="Wortgeschichte digital">WGd</abbr> intern genutzten Format entspricht. Eine so exportierte Visualisierung können Sie direkt in die <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Datei mit der Wortgeschichte einfügen.</li>
+
+              <li><i>Kopieren <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>:</i> Diese Funktion exportiert die Daten ebenfalls als <abbr title="JavaScript Object Notation" lang="en">JSON</abbr>. Der einzige Unterschied zur voherigen Funktion ist, dass die Daten nicht in einen <abbr title="Extensible Markup Language" lang="en">XML</abbr>-Tag gewickelt werden.</li>
+
+              <li><i>Speichern <abbr title="Scalable Vector Graphics" lang="en">SVG</abbr>:</i> Speichert die Visualisierung als <abbr title="Scalable Vector Graphics" lang="en">SVG</abbr>-Datei. In der Datei sind alle Layoutinformationen enthalten, sodass sie (im Wesentlichen) so wie in der Vorschau aussieht. Da nicht alle Programme, die <abbr title="Scalable Vector Graphics" lang="en">SVG</abbr>-Dateien importieren können, in der Lage sind, diese Layoutinformationen einzulesen, könnte die direkte Weiterverarbeitung der exportieren Datei unter Umständen Probleme bereiten. Die <abbr title="Scalable Vector Graphics" lang="en">SVG</abbr> kann allerdings von jedem Browser geöffnet und korrekt dargestellt werden. Hier lässt sie sich dann abfotografieren und in einem anderen Format speichern.</li>
+
+              <li><i>Speichern Modul:</i> Diese Funktion ist für technisch Interessierte gedacht, die die Funktionsweise der Visualisierung studieren wollen. Mit ihr kann man sich einen Ordner (oder ein komprimiertes Archiv) erstellen lassen, in dem sich eine Webseite mit den Daten der aktuellen Visualisierung befindet. Lädt man diese Seite mit einem Browser, wird die Visualisierung angezeigt. (Da die Visualisierung mithilfe eine ES-Moduls berechnet wird, muss sie allerdings via <abbr title="Hypertext Transfer Protocol" lang="en">HTTP</abbr> aufgerufen werden. Andernfalls lässt sich das Modul nicht laden.)</li>
+            </ul>
+
+            <p>Die Funktionen dieses Dialogfensters erreichen Sie auch über einen Rechtsklick auf der Grafik im Vorschaubereich.</p>
+          </div>
+
           <p class="erklaerung-icon-menues" id="menueKartei-suche"><img src="../img/lupe.svg" width="24" height="24" alt="">Suche</p>
 
           <div class="info">

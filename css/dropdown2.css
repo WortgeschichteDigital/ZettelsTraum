@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+.dropdown2-cont {
+  position: relative;
+
+  .dropdown2-input:read-only {
+    cursor: default;
+  }
+
+  .dropdown2-list {
+    display: none;
+    position: absolute;
+    top: 31px;
+    left: 0;
+    z-index: 2;
+    box-shadow: var(--boxShadow);
+    width: 100%;
+    background-color: #fff;
+
+    /* list container */
+    div {
+      position: relative;
+      margin: 5px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: 289px;
+
+      &:empty {
+        margin: 0;
+      }
+    }
+
+    /* list item */
+    a,
+    .placeholder {
+      display: block;
+      outline: none;
+      overflow: hidden;
+      border-bottom: 1px solid var(--linie);
+      padding: 2px 5px;
+      background-color: #fff;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 24px;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:not(.placeholder):is(.markiert, :hover, :focus) {
+        background-color: var(--highlight);
+      }
+
+      &.placeholder {
+        color: var(--textSehrHell);
+        font-style: italic;
+      }
+
+      img {
+        vertical-align: top;
+        margin-right: 3px;
+      }
+
+      /* meanings */
+      .bed-zaehlung {
+        display: inline-block;
+        margin-right: 5px;
+        min-width: 10px;
+        text-align: right;
+      }
+
+      &.bed-level2 {
+        padding-left: 20px;
+      }
+
+      &.bed-level3 {
+        padding-left: 35px;
+      }
+
+      &.bed-level4 {
+        padding-left: 50px;
+      }
+
+      &.bed-level5 {
+        padding-left: 65px;
+      }
+
+      &.bed-level6 {
+        padding-left: 80px;
+      }
+
+      &.bed-level7 {
+        padding-left: 95px;
+      }
+
+      &.bed-level8 {
+        padding-left: 110px;
+      }
+    }
+  }
+
+  .dropdown2-open-above + .dropdown2-list {
+    top: -6px;
+    transform: translateY(-100%);
+  }
+
+  &:focus-within .dropdown2-list {
+    display: block;
+  }
+}

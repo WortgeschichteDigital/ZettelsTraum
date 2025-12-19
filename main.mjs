@@ -1,5 +1,5 @@
 
-/* MODULE & VARIABLEN ***************************/
+/* MODULE ***************************************/
 
 import {
   app,
@@ -15,6 +15,7 @@ import os from "node:os";
 import path from "node:path";
 
 import appMenu from "./js/main/appMenu.mjs";
+import bedvis from "./js/main/bedvis.mjs";
 import dd from "./js/main/dd.mjs";
 import dienste from "./js/main/dienste.mjs";
 import fenster from "./js/main/fenster.mjs";
@@ -544,6 +545,49 @@ ipcMain.handle("fenster-status", (evt, winId, fenster) => {
   return status;
 });
 
+// Bedvis-Fenster schliessen
+ipcMain.handle("bedvis-close", (evt, contentsId) => {
+  if (!validSender(evt)) {
+    return;
+  }
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
+  bw.close();
+});
+
+// Bedvis-Modul exportieren
+ipcMain.handle("bedvis-export-module", async (evt, data) => {
+  if (!validSender(evt)) {
+    return {
+      name: "Illegal Usage",
+      message: "invalid sender process",
+    };
+  }
+  return await bedvis.saveModule(data);
+});
+
+// Bedvis-Fenster fokussieren
+ipcMain.handle("bedvis-focus", (evt, contentsId) => {
+  if (!validSender(evt)) {
+    return;
+  }
+  const wc = webContents.fromId(contentsId);
+  const bw = BrowserWindow.fromWebContents(wc);
+  fenster.fokus(bw);
+});
+
+// Bedvis-Fenster öffnen
+ipcMain.handle("bedvis-open", (evt, title) => {
+  if (!validSender(evt)) {
+    return 0;
+  }
+  return fenster.erstellenNeben({
+    typ: "bedvis",
+    winTitle: title,
+    caller: evt.sender,
+  });
+});
+
 // Bedeutungsgerüst-Fenster öffnen
 ipcMain.handle("bedeutungen-oeffnen", (evt, title) => {
   if (!validSender(evt)) {
@@ -905,6 +949,13 @@ ipcMain.handle("cb", (evt, fun, data) => {
     return clipboard[fun](data);
   }
   return clipboard[fun]();
+});
+
+ipcMain.handle("check-tar", async evt => {
+  if (!validSender(evt)) {
+    return false;
+  }
+  return await dienste.checkTar();
 });
 
 // Dateidialoge öffnen

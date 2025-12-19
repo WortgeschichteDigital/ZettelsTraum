@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Visualisierung</title>
+
+    <link rel="stylesheet" href="files/bedvis.min.css">
+    <style>
+      p.error {
+        color: #d00;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      #wgd-lesarten,
+      #wgd-belegauswahl {
+        display: none;
+      }
+    </style>
+
+    <script type="module">
+      window.addEventListener("load", async () => {
+        // load the visualization module
+        let bedvis;
+        try {
+          ({ default: bedvis } = await import("./files/bedvis.min.mjs"));
+        } catch (err) {
+          throw error("module", "Unable to load module!", err);
+        }
+
+        // parse JSON data
+        for (const cont of document.querySelectorAll(".bedvis")) {
+          let json;
+          try {
+            json = JSON.parse(cont.dataset.bedvis);
+          } catch (err) {
+            throw error("json", "JSON data invalid!", err);
+          }
+
+          // create SVG
+          let svg;
+          try {
+            svg = bedvis.makeSVG(json);
+          } catch (err) {
+            throw error("svg", "Unable to create image!", err);
+          }
+
+          // append image
+          cont.appendChild(svg);
+        }
+      });
+
+      // handle errors
+      function error (type, message, err) {
+        let msgTxt = message;
+        if (err) {
+          msgTxt += `\n${err.name}: ${err.message}`;
+        }
+
+        const { protocol } = window.location;
+        if (type === "module" && !/^http/.test(protocol)) {
+          printError(`It is impossible to load JavaScript modules via <i>${protocol}</i> protocol.`);
+        } else {
+          const errMsg = msgTxt.replace(/\n/g, "<br>");
+          printError(errMsg);
+        }
+
+        return new Error(message);
+      }
+
+      // print error message on the page
+      function printError (message) {
+        const p = document.createElement("p");
+        document.body.insertBefore(p, document.body.firstElementChild);
+        p.classList.add("error");
+        p.innerHTML = message;
+      }
+    </script>
+  </head>
+  <body>
+    <!-- @data-bedvis contains the JSON data of the visualization -->
+    <p class="bedvis" data-bedvis=''></p>
+
+    <!-- #wgd-lesarten gives the list of meanings that are referred to in the data -->
+    <div id="wgd-lesarten"></div>
+
+    <!-- #wgd-belegauswahl comprises all the quotations that are referred to in the data -->
+    <div id="wgd-belegauswahl"></div>
+  </body>
+</html>

@@ -3,5 +3,5 @@
 <metadata>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description dc:publisher="Papirus Development Team" dc:rights="GPL-3.0-only"></rdf:Description></rdf:RDF>
 </metadata>
-<path d="m6 6 4.8 4 0.02344 4 1.1625 4 1.2141-4v-4l4.8-4z" color="#444444" fill="#212121"/>
+<path d="m18.343 5h-12.686c-0.58292 0-0.87706 0.70727-0.46402 1.1203l4.807 5.0578v5.6344c0 0.21413 0.05452 0.41481 0.22996 0.53764l2.4875 1.5307c0.43157 0.30209 1.2826-0.0044 1.2826-0.53764v-7.1651l4.8071-5.0578c0.41219-0.4122 0.12007-1.1203-0.46405-1.1203z" fill="#212121"/>
 </svg>

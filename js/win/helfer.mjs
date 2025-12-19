@@ -1,5 +1,6 @@
 
 import bedeutungen from "./bedeutungen.mjs";
+import bedvisData from "./bedvis/data.mjs";
 import xml from "./xml.mjs";
 
 import dd from "../dd.mjs";
@@ -61,6 +62,14 @@ const helfer = {
         data: null,
       });
       await bridge.ipc.invoke("fenster-status", dd.win.winId, "fenster-bedeutungen");
+    } else if (dd.win.typ === "bedvis") {
+      // Bedvis-Fenster
+      bridge.ipc.invoke("webcontents-bridge", {
+        id: bedvisData.mainContentsId,
+        channel: "bedvis-closed",
+        data: null,
+      });
+      await bridge.ipc.invoke("fenster-status", dd.win.winId, "fenster-bedvis");
     } else if (dd.win.typ === "xml") {
       // XML-Fenster
       bridge.ipc.invoke("webcontents-bridge", {

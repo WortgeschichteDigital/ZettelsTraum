@@ -3,6 +3,7 @@ import anhaenge from "./anhaenge.mjs";
 import annotieren from "./annotieren.mjs";
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import filter from "./filter.mjs";
 import helfer from "./helfer.mjs";
 import importBibtex from "./importBibtex.mjs";
@@ -1079,6 +1080,8 @@ const beleg = {
     beleg.belegGeaendert(false);
     beleg.listeGeaendert = true;
     kartei.karteiGeaendert(true);
+    // Änderungshinweis an das BedVis-Fenster schicken
+    bedvis.cardboxUpdate();
     // Schließen?
     direktSchliessen();
     // Speichern war erfolgreich
@@ -1184,6 +1187,7 @@ const beleg = {
           kopieren.belege.splice(kopieren.belege.indexOf(id.toString()), 1);
           kopieren.uiText();
         }
+        bedvis.cardboxUpdate();
       },
     });
   },

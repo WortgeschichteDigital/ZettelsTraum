@@ -2,6 +2,7 @@
 import anhaenge from "./anhaenge.mjs";
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import belegeBuchung from "./belegeBuchung.mjs";
 import erinnerungen from "./erinnerungen.mjs";
@@ -68,6 +69,7 @@ const kartei = {
           },
         },
       },
+      bv: [], // Bedeutungsvisualisierung
       dc: new Date().toISOString(), // Datum Kartei-Erstellung
       dm: "", // Datum Kartei-Änderung
       fv: {}, // Formvarianten
@@ -148,6 +150,9 @@ const kartei = {
 
     // Bedeutungsgerüst-Fenster schließen
     bedeutungenWin.schliessen();
+
+    // Bedvis-Fenster schließen
+    bedvis.close();
 
     // XML-Fenster schließen
     redXml.schliessen();
@@ -515,6 +520,7 @@ const kartei = {
     kartei.karteiGeaendert(false);
     await overlayApp.alleSchliessen();
     bedeutungenWin.schliessen();
+    bedvis.close();
     redXml.schliessen();
     dd.file = {};
     kartei.titel = "";

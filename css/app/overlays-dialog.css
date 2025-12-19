@@ -98,3 +98,15 @@ p.dialog-liste {
   padding-left: 25px;
   text-indent: -25px;
 }
+
+p.dialog-indent {
+  margin-left: 25px;
+}
+
+p.input-text {
+  line-height: 30px;
+}
+
+p.force-wrap {
+  overflow-wrap: break-word;
+}

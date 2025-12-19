@@ -71,6 +71,20 @@ const overlay = {
     }
   },
 
+  // alle offenen Overlays schließen
+  async alleSchliessen () {
+    const open = [];
+    document.querySelectorAll(".overlay").forEach(i => {
+      if (!i.classList.contains("aus")) {
+        open.push(i.id);
+      }
+    });
+    for (const id of open) {
+      this.schliessen(document.getElementById(id));
+      await new Promise(resolve => setTimeout(() => resolve(true), 200));
+    }
+  },
+
   // blendet ein Overlay-Fenster aus
   ausblenden (fenster) {
     fenster.classList.remove("einblenden");

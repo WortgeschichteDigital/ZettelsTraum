@@ -1,59 +1,69 @@
 @charset "UTF-8";
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans";
   src: url(../fonts/NotoSans-Regular.woff2) format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans";
+  font-style: italic;
   src: url(../fonts/NotoSans-Italic.woff2) format("woff2");
-  font-style: italic;
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans";
+  font-weight: bold;
   src: url(../fonts/NotoSans-Bold.woff2) format("woff2");
-  font-weight: bold;
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans";
-  src: url(../fonts/NotoSans-BoldItalic.woff2) format("woff2");
   font-style: italic;
   font-weight: bold;
+  src: url(../fonts/NotoSans-BoldItalic.woff2) format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Serif";
   src: url(../fonts/NotoSerif-Regular.woff2) format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Serif";
+  font-style: italic;
   src: url(../fonts/NotoSerif-Italic.woff2) format("woff2");
-  font-style: italic;
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Serif";
+  font-weight: bold;
   src: url(../fonts/NotoSerif-Bold.woff2) format("woff2");
-  font-weight: bold;
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Serif";
-  src: url(../fonts/NotoSerif-BoldItalic.woff2) format("woff2");
   font-style: italic;
   font-weight: bold;
+  src: url(../fonts/NotoSerif-BoldItalic.woff2) format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans Mono";
   src: url(../fonts/NotoSansMono-Regular.woff2) format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: "Noto Sans Symbols2";
   src: url(../fonts/NotoSansSymbols2-Regular.woff2) format("woff2");
 }

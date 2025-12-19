@@ -67,6 +67,10 @@
   --palette16: #999; /* grau-silber */
   --palette17: #000; /* schwarz */
 
+  /* Belege */
+  --stichwort: #0a0;
+  --markierung: #72a0cf;
+
   /* Schatten */
   --boxShadow: 3px 3px 6px 0 #d1d1d1;
 

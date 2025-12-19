@@ -166,7 +166,6 @@ main h2:first-child {
   width: 24px;
   height: 28px;
   background-color: #fff;
-  -webkit-mask-position: center;
   mask-position: center;
 }
 

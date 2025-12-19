@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+#import > div {
+  margin-top: 40px;
+  max-width: 500px;
+}
+
+.icon-h-import {
+  mask-image: url(../../../img/dokument-import.svg);
+}
+
+#import-cont {
+  padding: 10px;
+
+  #list-import {
+    margin-bottom: 10px;
+  }
+
+  p {
+    position: relative;
+
+    a:last-child {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}

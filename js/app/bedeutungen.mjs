@@ -2,6 +2,7 @@
 import bedeutungenDrag from "./bedeutungenDrag.mjs";
 import bedeutungenGerueste from "./bedeutungenGerueste.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import helfer from "./helfer.mjs";
 import kartei from "./kartei.mjs";
 import liste from "./liste.mjs";
@@ -1851,6 +1852,8 @@ const bedeutungen = {
     dd.file.bd = structuredClone(bedeutungen.data);
     // Bedeutungsgerüst-Fenster mit neuen Daten versorgen
     bedeutungenWin.daten();
+    // Änderungshinweis an das BedVis-Fenster schicken
+    bedvis.cardboxUpdate();
     // Änderungsmarkierung setzen/zurücksetzen und schließen
     kartei.karteiGeaendert(true);
     bedeutungen.bedeutungenGeaendert(false);
@@ -1980,28 +1983,54 @@ const bedeutungen = {
     });
   },
 
-  // Bedeutungsgerüst transformieren und an das Redaktionssystem schicken
+  // Bedeutungsgerüst an das Redaktionssystem schicken
   xmlDatensatz () {
+    const xl = bedeutungen.xmlMake({
+      geruest: bedeutungen.akt,
+      geruestID: bedeutungen.data.gn,
+    });
+    const xmlDatensatz = {
+      key: "bg",
+      ds: {
+        gn: bedeutungen.data.gn,
+        la: "",
+        nw: [],
+        tf: [],
+        xl,
+      },
+    };
+    redXml.datensatz({ xmlDatensatz });
+  },
+
+  // Bedeutungsgerüst in XML umwandeln
+  //   geruest = object
+  //   geruestID = string
+  //   typ = tring (xml-fenster | bedvis)
+  xmlMake ({ geruest, geruestID, typ = "xml-fenster" }) {
     // Lesarten auslesen
     const lesarten = [];
-    for (let i = 0, len = bedeutungen.akt.bd.length; i < len; i++) {
+    for (let i = 0, len = geruest.bd.length; i < len; i++) {
       const lesart = {
         ebene: -1,
         n: "",
         id: "",
         dia: [],
         txt: "",
+        // ergänzende Daten für "bedvis"
+        alias: "",
+        idOri: "",
       };
+
       // Zählzeichen + ID
-      const bd = bedeutungen.akt.bd[i];
+      const bd = geruest.bd[i];
       let zaId = bd.za;
       if (bd.bd.length > 1) {
         let j = i;
-        let bd = bedeutungen.akt.bd[j];
+        let bd = geruest.bd[j];
         let ebene = bd.bd.length;
         do {
           j--;
-          bd = bedeutungen.akt.bd[j];
+          bd = geruest.bd[j];
           if (bd.bd.length < ebene) {
             ebene = bd.bd.length;
             zaId = bd.za + zaId;
@@ -2010,14 +2039,20 @@ const bedeutungen = {
       }
       lesart.n = bd.za;
       lesart.id = zaId;
+
       // Diasystematik
       for (const t of bd.ta) {
         const tt = optionen.tagsTypen[t.ty];
         if (!tt) {
           continue;
         }
-        lesart.dia.push(`<${tt[0]}>${optionen.data.tags[t.ty].data[t.id].name}</${tt[0]}>`);
+        const tag = optionen.data.tags?.[t.ty]?.data?.[t.id]?.name;
+        if (!tag) {
+          continue;
+        }
+        lesart.dia.push(`<${tt[0]}>${tag}</${tt[0]}>`);
       }
+
       // Text
       let text = bd.bd[bd.bd.length - 1];
       text = text.replace(/<mark class="paraphrase">(.+?)<\/mark>/g, (m, p1) => `<Paraphrase>${p1}</Paraphrase>`);
@@ -2031,17 +2066,38 @@ const bedeutungen = {
         text = `<Paraphrase>${text}</Paraphrase>`;
       }
       lesart.txt = text;
+
+      // Alias und Original-ID
+      lesart.alias = bd.al;
+      lesart.idOri = bd.id;
+
       // Ebene eintragen...
       lesart.ebene = bd.bd.length;
+
       // ... und fertig!
       lesarten.push(lesart);
     }
+
     // XML erstellen
-    let xl = "<Lesarten>\n\t<Nachweise/>";
+    let xl = "<Lesarten>\n";
+    if (typ === "bedvis") {
+      const name = geruest.na || `Gerüst ${geruestID}`;
+      xl += "\t<Lemma>\n";
+      xl += `\t\t<Schreibung>${name}</Schreibung>\n`;
+      xl += "\t</Lemma>\n";
+    }
+    xl += "\t<Nachweise/>";
     let ebeneZuvor = 1;
     for (const i of lesarten) {
       const t = "\n" + "\t".repeat(i.ebene);
-      let la = `${t}<Lesart n="${i.n}" xml:id="l${bedeutungen.data.gn}-${i.id}">`;
+      let la = `${t}<Lesart n="${i.n}" xml:id="l${geruestID}-${i.id}"`;
+      if (typ === "bedvis") {
+        la += ` ID="l${geruestID}-${i.idOri}"`;
+      }
+      la += ">";
+      if (typ === "bedvis") {
+        la += `${t}\t<Alias>${i.alias}</Alias>`;
+      }
       if (i.dia.length) {
         la += `${t}\t<Diasystematik>`;
         for (const d of i.dia) {
@@ -2072,20 +2128,10 @@ const bedeutungen = {
       ebeneZuvor--;
     }
     xl += "\n</Lesarten>";
+
     // Tabs zu Spaces
     xl = xl.replace(/\t/g, "  ");
-    // XML-Datensatz erzeugen und an das Redaktionssystem schicken
-    const xmlDatensatz = {
-      key: "bg",
-      ds: {
-        gn: bedeutungen.data.gn,
-        la: "",
-        nw: [],
-        tf: [],
-        xl,
-      },
-    };
-    redXml.datensatz({ xmlDatensatz });
+    return xl;
   },
 
   // überprüft, ob das Bedeutungsgerüst beim Umbenennen einer Bedeutung korrumpiert wurde

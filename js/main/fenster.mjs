@@ -223,14 +223,14 @@ const fenster = {
   },
 
   // Neben-Fenster erstellen
-  //   typ = String
+  //   typ = string
   //     (der Typ des Neben-Fensters:
-  //     "bedeutungen" | "changelog" | "dokumentation" | "fehlerlog" | "handbuch" | "xml")
-  //   abschnitt = String | undefined
+  //     bedeutungen | bedvis | changelog | dokumentation | fehlerlog | handbuch | xml)
+  //   abschnitt = string
   //     (Abschnitt, der im Fenster geöffnet werden soll; nur "handbuch" und "dokumentation")
-  //   winTitle = String | undefined
+  //   winTitle = string
   //     (Fenster-Titel für Bedeutungsgerüst- und XML-Fenster)
-  //   caller = Object | undefined
+  //   caller = object
   //     (ggf. Fensterobjekt, das als Caller fungiert)
   erstellenNeben ({
     typ,
@@ -241,7 +241,7 @@ const fenster = {
     // ist das Fenster bereits offen? => Fenster fokussieren
     // (bei Bedeutungsgerüst- und XML-Fenstern wissen die Hauptfenster,
     // ob sie auf sind)
-    if (!/^(bedeutungen|xml)$/.test(typ)) {
+    if (!/^(bedeutungen|bedvis|xml)$/.test(typ)) {
       for (const [ id, val ] of Object.entries(dd.win)) {
         if (val.typ === typ) {
           const w = BrowserWindow.fromId(parseInt(id, 10));
@@ -307,6 +307,22 @@ const fenster = {
       opt.height = optionen.data["fenster-bedeutungen"].height;
       opt.minWidth = 400;
       opt.minHeight = 400;
+    } else if (typ === "bedvis") {
+      opt.title = winTitle;
+      let { x, y, width, height } = optionen.data["fenster-bedvis"];
+      if (!width) {
+        width = Bildschirm.workArea.width < 1500 ? Bildschirm.workArea.width : 1500;
+      }
+      if (!height) {
+        height = Bildschirm.workArea.height;
+        y = Bildschirm.workArea.y;
+      }
+      opt.x = x;
+      opt.y = y;
+      opt.width = width;
+      opt.height = height;
+      opt.minWidth = 900;
+      opt.minHeight = 600;
     } else if (typ === "xml") {
       opt.title = winTitle;
       opt.width = Math.round(Bildschirm.workArea.width / 2);
@@ -353,8 +369,8 @@ const fenster = {
     });
 
     // ggf. maximieren
-    if (typ === "bedeutungen" &&
-        optionen.data["fenster-bedeutungen"].maximiert) {
+    if (typ === "bedeutungen" && optionen.data["fenster-bedeutungen"].maximiert ||
+        typ === "bedvis" && optionen.data["fenster-bedvis"].maximiert) {
       bw.maximize();
     }
 
@@ -422,6 +438,8 @@ const fenster = {
       // ggf. Daten an das Bedeutungsgerüst schicken
       if (typ === "bedeutungen" && caller) {
         caller.send("bedeutungen-fenster-daten");
+      } else if (typ === "bedvis" && caller) {
+        caller.send("bedvis-data-send");
       } else if (typ === "xml" && caller) {
         caller.send("red-xml-daten");
       }

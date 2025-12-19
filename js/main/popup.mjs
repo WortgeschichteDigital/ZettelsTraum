@@ -64,6 +64,34 @@ const punkte = {
     icon: "zahnrad.png",
     click: () => appMenu.befehl("popup-optionen-oeffnen", "einstellungen-link-bedeutungsgeruest"),
   },
+  bedvisCopy: {
+    label: "Kopieren",
+    icon: "kopieren.png",
+  },
+  bedvisExportJSON: {
+    label: "JSON",
+    icon: "json.png",
+    click: () => appMenu.befehl("bedvis-export", "json"),
+  },
+  bedvisExportModule: {
+    label: "Modul",
+    icon: "modul.png",
+    click: () => appMenu.befehl("bedvis-export", "module"),
+  },
+  bedvisExportSvg: {
+    label: "SVG",
+    icon: "bild.png",
+    click: () => appMenu.befehl("bedvis-export", "svg"),
+  },
+  bedvisExportXml: {
+    label: "XML",
+    icon: "xml.png",
+    click: () => appMenu.befehl("bedvis-export", "xml"),
+  },
+  bedvisSave: {
+    label: "Speichern",
+    icon: "speichern.png",
+  },
   belegBearbeiten: {
     label: "Beleg bearbeiten",
     icon: "karteikarte.png",

@@ -1,5 +1,6 @@
 
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import helfer from "./helfer.mjs";
 import kartei from "./kartei.mjs";
 import liste from "./liste.mjs";
@@ -162,7 +163,7 @@ const lemmata = {
           // 14 = Hellgrün
           const farben = [ 0, 14, 6, 11, 12, 5 ];
           while (farben.length < 17) {
-            const fa = helfer.zufall(1, 17);
+            const fa = shared.rand(1, 17);
             if (fa !== 9 && !farben.includes(fa)) {
               // 9 = Blau (auslassen, weil Standardfarbe für Annotierungen)
               farben.push(fa);
@@ -236,7 +237,7 @@ const lemmata = {
             if (fa === -1) {
               if (!farben.length) {
                 do {
-                  fa = helfer.zufall(0, 17);
+                  fa = shared.rand(0, 17);
                   // 9 = Blau (auslassen, weil Standardfarbe für Annotierungen)
                 } while (fa === 9);
               } else {
@@ -287,6 +288,9 @@ const lemmata = {
 
       // Änderungsmarkierung für Kartei setzen
       kartei.karteiGeaendert(true);
+
+      // Änderungshinweis an das BedVis-Fenster schicken
+      bedvis.cardboxUpdate();
 
       // Änderungsmarkierung für Fenster zurücksetzen
       lemmata.geaendert = false;
@@ -684,7 +688,7 @@ const lemmata = {
     document.querySelectorAll("#lemmata-liste input[type='number']").forEach(i => {
       i.addEventListener("input", function () {
         // Auto-Korrektur fehlerhafter Eingaben
-        helfer.inputNumber(this);
+        shared.inputNumber(this);
         // Eingabe übernehmen
         const idxLemma = parseInt(this.closest("tr").dataset.idx, 10);
         dd.file.la.la[idxLemma].ho = parseInt(this.value, 10);
