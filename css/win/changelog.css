@@ -196,6 +196,10 @@ li p {
 
 /* BESONDERHEITEN ------------------------------- */
 
+.changelog-message {
+  text-align: center;
+}
+
 .datei {
   font-family: "Noto Sans Mono", "Noto Sans Symbols2", monospace;
 }
