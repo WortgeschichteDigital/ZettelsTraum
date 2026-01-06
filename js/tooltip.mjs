@@ -23,7 +23,7 @@ const tooltip = {
   //   basis = node | undefined
   init (basis = document) {
     basis.querySelectorAll("[title], [data-description]").forEach(i => {
-      let title = i.title || i.dataset.description;
+      let title = i.title || i.dataset.description || "";
       const repMap = new Map([
         [ /(?<!<)\//g, "/<wbr>" ],
         [ / \+ /g, "\u00A0+\u00A0" ],
