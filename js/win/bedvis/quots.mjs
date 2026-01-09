@@ -77,24 +77,48 @@ const quots = {
     frame.appendChild(frag);
 
     // reset filters
-    this.filterBy = {};
+    this.filterReset(false);
     this.filterResetIcon();
   },
 
-  // filter list of active IDs
-  filterBy: {},
+  // filter configuration
+  filterBy: {
+    // list of active meanings
+    meanings: {},
+
+    // tags in the quotation text
+    //   0 = all quotations
+    //   1 = only quotations with headwords
+    //   2 = only quotations with marks
+    tags: 0,
+  },
 
   // filter the meanings
   filter () {
     // filter quotations
     const quotations = document.querySelectorAll("#wgd-belegauswahl > div");
-    const filterBy = Object.keys(this.filterBy);
+    const meanings = Object.keys(this.filterBy.meanings);
     for (const q of quotations) {
-      if (filterBy.length &&
-          !this.maps.quotToMean[q.id].some(i => filterBy.includes(i))) {
-        q.classList.add("aus");
-      } else {
+      let passed = true;
+
+      // filter by meanings
+      if (meanings.length &&
+          !this.maps.quotToMean[q.id].some(i => meanings.includes(i))) {
+        passed = false;
+      }
+
+      // filter by tags
+      const { tags } = this.filterBy;
+      if (tags === 1 && !q.querySelector(".wgd-stichwort") ||
+          tags === 2 && !q.querySelector(".wgd-mark")) {
+        passed = false;
+      }
+
+      // toggle quotation
+      if (passed) {
         q.classList.remove("aus");
+      } else {
+        q.classList.add("aus");
       }
     }
 
@@ -103,17 +127,33 @@ const quots = {
   },
 
   // reset all filters
-  filterReset () {
-    for (const id of Object.keys(this.filterBy)) {
-      delete this.filterBy[id];
+  //   filter = boolean
+  filterReset (filter) {
+    // filter configuration
+    this.filterBy = {
+      meanings: {},
+      tags: 0,
+    };
+
+    // special filter forms
+    document.querySelectorAll("#meanings-filters input").forEach(i => {
+      if (i.value === "0") {
+        i.checked = true;
+      } else {
+        i.checked = false;
+      }
+    });
+
+    // filter quotations
+    if (filter) {
+      this.filter();
     }
-    this.filter();
   },
 
   // toggle reset icon
   filterResetIcon () {
     const reset = document.getElementById("quot-fun-reset");
-    if (Object.keys(this.filterBy).length) {
+    if (Object.keys(this.filterBy.meanings).length || this.filterBy.tags) {
       reset.classList.remove("aus");
     } else {
       reset.classList.add("aus");

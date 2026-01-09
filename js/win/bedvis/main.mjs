@@ -83,7 +83,7 @@ window.addEventListener("load", async () => {
   });
   document.getElementById("quot-fun-reset").addEventListener("click", evt => {
     evt.preventDefault();
-    quots.filterReset();
+    quots.filterReset(true);
   });
   document.getElementById("config-fun-lemmas").addEventListener("click", evt => {
     evt.preventDefault();
@@ -110,6 +110,14 @@ window.addEventListener("load", async () => {
       evt.preventDefault();
       const type = this.id.replace(/^.+-/, "");
       io.exportDo(type);
+    });
+  });
+
+  // OVERLAY MEANINGS
+  document.querySelectorAll("#meanings-filters input").forEach(i => {
+    i.addEventListener("change", function () {
+      quots.filterBy.tags = parseInt(this.value, 10);
+      quots.filter();
     });
   });
 

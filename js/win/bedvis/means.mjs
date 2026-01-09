@@ -240,6 +240,14 @@ const means = {
     const text = document.createTextNode(headingsData[ctx].text);
     heading.replaceChild(text, heading.childNodes[1]);
 
+    // toggle  visibility of special filters
+    const filters = document.getElementById("meanings-filters");
+    if (ctx === "quot") {
+      filters.classList.remove("aus");
+    } else {
+      filters.classList.add("aus");
+    }
+
     // toggle visibility of lemmas
     document.querySelectorAll("#meanings-cont > ol").forEach(list => {
       const { lemma } = list.dataset;
@@ -258,7 +266,7 @@ const means = {
       lemma.meanings.forEach(i => active.add(i.id));
     }
     win.querySelectorAll("li").forEach(i => {
-      if (ctx === "quot" && quots.filterBy[i.dataset.meaning] ||
+      if (ctx === "quot" && quots.filterBy.meanings[i.dataset.meaning] ||
           ctx === "config" && active.has(i.id)) {
         i.classList.add("selected");
       } else {
@@ -272,11 +280,11 @@ const means = {
   toggleQuot (id) {
     const item = document.getElementById(id);
     const { meaning } = item.dataset;
-    if (quots.filterBy[meaning]) {
-      delete quots.filterBy[meaning];
+    if (quots.filterBy.meanings[meaning]) {
+      delete quots.filterBy.meanings[meaning];
       item.classList.remove("selected");
     } else {
-      quots.filterBy[meaning] = true;
+      quots.filterBy.meanings[meaning] = true;
       item.classList.add("selected");
     }
     quots.filter();

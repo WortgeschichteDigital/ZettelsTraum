@@ -13,6 +13,20 @@
   mask-image: url(../../../img/geruest.svg);
 }
 
+#meanings-filters {
+  padding: 10px 10px 0;
+
+  .wgd-stichwort {
+    color: var(--stichwort);
+    font-weight: bold;
+  }
+
+  .wgd-mark {
+    color: var(--markierung);
+    font-weight: bold;
+  }
+}
+
 #meanings-wrap {
   padding: 10px;
 }
