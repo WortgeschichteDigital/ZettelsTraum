@@ -1,5 +1,6 @@
 
 import annotieren from "./annotieren.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import kartei from "./kartei.mjs";
 import liste from "./liste.mjs";
@@ -325,6 +326,7 @@ const belegKlammern = {
       dd.file.ka[p.dataset.id].bs = bs;
       dd.file.ka[p.dataset.id].dm = new Date().toISOString();
       kartei.karteiGeaendert(true);
+      bedvis.cardboxUpdate();
     }
   },
 };

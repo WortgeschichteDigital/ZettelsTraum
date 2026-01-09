@@ -1,4 +1,5 @@
 
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import helfer from "./helfer.mjs";
 import kartei from "./kartei.mjs";
@@ -113,16 +114,20 @@ const stamm = {
 
   // Formvarianten-Fenster schließen
   schliessen () {
-    if (stamm.geaendert &&
-        shared.hauptfunktion === "liste") {
-      liste.status(true);
-    } else if (stamm.geaendert &&
-        shared.hauptfunktion === "karte" &&
-        beleg.leseansicht) {
-      beleg.leseFill();
-      if (suchleiste.aktiv) {
-        suchleiste.suchen(true);
+    if (stamm.geaendert) {
+      // Update von Belegliste oder Karteikarte
+      if (shared.hauptfunktion === "liste") {
+        liste.status(true);
+      } else if (shared.hauptfunktion === "karte" &&
+          beleg.leseansicht) {
+        beleg.leseFill();
+        if (suchleiste.aktiv) {
+          suchleiste.suchen(true);
+        }
       }
+
+      // Änderungshinweis an das BedVis-Fenster schicken
+      bedvis.cardboxUpdate();
     }
     overlay.ausblenden(document.getElementById("stamm"));
   },
