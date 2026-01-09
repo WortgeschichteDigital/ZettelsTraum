@@ -4,6 +4,7 @@ import events from "./events.mjs";
 import lemmas from "./lemmas.mjs";
 import load from "./load.mjs";
 import means from "./means.mjs";
+import misc from "./misc.mjs";
 
 import dialog from "../../dialog.mjs";
 import shared from "../../shared.mjs";
@@ -47,10 +48,14 @@ const config = {
     ta.setAttribute("placeholder", "Beschreibungstext");
     ta.value = da.description || "";
     ta.addEventListener("change", function () {
-      const text = this.value
+      const valueRaw = this.value;
+      const text = misc.typo(valueRaw)
         .trim()
         .replace(/\n/g, " ")
         .replace(/\s{2,}/g, " ");
+      if (valueRaw !== text) {
+        this.value = text;
+      }
       da.description = text;
       load.svg();
       load.sha1Update();
@@ -384,8 +389,18 @@ const config = {
           const { vis } = load.data;
 
           // data update
+          const valueRaw = this.value;
+          let value = valueRaw.trim();
+          if (key === "definition") {
+            value = misc.typo(value);
+          }
           const meaning = vis.da.lemmas[lemma].meanings.find(i => i.id === id);
-          meaning[key] = type === "number" ? parseInt(this.value, 10) : this.value.trim();
+          meaning[key] = type === "number" ? parseInt(value, 10) : value;
+
+          // update field
+          if (valueRaw !== value) {
+            this.value = value;
+          }
 
           // update the configuration block header
           if (vis.ll && key === "definition") {
@@ -618,9 +633,10 @@ const config = {
         const { key } = this.dataset;
 
         const evt = load.data.vis.da.lemmas[lemma].events.find(i => i.id === id);
-        let value = this.value.trim();
+        const valueRaw = this.value;
+        let value = valueRaw.trim();
         if (key === "description") {
-          value = value
+          value = misc.typo(value)
             .replace(/\n/g, " ")
             .replace(/\s{2,}/g, " ");
         } else if (key === "name") {
@@ -629,11 +645,16 @@ const config = {
         evt[key] = type === "number" ? parseInt(value, 10) : value;
 
         if (key === "name") {
+          value = misc.typo(value);
           const header = this.closest(".event-cont").querySelector(".event-header");
           while (header.childNodes.length > 1) {
             header.removeChild(header.firstChild);
           }
           header.insertBefore(config.evtHeaderText(evt.name), header.lastChild);
+        }
+
+        if (valueRaw !== value) {
+          this.value = value;
         }
 
         load.svg();
@@ -794,22 +815,28 @@ const config = {
   labels: [
     {
       key: "definition",
-      help: "Die in der Grafik angezeigte Bedeutung wird normalerweise aus dem Bedeutungsgerüst ausgelesen. Sollte die Bedeutung aus dem Gerüst zu lang oder zu komplex sein, können Sie hier einen Alias eintragen, der in der Grafik anstelle der Bedeutung aus dem Gerüst gedruckt wird.",
+      help: "<p>Die in der Grafik angezeigte Bedeutung wird normalerweise aus dem Bedeutungsgerüst ausgelesen. Sollte die Bedeutung aus dem Gerüst zu lang oder zu komplex sein, können Sie hier einen Alias eintragen, der in der Grafik anstelle der Bedeutung aus dem Gerüst gedruckt wird.</p>\
+      <p>In diesem Feld sind die Markdownformatierungen für <i>_kursiven Text_</i> und <b>__fetten Text__</b> zulässig.</p>\
+      <p>Wenn Sie Text in einfache Guillemets einschließen (›Text‹), entfallen die automatisch erzeugten Guillemets, in die eine Bedeutung normalerweise eingeschlossen ist.</p>\
+      <p>Nach der Eingabe werden einige typographische Verbesserungen vorgenommen (z.\u00A0B. \"Text\" zu „Text“ oder >Text< zu ›Text‹).</p>",
       text: "Bedeutungsangabe",
     },
     {
       key: "description",
-      help: "Die Beschreibung ist für Menschen mit eingeschränkter Sehfähigkeit von Bedeutung. Sie sollte kurz sein (zwei, drei Sätze), dabei aber die wesentlichen Inhalte der Grafik sprachlich vermitteln. Zeilenumbrüche sind <em>nicht</em> erlaubt.",
+      help: "<p>Die Beschreibung ist für Menschen mit eingeschränkter Sehfähigkeit von Bedeutung. Sie sollte kurz sein (zwei, drei Sätze), dabei aber die wesentlichen Inhalte der Grafik sprachlich vermitteln. Zeilenumbrüche sind <em>nicht</em> erlaubt.</p>\
+      <p>Nach der Eingabe werden einige typographische Verbesserungen vorgenommen (z.\u00A0B. \"Text\" zu „Text“ oder >Text< zu ›Text‹).</p>",
       text: "Beschreibung der Grafik",
     },
     {
       key: "event-description",
-      help: "Sie können das Ereignis – wenn Sie möchten – genauer beschreiben. Die Beschreibung wird in einem Tooltip angezeigt, wenn man mit der Maus über den Ereignisnamen fährt. Zeilenumbrüche sind <em>nicht</em> erlaubt.",
+      help: "<p>Sie können das Ereignis – wenn Sie möchten – genauer beschreiben. Die Beschreibung wird in einem Tooltip angezeigt, wenn man mit der Maus über den Ereignisnamen fährt. Zeilenumbrüche sind <em>nicht</em> erlaubt.</p>\
+      <p>Nach der Eingabe werden einige typographische Verbesserungen vorgenommen (z.\u00A0B. \"Text\" zu „Text“ oder >Text< zu ›Text‹).</p>",
       text: "Beschreibung",
     },
     {
       key: "event-name",
-      help: "Hier geben Sie den Namen des Ereignisses an. Ein Ereignisname ist zwingend erforderlich. Zeilenumbrüche sind erlaubt.",
+      help: "<p>Hier geben Sie den Namen des Ereignisses an. Ein Ereignisname ist zwingend erforderlich. Zeilenumbrüche sind erlaubt.</p>\
+      <p>Nach der Eingabe werden einige typographische Verbesserungen vorgenommen (z.\u00A0B. \"Text\" zu „Text“ oder >Text< zu ›Text‹).</p>",
       text: "Name",
     },
     {
@@ -829,7 +856,9 @@ const config = {
     },
     {
       key: "ll-definition",
-      help: "Das hier angegebene Lemma wird auf der Webseite verlinkt, wenn es sich um ein Nebenlemma des Artikels oder um ein Lemma handelt, das in einem anderen Artikel behandelt wird. Dieses Feld muss zwingend ausgefüllt werden.",
+      help: "<p>Das hier angegebene Lemma wird auf der Webseite verlinkt, wenn es sich um ein Nebenlemma des Artikels oder um ein Lemma handelt, das in einem anderen Artikel behandelt wird. Dieses Feld muss zwingend ausgefüllt werden.</p>\
+      <p>In diesem Feld ist die Markdownformatierung für <b>__fetten Text__</b> zulässig.</p>\
+      <p>Nach der Eingabe werden einige typographische Verbesserungen vorgenommen (z.\u00A0B. \"Text\" zu „Text“ oder >Text< zu ›Text‹).</p>",
       text: "Lemma-Angabe",
     },
     {

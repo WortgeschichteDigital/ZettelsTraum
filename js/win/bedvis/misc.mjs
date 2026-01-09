@@ -49,4 +49,14 @@ const misc = {
       });
     });
   },
+
+  // typographical enhancements
+  //   str = string
+  typo (str) {
+    return str
+      .replace(/"(.+?)"/g, (...args) => `„${args[1]}“`)
+      .replace(/'(.+?)'/g, (...args) => `‚${args[1]}‘`)
+      .replace(/'/g, "’")
+      .replace(/>(.+?)</g, (...args) => `›${args[1]}‹`);
+  },
 };
