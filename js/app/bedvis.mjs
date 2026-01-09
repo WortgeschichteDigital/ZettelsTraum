@@ -117,10 +117,11 @@ const bedvis = {
       const belegDoc = sharedXml.parseXML(belegStr);
 
       // clean-up
-      if (!beleg.bs.includes('<span class="belegschnitt">')) {
+      if (!beleg.bs.includes('<span class="belegschnitt">') &&
+          (belegDoc.querySelector("Stichwort") || belegDoc.querySelector("Markierung"))) {
         const paragraphs = belegDoc.querySelectorAll("Absatz");
         for (const p of paragraphs) {
-          if (!p.querySelector("Stichwort")) {
+          if (!p.querySelector("Stichwort") && !p.querySelector("Markierung")) {
             p.parentNode.removeChild(p);
           }
         }
