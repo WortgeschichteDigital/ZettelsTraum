@@ -4102,8 +4102,16 @@ const xml = {
     xmlStr += "\t".repeat(2) + "</Literatur>\n";
     // Bedeutungsgerüste
     if (xml.bgAkt > -1) {
+      let n = 0;
       for (const g of d.bg) {
-        xmlStr += indentStr(g.xl, 2) + "\n";
+        n++;
+        let { xl } = g;
+        const idRep = `l${n}-`;
+        xl = xl.replace(/<Lesart.+?>/gs, m => m.replace(/xml:id="(.+?)"/, (...args) => {
+          const id = args[1].replace(/^l[0-9]+-/, idRep);
+          return `xml:id="${id}"`;
+        }));
+        xmlStr += indentStr(xl, 2) + "\n";
       }
       xmlStr += "\n";
     }
