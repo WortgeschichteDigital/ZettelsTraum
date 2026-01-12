@@ -88,7 +88,13 @@ const lemmas = {
     // fill in lemmas
     const { vis } = load.data;
     const tab = this.makeTab(vis, this.list);
-    document.getElementById("lemmas-cont").replaceChildren(tab);
+    const cont = document.getElementById("lemmas-cont");
+    if (tab.querySelectorAll("tr").length > 10) {
+      cont.classList.add("many-items");
+    } else {
+      cont.classList.remove("many-items");
+    }
+    cont.replaceChildren(tab);
   },
 
   // create a table with lemma forms

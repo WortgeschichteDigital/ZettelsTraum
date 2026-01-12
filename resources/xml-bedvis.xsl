@@ -25,69 +25,34 @@
     <xsl:value-of select="$articleType"/>
   </section>
 
-  <!-- Lemmas -->
+  <!-- Main lemmas -->
   <section id="wgd-lemmas">
-    <xsl:for-each select="//z:Lemma[@Typ = 'Hauptlemma']">
-      <xsl:if test="position() > 1">
-        <xsl:text>|</xsl:text>
-      </xsl:if>
-      <xsl:variable name="text">
-        <xsl:for-each select="z:Schreibung">
-          <xsl:if test="position() > 1">
-            <xsl:text>/</xsl:text>
-          </xsl:if>
-          <xsl:call-template name="hidx">
-            <xsl:with-param name="schreibung" select="current()"/>
-          </xsl:call-template>
-          <xsl:value-of select="current()"/>
-        </xsl:for-each>
-      </xsl:variable>
-      <xsl:value-of select="$text"/>
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="$articleType = 'Wortfeldartikel'">
+        <xsl:call-template name="lemmas-links">
+          <xsl:with-param name="base" select="//z:Verweise[@Typ = 'Wortfeld']/z:Verweis"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="lemmas-tags">
+          <xsl:with-param name="base" select="//z:Artikel/z:Lemma[@Typ = 'Hauptlemma']"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </section>
 
-  <!-- All lemmas (depending of the article type: article lemmas or field lemmas) -->
+  <!-- All lemmas -->
   <section id="wgd-all-lemmas">
     <xsl:choose>
       <xsl:when test="$articleType = 'Wortfeldartikel'">
-        <xsl:for-each select="//z:Verweise[@Typ = 'Wortfeld']/z:Verweis">
-          <xsl:variable name="lemma">
-            <xsl:call-template name="hidx">
-              <xsl:with-param name="schreibung" select="z:Verweisziel"/>
-            </xsl:call-template>
-            <xsl:choose>
-              <xsl:when test="z:Verweistext/text()">
-                <xsl:value-of select="z:Verweistext"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="z:Verweisziel"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:if test="position() > 1">
-            <xsl:text>/</xsl:text>
-          </xsl:if>
-          <xsl:value-of select="$lemma"/>
-        </xsl:for-each>
+        <xsl:call-template name="lemmas-links">
+          <xsl:with-param name="base" select="//z:Verweise[@Typ = 'Wortfeld']/z:Verweis"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="//z:Artikel/z:Lemma">
-          <xsl:if test="position() > 1">
-            <xsl:text>|</xsl:text>
-          </xsl:if>
-          <xsl:variable name="text">
-            <xsl:for-each select="z:Schreibung">
-              <xsl:if test="position() > 1">
-                <xsl:text>/</xsl:text>
-              </xsl:if>
-              <xsl:call-template name="hidx">
-                <xsl:with-param name="schreibung" select="current()"/>
-              </xsl:call-template>
-              <xsl:value-of select="current()"/>
-            </xsl:for-each>
-          </xsl:variable>
-          <xsl:value-of select="$text"/>
-        </xsl:for-each>
+        <xsl:call-template name="lemmas-tags">
+          <xsl:with-param name="base" select="//z:Artikel/z:Lemma"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </section>
@@ -104,6 +69,50 @@
 
   </body>
 </html>
+</xsl:template>
+
+<xsl:template name="lemmas-tags">
+  <xsl:param name="base"/>
+  <xsl:for-each select="$base">
+    <xsl:if test="position() > 1">
+      <xsl:text>|</xsl:text>
+    </xsl:if>
+    <xsl:variable name="text">
+      <xsl:for-each select="z:Schreibung">
+        <xsl:if test="position() > 1">
+          <xsl:text>/</xsl:text>
+        </xsl:if>
+        <xsl:call-template name="hidx">
+          <xsl:with-param name="schreibung" select="current()"/>
+        </xsl:call-template>
+        <xsl:value-of select="current()"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="$text"/>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="lemmas-links">
+  <xsl:param name="base"/>
+  <xsl:for-each select="$base">
+    <xsl:variable name="lemma">
+      <xsl:call-template name="hidx">
+        <xsl:with-param name="schreibung" select="z:Verweisziel"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="z:Verweistext/text()">
+          <xsl:value-of select="z:Verweistext"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="z:Verweisziel"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="position() > 1">
+      <xsl:text>|</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$lemma"/>
+  </xsl:for-each>
 </xsl:template>
 <!-- // P A G E -->
 

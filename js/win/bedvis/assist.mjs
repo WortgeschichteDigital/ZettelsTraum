@@ -315,6 +315,9 @@ const assist = {
     //   caller = element
     //   type = string
     meaningsWin (caller, type) {
+      // hide the special filters
+      document.getElementById("meanings-filters").classList.add("aus");
+
       // insert meanings list into the window
       const idx = parseInt(caller.dataset.idx, 10);
       const clone = assist.visData.lists[idx].cloneNode(true);
@@ -336,6 +339,12 @@ const assist = {
         for (const id of assist.visData.meanings[lemma]) {
           clone.querySelector("#" + id).classList.add("selected");
         }
+      }
+      if (!clone.hasChildNodes()) {
+        clone.classList.add("empty");
+        const li = document.createElement("li");
+        clone.appendChild(li);
+        li.textContent = "Bedeutungsgerüst ohne Bedeutungen";
       }
       document.getElementById("meanings-cont").replaceChildren(clone);
 

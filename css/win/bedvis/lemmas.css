@@ -9,8 +9,16 @@
   mask-image: url(../../../img/lemmata.svg);
 }
 
-#lemmas-cont {
+#lemmas-wrap {
   padding: 10px;
+}
+
+#lemmas-cont {
+  max-height: calc(100vh - 40px - 28px - 2 * 20px);
+
+  &.many-items {
+    overflow: hidden auto;
+  }
 
   table {
     margin: 0 auto;
