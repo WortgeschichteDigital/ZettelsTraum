@@ -84,7 +84,7 @@ const popup = {
         return "kopieren-code";
       }
       // Bedeutungsvisualisierung
-      if (pfad[i].nodeName === "P" &&
+      if (pfad[i].nodeName === "FIGURE" &&
           pfad[i].classList.contains("bedvis")) {
         return "bedvis-export";
       }

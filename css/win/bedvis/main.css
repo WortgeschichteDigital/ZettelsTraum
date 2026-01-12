@@ -131,8 +131,28 @@ main {
     border-left: 1px solid var(--linie);
     padding-left: 20px;
 
-    .bedvis svg {
-      width: 100%;
+    figure {
+      margin: 0 auto;
+      border-bottom: 1px solid #ccc;
+      padding: 5px;
+      max-width: 720px;
+      background-color: #f7f7f7;
+
+      p {
+        margin: 0;
+        padding: 5px;
+        background-color: #fff;
+
+        svg {
+          width: 100%;
+        }
+      }
+
+      figcaption {
+        padding: 7px 7px 0;
+        font-family: "PT Sans", sans-serif;
+        line-height: 20px;
+      }
     }
 
     .error {

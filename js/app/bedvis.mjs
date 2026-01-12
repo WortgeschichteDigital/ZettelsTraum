@@ -80,21 +80,42 @@ const bedvis = {
     const ns = sharedXml.nsResolver("z");
     let xmlDoc = sharedXml.parseXML(doc);
     const artikel = xmlDoc.querySelector("Artikel");
+    const { wf } = dd.file.la;
+    artikel.setAttribute("Typ", wf ? "Wortfeldartikel" : "Vollartikel");
 
     // append lemmas
+    let verweise;
+    if (wf) {
+      verweise = document.createElementNS(ns, "Verweise");
+      artikel.appendChild(verweise);
+      verweise.setAttribute("Typ", "Wortfeld");
+    }
     for (const la of dd.file.la.la) {
-      if (la.nl) {
+      if (wf && !la.nl) {
         continue;
       }
-      const lemma = document.createElementNS(ns, "Lemma");
-      artikel.appendChild(lemma);
-      lemma.setAttribute("Typ", "Hauptlemma");
-      for (const sc of la.sc) {
-        const schreibung = document.createElementNS(ns, "Schreibung");
-        lemma.appendChild(schreibung);
-        schreibung.textContent = sc;
+      if (wf) {
+        const verweis = document.createElementNS(ns, "Verweis");
+        verweise.appendChild(verweis);
+        const vt = document.createElementNS(ns, "Verweistext");
+        verweis.appendChild(vt);
+        vt.textContent = la.sc.join("/");
+        const vz = document.createElementNS(ns, "Verweisziel");
+        verweis.appendChild(vz);
         if (la.ho) {
-          schreibung.setAttribute("hidx", la.ho);
+          vz.setAttribute("hidx", la.ho);
+        }
+      } else {
+        const lemma = document.createElementNS(ns, "Lemma");
+        artikel.appendChild(lemma);
+        lemma.setAttribute("Typ", la.nl ? "Nebenlemma" : "Hauptlemma");
+        for (const sc of la.sc) {
+          const schreibung = document.createElementNS(ns, "Schreibung");
+          lemma.appendChild(schreibung);
+          schreibung.textContent = sc;
+          if (la.ho) {
+            schreibung.setAttribute("hidx", la.ho);
+          }
         }
       }
     }

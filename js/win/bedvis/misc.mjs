@@ -18,6 +18,57 @@ const misc = {
     }
   },
 
+  // create the caption for a figure
+  //   visData = object
+  //   type = string (html | xml)
+  makeCaption (visData, type) {
+    const tagMap = {
+      mentioned: {
+        html: "i",
+        xml: "erwaehntes_Zeichen",
+      },
+      term: {
+        html: "i",
+        xml: "Stichwort",
+      },
+    };
+
+    let caption;
+    if (visData.ll) {
+      // lemma list
+      const articleLemmas = data.vis.xml.html
+        .getElementById("wgd-all-lemmas")
+        .textContent
+        .split("|")
+        .map(i => i.split("/"))
+        .flat();
+      const lemmas = [];
+      for (const i of visData.da.lemmas.lemmas.meanings) {
+        const lemma = i.definition.replace(/_/g, "");
+        const tagType = articleLemmas.includes(lemma) ? "term" : "mentioned";
+        const tag = tagMap[tagType][type];
+        lemmas.push(`<${tag}>${lemma}</${tag}>`);
+      }
+      caption = "Chronologie der Wörter " + lemmasJoin(lemmas);
+    } else {
+      // meanings list
+      const lemmas = [];
+      const tag = tagMap.term[type];
+      for (const lemma of Object.keys(visData.da.lemmas)) {
+        lemmas.push(`<${tag}>${lemma}</${tag}>`);
+      }
+      caption = "Chronologie der Bedeutungen von " + lemmasJoin(lemmas);
+    }
+    return caption;
+
+    // join a lemma list
+    function lemmasJoin (lemmas) {
+      return lemmas
+        .join(", ")
+        .replace(/^(.+), /, (...args) => args[1] + " und ");
+    }
+  },
+
   // make a visualization ID
   makeId () {
     let id;

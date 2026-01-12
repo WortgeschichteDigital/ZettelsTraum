@@ -174,10 +174,16 @@ const load = {
     }
 
     // append graphics
-    const p = document.createElement("p");
-    cont.appendChild(p);
-    p.classList.add("bedvis");
-    p.appendChild(svg);
+    const fig = document.createElement("figure");
+    cont.appendChild(fig);
+    fig.classList.add("bedvis");
+    const graphics = document.createElement("p");
+    fig.appendChild(graphics);
+    graphics.appendChild(svg);
+    const figc = document.createElement("figcaption");
+    fig.appendChild(figc);
+    const caption = misc.makeCaption(this.data.vis, "html");
+    figc.innerHTML = `Visualisierung\u00A01: ${caption}`;
 
     // shorten overflowing definition text
     const svgWidth = parseInt(svg.getAttribute("width"), 10);

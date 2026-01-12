@@ -137,8 +137,13 @@ const xml = {
 
     // check for the existance of quotations and meanings
     const evaluator = xpath => xmlDoc.evaluate(xpath, xmlDoc, sharedXml.nsResolver, XPathResult.ANY_TYPE, null);
+    const requiredTags = [ "Belegreihe", "Lesarten" ];
+    const articleType = evaluator("//z:Artikel").iterateNext().getAttribute("Typ");
+    if (articleType === "Wortfeldartikel") {
+      requiredTags.pop();
+    }
     const missing = [];
-    for (const tag of [ "Belegreihe", "Lesarten" ]) {
+    for (const tag of requiredTags) {
       const exists = evaluator(`//z:${tag}`).iterateNext();
       if (!exists) {
         missing.push(`&lt;${tag}&gt;`);

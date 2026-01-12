@@ -69,9 +69,7 @@ const io = {
 
     // read and prepare data from clipboard
     let cb = await bridge.ipc.invoke("cb", "readText");
-    cb = cb
-      .trim()
-      .replace(/^<WGDBedVis.*?>|<\/WGDBedVis>$/g, "");
+    cb = cb.match(/<JSON>(.+?)<\/JSON>/s)?.[1]?.trim() || cb.trim();
 
     // unescape enteties
     // (&lt; &gt; &quot; &apos; &amp;)
@@ -333,7 +331,14 @@ const io = {
     // create text
     let text = this.prepData(visData);
     if (type === "xml") {
-      text = `<WGDBedVis xml:id="vis-1">${text}</WGDBedVis>`;
+      // enclose JSON in XML tags
+      const caption = misc.makeCaption(visData, "xml");
+      text = `<BedVis xml:id="vis-1">
+  <JSON>
+    ${text}
+  </JSON>
+  <Bildunterschrift>${caption}</Bildunterschrift>
+</BedVis>`;
     }
 
     // copy and feedback
