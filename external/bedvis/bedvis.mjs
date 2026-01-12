@@ -25,6 +25,12 @@ const shared = {
     // detect first year
     let first = 0;
     for (const val of Object.values(make.data.lemmas)) {
+      for (const evt of val.events) {
+        const year = evt.yearFrom;
+        if (year && (!first || year < first)) {
+          first = year;
+        }
+      }
       for (const meaning of val.meanings) {
         for (const id of meaning.quotations) {
           const year = this.getYear(id);
@@ -193,17 +199,17 @@ const make = {
 
   // create SVG
   //   config = object
+  //     artData = object (Artikel.json, see https://www.zdl.org/wb/wgd/api#Artikeldaten)
   //     standalone = boolean (create standalone image)
   svg (config) {
     // prepare attributes
-    const lemmas = Object.keys(this.data.lemmas);
-    let id;
+    let lemmas;
     if (this.data.lemmaList) {
-      id = this.data.lemmas.lemmas.meanings.flatMap(i => i.definition);
+      lemmas = this.data.lemmas.lemmas.meanings.flatMap(i => i.definition.replace(/_/g, ""));
     } else {
-      id = lemmas;
+      lemmas = Object.keys(this.data.lemmas);
     }
-    id = id
+    const id = lemmas
       .join(" ")
       .replace(/ /g, "_")
       .toLowerCase();
@@ -231,7 +237,7 @@ const make = {
     });
     svg.appendChild(title);
     const lemmasJoined = lemmas.join("“, „").replace(/^(.+)(, )/, (...args) => args[1] + " und ");
-    title.textContent = `Bedeutungsentwicklung von „${lemmasJoined}“`;
+    title.textContent = `Chronologie der ${this.data.lemmaList ? "Wörter" : "Bedeutungen von"} „${lemmasJoined}“`;
     if (this.data.description) {
       const desc = shared.createElement("desc", {
         id: "bedvis-desc-" + id,
@@ -303,13 +309,19 @@ const make = {
   meanings (svg, timespan, config) {
     // detect articles lemmas
     const ll = this.data.lemmaList;
-    const artLemmas = {};
+    const artWords = {};
     if (ll) {
       document.querySelector(".wgd-kopf-hl")?.textContent?.split(/\s·\s/)?.forEach(i => {
-        artLemmas[i] = "";
+        artWords[i] = "";
       });
       document.querySelectorAll(".wgd-kopf-nl a").forEach(i => {
-        artLemmas[i.textContent] = i.getAttribute("href");
+        artWords[i.textContent] = i.getAttribute("href");
+      });
+      document.querySelectorAll("#wgd-wortinformationen > div > p > a").forEach(i => {
+        const href = i.getAttribute("href");
+        if (/^#/.test(href)) {
+          artWords[i.textContent] = href;
+        }
       });
     }
 
@@ -400,10 +412,10 @@ const make = {
         const defText = m.definition || meaning?.querySelector("q")?.textContent || "[keine Angabe]";
         if (ll) {
           // lemma list
-          def.textContent = defText;
+          fillDef(def, defText, ll);
         } else {
           // meaning list
-          def.textContent = `›${defText}‹`;
+          fillDef(def, defText, ll);
           let defNumber = meaning.querySelector(".wgd-zaehlz")?.textContent;
           let defParent = meaning.parentNode.parentNode;
           while (defParent.nodeName === "LI") {
@@ -415,6 +427,7 @@ const make = {
           }
           if (data.showNumbering && defNumber) {
             const numbering = shared.createElement("tspan", {
+              class: "bold",
               "dominant-baseline": "hanging",
             });
             numbering.textContent = defNumber + "\u00A0".repeat(2);
@@ -424,15 +437,34 @@ const make = {
         let defTarget;
         if (ll) {
           // lemma list
-          const lemma = m.definition;
-          if (typeof artLemmas[lemma] !== "undefined") {
-            defTarget = artLemmas[lemma];
-          } else {
-            defTarget = `${window.location.origin}/wb/wortgeschichten/${encodeURIComponent(lemma)}`;
+          let lemma = m.definition.replace(/_/g, "");
+          const sup = [ "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹" ];
+          const supIdx = sup.indexOf(lemma.substring(0, 1));
+          let hidx = 0;
+          if (supIdx >= 0) {
+            lemma = lemma.substring(1);
+            hidx = supIdx + 1;
+          }
+          if (typeof artWords[lemma] !== "undefined") {
+            defTarget = artWords[lemma];
+          } else if (config.artData?.values) {
+            forX: for (let le of config.artData.values.le) {
+              const hidxLe = parseInt(le.match(/ \((\d+)\)$/)?.[1] || 0, 10);
+              le = le.replace(/ \(.+?\)$/, "");
+              for (const leSplit of le.split("/")) {
+                if (leSplit === lemma && hidxLe === hidx) {
+                  if (hidx > 1) {
+                    lemma += "-" + hidx;
+                  }
+                  defTarget = `${window.location.origin}/wb/wortgeschichten/${encodeURIComponent(lemma)}`;
+                  break forX;
+                }
+              }
+            }
           }
         } else {
           // meaning list
-          defTarget = meaning.querySelector("a")?.getAttribute("href") || "";
+          defTarget = meaning.querySelector("a")?.getAttribute("href");
         }
         if (defTarget && /^(#|http)/.test(defTarget)) {
           const a = shared.createElement("a", {
@@ -470,38 +502,25 @@ const make = {
             usedFrom = lineStart - 30;
           }
           const x1 = usedFrom > 0 ? usedFrom : 0;
-          const hasRealQuots = quots.some(i => typeof i.id === "string");
           for (let i = 1; i <= 2; i++) {
             const cl = i === 1 ? "extension-norm" : "extension-hover";
-            let extension;
-            if (!hasRealQuots && !ll) {
-              extension = shared.createElement("line", {
-                x1,
-                y1: lineY,
-                x2: lineStart,
-                y2: lineY,
-                "stroke-width": lineWidth,
-                class: "extension " + cl,
-              });
-            } else {
-              const gradId = shared.createGradient({
-                svg,
-                x1,
-                x2: x1 + 25,
-                fadeIn: true,
-                cl,
-              });
-              extension = shared.createElement("line", {
-                x1,
-                y1: lineY,
-                x2: lineStart,
-                y2: lineY,
-                stroke: `url(#${gradId})`,
-                "stroke-dasharray": dasharray,
-                "stroke-width": lineWidth,
-                class: cl,
-              });
-            }
+            const gradId = shared.createGradient({
+              svg,
+              x1,
+              x2: x1 + 25,
+              fadeIn: true,
+              cl,
+            });
+            const extension = shared.createElement("line", {
+              x1,
+              y1: lineY,
+              x2: lineStart,
+              y2: lineY,
+              stroke: `url(#${gradId})`,
+              "stroke-dasharray": dasharray,
+              "stroke-width": lineWidth,
+              class: cl,
+            });
             g.appendChild(extension);
           }
         }
@@ -562,7 +581,7 @@ const make = {
           // year
           const year = shared.createElement("text", {
             x: cx,
-            y: lineY + circleRadius + 2,
+            y: lineY + circleRadius + 3,
             "dominant-baseline": "hanging",
             class: "year",
           });
@@ -583,6 +602,68 @@ const make = {
 
         // increase top (after meaning group)
         top += groupHeight + 4;
+      }
+    }
+
+    // fill in the definition text
+    function fillDef (def, defText, ll) {
+      // Is it necessary to enclose the definition in guillemets?
+      const guillemets = !/›.+‹/.test(defText) && !ll;
+
+      // detect text chunks
+      const chunks = [];
+      while (defText.length) {
+        const text = defText.match(/^[^_]+/)?.[0];
+        if (text) {
+          chunks.push({
+            text,
+          });
+          defText = defText.substring(text.length);
+        } else {
+          let cl;
+          const type = defText.match(/^_+/)[0];
+          if (type.length === 1) {
+            cl = "italic";
+          } else if (type.length === 2) {
+            cl = "bold";
+          } else {
+            cl = "italic bold";
+          }
+          const m = defText.match(/^_+(.+?)_+/);
+          chunks.push({
+            text: m[1],
+            cl,
+          });
+          defText = defText.substring(m[0].length);
+        }
+      }
+
+      // create <tspan> tags
+      for (const i of chunks) {
+        const tspan = shared.createElement("tspan", {
+          "dominant-baseline": "hanging",
+        });
+        if (i.cl) {
+          tspan.setAttribute("class", i.cl);
+        }
+        tspan.textContent = i.text;
+        def.appendChild(tspan);
+      }
+
+      // add guillemets
+      // (for the shortening function, it is important that the guillemets
+      //  are enclosed in <tspan> tags)
+      if (guillemets) {
+        const open = shared.createElement("tspan", {
+          "dominant-baseline": "hanging",
+        });
+        open.textContent = "›";
+        def.insertBefore(open, def.firstChild);
+        const close = shared.createElement("tspan", {
+          "dominant-baseline": "hanging",
+        });
+        close.textContent = "‹";
+        def.appendChild(close);
       }
     }
 
@@ -627,11 +708,19 @@ const make = {
     ele.setAttribute("aria-label", text);
   },
 
+  // storage for the timeline labels
+  // (it might be necessary to remove them after they were created
+  //  if an event line overlaps a label)
+  timelineLabels: [],
+
   // add timeline
   //   svg = document
   //   timespan = object
   //   top = number
   timeline (svg, timespan, top) {
+    // clear label storage
+    this.timelineLabels = [];
+
     // draw line
     svg.appendChild(shared.createElement("line", {
       x1: 0,
@@ -672,11 +761,14 @@ const make = {
       step = 100;
     }
     do {
+      // ensure that the labels do not overlap
       const x = minYearX + Math.round((year - minYear) * timespan.pxYear);
       if (x < 15) {
         year += step;
         continue;
       }
+
+      // create a new label
       const text = shared.createElement("text", {
         x,
         y: top + 6,
@@ -687,6 +779,13 @@ const make = {
       text.textContent = year;
       svg.appendChild(text);
       year += step;
+
+      // store the label
+      // (its normal width is about 34px)
+      this.timelineLabels.push({
+        ele: text,
+        x: x - 20,
+      });
     } while (year < timespan.last);
 
     return {
@@ -780,6 +879,14 @@ const make = {
         g.appendChild(text);
         if (lines > eventLines) {
           eventLines = lines;
+        }
+
+        // remove a timeline label if it is overlapped by the marker line
+        for (const i of this.timelineLabels) {
+          if (x > i.x && x < i.x + 40) {
+            i.ele.parentNode.removeChild(i.ele);
+            break;
+          }
         }
       }
     }
