@@ -8,8 +8,6 @@ import misc from "./misc.mjs";
 import quots from "./quots.mjs";
 import xml from "./xml.mjs";
 
-import overlay from "../../overlay.mjs";
-
 import bedvis from "../../../external/bedvis/bedvis.mjs";
 
 export { load as default };
@@ -76,7 +74,7 @@ const load = {
 
     // close all overlays if the reload is triggered via cardbox update
     if (cardboxUpdate) {
-      await overlay.alleSchliessen();
+      await misc.closeAllOverlays();
     }
 
     // initialize lemmas

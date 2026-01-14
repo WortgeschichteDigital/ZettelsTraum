@@ -14,6 +14,10 @@ const misc = {
     const open = document.querySelectorAll(".overlay:not(.aus)");
     for (const win of open) {
       const { id } = win;
+      if (id === "assist" &&
+          document.getElementById("assist-cont").lastChild.querySelector("#make-hints")) {
+        continue;
+      }
       overlay.schliessen(document.getElementById(id));
       await new Promise(resolve => setTimeout(() => resolve(true), 200));
     }
