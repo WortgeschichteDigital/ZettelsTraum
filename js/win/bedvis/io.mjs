@@ -521,9 +521,11 @@ const io = {
   //   tar = boolean
   async saveModule (visData, path, tar) {
     // module data
+    const caption = misc.makeCaption(visData, "html");
     const data = {
       path,
       compress: tar,
+      caption: `Visualisierung&nbsp;1: ${caption}`,
       json: this.prepData(visData),
       meanings: [],
       quotations: [],

@@ -157,6 +157,7 @@ const bedvis = {
     // inject data
     index = index
       .replace(/data-bedvis=''/, `data-bedvis='${data.json}'`)
+      .replace(/<figcaption>/, `<figcaption>${data.caption}`)
       .replace(/<div id="wgd-lesarten">/, `<div id="wgd-lesarten">${data.meanings.join("\n")}`)
       .replace(/<div id="wgd-belegauswahl">/, `<div id="wgd-belegauswahl">${data.quotations.join("\n")}`);
 
