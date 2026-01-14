@@ -102,6 +102,16 @@ const misc = {
     });
   },
 
+  // save the ZTJ file
+  saveFile () {
+    bridge.ipc.invoke("webcontents-bridge", {
+      id: data.mainContentsId,
+      channel: "kartei-speichern",
+      data: null,
+    });
+    shared.animation("gespeichert");
+  },
+
   // shorten the overflowing definition text
   //   svg = document
   async shortenDef (svg) {

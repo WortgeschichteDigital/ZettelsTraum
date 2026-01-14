@@ -5,6 +5,7 @@ import io from "./io.mjs";
 import lemmas from "./lemmas.mjs";
 import load from "./load.mjs";
 import means from "./means.mjs";
+import misc from "./misc.mjs";
 import quots from "./quots.mjs";
 
 import winShared from "../winShared.mjs";
@@ -24,6 +25,10 @@ window.addEventListener("load", async () => {
   await dropdown2.init();
 
   // CLICK EVENTS
+  document.getElementById("save-file").addEventListener("click", evt => {
+    evt.preventDefault();
+    misc.saveFile();
+  });
   document.getElementById("main-fun-assist").addEventListener("click", evt => {
     evt.preventDefault();
     assist.show();

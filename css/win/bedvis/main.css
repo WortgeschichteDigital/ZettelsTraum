@@ -58,6 +58,7 @@ body {
     white-space: nowrap;
 
     h1 {
+      display: inline-block;
       margin: 0;
       color: #fff;
       font-size: 30px;

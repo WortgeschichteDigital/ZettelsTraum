@@ -1,5 +1,6 @@
 
 import bedeutungen from "./bedeutungen.mjs";
+import bedvisData from "./bedvis/data.mjs";
 import fehlerlog from "./fehlerlog.mjs";
 import hilfe from "./hilfe.mjs";
 import xml from "./xml.mjs";
@@ -147,6 +148,10 @@ const tastatur = {
         print();
       }
       return;
+    }
+    // Key "s" (BedVis-Fenster)
+    if (dd.win.typ === "bedvis" && m === "Ctrl" && evt.code === "KeyS") {
+      bedvisData.mod.misc.saveFile();
     }
     // Key "e" | "n" | "s" (XML-Fenster)
     if (dd.win.typ === "xml" && m === "Ctrl") {
