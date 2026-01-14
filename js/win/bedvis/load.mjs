@@ -190,19 +190,35 @@ const load = {
     svg.querySelectorAll("text.definition").forEach(i => {
       const box = i.getBBox();
       if (box.x + box.width > svgWidth) {
-        // replace definition
-        const percentage = Math.round((box.x + box.width - svgWidth) / (box.width / 100));
-        const defOld = i.lastChild.nodeValue;
-        const letters = Math.round(defOld.length / 100 * (100 - percentage - 20));
-        const defNew = document.createTextNode(defOld.substring(0, letters) + "…");
-        i.replaceChild(defNew, i.lastChild);
-
         // add tooltip
-        let number = "";
-        if (i.firstChild.nodeType === Node.ELEMENT_NODE) {
-          number = `<b>${i.firstChild.firstChild.nodeValue.replace(/\s+$/, "")}</b> `;
+        const tip = [];
+        for (const n of i.childNodes) {
+          let text = n.textContent.replace(/\s{2,}/g, " ");
+          if (n.classList.contains("bold")) {
+            text = `<b>${text}</b>`;
+          }
+          if (n.classList.contains("italic")) {
+            text = `<i>${text}</i>`;
+          }
+          tip.push(text);
         }
-        i.dataset.description = number + defOld;
+        i.dataset.description = tip.join("");
+
+        // shorten definition
+        const { children } = i;
+        for (let i = children.length - 1; i >= 0; i--) {
+          const child = children[i];
+          const childBox = child.getBBox();
+          if (childBox.x > svgWidth) {
+            child.parentNode.removeChild(child);
+            continue;
+          }
+          const percentage = Math.round((childBox.x + childBox.width - svgWidth) / (childBox.width / 100));
+          const oldText = child.textContent;
+          const letters = Math.round(oldText.length / 100 * (100 - percentage));
+          child.textContent = oldText.substring(0, letters - 5) + "…";
+          break;
+        }
       }
     });
 
