@@ -3,6 +3,7 @@ import admin from "./admin.mjs";
 import data from "./data.mjs";
 import lists from "./lists.mjs";
 import load from "./load.mjs";
+import misc from "./misc.mjs";
 
 import dd from "../../dd.mjs";
 import dialog from "../../dialog.mjs";
@@ -262,6 +263,20 @@ const io = {
       return;
     }
 
+    // the visualization is currently erroneous
+    const visCont = document.querySelector("#svg p");
+    if (visCont.classList.contains("error")) {
+      dialog.oeffnen({
+        typ: "alert",
+        text: "Die Visualisierung ist fehlerhaft und kann nicht exportiert werden.",
+        callback: () => {
+          const win = document.getElementById("export");
+          overlay.schliessen(win);
+        },
+      });
+      return;
+    }
+
     // validate the visualization data
     const { da, ll } = visData;
     const messages = [];
@@ -421,11 +436,14 @@ const io = {
   //   visData = object
   //   path = string
   async saveSVG (visData, path) {
-    // create SVG
+    // create standalone SVG
+    const visCont = document.querySelector("#svg p");
     const da = structuredClone(visData.da);
     const svg = bedvis.makeSVG(da, {
       standalone: true,
     });
+    visCont.replaceChildren(svg);
+    await misc.shortenDef(svg);
 
     // read CSS file
     const controller = new AbortController();
@@ -456,7 +474,6 @@ const io = {
 
     // prepare CSS file
     css = css
-      .replace(/p\.bedvis.+?\{.+?\}/gs, "")
       .replace(/\/\*.+?\*\//g, "")
       .replace(/\n\s*\n/g, "\n")
       .replace(/\s+svg\.bedvis text\.year {\n\s+fill: transparent;\n\s+}/, "  svg.bedvis text.year {\n    fill: var(--text);\n  }");
@@ -474,17 +491,27 @@ const io = {
       return;
     }
 
-    // give feedback
+    // recreate the normal SVG and give a feedback
+    normalSvg();
     const win = document.getElementById("export");
     overlay.schliessen(win);
     shared.animation("gespeichert");
 
     // error message
     function error (message) {
+      normalSvg();
       dialog.oeffnen({
         typ: "alert",
         text: `Beim Erstellen Grafik ist ein Fehler aufgetreten.\n<h3>Fehlermeldung</h3>\n<p class="force-wrap">${message}</p>`,
       });
+    }
+
+    // recreate the normal SVG
+    function normalSvg () {
+      const da = structuredClone(visData.da);
+      const svg = bedvis.makeSVG(da);
+      visCont.replaceChildren(svg);
+      misc.shortenDef(svg);
     }
   },
 

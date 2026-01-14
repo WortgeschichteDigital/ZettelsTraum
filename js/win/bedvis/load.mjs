@@ -4,11 +4,11 @@ import data from "./data.mjs";
 import lemmas from "./lemmas.mjs";
 import lists from "./lists.mjs";
 import means from "./means.mjs";
+import misc from "./misc.mjs";
 import quots from "./quots.mjs";
 import xml from "./xml.mjs";
 
 import overlay from "../../overlay.mjs";
-import tooltip from "../../tooltip.mjs";
 
 import bedvis from "../../../external/bedvis/bedvis.mjs";
 
@@ -185,45 +185,8 @@ const load = {
     const caption = misc.makeCaption(this.data.vis, "html");
     figc.innerHTML = `Visualisierung\u00A01: ${caption}`;
 
-    // shorten overflowing definition text
-    const svgWidth = parseInt(svg.getAttribute("width"), 10);
-    svg.querySelectorAll("text.definition").forEach(i => {
-      const box = i.getBBox();
-      if (box.x + box.width > svgWidth) {
-        // add tooltip
-        const tip = [];
-        for (const n of i.childNodes) {
-          let text = n.textContent.replace(/\s{2,}/g, " ");
-          if (n.classList.contains("bold")) {
-            text = `<b>${text}</b>`;
-          }
-          if (n.classList.contains("italic")) {
-            text = `<i>${text}</i>`;
-          }
-          tip.push(text);
-        }
-        i.dataset.description = tip.join("");
-
-        // shorten definition
-        const { children } = i;
-        for (let i = children.length - 1; i >= 0; i--) {
-          const child = children[i];
-          const childBox = child.getBBox();
-          if (childBox.x > svgWidth) {
-            child.parentNode.removeChild(child);
-            continue;
-          }
-          const percentage = Math.round((childBox.x + childBox.width - svgWidth) / (childBox.width / 100));
-          const oldText = child.textContent;
-          const letters = Math.round(oldText.length / 100 * (100 - percentage));
-          child.textContent = oldText.substring(0, letters - 5) + "…";
-          break;
-        }
-      }
-    });
-
-    // append tooltips
-    tooltip.init(p);
+    // shorten the overflowing definition text
+    misc.shortenDef(svg);
   },
 
   // update the checksum of the current visualization
