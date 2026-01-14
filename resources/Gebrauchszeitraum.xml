@@ -8,6 +8,11 @@
 ]>
 <gebrauchszeitraum>
   <item>
+    <id>5</id>
+    <name>in der Sprache der Bonner Republik</name>
+    <abbr>BRD</abbr>
+  </item>
+  <item>
     <id>1</id>
     <name>in der Sprache der DDR</name>
     <abbr>DDR</abbr>
@@ -16,10 +21,5 @@
     <id>3</id>
     <name>in der Sprache des Nationalsozialismus</name>
     <abbr>Nationalsoz.</abbr>
-  </item>
-  <item>
-    <id>4</id>
-    <name>in der Sprache des Sozialismus</name>
-    <abbr>Sozialis.</abbr>
   </item>
 </gebrauchszeitraum>
