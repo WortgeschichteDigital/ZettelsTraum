@@ -269,20 +269,37 @@ const config = {
       config.toggleBlock(this.parentNode);
     });
 
-    // add delete icon
-    const del = document.createElement("span");
-    header.appendChild(del);
-    del.classList.add("meaning-del");
+    // add function icons
+    const fun = document.createElement("span");
+    header.appendChild(fun);
+    fun.classList.add("meaning-fun");
+    const funTarget = vis.ll ? "Lemma" : "Bedeutung";
+
+    // move entry
     this.makeImg({
-      src: "muelleimer.svg",
-      title: "Bedeutung aus Grafik entfernen",
-      cont: del,
+      src: "pfeil-gerade-hoch.svg",
+      title: funTarget + " nach oben schieben",
+      cont: fun,
     });
-    del.firstChild.addEventListener("click", async function (evt) {
+    fun.lastChild.classList.add("meaning-fun-move");
+    fun.lastChild.addEventListener("click", function (evt) {
       evt.stopPropagation();
       const { lemma } = this.closest(".lemma-cont").dataset;
       const { id } = this.closest(".meaning-cont").dataset;
-      await means.toggleConfig(lemma, id);
+      config.moveUp(lemma, id);
+    });
+
+    // delete entry
+    this.makeImg({
+      src: "muelleimer.svg",
+      title: funTarget + " aus Grafik entfernen",
+      cont: fun,
+    });
+    fun.lastChild.addEventListener("click", function (evt) {
+      evt.stopPropagation();
+      const { lemma } = this.closest(".lemma-cont").dataset;
+      const { id } = this.closest(".meaning-cont").dataset;
+      means.toggleConfig(lemma, id);
     });
 
     // add form elements
@@ -527,15 +544,15 @@ const config = {
       config.toggleBlock(this.parentNode);
     });
 
-    const del = document.createElement("span");
-    header.appendChild(del);
-    del.classList.add("event-del");
+    const fun = document.createElement("span");
+    header.appendChild(fun);
+    fun.classList.add("event-fun");
     this.makeImg({
       src: "muelleimer.svg",
       title: "Ereignis aus Grafik entfernen",
-      cont: del,
+      cont: fun,
     });
-    del.firstChild.addEventListener("click", async function (evt) {
+    fun.firstChild.addEventListener("click", async function (evt) {
       evt.stopPropagation();
       const configBlock = this.closest(".event-cont");
       const { lemma } = this.closest(".lemma-cont").dataset;
@@ -982,5 +999,33 @@ const config = {
         i.setAttribute("tabindex", "-1");
       }
     });
+  },
+
+  // move a meaning or a lemma one slot upwards
+  //   lemma = string
+  //   id = string
+  moveUp (lemma, id) {
+    // update the data
+    const { vis } = load.data;
+    const meanings = vis.da.lemmas[lemma].meanings;
+    const idx = meanings.findIndex(i => i.id === id);
+    const clone = structuredClone(meanings[idx]);
+    meanings.splice(idx, 1);
+    meanings.splice(idx - 1, 0, clone);
+
+    // remove the configuration block
+    const oldBlock = document.querySelector(`.meaning-cont[data-id="${id}"]`);
+    const parent = oldBlock.parentNode;
+    const previous = oldBlock.previousSibling;
+    oldBlock.parentNode.removeChild(oldBlock);
+
+    // insert the newly created configuration block
+    const newBlock = config.makeMeanBlock(lemma, clone);
+    parent.insertBefore(newBlock, previous);
+
+    // update SVG and save data
+    load.svg();
+    load.sha1Update();
+    data.save();
   },
 };

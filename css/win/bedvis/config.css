@@ -51,6 +51,10 @@
     .event-cont:nth-last-child(1 of .event-cont) {
       border-bottom-width: 1px;
     }
+
+    .meaning-cont:first-of-type .meaning-fun .meaning-fun-move {
+      display: none;
+    }
   }
 
   .num-cont {
@@ -99,8 +103,8 @@
         font-weight: bold;
       }
 
-      .meaning-del,
-      .event-del {
+      .meaning-fun,
+      .event-fun {
         position: absolute;
         top: 0;
         right: 0;
@@ -116,7 +120,7 @@
         }
       }
 
-      &:hover :is(.meaning-del, .event-del) {
+      &:hover :is(.meaning-fun, .event-fun) {
         opacity: 1;
       }
     }
