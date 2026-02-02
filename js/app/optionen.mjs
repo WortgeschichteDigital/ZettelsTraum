@@ -290,6 +290,9 @@ const optionen = {
       "belegliste-notizen": false,
       // Textsorte in den Kopf der Belegliste eintragen
       textsorte: false,
+      // Annotierung
+      "annotierung-nicht-taggen": false,
+      "annotierung-farbe": "4",
     },
     // Einstellungen für die Karteisuche
     karteisuche: {
@@ -513,6 +516,14 @@ const optionen = {
     // Vorauswahl Kopierfenster anwenden
     document.getElementsByName("einstellung-ctrlC-vor").forEach(i => {
       if (i.value === optionen.data.einstellungen["ctrlC-vor"]) {
+        i.checked = true;
+      } else {
+        i.checked = false;
+      }
+    });
+    // Vorauswahl Annotierungsfarbe anwenden
+    document.getElementsByName("einstellung-annotierung-farbe").forEach(i => {
+      if (i.value === optionen.data.einstellungen["annotierung-farbe"]) {
         i.checked = true;
       } else {
         i.checked = false;
@@ -1337,6 +1348,10 @@ const optionen = {
     // Vorauswahl Kopierfenster
     if (ele.name === "einstellung-ctrlC-vor") {
       optionen.data.einstellungen["ctrlC-vor"] = ele.value;
+    }
+    // Annotierung
+    if (ele.name === "einstellung-annotierung-farbe") {
+      optionen.data.einstellungen["annotierung-farbe"] = ele.value;
     }
     // ggf. Konsequenzen on-the-fly
     if (/^kopf-icon-/.test(e)) { // Icons im Fensterkopf

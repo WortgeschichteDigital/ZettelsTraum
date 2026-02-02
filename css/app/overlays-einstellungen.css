@@ -185,6 +185,38 @@
   }
 }
 
+.annotierung-farben label {
+  display: inline-block;
+  width: 40px;
+  text-indent: 0;
+
+  span {
+    position: relative;
+    top: 3px;
+    vertical-align: top;
+    display: inline-block;
+    border: 1px solid var(--linie);
+    width: 16px;
+    height: 16px;
+
+    &.annotierung-gelb {
+      background-color: var(--farbeGelb);
+    }
+
+    &.annotierung-gruen {
+      background-color: var(--hintergrundGruen);
+    }
+
+    &.annotierung-rot {
+      background-color: var(--farbeRot);
+    }
+
+    &.annotierung-blau {
+      background-color: var(--hintergrundBlau);
+    }
+  }
+}
+
 
 /* QUICK-ACCESS-BAR ----------------------------- */
 

@@ -154,18 +154,35 @@ const lemmata = {
           }
         }
         if (woerter.length) {
+          // Standardfarbe für Annotierungen überspringen
+          //   1 (gelb) = Farbpalette 0
+          //   2 (grün) = Farbpalette 14
+          //   3 (rot)  = Farbpalette 4
+          //   4 (blau) = Farbpalette 9
+          const annotMap = {
+            1: 0,
+            2: 14,
+            3: 4,
+            4: 9,
+          };
+          const annotFarbe = annotMap[optionen.data.einstellungen["annotierung-farbe"]];
+
           // Farben ermitteln, die noch vergeben werden können
-          // 0 = Gelb
-          // 5 = Rosa
-          // 6 = Lila
-          // 11 = Türkis
-          // 12 = Dunkeltürkisgrün
-          // 14 = Hellgrün
-          const farben = [ 0, 14, 6, 11, 12, 5 ];
+          // 0 = gelb
+          // 5 = rosa
+          // 6 = lila
+          // 11 = türkis
+          // 9 = blau
+          // 12 = dunkeltürkisgrün
+          // 14 = hellgrün
+          const farben = [ 0, 14, 6, 11, 9, 12, 5 ];
+          const annotIdx = farben.indexOf(annotFarbe);
+          if (annotIdx >= 0) {
+            farben.splice(annotIdx, 1);
+          }
           while (farben.length < 17) {
             const fa = shared.rand(1, 17);
-            if (fa !== 9 && !farben.includes(fa)) {
-              // 9 = Blau (auslassen, weil Standardfarbe für Annotierungen)
+            if (fa !== annotFarbe && !farben.includes(fa)) {
               farben.push(fa);
             }
           }

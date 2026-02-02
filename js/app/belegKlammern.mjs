@@ -115,7 +115,7 @@ const belegKlammern = {
           break;
         case "annotierung":
           annotieren.mod(cont);
-          annotieren.ausfuehren();
+          annotieren.ausfuehren(true);
           break;
       }
 

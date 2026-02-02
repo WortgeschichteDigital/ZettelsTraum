@@ -250,7 +250,7 @@ const annotieren = {
     aw.querySelectorAll(".farbe").forEach(i => annotieren.modFarbe(i));
 
     // Checkbox
-    aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", () => annotieren.ausfuehren());
+    aw.querySelector("#annotierung-nicht-taggen").addEventListener("click", () => annotieren.ausfuehren(false));
 
     // Textfeld
     annotieren.modText(aw.querySelector(".text"));
@@ -284,7 +284,7 @@ const annotieren = {
     }
 
     // Löschen ausführen
-    annotieren.ausfuehren();
+    annotieren.ausfuehren(false);
 
     // ggf. Popup schließen
     if (!annotieren.data.data) {
@@ -311,7 +311,7 @@ const annotieren = {
     f.addEventListener("click", function () {
       this.parentNode.querySelector(".aktiv").classList.remove("aktiv");
       this.classList.add("aktiv");
-      annotieren.ausfuehren();
+      annotieren.ausfuehren(false);
     });
   },
 
@@ -371,37 +371,48 @@ const annotieren = {
       feld.textContent = textNeu;
     }
     feld.classList.remove("aktiv");
-    annotieren.ausfuehren();
+    annotieren.ausfuehren(false);
   },
 
   // Annotierung umsetzen
-  ausfuehren () {
+  //   neu = boolean
+  ausfuehren (neu) {
     const aw = document.getElementById("annotierung-wort");
     const werte = {
       farbe: 4,
       taggen: aw.querySelector("#annotierung-nicht-taggen:checked") === null,
       text: "",
     };
-    // Text ermitteln
-    const feld = aw.querySelector(".text");
-    if (feld.firstChild.nodeType === 1) { // Textfeld ist noch aktiv
-      annotieren.modTextSpeichern(feld.firstChild, 13);
-      return;
-    }
-    if (!feld.classList.contains("leer")) {
-      werte.text = feld.textContent;
-    }
-    // Farbe ermitteln
-    const farben = aw.querySelectorAll(".farbe");
-    for (let i = 0, len = farben.length; i < len; i++) {
-      if (farben[i].classList.contains("aktiv")) {
-        werte.farbe = i;
-        break;
+
+    // ggf. Standardwerte anpassen
+    if (neu) {
+      werte.farbe = parseInt(optionen.data.einstellungen["annotierung-farbe"], 10);
+      werte.taggen = !optionen.data.einstellungen["annotierung-nicht-taggen"];
+    } else {
+      // Text ermitteln
+      const feld = aw.querySelector(".text");
+      if (feld.firstChild.nodeType === 1) {
+        // Textfeld ist noch aktiv
+        annotieren.modTextSpeichern(feld.firstChild, 13);
+        return;
+      }
+      if (!feld.classList.contains("leer")) {
+        werte.text = feld.textContent;
+      }
+      // Farbe ermitteln
+      const farben = aw.querySelectorAll(".farbe");
+      for (let i = 0, len = farben.length; i < len; i++) {
+        if (farben[i].classList.contains("aktiv")) {
+          werte.farbe = i;
+          break;
+        }
       }
     }
+
     // Anzeige auffrischen
     const cl = annotieren.data.cl;
-    if (cl === "user" && werte.farbe === 0 && werte.taggen && !werte.text) { // Annotierung entfernen (user)
+    if (cl === "user" && werte.farbe === 0 && werte.taggen && !werte.text) {
+      // Annotierung entfernen (user)
       const frag = document.createDocumentFragment();
       const start = annotieren.data.start;
       for (const i of start.childNodes) {
@@ -412,7 +423,8 @@ const annotieren = {
       }
       const data = annotieren.data.data;
       data.parentNode.replaceChild(frag, data);
-    } else if (cl === "wort" && werte.farbe === 1 && werte.taggen && !werte.text) { // Annotierung entfernen (wort)
+    } else if (cl === "wort" && werte.farbe === 1 && werte.taggen && !werte.text) {
+      // Annotierung entfernen (wort)
       const data = annotieren.data.data;
       if (!data) {
         // noch keine Annotierung vorhanden => nichts entfernen und nichts auffrischen
@@ -427,7 +439,8 @@ const annotieren = {
         const klon = i.cloneNode(true);
         frag.appendChild(klon);
         let mark = klon;
-        if (!mark.classList.contains(cl)) { // falls der <mark> verschachtelt ist in einem Formatierungstag
+        if (!mark.classList.contains(cl)) {
+          // falls der <mark> verschachtelt ist in einem Formatierungstag
           mark = mark.querySelector(`.${cl}`);
         }
         if (mark) {
@@ -445,7 +458,8 @@ const annotieren = {
       annotieren.data.data = null;
       // Events auffrischen
       events();
-    } else if (annotieren.data.data) { // Annotierung auffrischen
+    } else if (annotieren.data.data) {
+      // Annotierung auffrischen
       const data = annotieren.data.data;
       data.removeAttribute("class");
       data.classList.add("annotierung-wort", `farbe${werte.farbe}`);
@@ -459,7 +473,7 @@ const annotieren = {
       } else if (data?.dataset?.nichtTaggen) {
         delete data.dataset.nichtTaggen;
       }
-    } else { // Annotierung vornehmen
+    } else {
       // Annotierung erzeugen
       const annotierung = document.createElement("span");
       annotierung.classList.add("annotierung-wort", `farbe${werte.farbe}`);
@@ -523,12 +537,15 @@ const annotieren = {
       // Events auffrischen
       events();
     }
+
     // Datensatz auffrischen
     belegKlammern.update(annotieren.data.p);
+
     // Filterleiste neu aufbauen
     // (es wäre performanter filter.aufbauen(belege) zu benutzen; dann gibt es aber
     // Probleme, wenn nach Annotierungen gefiltert wird und die letzte Annotierung entfernt wurde)
     liste.status(true);
+
     // Events auffrischen
     function events () {
       const marks = annotieren.data.p.querySelectorAll(`mark.${annotieren.data.cl}`);
