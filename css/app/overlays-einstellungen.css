@@ -171,6 +171,20 @@
   white-space: nowrap;
 }
 
+#einstellungen-cont .einstellungen-spalten-zwei {
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 340px;
+  height: auto;
+
+  p {
+    margin: 0;
+    width: 170px;
+    padding: 0;
+  }
+}
+
 
 /* QUICK-ACCESS-BAR ----------------------------- */
 
