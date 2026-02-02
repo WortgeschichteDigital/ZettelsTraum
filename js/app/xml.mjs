@@ -196,21 +196,13 @@ const xml = {
     text = text.replace(/<Absatz>(.+?)<\/Absatz>/g, (m, p1) => {
       if (/<Vers>/.test(p1)) {
         p1 = `<Vers>${p1}</Vers>`;
-        p1 = p1.replace(/<Vers><(Streichung|Loeschung)>(.+)/g, (m, p1, p2) => {
-          const reg = new RegExp(`</${p1}>`);
-          const [ vers ] = p2.split(/<\/Vers>/);
-          if (reg.test(vers)) {
-            return m;
+        p1 = p1.replace(/<Vers>.+?<\/Vers>/g, m => {
+          if (/^<Vers><(Streichung|Loeschung)>/.test(m) &&
+              /<\/(Streichung|Loeschung)><\/Vers>$/.test(m)) {
+            m = m.replace(/^<Vers><(Streichung|Loeschung)>/, (m, p1) => `<${p1}><Vers>`);
+            m = m.replace(/<\/(Streichung|Loeschung)><\/Vers>$/, (m, p1) => `</Vers></${p1}>`);
           }
-          return `<${p1}><Vers>${p2}`;
-        });
-        p1 = p1.replace(/(.+)<\/(Streichung|Loeschung)><\/Vers>/g, (m, p1, p2) => {
-          const reg = new RegExp(`<${p2}>`);
-          const [ vers ] = p1.split(/<Vers>/);
-          if (reg.test(vers)) {
-            return m;
-          }
-          return `${p1}</Vers></${p2}>`;
+          return m;
         });
         p1 = p1.replace(/<Vers><\/Absatz>$/, "</Absatz>");
       }
