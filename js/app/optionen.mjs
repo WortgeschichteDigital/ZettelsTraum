@@ -169,11 +169,12 @@ const optionen = {
       // Vorauswahl für Kopierfenster ohne Nachfrage ausführen
       "ctrlC-auto": false,
       // Vorauswahl für Kopierfenster
-      //   1 = HTML und Plain
-      //   2 = Plain-Referenz
-      //   3 = XML-Belegschnitt
+      //   1 = HTML und Plain (original)
+      //   2 = HTML und Plain (aufbereitet)
+      //   3 = Plain-Referenz
       //   4 = XML-Referenz
-      //   5 = XML-Fenster
+      //   5 = XML-Belegschnitt
+      //   6 = XML-Fenster
       "ctrlC-vor": "1",
       // Einfügen-Fenster (Kopierfunktion) nach dem Einfügen direkt schließen
       "einfuegen-schliessen": true,

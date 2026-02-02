@@ -2319,37 +2319,53 @@ const liste = {
   textKopieren (evt) {
     const sel = window.getSelection();
     let anker = sel.anchorNode;
+
     // Text ausgewählt?
     if (!anker) {
       return;
     }
+
     // Text in Detailansicht Belegliste oder Formularansicht Karteikarte?
     anker = anker.parentNode; // andernfalls funktioniert closest() nicht
     if (!anker.closest(".liste-details") &&
         !anker.closest(".beleg-lese")) {
       return;
     }
+
     // Kopieren wird vom Programm erledigt
     evt.preventDefault();
+
+    // Original-Text speichern
+    const range = sel.getRangeAt(0);
+    popup.selected.text = range.toString();
+    const container = document.createElement("div");
+    container.appendChild(range.cloneContents());
+    popup.selected.html = container;
+
     // Text auslesen
     popup.getTargetSelection(evt.composedPath());
+
     // Aktion ohne Nachfrage ausführen
     if (optionen.data.einstellungen["ctrlC-auto"]) {
       liste.textKopierenExec();
       return;
     }
+
     // Fenster öffnen
     const fenster = document.getElementById("ctrlC");
     overlay.oeffnen(fenster);
+
     // Checkbox zurücksetzen
     document.getElementById("ctrlC-auto").checked = false;
+
     // Radio-Buttons vorbereiten
     let auswahl = parseInt(optionen.data.einstellungen["ctrlC-vor"], 10);
     const radios = fenster.querySelectorAll('input[type="radio"]');
+
     // kein Belegtext ausgewählt
     if (!popup.selInBeleg()) {
       radios[2].disabled = true;
-      if (auswahl === 3) {
+      if (auswahl === 5) {
         auswahl = 4;
       }
     } else {
@@ -2389,20 +2405,23 @@ const liste = {
       const radio = fenster.querySelector("input:checked");
       const aktion = radio.id.replace(/.+-/, "");
       switch (aktion) {
-        case "html":
+        case "ori":
           auswahl = "1";
           break;
-        case "htmlReferenz":
+        case "html":
           auswahl = "2";
           break;
-        case "xml":
+        case "htmlReferenz":
           auswahl = "3";
           break;
         case "xmlReferenz":
           auswahl = "4";
           break;
-        case "xmlFenster":
+        case "xml":
           auswahl = "5";
+          break;
+        case "xmlFenster":
+          auswahl = "6";
           break;
       }
       // Aktion künftig ohne Nachfrage ausführen
@@ -2414,31 +2433,38 @@ const liste = {
       }
       // Fenster schließen
       overlayApp.schliessen(fenster);
-    } else if (!popup.selInBeleg() && auswahl === "3") { // Overlay-Fenster nicht geöffnet
+    } else if (!popup.selInBeleg() && auswahl === "5") { // Overlay-Fenster nicht geöffnet
       auswahl = "4"; // Vorauswahl XML-Belgschnitt anpassen, wenn Auswahl nicht im Belegtext
     }
     // Kopieraktion ausführen
     switch (auswahl) {
       case "1":
         bridge.ipc.invoke("cb", "write", {
-          text: popup.textauswahl.text,
-          html: popup.textauswahl.html,
+          text: popup.selected.text,
+          html: popup.selected.html,
         });
         shared.animation("zwischenablage");
         break;
       case "2":
         bridge.ipc.invoke("cb", "write", {
-          text: xml.belegId({}),
+          text: popup.textauswahl.text,
+          html: popup.textauswahl.html,
         });
         shared.animation("zwischenablage");
         break;
       case "3":
-        xml.schnittInZwischenablage(false);
+        bridge.ipc.invoke("cb", "write", {
+          text: xml.belegId({}),
+        });
+        shared.animation("zwischenablage");
         break;
       case "4":
         xml.referenz();
         break;
       case "5":
+        xml.schnittInZwischenablage(false);
+        break;
+      case "6":
         xml.schnittInXmlFenster(false);
         break;
     }

@@ -21,6 +21,15 @@ const popup = {
     xml: "",
   },
 
+  // speichert den ausgewählten Text, der kopiert werden soll
+  selected: {
+    // Text als String
+    text: "",
+
+    // Text als HTML (gewrappt in einem <div>)
+    html: null,
+  },
+
   // speichert die ID des Belegs, der bearbeitet werden soll
   belegID: "",
 

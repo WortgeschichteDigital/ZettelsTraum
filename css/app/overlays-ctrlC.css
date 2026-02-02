@@ -3,7 +3,7 @@
 /* KOPIERFENSTER -------------------------------- */
 
 #ctrlC > div {
-  width: 375px;
+  width: 510px;
 }
 
 #ctrlC-cont {
@@ -16,7 +16,7 @@
 
 #ctrlC-cont label {
   display: inline-block;
-  width: 150px;
+  width: 220px;
 }
 
 #ctrlC-cont p.checkbox label {
