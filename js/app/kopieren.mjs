@@ -2,6 +2,7 @@
 import anhaenge from "./anhaenge.mjs";
 import bedeutungen from "./bedeutungen.mjs";
 import bedeutungenWin from "./bedeutungenWin.mjs";
+import bedvis from "./bedvis.mjs";
 import beleg from "./beleg.mjs";
 import kartei from "./kartei.mjs";
 import liste from "./liste.mjs";
@@ -656,6 +657,9 @@ const kopieren = {
 
     // Änderungsmarkierung
     kartei.karteiGeaendert(true);
+
+    // Änderungshinweis an das BedVis-Fenster schicken
+    bedvis.cardboxUpdate();
 
     // die folgenden Operationen sind fast alle unnötig, wenn ein Beleg dupliziert wurde
     if (duplikat) {
