@@ -54,7 +54,7 @@ const misc = {
         const tag = tagMap[tagType][type];
         lemmas.push(`<${tag}>${lemma}</${tag}>`);
       }
-      caption = "Chronologie der Wörter " + lemmasJoin(lemmas);
+      caption = `Chronologie der ${lemmas.some(i => / /.test(i)) ? "Ausdrücke" : "Wörter"} ${lemmasJoin(lemmas)}`;
     } else {
       // meanings list
       const lemmas = [];

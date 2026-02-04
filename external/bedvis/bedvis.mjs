@@ -237,7 +237,11 @@ const make = {
     });
     svg.appendChild(title);
     const lemmasJoined = lemmas.join("“, „").replace(/^(.+)(, )/, (...args) => args[1] + " und ");
-    title.textContent = `Chronologie der ${this.data.lemmaList ? "Wörter" : "Bedeutungen von"} „${lemmasJoined}“`;
+    if (this.data.lemmaList) {
+      title.textContent = `Chronologie der ${lemmas.some(i => / /.test(i)) ? "Ausdrücke" : "Wörter"} „${lemmasJoined}“`;
+    } else {
+      title.textContent = `Chronologie der Bedeutungen von „${lemmasJoined}“`;
+    }
     if (this.data.description) {
       const desc = shared.createElement("desc", {
         id: "bedvis-desc-" + id,
