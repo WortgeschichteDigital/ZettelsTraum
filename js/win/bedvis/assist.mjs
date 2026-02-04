@@ -742,7 +742,7 @@ const assist = {
           const { lemma, year } = d.lemmas[i];
           const meaning = means.newObject({
             definition: lemma,
-            id: "l1-" + (i + 1),
+            id: "l" + (i + 1),
             quotation: year,
           });
           vis.da.lemmas.lemmas.meanings.push(meaning);

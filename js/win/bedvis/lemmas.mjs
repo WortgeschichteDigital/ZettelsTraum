@@ -295,7 +295,13 @@ const lemmas = {
     const { meanings: entries } = load.data.vis.da.lemmas.lemmas;
     let id = "l1";
     if (entries.length) {
-      const lastNo = parseInt(entries.at(-1).id.replace(/^l/, ""), 10);
+      let lastNo = 0;
+      for (const entry of entries) {
+        const no = parseInt(entry.id.replace(/^l/, ""), 10);
+        if (no > lastNo) {
+          lastNo = no;
+        }
+      }
       id = "l" + (lastNo + 1);
     }
     const entry = means.newObject({
