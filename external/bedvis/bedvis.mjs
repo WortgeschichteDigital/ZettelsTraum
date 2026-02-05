@@ -134,6 +134,40 @@ const shared = {
     }
     return parseInt(year, 10);
   },
+
+  // extract the lemma out of the item of a lemma list;
+  // it is vital that the lemma itself is the only part
+  // of the passed string that remains
+  //   str = string
+  getLemma (str) {
+    // bold text marks the lemma
+    if (/__.+?__/.test(str)) {
+      return str.match(/__([^_]+)__/)[1];
+    }
+
+    // erase text in quotation marks, in brackets, and punctuation marks
+    const erase = [
+      /›.+?‹/g,
+      /‚.+?‘/g,
+      /„.+?“/g,
+      /\(.+?\)/g,
+      /\[.+?\]/g,
+      /\{.+?\}/g,
+      // last token is U+2013, not U+002D
+      /[,;._–]/g,
+      /:(?= )/g,
+      // U+002D
+      /(?<= )-(?= )/g,
+    ];
+    for (const reg of erase) {
+      str = str.replace(reg, "");
+    }
+
+    // final touch
+    return str
+      .replace(/ {2,}/g, " ")
+      .trim();
+  },
 };
 
 const make = {
@@ -205,7 +239,7 @@ const make = {
     // prepare attributes
     let lemmas;
     if (this.data.lemmaList) {
-      lemmas = this.data.lemmas.lemmas.meanings.flatMap(i => i.definition.replace(/_/g, ""));
+      lemmas = this.data.lemmas.lemmas.meanings.flatMap(i => shared.getLemma(i.definition));
     } else {
       lemmas = Object.keys(this.data.lemmas);
     }
@@ -315,9 +349,12 @@ const make = {
     const ll = this.data.lemmaList;
     const artWords = {};
     if (ll) {
-      document.querySelector(".wgd-kopf-hl")?.textContent?.split(/\s·\s/)?.forEach(i => {
-        artWords[i] = "";
-      });
+      const hl = document.querySelector(".wgd-kopf-hl");
+      if (hl && !hl.parentNode.classList.contains("wgd-wortfeldartikel")) {
+        hl.textContent.split(/\s·\s/).forEach(i => {
+          artWords[i] = "";
+        });
+      }
       document.querySelectorAll(".wgd-kopf-nl a").forEach(i => {
         artWords[i.textContent] = i.getAttribute("href");
       });
@@ -441,7 +478,7 @@ const make = {
         let defTarget;
         if (ll) {
           // lemma list
-          let lemma = m.definition.replace(/_/g, "");
+          let lemma = shared.getLemma(m.definition);
           const sup = [ "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹" ];
           const supIdx = sup.indexOf(lemma.substring(0, 1));
           let hidx = 0;
@@ -766,7 +803,7 @@ const make = {
     }
     do {
       // ensure that the labels do not overlap
-      const x = minYearX + Math.round((year - minYear) * timespan.pxYear);
+      const x = Math.round(minYearX + (year - minYear) * timespan.pxYear);
       if (x < 15) {
         year += step;
         continue;
@@ -821,7 +858,8 @@ const make = {
         shared.pointerEvent(g);
 
         // marker
-        const x = minYearX + Math.round((e.yearFrom + Math.floor((e.yearTo - e.yearFrom) / 2) - minYear) * timespan.pxYear);
+        const x = Math.round(minYearX + (e.yearFrom + Math.floor((e.yearTo - e.yearFrom) / 2) - minYear) * timespan.pxYear);
+        let markerX = x;
         if (e.yearTo === e.yearFrom) {
           g.appendChild(shared.createElement("rect", {
             x: x - 5,
@@ -831,12 +869,20 @@ const make = {
             transform: `rotate(45, ${x}, ${top})`,
           }));
         } else {
-          let spanStart = minYearX + Math.round((e.yearFrom - minYear) * timespan.pxYear);
-          let spanEnd = minYearX + Math.round((e.yearTo - minYear) * timespan.pxYear);
+          let spanStart = Math.round(minYearX + (e.yearFrom - minYear) * timespan.pxYear);
+          let spanEnd = Math.round(minYearX + (e.yearTo - minYear) * timespan.pxYear);
           while (spanEnd - spanStart < 10) {
             spanStart--;
             spanEnd++;
           }
+          // ensure an even number of pixels
+          if ((spanEnd - spanStart) % 2) {
+            spanEnd++;
+          }
+          // sometimes the marker line is not perfectly centered
+          // if the span was extended to make it visible;
+          // therefore we need to calculate its position using the span boundaries
+          markerX = spanStart + Math.round((spanEnd - spanStart) / 2);
           g.appendChild(shared.createElement("line", {
             x1: spanStart,
             y1: top,
@@ -846,9 +892,9 @@ const make = {
           }));
         }
         g.appendChild(shared.createElement("line", {
-          x1: x,
+          x1: markerX,
           y1: top + 28,
-          x2: x,
+          x2: markerX,
           y2: top,
           class: "timeline-event-marker",
         }));
@@ -865,6 +911,7 @@ const make = {
         const text = shared.createElement("text", {
           x,
           y: top + 10,
+          class: "timeline-event-text",
           "dominant-baseline": "hanging",
           "text-anchor": "middle",
           "data-description": desc,
@@ -906,4 +953,6 @@ export default {
     const svg = make.svg(config) || null;
     return svg;
   },
+
+  getLemma: str => shared.getLemma(str),
 };

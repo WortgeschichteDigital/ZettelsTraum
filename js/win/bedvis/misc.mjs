@@ -6,6 +6,8 @@ import overlay from "../../overlay.mjs";
 import shared from "../../shared.mjs";
 import tooltip from "../../tooltip.mjs";
 
+import bedvis from "../../../external/bedvis/bedvis.mjs";
+
 export { misc as default };
 
 const misc = {
@@ -49,7 +51,7 @@ const misc = {
         .flat();
       const lemmas = [];
       for (const i of visData.da.lemmas.lemmas.meanings) {
-        const lemma = i.definition.replace(/_/g, "");
+        const lemma = bedvis.getLemma(i.definition);
         const tagType = articleLemmas.includes(lemma) ? "term" : "mentioned";
         const tag = tagMap[tagType][type];
         lemmas.push(`<${tag}>${lemma}</${tag}>`);
@@ -173,6 +175,7 @@ const misc = {
   //   str = string
   typo (str) {
     return str
+      .replace(/ - /g, " – ")
       .replace(/"(.+?)"/g, (...args) => `„${args[1]}“`)
       .replace(/'(.+?)'/g, (...args) => `‚${args[1]}‘`)
       .replace(/'/g, "’")
