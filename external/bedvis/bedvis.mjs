@@ -234,7 +234,7 @@ const make = {
   // create SVG
   //   config = object
   //     artData = object (Artikel.json, see https://www.zdl.org/wb/wgd/api#Artikeldaten)
-  //     standalone = boolean (create standalone image)
+  //     touch = boolean (the graphic is displayed on a touch device)
   svg (config) {
     // prepare attributes
     let lemmas;
@@ -413,8 +413,8 @@ const make = {
           continue;
         }
 
-        // increase space between meaning lines for standalone graphics
-        if (i && config.standalone) {
+        // increase space between meaning lines for touch devices
+        if (i && config.touch) {
           top += 15;
         }
 
@@ -779,15 +779,19 @@ const make = {
     const minYearX = 50 - yearsLeft * timespan.pxYear;
     let year;
     let step;
-    if (timespan.last - timespan.first < 30) {
+    if (timespan.last - timespan.first < 40) {
       // steps: five years
       year = parseInt(minYear.toString().replace(/[0-9]$/, "0"), 10) - 5;
       step = 5;
-    } else if (timespan.last - timespan.first < 100) {
+    } else if (timespan.last - timespan.first < 80) {
       // steps: ten years
       year = parseInt(minYear.toString().replace(/[0-9]$/, "0"), 10) - 10;
       step = 10;
-    } else if (timespan.last - timespan.first < 300) {
+    } else if (timespan.last - timespan.first < 160) {
+      // steps: twenty years
+      year = parseInt(minYear.toString().replace(/[0-9]$/, "0"), 10) - 20;
+      step = 20;
+    } else if (timespan.last - timespan.first < 400) {
       // steps: fifty years
       year = parseInt(minYear.toString().substring(0, 2), 10) * 100;
       if (parseInt(minYear.toString().substring(2), 10) <= 50) {

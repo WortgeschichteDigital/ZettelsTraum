@@ -440,7 +440,7 @@ const io = {
     const visCont = document.querySelector("#svg p");
     const da = structuredClone(visData.da);
     const svg = bedvis.makeSVG(da, {
-      standalone: true,
+      touch: true,
     });
     visCont.replaceChildren(svg);
     await misc.shortenDef(svg);
