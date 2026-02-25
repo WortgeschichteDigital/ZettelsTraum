@@ -225,7 +225,7 @@ const importBibtex = {
     return zeilen.join("\n");
   },
 
-  // BibTeX-Symbolen auflösen
+  // BibTeX-Symbole auflösen
   //   text = string
   //     (Textzeile, in der die Symbole aufgelöst werden sollen)
   symbols (text) {
