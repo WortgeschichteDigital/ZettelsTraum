@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE stichwortplanung [
+  <!ELEMENT stichwortplanung (item)+>
+  <!ELEMENT item (id, name)>
+  <!ELEMENT id (#PCDATA)>
+  <!ELEMENT name (#PCDATA)>
+]>
+<stichwortplanung>
+  <item>
+    <id>1</id>
+    <name>I. Soziale Makrostrukturen</name>
+  </item>
+  <item>
+    <id>2</id>
+    <name>II. Gesellschaftliche Gruppen/Gruppenbildung</name>
+  </item>
+  <item>
+    <id>3</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Elementare Beziehungen</name>
+  </item>
+  <item>
+    <id>4</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Soziale Grundstrukturen</name>
+  </item>
+  <item>
+    <id>5</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Oberschicht</name>
+  </item>
+  <item>
+    <id>6</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Unterschicht</name>
+  </item>
+  <item>
+    <id>7</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Sozioökonomische Stellung</name>
+  </item>
+  <item>
+    <id>8</id>
+    <name>III. Gesellschaftliche Hierarchien und Strukturen: Mehrheit/Minderheit/Durchschnitt</name>
+  </item>
+  <item>
+    <id>9</id>
+    <name>IV. Machtausübung und Machtverteilung</name>
+  </item>
+  <item>
+    <id>10</id>
+    <name>V. Gesellschaftlicher Wandel/Konflikte: Soziale Mobilität</name>
+  </item>
+  <item>
+    <id>11</id>
+    <name>V. Gesellschaftlicher Wandel/Konflikte: Soziale Veränderungen/Beharren</name>
+  </item>
+  <item>
+    <id>12</id>
+    <name>V. Gesellschaftlicher Wandel/Konflikte: Migration</name>
+  </item>
+  <item>
+    <id>13</id>
+    <name>VI. Gesellschaftsbezogenes Verhalten/Normen/Einstellungen</name>
+  </item>
+</stichwortplanung>
