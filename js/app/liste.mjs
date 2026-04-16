@@ -151,6 +151,16 @@ const liste = {
         break;
       }
     }
+    // offenbar ist der letzte Beleg aufgeklappt, aber es wurde ganz nach unten gescrollt,
+    // sodass der Kopf nicht mehr sichtbar ist
+    // => den letzten Beleg in der Liste merken, aber sicherstellen, dass er wirklich offen ist
+    if (!liste.statusScroll.id) {
+      const letzterKopf = koepfe[koepfe.length - 1];
+      if (letzterKopf.classList.contains("schnitt-offen")) {
+        liste.statusScroll.id = letzterKopf.dataset.id;
+        liste.statusScroll.scroll = letzterKopf.offsetTop - header - win;
+      }
+    }
   },
 
   // Scroll-Status wiederherstellen
