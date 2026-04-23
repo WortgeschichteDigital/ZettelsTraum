@@ -197,8 +197,9 @@ const xml = {
       if (/<Vers>/.test(p1)) {
         p1 = `<Vers>${p1}</Vers>`;
         p1 = p1.replace(/<Vers>.+?<\/Vers>/g, m => {
-          if (/^<Vers><(Streichung|Loeschung)>/.test(m) &&
-              /<\/(Streichung|Loeschung)><\/Vers>$/.test(m)) {
+          if (/^<Vers><(Streichung|Loeschung)>/.test(m) && /<\/(Streichung|Loeschung)><\/Vers>$/.test(m) ||
+              /^<Vers><(Streichung|Loeschung)>/.test(m) && !/<\/(Streichung|Loeschung)>/.test(m) ||
+              /<\/(Streichung|Loeschung)><\/Vers>$/.test(m) && !/<(Streichung|Loeschung)>/.test(m)) {
             m = m.replace(/^<Vers><(Streichung|Loeschung)>/, (m, p1) => `<${p1}><Vers>`);
             m = m.replace(/<\/(Streichung|Loeschung)><\/Vers>$/, (m, p1) => `</Vers></${p1}>`);
           }
