@@ -1153,6 +1153,18 @@ ipcMain.handle("io", async (evt, data) => {
   return await io.write(data.path, data.data);
 });
 
+// URL herunterladen
+ipcMain.handle("fetch-url", async (evt, data) => {
+  if (!validSender(evt)) {
+    return {
+      name: "Illegal Usage",
+      message: "invalid sender process",
+    };
+  }
+  const feedback = await dienste.fetchURL(data);
+  return feedback;
+});
+
 // Internetadresse öffnen
 ipcMain.handle("open-external", (evt, url) => {
   if (!validSender(evt)) {

@@ -64,6 +64,70 @@ const dienste = {
     }
   },
 
+  // fetching URL
+  //   abortTimeout = number
+  //   url = string
+  //   userAgent = string
+  async fetchURL ({ abortTimeout, url, userAgent }) {
+    // prepare feedback
+    const feedback = {
+      fetchOk: true,
+      fehler: "",
+      text: "",
+    };
+
+    // initiliazize abort controller
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), abortTimeout);
+
+    // prepare headers
+    const headers = new Headers({
+      "User-Agent": userAgent,
+    });
+    if (/^https:\/\/www\.deutschestextarchiv\.de\/book\/download_xml/.test(url)) {
+      // circumvent the DTA download restrictions
+      headers.append("Cookie", "verified=1; Path=/; SameSite=Lax");
+    }
+
+    // fetch URL
+    let response;
+    try {
+      response = await fetch(url, {
+        headers,
+        signal: controller.signal,
+      });
+    } catch (err) {
+      feedback.fetchOk = false;
+      error(err);
+      return feedback;
+    }
+
+    // server reponse erroneous
+    if (!response.ok) {
+      feedback.fehler = `HTTP-Status-Code ${response.status}`;
+      return feedback;
+    }
+
+    // read text
+    try {
+      feedback.text = await response.text();
+    } catch (err) {
+      error(err);
+    }
+
+    // return feedback
+    return feedback;
+
+    // prepare error message
+    function error (err) {
+      if (err.name === "AbortError") {
+        feedback.fehler = "Timeout-Fehler";
+      } else {
+        feedback.fehler = `${err.name}: ${err.message}`;
+      }
+    }
+  },
+
   // Dateidialog anzeigen
   //   open = Boolean
   //     (der showOpenDialog() soll angezeigt werden; sonst showSaveDailog())

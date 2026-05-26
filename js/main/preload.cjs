@@ -26,6 +26,7 @@ const validInvokes = [
   "fenster-schliessen",
   "fenster-schliessen-endgueltig",
   "fenster-status",
+  "fetch-url",
   "file-copy",
   "file-exists",
   "file-info",

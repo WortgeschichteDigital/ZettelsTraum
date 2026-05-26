@@ -470,51 +470,26 @@ const helfer = {
     return div;
   },
 
-  // lädt den Inhalt der übergebenen URL herunter
-  //   url = String
-  //     (URL, deren Inhalt heruntergeladen werden soll)
+  // download the contents of a URL
+  // (as of May 2026, DTA needs a cookie header that cannot be set in a browser environment; therefore
+  //  the whole function is delegated to Node where the problem may also be solved for further sites)
+  //   url = string
   async fetchURL (url) {
-    // Abort-Controller initialisieren
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), parseInt(optionen.data.einstellungen.timeout, 10) * 1000);
-    // Feedback vorbereiten
-    const feedback = {
-      fetchOk: true,
-      fehler: "",
-      text: "",
-    };
-    // Fetch durchführen
-    let response;
-    try {
-      response = await fetch(url, {
-        signal: controller.signal,
-      });
-    } catch (err) {
-      feedback.fetchOk = false;
-      fehler(err);
-      return feedback;
-    }
-    // Antwort des Servers fehlerhaft
-    if (!response.ok) {
-      feedback.fehler = `HTTP-Status-Code ${response.status}`;
-      return feedback;
-    }
-    // Antworttext auslesen
-    try {
-      feedback.text = await response.text();
-    } catch (err) {
-      fehler(err);
-    }
-    // Feedback auswerfen
-    return feedback;
-    // Fehler eintragen
-    function fehler (err) {
-      if (err.name === "AbortError") {
-        feedback.fehler = "Timeout-Fehler";
-      } else {
-        feedback.fehler = `${err.name}: ${err.message}`;
+    // detect user agent
+    // (the user agent must not contain tokens with a character code higher than 255)
+    let userAgent = "";
+    for (const i of navigator.userAgent) {
+      if (i.charCodeAt(0) < 256) {
+        userAgent += i;
       }
     }
+
+    // fetch URL
+    return await bridge.ipc.invoke("fetch-url", {
+      abortTimeout: parseInt(optionen.data.einstellungen.timeout, 10) * 1e3,
+      url,
+      userAgent,
+    });
   },
 
   // öffnet den Dateimanager im Ordner der übergebenen Datei
