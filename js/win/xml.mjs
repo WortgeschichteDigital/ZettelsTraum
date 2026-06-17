@@ -2557,10 +2557,7 @@ const xml = {
     if (ul.value) {
       xl += `\t\t<URL>${mask(ul.value)}</URL>\n`;
       const ad = form.querySelector('[id$="aufrufdatum"]');
-      if (!ad.value) {
-        ad.value = new Date().toISOString().split("T")[0];
-      }
-      const datum = ad.value.split("-");
+      const datum = (ad.value || new Date().toISOString().split("T")[0]).split("-");
       xl += `\t\t<Aufrufdatum>${datum[2]}.${datum[1]}.${datum[0]}</Aufrufdatum>\n`;
       xl += `\t\t<Fundort>${sharedXml.fundort({ url: ul.value })}</Fundort>\n`;
     }
