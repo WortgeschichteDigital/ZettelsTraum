@@ -410,7 +410,7 @@ const filter = {
         // in Filterbaum einhängen
         //   [0] = Document-Fragment
         //   [1] = Verschachtelungstiefe; 0 = ohne Verschachtelung, 1 = 1. Ebene usw.
-        if (neuer_filter[1] > 0) {
+        if (neuer_filter[1] > 0 && block !== "verschiedenes") {
           let schachtel;
           if (block === "bedeutungen") {
             const e = cont.querySelectorAll(`[data-tiefe="${neuer_filter[1] - 1}"]`);
@@ -419,7 +419,9 @@ const filter = {
             schachtel = schachtelFinden(neuer_filter[0].firstChild.dataset.f);
           }
           schachtel.appendChild(neuer_filter[0]);
-        } else if (neuer_filter[1] === 0) { // der Filter ist unterhalb einer Baumstruktur
+        } else if (neuer_filter[1] === 0 || block === "verschiedenes") {
+          // der Filter ist unterhalb einer Baumstruktur
+          // oder im Block "Verschiedenes", in dem es keine Baumstruktur gibt
           cont.lastChild.appendChild(neuer_filter[0]);
         }
       }
@@ -976,10 +978,7 @@ const filter = {
   //     (Block, in dem die Filter stecken)
   backupKlappScroll (div) {
     div.addEventListener("scroll", function () {
-      let ziel = this;
-      if (this.id === "filter-zeitraum-dynamisch") {
-        ziel = this.parentNode;
-      }
+      const ziel = this.id === "filter-zeitraum-dynamisch" ? this.parentNode : this;
       ziel.dataset.scroll = this.scrollTop;
     });
   },
