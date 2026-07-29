@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+/* LITERATURLISTE-FENSTER ------------------- */
+
+#literaturliste > div {
+  margin-top: 40px;
+  max-width: 500px;
+}
+
+#literaturliste-cont {
+  padding: 20px 10px;
+
+  p {
+    margin-bottom: 20px;
+    text-align: center;
+
+    input {
+      width: 230px;
+    }
+
+    #literaturliste-read {
+      margin: 0;
+    }
+  }
+
+  #literaturliste-message {
+    margin: 0;
+    font-style: italic;
+
+    &.literaturliste-message-error {
+      color: var(--textWarnung);
+      font-weight: bold;
+    }
+
+    span {
+      display: block;
+      margin-top: 5px;
+    }
+  }
+}
+
+#literaturliste-results {
+  margin-top: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &:empty {
+    margin-top: 0;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 30px;
+    list-style-type: circle;
+
+    li {
+      margin-bottom: 5px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .title-not-found {
+        color: var(--textWarnung);
+        font-weight: bold;
+      }
+    }
+  }
+}
+

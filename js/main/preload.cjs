@@ -185,6 +185,7 @@ const validListeners = [
   "redaktion-belege-xml",
   "redaktion-ereignisse",
   "redaktion-literatur",
+  "redaktion-literaturliste",
   "redaktion-metadaten",
   "redaktion-wortinformationen",
   "redaktion-xml",

@@ -85,7 +85,8 @@ input[type="button"][value="GitHub"] {
   background-image: url(../img/github-weiss.svg);
 }
 
-input[type="button"][value="Kopieren"] {
+input[type="button"][value="Kopieren"],
+input[type="button"][value="Literaturliste kopieren"] {
   background-image: url(../img/kopieren-weiss.svg);
 }
 

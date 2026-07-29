@@ -238,6 +238,9 @@ const shared = {
       "lemmata-over": {
         queries: [ "#lemmata h2" ],
       },
+      "literaturliste-results": {
+        queries: [],
+      },
       "meta-cont-over": {
         queries: [],
       },

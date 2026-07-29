@@ -24,6 +24,7 @@ import kopieren from "./kopieren.mjs";
 import lemmata from "./lemmata.mjs";
 import lexika from "./lexika.mjs";
 import liste from "./liste.mjs";
+import literaturliste from "./literaturliste.mjs";
 import meta from "./meta.mjs";
 import notizen from "./notizen.mjs";
 import optionen from "./optionen.mjs";
@@ -101,6 +102,7 @@ window.addEventListener("load", async () => {
   bridge.ipc.listen("redaktion-metadaten", () => redMeta.oeffnen());
   bridge.ipc.listen("redaktion-wortinformationen", () => redWi.oeffnen());
   bridge.ipc.listen("redaktion-xml", () => redXml.oeffnen());
+  bridge.ipc.listen("redaktion-literaturliste", () => literaturliste.open());
   bridge.ipc.listen("redaktion-belege-xml", () => xml.belegeInXmlFenster());
   bridge.ipc.listen("belege-hinzufuegen", () => {
     // Sperre für macOS (Menüpunkte können nicht deaktiviert werden)
@@ -631,6 +633,9 @@ window.addEventListener("load", async () => {
   document.querySelectorAll("#red-wi-form input, #red-wi-copy input").forEach(input => redWi.formListener({ input }));
   redWi.xml({ icon: document.getElementById("red-wi-xml") });
   redWi.clipboard({ icon: document.getElementById("red-wi-clipboard") });
+  // Literaturliste
+  document.getElementById("literaturliste-read").addEventListener("click", () => literaturliste.read());
+  document.getElementById("literaturliste-copy").addEventListener("click", () => literaturliste.copy());
   // Karteisuche
   document.getElementById("karteisuche-suchen").addEventListener("click", () => karteisuche.suchenPrep());
   document.getElementById("karteisuche-suchenCache").addEventListener("click", () => karteisuche.suchenPrepZtj([]));

@@ -270,6 +270,13 @@ const layoutMenu = [
       },
       { type: "separator" },
       {
+        label: "Literatur auflisten",
+        icon: path.join(__dirname, "..", "..", "img", "menu", "buecher.png"),
+        click: () => appMenu.befehl("redaktion-literaturliste"),
+        id: "redaktion-literaturliste",
+      },
+      { type: "separator" },
+      {
         label: "Belege in XML-Fenster",
         icon: path.join(__dirname, "..", "..", "img", "menu", "xml.png"),
         click: () => appMenu.befehl("redaktion-belege-xml"),

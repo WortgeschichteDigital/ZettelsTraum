@@ -11,6 +11,10 @@
   mask-image: url(../../img/buch-check.svg);
 }
 
+#buchung-read {
+  margin: 0;
+}
+
 #buchung-cont > p {
   margin-bottom: 20px;
   text-align: center;
