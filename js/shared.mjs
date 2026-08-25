@@ -795,6 +795,7 @@ const shared = {
   typographie (text) {
     text = text.replace(/[=]"(.*?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
     text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
+    text = text.replace(/"/g, "“"); // verlorene Anführungszeichen zu Ausführungszeichen
     text = text.replace(/([a-z])'([a-z])/g, (m, p1, p2) => `${p1}’${p2}`); // offenkundiges Apostroph
     text = text.replace(/'(.+?)'/g, (m, p1) => `‚${p1}‘`); // einfache Anführungszeichen
     text = text.replace(/'/g, "’"); // wahrscheinliches Apostroph
@@ -808,6 +809,7 @@ const shared = {
     text = text.replace(/([a-z]) ([0-9]+ \([0-9]{4}\))/, (m, p1, p2) => `${p1}\u00A0${p2}`); // geschütztes Leerzeichen vor Jahrgang einer Zeitschrift
     text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (...args) => `${args[1].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[3]}`); // Leerzeichen bei aneinandergeklatschten Daten
     text = text.replace(/ \/(?!>)/g, "\u00A0/"); // geschütztes Leerzeichen vor Virgel
+    text = text.replace(/(?<=[0-9]) ?%/g, "\u00A0%"); // geschütztes Leerzeichen vor Prozentzeichen
     // Korrekturen
     text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (...args) => `${args[3].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[1]}`); // ISO-Daten in das übliche Datumsformat umwandeln
     // geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
@@ -835,6 +837,7 @@ const shared = {
       /s\.\s?v\./g, // sub voce (nur in Kleinschreibung)
       /Sp?\.\s?[0-9]+/g, // Seiten-/Spaltenangaben
       /u\.\s?(a|ä)\./ig,
+      /u\.\s?[sſ]\.\s?w\./ig,
       /v\.\s?a\./ig,
       /z\.\s?B\./ig,
       /zit\.\s?n\./ig,
