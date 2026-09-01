@@ -793,6 +793,7 @@ const shared = {
   //   text = String
   //     (Text, in dem die Anpassungen vorgenommen werden sollen)
   typographie (text) {
+    // Ersetzungen
     text = text.replace(/[=]"(.*?)"/g, (m, p1) => `=__${p1}__`); // Attribute in Tags maskieren
     text = text.replace(/"(.+?)"/g, (m, p1) => `„${p1}“`); // doppelte Anführungszeichen
     text = text.replace(/"/g, "“"); // verlorene Anführungszeichen zu Ausführungszeichen
@@ -810,12 +811,15 @@ const shared = {
     text = text.replace(/([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})/g, (...args) => `${args[1].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[3]}`); // Leerzeichen bei aneinandergeklatschten Daten
     text = text.replace(/ \/(?!>)/g, "\u00A0/"); // geschütztes Leerzeichen vor Virgel
     text = text.replace(/(?<=[0-9]) ?%/g, "\u00A0%"); // geschütztes Leerzeichen vor Prozentzeichen
+
     // Korrekturen
     text = text.replace(/([0-9]{4})[–-]([0-9]{2})[–-]([0-9]{2})/g, (...args) => `${args[3].replace(/^0/, "")}.\u00A0${args[2].replace(/^0/, "")}. ${args[1]}`); // ISO-Daten in das übliche Datumsformat umwandeln
     // geschützte Leerzeichen (ggf. einfügen, wenn Spatien vergessen wurden)
+
+    // Abkürzungen
     const abk = new Set([
       /[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}/g, // Datumsangabe (nur 1. Leerzeichen wird ersetzt!)
-      /[0-9]{1,2}\.\s?(Jan|Feb|März|Apr|Mai|Juni|Juli|Aug|Sep|Okt|Nov|Dez)/g, // Datumsangabe mit Monat
+      /[0-9]{1,2}\.\s?(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\b/g, // Datumsangabe mit Monat
       /[0-9]\.\s?Aufl/g, // Auflage
       /[0-9] Bde/g, // Bände
       /[0-9]\.\s?Hälfte/g,
@@ -850,6 +854,7 @@ const shared = {
       /i\.\s?S\./g, // im Sinne von
       /S\.\s?v\./g,
     ]);
+
     for (const i of abk) {
       text = text.replace(i, m => {
         if (!/\s/.test(m)) {
@@ -858,6 +863,7 @@ const shared = {
         return m.replace(/\s/, "\u00A0");
       });
     }
+
     // Text zurückgeben
     return text;
   },
