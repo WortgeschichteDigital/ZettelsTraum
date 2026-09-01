@@ -3494,6 +3494,7 @@ const xml = {
     // <Literaturreferenz>
     str = str.replace(/(?<!(?:\p{Letter}|\d|-|#|\/))([a-zäöü][a-zäöüß0-9-]+)((?:,\shier|\ss\.\s?v\.)?[0-9\s,\-–]+)?(?!(?:\p{Letter}|\d|-|#))/ug, (m, p1, p2) => {
       if (!/[a-z]/.test(p1) ||
+          !/[0-9]/.test(p1) ||
           /^[a-zäöüß]+$/.test(p1) && !p2Typisch(p2) ||
           /-/.test(p1) && !/[0-9]/.test(p1) && !p2Typisch(p2) ||
           /[0-9]/.test(p1) && !/-/.test(p1) && p1.match(/[a-zäöüß]/g).length / p1.match(/[0-9]/g).length < 2) {

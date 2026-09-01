@@ -23,6 +23,14 @@ const literaturliste = {
   // further titles that should be searched for with a special RegExp
   furtherTitles: [
     {
+      reg: /https?:\/\/www\.deutsche-biographie\.de\/.+#adbcontent/,
+      title: "adb1",
+    },
+    {
+      reg: /https?:\/\/www\.deutsche-biographie\.de\/.+#ndbcontent/,
+      title: "ndb1",
+    },
+    {
       reg: /https?:\/\/[a-z]+\.wikipedia\.org/,
       title: "wikipedia1",
     },
@@ -40,10 +48,11 @@ const literaturliste = {
     const text = await bridge.ipc.invoke("cb", "readText");
 
     for (const m of text.matchAll(reg) || []) {
-      const p1 = m[1];
-      const p2 = m[2];
+      const p1 = m[1]?.trimEnd();
+      const p2 = m[2]?.trimEnd();
       if (/(?<!##(?:\p{Lowercase}|-)*)[\p{Lowercase}-]+-[0-9]{4}-[0-9]+(?!##)/ug.test(p1) ||
           !/[a-z]/.test(p1) ||
+          !/[0-9]/.test(p1) ||
           /^[a-zäöüß]+$/.test(p1) && !p2Typisch(p2) ||
           /-/.test(p1) && !/[0-9]/.test(p1) && !p2Typisch(p2) ||
           /[0-9]/.test(p1) && !/-/.test(p1) && p1.match(/[a-zäöüß]/g).length / p1.match(/[0-9]/g).length < 2) {
