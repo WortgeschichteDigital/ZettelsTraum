@@ -16,12 +16,12 @@ if (process.argv.some(i => /^(-{0,2}help|-h)$/.test(i))) {
   console.log(`Usage:
   node ${path.basename(__filename)} [module] [platform] [architecture] [package type] [email] [output]
 
-The options may appear in loose order. If some or even all are missing, the script resorts to defaults. No ia32 support for Linux and macOS.
+The options may appear in loose order. If some or even all are missing, the script resorts to defaults.
 
 Option details:
   module:       builder | packager (default = packager)
   platform:     darwin | linux | win32 (default = ${process.platform})
-  architecture: ia32 | x64 (default = x64)
+  architecture: x64 (default = x64)
 
 Package types for module "builder":
   darwin: dmg
@@ -150,7 +150,6 @@ const validArgs = {
   linux: "platform",
   win32: "platform",
   // architecture
-  ia32: "arch",
   x64: "arch",
   // package type
   appImage: "packageType",
@@ -193,10 +192,6 @@ for (let i = 2, len = process.argv.length; i < len; i++) {
 
 if (config.module === "builder" && !config.packageType) {
   config.packageType = packageTypeDefaults[config.platform];
-}
-
-if (config.arch === "ia32" && (config.platform === "darwin" || config.platform === "linux")) {
-  config.arch = "x64";
 }
 
 

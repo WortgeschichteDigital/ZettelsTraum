@@ -62,7 +62,7 @@ Für ein Update laden Sie sich einfach die neue Version herunter und ersetzen de
 
 Der **Installer** legt ein Icon im Windows-Startmenü an, über das das Programm aufgerufen werden kann. Außerdem werden während der Installation automatisch Dateien mit der Endung `.ztj` mit *Zettel’s Traum* verknüpft, sodass sie durch Doppelklick im *Windows-Explorer* geöffnet werden können.
 
-**Unterstützung:** Windows 10 und später mit 64-Bit-Architektur. Das Bauen von 32-Bit-Versionen wäre prinzipiell möglich, dafür müssten Sie aber [selbst aktiv werden](#bauanleitung).
+**Unterstützung:** Windows 10 und später mit 64-Bit-Architektur.
 
 Da die App bisher nicht zertifiziert ist, wird Windows vermutlich das reibungslose Starten des Installers oder Pakets auf Ihrem Rechner unterbinden. Unter Windows 10 könnte die Meldung: „Der Computer wurde durch Windows geschützt“, erscheinen. Klicken Sie in der Meldung auf den Link „Weitere Informationen“, erscheint im Meldungsfenster der Button „Trotzdem ausführen", mit dem Sie die Software installieren bzw. starten können – natürlich nur, wenn Sie uns vertrauen.
 
@@ -91,7 +91,7 @@ $ sudo dpkg -i zettelstraum_1.0.0_amd64.deb
 
 Die App wird in `/opt/zettelstraum/` abgelegt. Bei der Installation wird die Datei `/usr/share/applications/zettelstraum.desktop` erzeugt, das Programm sollte sich also über das Startmenü Ihrer Distribution aufrufen lassen. Es wird automatisch eine Verknüpfung zwischen der Dateiendung `.ztj` und *Zettel’s Traum* angelegt, sodass Wortkarteien durch Doppelklick im Dateimanager Ihrer Wahl geöffnet werden können.
 
-**Unterstützung:** Distributionen ab Ubuntu 18.04, Fedora 32, Debian 10 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 24.04 basiert. 32-Bit-Versionen können nicht gebaut werden.
+**Unterstützung:** Distributionen ab Ubuntu 18.04, Fedora 32, Debian 10 mit 64-Bit-Architektur. Die Paketierung erfolgt in einer Distribution, die auf Ubuntu 26.04 basiert.
 
 ### macOS
 
