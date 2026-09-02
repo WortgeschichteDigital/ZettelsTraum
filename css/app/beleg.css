@@ -562,6 +562,10 @@ span#beleg-bewertung {
   mask-image: url(../../img/text-gross.svg);
 }
 
+.icon-tools-small {
+  mask-image: url(../../img/text-klein.svg);
+}
+
 .icon-tools-sonderzeichen {
   mask-image: url(../../img/pi.svg);
 }

@@ -1840,6 +1840,10 @@ const beleg = {
         start: '<span class="tei-groesser">',
         ende: "</span>",
       },
+      small: {
+        start: '<small>',
+        ende: "</small>",
+      },
       spacing: {
         start: '<span class="tei-gesperrt">',
         ende: "</span>",
