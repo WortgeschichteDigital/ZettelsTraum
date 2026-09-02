@@ -563,11 +563,11 @@ const fenster = {
   // ermittelt das zum Betriebssystem passende Programm-Icon
   icon () {
     if (process.platform === "win32") {
-      return nativeImage.createFromPath(path.join(__dirname, "..", "..", "img", "icon", "win", "icon.ico"));
+      return path.join(__dirname, "..", "..", "img", "icon", "win", "icon.ico");
     } else if (process.platform === "darwin") {
-      return nativeImage.createFromPath(path.join(__dirname, "..", "..", "img", "icon", "mac", "icon.icns"));
+      return nativeImage.createFromPath(path.join(__dirname, "..", "..", "img", "icon", "linux", "icon_64px.png"));
     } else if (process.platform === "linux") {
-      return nativeImage.createFromPath(path.join(__dirname, "..", "..", "img", "icon", "linux", "icon_32px.png"));
+      return nativeImage.createFromPath(path.join(__dirname, "..", "..", "img", "icon", "linux", "icon_64px.png"));
     }
     return null;
   },

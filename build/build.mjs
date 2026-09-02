@@ -244,7 +244,7 @@ const builder = {
         if (config.platform === "darwin") {
           this.config.mac = {
             target: config.packageType,
-            icon: path.join(config.appDir, "img", "icon", "mac", "icon.icns"),
+            icon: path.join(config.appDir, "img", "icon", "icon.svg"),
             category: "public.app-category.utilities",
           };
 
@@ -266,7 +266,7 @@ const builder = {
             target: config.packageType,
             executableName: "zettelstraum",
             artifactName: "zettelstraum_${version}_${arch}.${ext}",
-            icon: path.join(config.appDir, "img", "icon", "linux"),
+            icon: path.join(config.appDir, "img", "icon", "icon.svg"),
             synopsis: "Wortkartei-App von „Wortgeschichte digital“",
             category: "Science",
             desktop: {
@@ -307,7 +307,7 @@ const builder = {
         } else if (config.platform === "win32") {
           this.config.win = {
             target: config.packageType,
-            icon: path.join(config.appDir, "img", "icon", "win", "icon.ico"),
+            icon: path.join(config.appDir, "img", "icon", "icon.svg"),
           };
 
           this.config.fileAssociations = [
