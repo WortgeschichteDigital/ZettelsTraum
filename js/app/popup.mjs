@@ -631,8 +631,8 @@ const popup = {
 
     // Belegtext kopieren
     bridge.ipc.invoke("cb", "write", {
-      text: popup.textauswahl.text,
-      html: popup.textauswahl.html,
+      "text/plain": popup.textauswahl.text,
+      "text/html": popup.textauswahl.html,
     });
 
     // Feedback

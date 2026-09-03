@@ -1080,7 +1080,8 @@ const importShared = {
       }
     } else if (ansicht === "zwischenablage") {
       // ZWISCHENABLAGE
-      typeData = importShared.detectType(await bridge.ipc.invoke("cb", "readText"), await bridge.ipc.invoke("cb", "readHTML"));
+      const cbCont = await bridge.ipc.invoke("cb", "read", [ "text/plain", "text/html" ]);
+      typeData = importShared.detectType(cbCont["text/plain"], cbCont["text/html"]);
       if (typeData.formView !== "zwischenablage") {
         await beleg.formularImport({
           src: typeData.formView,

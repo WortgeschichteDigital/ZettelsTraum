@@ -249,7 +249,8 @@ const beleg = {
     await new Promise(resolve => setTimeout(() => resolve(true), 25));
     if (neu && !beleg.leseansicht) {
       // Zwischenablage auswerten
-      let cb = importShared.detectType(await bridge.ipc.invoke("cb", "readText"), await bridge.ipc.invoke("cb", "readHTML"));
+      const cbCont = await bridge.ipc.invoke("cb", "read", [ "text/plain", "text/html" ]);
+      let cb = importShared.detectType(cbCont["text/plain"], cbCont["text/html"]);
 
       // keine bekannten Daten in der Zwischenablage => Dateidaten vorhanden?
       if (!cb &&
@@ -549,7 +550,8 @@ const beleg = {
 
     // Textfeld entsprechend der Zwischenablage füllen
     if (autoFill) {
-      const cb = typeData || importShared.detectType(await bridge.ipc.invoke("cb", "readText"), await bridge.ipc.invoke("cb", "readHTML"));
+      const cbCont = await bridge.ipc.invoke("cb", "read", [ "text/plain", "text/html" ]);
+      const cb = typeData || importShared.detectType(cbCont["text/plain"], cbCont["text/html"]);
       if (optionen.data.einstellungen["url-eintragen"] &&
           (src === "url" && cb?.type === "url" ||
           src === "datei" && cb?.type === "file")) {
@@ -650,7 +652,8 @@ const beleg = {
       if (this.value || this.readOnly || !optionen.data.einstellungen["url-eintragen"]) {
         return;
       }
-      const cb = importShared.detectType(await bridge.ipc.invoke("cb", "readText"), await bridge.ipc.invoke("cb", "readHTML"));
+      const cbCont = await bridge.ipc.invoke("cb", "read", [ "text/plain", "text/html" ]);
+      const cb = importShared.detectType(cbCont["text/plain"], cbCont["text/html"]);
       if (cb?.type === "file" || cb?.type === "url") {
         setTimeout(() => {
           // der Fokus könnte noch in einem anderen Feld sein, das dann gefüllt werden würde;
@@ -1343,8 +1346,8 @@ const beleg = {
     if (cb && window.getSelection().toString() &&
         popup.getTargetSelection([ ele ])) {
       bridge.ipc.invoke("cb", "write", {
-        text: popup.textauswahl.text,
-        html: popup.textauswahl.html,
+        "text/plain": popup.textauswahl.text,
+        "text/html": popup.textauswahl.html,
       });
       return;
     }
@@ -1359,8 +1362,8 @@ const beleg = {
       // Text in Zwischenablage oder Text zurückgeben
       if (cb) {
         bridge.ipc.invoke("cb", "write", {
-          text: popup.textauswahl.text,
-          html: popup.textauswahl.html,
+          "text/plain": popup.textauswahl.text,
+          "text/html": popup.textauswahl.html,
         });
       } else {
         return {
@@ -1389,8 +1392,8 @@ const beleg = {
       }
       const text = bd.join("\n").replace(/<.+?>/g, "");
       bridge.ipc.invoke("cb", "write", {
-        text,
-        html,
+        "text/plain": text,
+        "text/html": html,
       });
     } else { // alle anderen Felder
       bridge.ipc.invoke("cb", "writeText", text);
@@ -1573,11 +1576,11 @@ const beleg = {
     // Text auslesen
     let text = "";
     if (id === "beleg-bs") {
-      const available = await bridge.ipc.invoke("cb", "availableFormats");
-      if (available.includes("text/html")) {
-        text = await bridge.ipc.invoke("cb", "readHTML");
+      const cbCont = await bridge.ipc.invoke("cb", "read", [ "text/plain", "text/html" ]);
+      if (cbCont["text/html"]) {
+        text = cbCont["text/html"];
       } else {
-        text = await bridge.ipc.invoke("cb", "readText"); // aus Sicherheitsgründen auch Plain-Text bereinigen
+        text = cbCont["text/plain"]; // aus Sicherheitsgründen auch Plain-Text bereinigen
       }
       text = beleg.toolsEinfuegenHtml(text);
     } else {
@@ -1841,7 +1844,7 @@ const beleg = {
         ende: "</span>",
       },
       small: {
-        start: '<small>',
+        start: "<small>",
         ende: "</small>",
       },
       spacing: {

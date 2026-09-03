@@ -2182,8 +2182,8 @@ const liste = {
           popup.getTargetSelection([ this.parentNode ])) {
         // Textauswahl kopieren
         bridge.ipc.invoke("cb", "write", {
-          text: popup.textauswahl.text,
-          html: popup.textauswahl.html,
+          "text/plain": popup.textauswahl.text,
+          "text/html": popup.textauswahl.html,
         });
         shared.animation("zwischenablage");
       } else {
@@ -2232,8 +2232,8 @@ const liste = {
 
     // Daten => Clipboard
     bridge.ipc.invoke("cb", "write", {
-      text: text.join("\n".repeat(4)),
-      html: html.join(""),
+      "text/plain": text.join("\n".repeat(4)),
+      "text/html": html.join(""),
     });
 
     // Feedback
@@ -2450,22 +2450,20 @@ const liste = {
     switch (auswahl) {
       case "1":
         bridge.ipc.invoke("cb", "write", {
-          text: popup.selected.text,
-          html: popup.selected.html,
+          "text/plain": popup.selected.text,
+          "text/html": popup.selected.html,
         });
         shared.animation("zwischenablage");
         break;
       case "2":
         bridge.ipc.invoke("cb", "write", {
-          text: popup.textauswahl.text,
-          html: popup.textauswahl.html,
+          "text/plain": popup.textauswahl.text,
+          "text/html": popup.textauswahl.html,
         });
         shared.animation("zwischenablage");
         break;
       case "3":
-        bridge.ipc.invoke("cb", "write", {
-          text: xml.belegId({}),
-        });
+        bridge.ipc.invoke("cb", "writeText", xml.belegId({}));
         shared.animation("zwischenablage");
         break;
       case "4":

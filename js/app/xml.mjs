@@ -464,9 +464,7 @@ const xml = {
     const xmlStr = xml.schnitt();
 
     // Text kopieren
-    bridge.ipc.invoke("cb", "write", {
-      text: xmlStr,
-    });
+    bridge.ipc.invoke("cb", "writeText", xmlStr);
 
     // Animation
     shared.animation("zwischenablage");
@@ -718,9 +716,7 @@ const xml = {
   // Referenztag des Belegs in die Zwischenablage kopieren
   referenz () {
     const id = xml.belegId({});
-    bridge.ipc.invoke("cb", "write", {
-      text: `<Belegreferenz Ziel="${id}"/>`,
-    });
+    bridge.ipc.invoke("cb", "writeText", `<Belegreferenz Ziel="${id}"/>`);
     shared.animation("zwischenablage");
   },
 

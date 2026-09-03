@@ -227,37 +227,27 @@ window.addEventListener("load", async () => {
   bridge.ipc.listen("popup-kartei-oeffnen", () => popup.karteiLink.click());
   bridge.ipc.listen("popup-kopieren", () => {
     bridge.ipc.invoke("cb", "write", {
-      text: popup.textauswahl.text,
-      html: popup.textauswahl.html,
+      "text/plain": popup.textauswahl.text,
+      "text/html": popup.textauswahl.html,
     });
     shared.animation("zwischenablage");
   });
   bridge.ipc.listen("popup-kopieren-code", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
-    });
+    bridge.ipc.invoke("cb", "writeText", popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"));
   });
   bridge.ipc.listen("popup-kopieren-id", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: popup.kopfID,
-    });
+    bridge.ipc.invoke("cb", "writeText", popup.kopfID);
   });
   bridge.ipc.listen("popup-kopieren-nebenfenster", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
-    });
+    bridge.ipc.invoke("cb", "writeText", popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"));
   });
   bridge.ipc.listen("popup-kopierfunktion", () => kopieren.uiOff());
   bridge.ipc.listen("popup-lexika", () => lexika.oeffnen());
   bridge.ipc.listen("popup-link", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: popup.element.getAttribute("href"),
-    });
+    bridge.ipc.invoke("cb", "writeText", popup.element.getAttribute("href"));
   });
   bridge.ipc.listen("popup-mail", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: popup.element.getAttribute("href").replace(/^mailto:/, ""),
-    });
+    bridge.ipc.invoke("cb", "writeText", popup.element.getAttribute("href").replace(/^mailto:/, ""));
   });
   bridge.ipc.listen("popup-markieren", () => annotieren.makeUser());
   bridge.ipc.listen("popup-notizen", () => notizen.oeffnen());
@@ -274,9 +264,7 @@ window.addEventListener("load", async () => {
   });
   bridge.ipc.listen("popup-text-complete", () => popup.textauswahlComplete(true));
   bridge.ipc.listen("popup-text-referenz", () => {
-    bridge.ipc.invoke("cb", "write", {
-      text: xml.belegId({}),
-    });
+    bridge.ipc.invoke("cb", "writeText", xml.belegId({}));
   });
   bridge.ipc.listen("popup-titel-aufnahmen", () => redLit.anzeigePopup(popup.titelaufnahme.ds));
   bridge.ipc.listen("popup-titel-bearbeiten", () => redLit.dbCheck(() => redLit.eingabeBearbeiten(popup.titelaufnahme.ds), false));

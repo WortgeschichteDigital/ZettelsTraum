@@ -376,7 +376,9 @@ const notizen = {
       const mark = document.createElement("mark");
       mark.classList.add(cl);
       mark.innerHTML = content;
-      await bridge.ipc.invoke("cb", "writeHTML", mark.outerHTML);
+      await bridge.ipc.invoke("cb", "write", {
+        "text/html": mark.outerHTML,
+      });
       range.deleteContents();
       range.insertNode(mark);
       sel.selectAllChildren(mark);

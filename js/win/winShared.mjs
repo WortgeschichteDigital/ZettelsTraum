@@ -78,29 +78,19 @@ const winShared = {
 
     // Popup
     bridge.ipc.listen("popup-kopieren-code", () => {
-      bridge.ipc.invoke("cb", "write", {
-        text: popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
-      });
+      bridge.ipc.invoke("cb", "writeText", popup.element.innerText.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"));
     });
     bridge.ipc.listen("popup-kopieren-id", () => {
-      bridge.ipc.invoke("cb", "write", {
-        text: popup.kopfID,
-      });
+      bridge.ipc.invoke("cb", "writeText", popup.kopfID);
     });
     bridge.ipc.listen("popup-kopieren-nebenfenster", () => {
-      bridge.ipc.invoke("cb", "write", {
-        text: popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"),
-      });
+      bridge.ipc.invoke("cb", "writeText", popup.textauswahl.replace(/␣/g, "\u00A0").replace(/[.]{3}/g, "…"));
     });
     bridge.ipc.listen("popup-link", () => {
-      bridge.ipc.invoke("cb", "write", {
-        text: popup.element.getAttribute("href"),
-      });
+      bridge.ipc.invoke("cb", "writeText", popup.element.getAttribute("href"));
     });
     bridge.ipc.listen("popup-mail", () => {
-      bridge.ipc.invoke("cb", "write", {
-        text: popup.element.getAttribute("href").replace(/^mailto:/, ""),
-      });
+      bridge.ipc.invoke("cb", "writeText", popup.element.getAttribute("href").replace(/^mailto:/, ""));
     });
 
     // Before-Unload

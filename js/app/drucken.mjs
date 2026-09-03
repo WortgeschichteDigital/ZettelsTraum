@@ -380,8 +380,8 @@ const drucken = {
         text = cleanText(text);
       }
       bridge.ipc.invoke("cb", "write", {
-        text,
-        html,
+        "text/plain": text,
+        "text/html": html,
       });
       return;
     }
@@ -401,8 +401,8 @@ const drucken = {
     text = cleanText(text);
     // HTML und Text kopieren
     bridge.ipc.invoke("cb", "write", {
-      text,
-      html,
+      "text/plain": text,
+      "text/html": html,
     });
     // Animation, die anzeigt, dass die Zwischenablage gefüllt wurde
     shared.animation("zwischenablage");

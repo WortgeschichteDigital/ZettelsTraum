@@ -628,8 +628,8 @@ const redWi = {
 
       // Kopieren ausführen
       bridge.ipc.invoke("cb", "write", {
-        text,
-        html,
+        "text/plain": text,
+        "text/html": html,
       });
       shared.animation("zwischenablage");
     });

@@ -5,6 +5,7 @@ import {
   app,
   BrowserWindow,
   clipboard,
+  ClipboardItem,
   ipcMain,
   shell,
   webContents,
@@ -941,14 +942,29 @@ ipcMain.handle("cli-return-code", (evt, returnCode) => {
 
 // ***** QUODLIBETICA *****
 // Clipboard
-ipcMain.handle("cb", (evt, fun, data) => {
+ipcMain.handle("cb", async (evt, fun, data = null) => {
   if (!validSender(evt)) {
     return null;
   }
-  if (data) {
-    return clipboard[fun](data);
+  if (fun === "read") {
+    const result = {};
+    const items = await clipboard.read();
+    for (const type of data) {
+      if (items[0].types.includes(type)) {
+        const blob = await items[0].getType(type);
+        result[type] = await blob.text();
+      } else {
+        result[type] = "";
+      }
+    }
+    return result;
+  } else if (fun === "write") {
+    const item = new ClipboardItem(data);
+    const result = await clipboard.write([ item ]);
+    return result;
   }
-  return clipboard[fun]();
+  const result = await clipboard[fun](data);
+  return result;
 });
 
 ipcMain.handle("check-tar", async evt => {
